@@ -1,4 +1,4 @@
 name: KitPvP
-main: me.bukkit.kitpvp.KitPvP
-version: 1.0
-author: [WhiteWalker72]
+main: net.skycade.kitpvp.KitPVP
+version: 2.0.0-SNAPSHOT
+author: ["WhiteWalker72", "Riccardo Bello (RickyB98)"]

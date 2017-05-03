@@ -1,7 +1,345 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1a2ef5e7-1cac-4cbf-9305-c4e0b0d2d113" name="Default" comment="" />
+    <list default="true" id="1a2ef5e7-1cac-4cbf-9305-c4e0b0d2d113" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_gson_gson_2_2_4.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_guava_guava_17_0.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_googlecode_json_simple_json_simple_1_1_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_lang_commons_lang_2_6.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__javax_persistence_persistence_api_1_0.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_10.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_md_5_bungeecord_chat_1_8_SNAPSHOT.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_avaje_ebean_2_8_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_bukkit_craftbukkit_1_8_8_R0_1_SNAPSHOT.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_mongodb_mongo_java_driver_3_4_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_spigotmc_spigot_api_1_8_8_R0_1_SNAPSHOT.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_yaml_snakeyaml_1_15.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/KitPvP.iml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/KitPvP.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/Settings.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/CommandAchievements.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/CommandCrate.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/CommandDuel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/CommandKit.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/CommandKitName.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/CommandKitPvPHelp.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/CommandKitpvpStats.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/CommandShop.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/CommandSoup.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/CommandSpawn.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/CommandTopStats.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/CommandUpgrade.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/CommandViewKit.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/staff/CommandEco.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/staff/CommandGiveKeys.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/staff/CommandKitsUnlocked.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/staff/CommandResetStats.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/staff/CommandSetLevel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/staff/CommandSetStats.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/staff/CommandTeam.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/staff/CommandTp.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/staff/CommandUnlock.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/staff/CommandViewStats.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/commands/staff/RefundCommand.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/algorithms/SequentialSearch.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/commands/Command.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/commands/CommandEvent.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/commands/CommandManager.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/commands/Module.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/datastructures/Pair.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/datastructures/binarytree/BTNode.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/datastructures/binarytree/BinaryTree.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/events/CustomEvent.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/member/DisplayRank.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/member/Member.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/member/MemberManager$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/member/MemberManager.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/member/Permission.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/member/listeners/MemberJoinQuit$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/member/listeners/MemberJoinQuit.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/member/listeners/MemberListeners.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/option/IOption.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/option/None.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/option/Some.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/region/DataPoint.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/region/Region.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/Callback.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/DelayedTeleport.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ItemBuilder.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect$BlockData.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect$ItemData.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect$NoteColor.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect$OrdinaryColor.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect$ParticleColor.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect$ParticleColorException.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect$ParticleData.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect$ParticleDataException.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect$ParticlePacket$PacketInstantiationException.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect$ParticlePacket$PacketSendingException.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect$ParticlePacket$VersionIncompatibleException.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect$ParticlePacket.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect$ParticleProperty.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect$ParticleVersionException.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/Recharge.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ReflectionUtils$DataType.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ReflectionUtils$PackageType.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/ReflectionUtils.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/UtilBlock.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/UtilItem.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/UtilMath.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/UtilPacket.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/UtilPlayer.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/UtilServer.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/coreclasses/utils/UtilString.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/duel/Duel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/Kit$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/Kit.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/KitManager.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/KitType.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitArcher.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitAssassin.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitBarbarian.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitBladeMaster.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitBomber.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitCaveMan$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitCaveMan.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitCerberus.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitChance.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitChronos.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitCobra.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitDefault.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitDualBlader.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitDubstep.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitElite.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitEnderman.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitFireArcher.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitFireMage$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitFireMage.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitFisherman.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitFrosty.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitGank.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitGhost.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitGolem.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitHades.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitHuntsman.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitHydra.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitHyper.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitJesus.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitJumper.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitKangaroo.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitKing.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitKnight.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitLover.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitMaster.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitMedic.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitMystic.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitNinja.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitPlush.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitPotionMaster.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitPrick.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitShaco.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitSharingan.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitSniper.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitSonic.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitSoulMaster.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitStrafe.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitSupport.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitTank.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitTeleporter.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitTribesman.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitUnicorn$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitUnicorn.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitVampire.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitWarrior.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitWither.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitWizard$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitWizard.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitWolfPack.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/kit/kits/KitZeus.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/listeners/SignListeners.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/listeners/WorldListeners.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/listeners/chat/ChatClick$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/listeners/chat/ChatClick.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/listeners/player/LastMoveListener.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/listeners/player/PlayerDamageListener.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/listeners/player/PlayerInteractListener.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/listeners/player/PlayerJoinQuitListener.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/listeners/player/PlayerListeners.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/listeners/player/PlayerMoveListener.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/managers/PageManager.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/runnable/CrateRunnable.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/runnable/ItemRunnable.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/scoreboard/HighestKsUpdater.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/scoreboard/KitPvPScoreboard.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/stat/Achievement.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/stat/KitData.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/stat/KitPvPDB.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/stat/KitPvPStats.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/stat/RotationManager.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/ui/AchievementsMenu.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/ui/KitsMenu.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/ui/MenuSize.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/ui/ShopMenu.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/ui/ViewkitMenu.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/me/bukkit/kitpvp/util/DamageDisplay.class" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/KitPvP.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/KitPvP.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/Settings.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/Settings.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandAchievements.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandAchievements.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandCrate.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandCrate.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandDuel.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandDuel.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandKit.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandKit.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandKitName.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandKitName.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandKitPvPHelp.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandKitPvPHelp.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandKitpvpStats.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandKitpvpStats.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandShop.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandShop.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandSoup.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandSoup.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandSpawn.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandSpawn.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandTopStats.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandTopStats.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandUpgrade.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandUpgrade.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandViewKit.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandViewKit.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/staff/CommandEco.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/staff/CommandEco.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/staff/CommandGiveKeys.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/staff/CommandGiveKeys.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/staff/CommandKitsUnlocked.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/staff/CommandKitsUnlocked.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/staff/CommandResetStats.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/staff/CommandResetStats.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/staff/CommandSetLevel.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/staff/CommandSetLevel.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/staff/CommandSetStats.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/staff/CommandSetStats.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/staff/CommandTeam.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/staff/CommandTeam.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/staff/CommandTp.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/staff/CommandTp.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/staff/CommandUnlock.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/staff/CommandUnlock.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/staff/CommandViewStats.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/staff/CommandViewStats.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/staff/RefundCommand.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/staff/RefundCommand.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/algorithms/SequentialSearch.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/algorithms/SequentialSearch.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/commands/Command.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/commands/Command.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/commands/CommandEvent.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/commands/CommandEvent.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/commands/CommandManager.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/commands/CommandManager.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/commands/Module.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/commands/Module.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/datastructures/Pair.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/datastructures/Pair.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/datastructures/binarytree/BTNode.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/datastructures/binarytree/BTNode.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/datastructures/binarytree/BinaryTree.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/datastructures/binarytree/BinaryTree.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/events/CustomEvent.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/events/CustomEvent.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/member/DisplayRank.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/member/DisplayRank.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/member/Member.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/member/Member.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/member/MemberManager.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/member/MemberManager.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/member/Permission.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/member/Permission.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/member/listeners/MemberJoinQuit.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/member/listeners/MemberJoinQuit.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/member/listeners/MemberListeners.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/member/listeners/MemberListeners.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/option/IOption.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/option/IOption.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/option/None.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/option/None.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/option/Some.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/option/Some.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/region/DataPoint.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/region/DataPoint.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/region/Region.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/region/Region.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/Callback.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/Callback.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/DelayedTeleport.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/DelayedTeleport.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/ItemBuilder.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/ItemBuilder.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/ParticleEffect.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/Recharge.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/Recharge.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/ReflectionUtils.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/ReflectionUtils.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilBlock.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/UtilBlock.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilItem.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/UtilItem.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilMath.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/UtilMath.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilPacket.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/UtilPacket.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilPlayer.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/UtilPlayer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilServer.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/UtilServer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilString.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/UtilString.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/duel/Duel.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/duel/Duel.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/Kit.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/Kit.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/KitManager.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/KitManager.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/KitType.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/KitType.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitArcher.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitArcher.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitAssassin.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitAssassin.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitBarbarian.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitBarbarian.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitBladeMaster.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitBladeMaster.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitBomber.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitBomber.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitCaveMan.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitCaveMan.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitCerberus.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitCerberus.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitChance.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitChance.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitChronos.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitChronos.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitCobra.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitCobra.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitDefault.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitDefault.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitDualBlader.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitDualBlader.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitDubstep.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitDubstep.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitElite.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitElite.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitEnderman.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitEnderman.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitFireArcher.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitFireArcher.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitFireMage.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitFireMage.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitFisherman.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitFisherman.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitFrosty.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitFrosty.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitGank.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitGank.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitGhost.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitGhost.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitGolem.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitGolem.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitHades.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitHades.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitHuntsman.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitHuntsman.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitHydra.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitHydra.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitHyper.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitHyper.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitJesus.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitJesus.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitJumper.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitJumper.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitKangaroo.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitKangaroo.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitKing.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitKing.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitKnight.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitKnight.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitLover.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitLover.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitMaster.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitMaster.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitMedic.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitMedic.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitMystic.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitMystic.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitNinja.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitNinja.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitPlush.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitPlush.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitPotionMaster.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitPotionMaster.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitPrick.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitPrick.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitShaco.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitShaco.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitSharingan.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitSharingan.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitSniper.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitSniper.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitSonic.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitSonic.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitSoulMaster.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitSoulMaster.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitStrafe.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitStrafe.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitSupport.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitSupport.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitTank.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitTank.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitTeleporter.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitTeleporter.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitTribesman.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitTribesman.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitUnicorn.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitUnicorn.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitVampire.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitVampire.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitWarrior.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitWarrior.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitWither.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitWither.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitWizard.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitWizard.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitWolfPack.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitWolfPack.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitZeus.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitZeus.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/SignListeners.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/listeners/SignListeners.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/WorldListeners.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/listeners/WorldListeners.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/chat/ChatClick.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/listeners/chat/ChatClick.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/player/LastMoveListener.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/listeners/player/LastMoveListener.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/player/PlayerDamageListener.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/listeners/player/PlayerDamageListener.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/player/PlayerInteractListener.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/listeners/player/PlayerInteractListener.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/player/PlayerJoinQuitListener.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/listeners/player/PlayerJoinQuitListener.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/player/PlayerListeners.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/listeners/player/PlayerListeners.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/player/PlayerMoveListener.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/listeners/player/PlayerMoveListener.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/managers/PageManager.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/managers/PageManager.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/runnable/CrateRunnable.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/runnable/CrateRunnable.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/runnable/ItemRunnable.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/runnable/ItemRunnable.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/scoreboard/HighestKsUpdater.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/scoreboard/HighestKsUpdater.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/scoreboard/KitPvPScoreboard.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/scoreboard/KitPvPScoreboard.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/stat/Achievement.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/stat/Achievement.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/stat/KitData.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/stat/KitData.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/stat/KitPvPDB.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/stat/KitPvPDB.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/stat/KitPvPStats.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/stat/KitPvPStats.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/stat/RotationManager.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/stat/RotationManager.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/ui/AchievementsMenu.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/ui/AchievementsMenu.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/ui/KitsMenu.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/ui/KitsMenu.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/ui/MenuSize.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/ui/MenuSize.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/ui/ShopMenu.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/ui/ShopMenu.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/ui/ViewkitMenu.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/ui/ViewkitMenu.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/util/DamageDisplay.java" afterPath="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/util/DamageDisplay.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" afterPath="$PROJECT_DIR$/dependency-reduced-pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/plugin.yml" afterPath="$PROJECT_DIR$/target/classes/plugin.yml" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,104 +355,104 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="BinaryTree.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/datastructures/binarytree/BinaryTree.java">
+      <file leaf-file-name="KitSonic.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitSonic.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="192" column="90" lean-forward="false" selection-start-line="192" selection-start-column="90" selection-end-line="192" selection-end-column="90" />
+            <state relative-caret-position="193">
+              <caret line="68" column="5" lean-forward="false" selection-start-line="68" selection-start-column="5" selection-end-line="68" selection-end-column="5" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CommandDuel.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandDuel.java">
+      <file leaf-file-name="KitSoulMaster.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitSoulMaster.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="169" column="44" lean-forward="false" selection-start-line="169" selection-start-column="44" selection-end-line="169" selection-end-column="44" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CommandManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/commands/CommandManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="47" column="19" lean-forward="false" selection-start-line="47" selection-start-column="19" selection-end-line="47" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="KitDubstep.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitDubstep.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="31" column="88" lean-forward="false" selection-start-line="31" selection-start-column="88" selection-end-line="31" selection-end-column="88" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Kit.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/Kit.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="288" column="32" lean-forward="false" selection-start-line="288" selection-start-column="32" selection-end-line="288" selection-end-column="32" />
+            <state relative-caret-position="238">
+              <caret line="55" column="78" lean-forward="false" selection-start-line="55" selection-start-column="78" selection-end-line="55" selection-end-column="78" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="KitWizard.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitWizard.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitWizard.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="98" column="16" lean-forward="false" selection-start-line="98" selection-start-column="16" selection-end-line="98" selection-end-column="16" />
+            <state relative-caret-position="309">
+              <caret line="58" column="82" lean-forward="false" selection-start-line="58" selection-start-column="82" selection-end-line="58" selection-end-column="82" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KitShaco.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitShaco.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-167">
+              <caret line="82" column="53" lean-forward="false" selection-start-line="82" selection-start-column="53" selection-end-line="82" selection-end-column="53" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" column="27" lean-forward="false" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KitBarbarian.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitBarbarian.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="11" column="18" lean-forward="false" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="plugin.yml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/plugin.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" column="39" lean-forward="false" selection-start-line="3" selection-start-column="39" selection-end-line="3" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitlab-ci.yml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitlab-ci.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dependency-reduced-pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dependency-reduced-pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="283">
+              <caret line="80" column="23" lean-forward="false" selection-start-line="80" selection-start-column="23" selection-end-line="80" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KitPvP.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/KitPvP.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="7" lean-forward="false" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Module.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/commands/Module.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="21" column="33" lean-forward="false" selection-start-line="21" selection-start-column="33" selection-end-line="21" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Command.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/commands/Command.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="160" column="19" lean-forward="false" selection-start-line="160" selection-start-column="19" selection-end-line="160" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UtilMath.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilMath.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="50" column="20" lean-forward="false" selection-start-line="50" selection-start-column="20" selection-end-line="50" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="KitGolem.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitGolem.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="83" column="20" lean-forward="false" selection-start-line="83" selection-start-column="20" selection-end-line="83" selection-end-column="20" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -156,11 +494,16 @@
       <find>lastProjLaunch</find>
       <find>sign</find>
       <find>getDocument()</find>
+      <find>purr</find>
+      <find>me</find>
     </findStrings>
     <replaceStrings>
       <replace>teamName</replace>
       <replace>document</replace>
     </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GradleLocalSettings">
     <option name="externalProjectsViewState">
@@ -170,42 +513,23 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/PlayerListeners.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/player/PlayerListeners.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/SignListeners.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/managers/PageManager.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitSoulMaster.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitPlush.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitBarbarian.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandDuel.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitMystic.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitSupport.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/ui/ViewkitMenu.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/chat/ChatClick.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/KitPvP.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandKitPvPHelp.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/Recharge.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandSoup.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/Kit.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/player/PlayerInteractListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/player/PlayerJoinQuitListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitFireMage.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/stat/KitPvPStats.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/stat/KitPvPDB.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitFisherman.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/KitType.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/ui/AchievementsMenu.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/runnable/CrateRunnable.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitChronos.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitHades.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/KitManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitSonic.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitUnicorn.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitWizard.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/Settings.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/runnable/ItemRunnable.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilPlayer.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/commands/CommandManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandTopStats.java" />
@@ -213,7 +537,6 @@
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/scoreboard/HighestKsUpdater.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/scoreboard/KitPvPScoreboard.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/player/PlayerMoveListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitFireArcher.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/member/listeners/MemberJoinQuit.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/ItemBuilder.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilMath.java" />
@@ -221,6 +544,26 @@
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/member/Member.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilPacket.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/datastructures/binarytree/BinaryTree.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/Kit.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/ui/ViewkitMenu.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilPlayer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitBarbarian.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitSupport.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/runnable/CrateRunnable.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitSoulMaster.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitFireArcher.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitFireMage.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitPlush.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitMystic.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitSonic.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitWizard.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/skycade/SkycadeKitPVP/kitpvp/kit/kits/KitBarbarian.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/skycade/SkycadeKitPVP/kitpvp/KitPvP.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/KitPvP.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/resources/plugin.yml" />
+        <option value="$PROJECT_DIR$/dependency-reduced-pom.xml" />
       </list>
     </option>
   </component>
@@ -245,7 +588,7 @@
           <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="KitPvP" />
+          <option name="myItemId" value="kitpvp" />
           <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -255,7 +598,7 @@
           <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="KitPvP" />
+          <option name="myItemId" value="kitpvp" />
           <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
@@ -265,11 +608,10 @@
       </PATH>
     </treeState>
   </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="2576" />
-    <option name="height" value="1056" />
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -286,44 +628,26 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="KitPvP - 1.8" />
+              <option name="myItemId" value="SkycadeKitPVP" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="KitPvP - 1.8" />
+              <option name="myItemId" value="SkycadeKitPVP" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="KitPvP - 1.8" />
+              <option name="myItemId" value="SkycadeKitPVP" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="KitPvP - 1.8" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="KitPvP - 1.8" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="KitPvP - 1.8" />
+              <option name="myItemId" value="SkycadeKitPVP" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -334,14 +658,18 @@
               <option name="myItemId" value="main" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="KitPvP - 1.8" />
+              <option name="myItemId" value="SkycadeKitPVP" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="KitPvP - 1.8" />
+              <option name="myItemId" value="SkycadeKitPVP" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -363,11 +691,41 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="KitPvP - 1.8" />
+              <option name="myItemId" value="SkycadeKitPVP" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="KitPvP - 1.8" />
+              <option name="myItemId" value="SkycadeKitPVP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kitpvp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="util" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SkycadeKitPVP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SkycadeKitPVP" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -391,88 +749,29 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="KitPvP - 1.8" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="KitPvP - 1.8" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kitpvp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="listeners" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="KitPvP - 1.8" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="KitPvP - 1.8" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kitpvp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="listeners" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="player" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="js.eslint.eslintPackage" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../EvoCore" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/SivHD/Documents/GitHub/KitPvP/src/main/java/me/bukkit/kitpvp/kit/Kit.java" />
     <property name="settings.editor.selected.configurable" value="copyright" />
+    <property name="FullScreen" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="net.skycade" />
+      <recent name="net.skycade.SkycadeKitPVP" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="me.bukkit.kitpvp.managers" />
       <recent name="me.bukkit.kitpvp.coreclasses.algorithms" />
@@ -487,6 +786,18 @@
       <recent name="C:\Users\SivHD\Documents\GitHub\KitPvP\src\main\java\me\bukkit\kitpvp\coreclasses" />
       <recent name="C:\Users\SivHD\Documents\GitHub\KitPvP\src\main\java\me\bukkit\kitpvp" />
     </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -771,6 +1082,13 @@
       <envs />
       <method />
     </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerJest" factoryName="Jest">
+      <node-interpreter value="project" />
+      <working-dir value="" />
+      <envs />
+      <scope-kind value="ALL" />
+      <method />
+    </configuration>
     <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
       <config-file value="" />
       <node-interpreter value="project" />
@@ -827,12 +1145,57 @@
       </MavenSettings>
       <method />
     </configuration>
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="ScalaTestRunConfiguration" factoryName="ScalaTest">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <setting name="path" value="" />
+      <setting name="package" value="" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workingDirectory" value="" />
+      <setting name="searchForTest" value="Across module dependencies" />
+      <setting name="testName" value="" />
+      <setting name="testKind" value="Class" />
+      <setting name="showProgressMessages" value="true" />
+      <setting name="useSbt" value="false" />
+      <setting name="useUiWithSbt" value="false" />
+      <classRegexps />
+      <testRegexps />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="Specs2RunConfiguration" factoryName="Specs2">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <setting name="path" value="" />
+      <setting name="package" value="" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workingDirectory" value="" />
+      <setting name="searchForTest" value="Across module dependencies" />
+      <setting name="testName" value="" />
+      <setting name="testKind" value="Class" />
+      <setting name="showProgressMessages" value="true" />
+      <setting name="useSbt" value="false" />
+      <setting name="useUiWithSbt" value="false" />
+      <classRegexps />
+      <testRegexps />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
@@ -891,6 +1254,30 @@
     <configuration default="true" type="osgi.bnd.run" factoryName="Test Launcher (JUnit)">
       <method />
     </configuration>
+    <configuration default="true" type="uTestRunConfiguration" factoryName="utest">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <setting name="path" value="" />
+      <setting name="package" value="" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workingDirectory" value="" />
+      <setting name="searchForTest" value="Across module dependencies" />
+      <setting name="testName" value="" />
+      <setting name="testKind" value="Class" />
+      <setting name="showProgressMessages" value="true" />
+      <setting name="useSbt" value="false" />
+      <setting name="useUiWithSbt" value="false" />
+      <classRegexps />
+      <testRegexps />
+      <envs />
+      <method />
+    </configuration>
+  </component>
+  <component name="SbtLocalSettings">
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -914,44 +1301,46 @@
       <workItem from="1493640983278" duration="7748000" />
       <workItem from="1493662172981" duration="631000" />
       <workItem from="1493671024491" duration="1886000" />
+      <workItem from="1493845278274" duration="1932000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="99040000" />
+    <option name="totallyTimeSpent" value="100972000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
-    <editor active="false" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12599364" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33333334" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12589413" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16852146" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32998884" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32998884" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="SBT Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32891566" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33333334" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32891566" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25608012" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32891566" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32998884" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -965,13 +1354,13 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/member/MemberManager.java</url>
+          <url>file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/member/MemberManager.java</url>
           <line>111</line>
           <properties />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/member/listeners/MemberJoinQuit.java</url>
+          <url>file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/member/listeners/MemberJoinQuit.java</url>
           <line>93</line>
           <properties />
           <option name="timeStamp" value="2" />
@@ -981,137 +1370,12 @@
     </breakpoint-manager>
     <watches-manager />
   </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/chat/ChatClick.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/KitPvP.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="51" column="53" lean-forward="true" selection-start-line="51" selection-start-column="53" selection-end-line="51" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/managers/PageManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="18" column="30" lean-forward="false" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandKitPvPHelp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/commands/CommandEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/Recharge.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="39" column="12" lean-forward="false" selection-start-line="39" selection-start-column="12" selection-end-line="39" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandSoup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="17" column="49" lean-forward="false" selection-start-line="17" selection-start-column="49" selection-end-line="17" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitGank.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/duel/Duel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/staff/CommandKitsUnlocked.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="17" column="13" lean-forward="false" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/staff/CommandUnlock.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="31" column="50" lean-forward="true" selection-start-line="31" selection-start-column="50" selection-end-line="31" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/player/PlayerListeners.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="21" column="3" lean-forward="false" selection-start-line="21" selection-start-column="3" selection-end-line="21" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/player/PlayerJoinQuitListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="799">
-          <caret line="58" column="73" lean-forward="false" selection-start-line="58" selection-start-column="73" selection-end-line="58" selection-end-column="73" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#584#585#0" expanded="false" />
-            <element signature="e#620#621#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitFireMage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="31" column="198" lean-forward="false" selection-start-line="31" selection-start-column="198" selection-end-line="31" selection-end-column="198" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/player/PlayerInteractListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/stat/KitPvPStats.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-755">
-          <caret line="95" column="0" lean-forward="false" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/stat/KitPvPDB.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/stat/KitPvPDB.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="9" column="23" lean-forward="false" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
@@ -1119,15 +1383,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitFisherman.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="63" column="15" lean-forward="false" selection-start-line="63" selection-start-column="15" selection-end-line="63" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/KitType.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/KitType.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="394">
           <caret line="92" column="30" lean-forward="false" selection-start-line="92" selection-start-column="30" selection-end-line="92" selection-end-column="30" />
@@ -1135,7 +1391,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/ui/AchievementsMenu.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/ui/AchievementsMenu.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
           <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
@@ -1145,35 +1401,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/runnable/CrateRunnable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="31" lean-forward="false" selection-start-line="2" selection-start-column="31" selection-end-line="2" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitChronos.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitChronos.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitHades.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitHades.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/KitManager.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/KitManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
           <caret line="19" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
@@ -1181,17 +1429,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitSonic.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitUnicorn.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitUnicorn.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="11" column="32" lean-forward="false" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
@@ -1199,7 +1437,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/Settings.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/Settings.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="42" lean-forward="false" selection-start-line="2" selection-start-column="42" selection-end-line="2" selection-end-column="42" />
@@ -1207,7 +1445,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/runnable/ItemRunnable.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/runnable/ItemRunnable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="343">
           <caret line="51" column="8" lean-forward="false" selection-start-line="51" selection-start-column="8" selection-end-line="51" selection-end-column="8" />
@@ -1215,26 +1453,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilPlayer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="394">
-          <caret line="74" column="8" lean-forward="false" selection-start-line="74" selection-start-column="8" selection-end-line="74" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/ParticleEffect.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/ParticleEffect.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="182">
           <caret line="385" column="76" lean-forward="false" selection-start-line="385" selection-start-column="76" selection-end-line="385" selection-end-column="76" />
           <folding>
-            <element signature="e#15097#15098#0" expanded="true" />
-            <element signature="e#15182#15183#0" expanded="true" />
+            <element signature="e#15099#15100#0" expanded="true" />
+            <element signature="e#15184#15185#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandTopStats.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandTopStats.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
           <caret line="79" column="74" lean-forward="false" selection-start-line="79" selection-start-column="74" selection-end-line="79" selection-end-column="74" />
@@ -1242,7 +1472,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/util/DamageDisplay.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/util/DamageDisplay.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="11" column="71" lean-forward="false" selection-start-line="11" selection-start-column="71" selection-end-line="11" selection-end-column="71" />
@@ -1250,7 +1480,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/scoreboard/HighestKsUpdater.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/scoreboard/HighestKsUpdater.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="369">
           <caret line="33" column="71" lean-forward="false" selection-start-line="33" selection-start-column="71" selection-end-line="33" selection-end-column="71" />
@@ -1258,7 +1488,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/scoreboard/KitPvPScoreboard.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/scoreboard/KitPvPScoreboard.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
           <caret line="28" column="51" lean-forward="false" selection-start-line="28" selection-start-column="51" selection-end-line="28" selection-end-column="51" />
@@ -1268,7 +1498,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/listeners/player/PlayerMoveListener.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/listeners/player/PlayerMoveListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="301">
           <caret line="26" column="57" lean-forward="false" selection-start-line="26" selection-start-column="57" selection-end-line="26" selection-end-column="57" />
@@ -1276,15 +1506,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitFireArcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="58" column="20" lean-forward="false" selection-start-line="58" selection-start-column="20" selection-end-line="58" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/member/listeners/MemberJoinQuit.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/member/listeners/MemberJoinQuit.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="309">
           <caret line="119" column="11" lean-forward="true" selection-start-line="119" selection-start-column="11" selection-end-line="119" selection-end-column="11" />
@@ -1292,7 +1514,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/ItemBuilder.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/ItemBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
           <caret line="112" column="58" lean-forward="false" selection-start-line="112" selection-start-column="58" selection-end-line="112" selection-end-column="58" />
@@ -1300,7 +1522,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/ReflectionUtils.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/ReflectionUtils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
           <caret line="735" column="11" lean-forward="false" selection-start-line="735" selection-start-column="11" selection-end-line="735" selection-end-column="11" />
@@ -1308,7 +1530,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/member/Member.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/member/Member.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
           <caret line="23" column="30" lean-forward="false" selection-start-line="23" selection-start-column="30" selection-end-line="23" selection-end-column="30" />
@@ -1316,7 +1538,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilPacket.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/UtilPacket.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="369">
           <caret line="54" column="12" lean-forward="false" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
@@ -1326,88 +1548,382 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/datastructures/binarytree/BinaryTree.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/datastructures/binarytree/BinaryTree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
+        <state relative-caret-position="2580">
           <caret line="192" column="90" lean-forward="false" selection-start-line="192" selection-start-column="90" selection-end-line="192" selection-end-column="90" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#423#424#0" expanded="false" />
+            <element signature="e#458#459#0" expanded="false" />
+            <element signature="e#500#501#0" expanded="false" />
+            <element signature="e#538#539#0" expanded="false" />
+            <element signature="e#590#591#0" expanded="false" />
+            <element signature="e#628#629#0" expanded="false" />
+            <element signature="e#1107#1108#0" expanded="false" />
+            <element signature="e#1152#1153#0" expanded="false" />
+            <element signature="e#1894#1895#0" expanded="false" />
+            <element signature="e#1929#1930#0" expanded="false" />
+            <element signature="e#2194#2195#0" expanded="false" />
+            <element signature="e#2231#2232#0" expanded="false" />
+            <element signature="e#2528#2529#0" expanded="false" />
+            <element signature="e#2574#2575#0" expanded="false" />
+            <element signature="e#5018#5019#0" expanded="false" />
+            <element signature="e#5045#5046#0" expanded="false" />
+            <element signature="e#5091#5092#0" expanded="false" />
+            <element signature="e#5128#5129#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/commands/CommandDuel.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/commands/CommandDuel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
+        <state relative-caret-position="2175">
           <caret line="169" column="44" lean-forward="false" selection-start-line="169" selection-start-column="44" selection-end-line="169" selection-end-column="44" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/commands/CommandManager.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/commands/CommandManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
+        <state relative-caret-position="495">
           <caret line="47" column="19" lean-forward="false" selection-start-line="47" selection-start-column="19" selection-end-line="47" selection-end-column="19" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#3065#3066#0" expanded="false" />
+            <element signature="e#3096#3097#0" expanded="false" />
+            <element signature="e#3180#3181#0" expanded="false" />
+            <element signature="e#3217#3218#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitDubstep.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitDubstep.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
+        <state relative-caret-position="315">
           <caret line="31" column="88" lean-forward="false" selection-start-line="31" selection-start-column="88" selection-end-line="31" selection-end-column="88" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitGolem.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitGolem.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
+        <state relative-caret-position="870">
           <caret line="83" column="20" lean-forward="false" selection-start-line="83" selection-start-column="20" selection-end-line="83" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/kits/KitWizard.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/commands/Module.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="98" column="16" lean-forward="false" selection-start-line="98" selection-start-column="16" selection-end-line="98" selection-end-column="16" />
+        <state relative-caret-position="135">
+          <caret line="21" column="33" lean-forward="false" selection-start-line="21" selection-start-column="33" selection-end-line="21" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/commands/Command.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1785">
+          <caret line="160" column="19" lean-forward="false" selection-start-line="160" selection-start-column="19" selection-end-line="160" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/UtilMath.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="50" column="20" lean-forward="false" selection-start-line="50" selection-start-column="20" selection-end-line="50" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="8" lean-forward="false" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/spigotmc/spigot-api/1.11.2-R0.1-SNAPSHOT/spigot-api-1.11.2-R0.1-20170501.095304-120.jar!/org/bukkit/Sound.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="7" column="12" lean-forward="false" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/spigotmc/spigot-api/1.11.2-R0.1-SNAPSHOT/spigot-api-1.11.2-R0.1-20170501.095304-120-sources.jar!/org/bukkit/Sound.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="75" lean-forward="false" selection-start-line="5" selection-start-column="75" selection-end-line="5" selection-end-column="75" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/coreclasses/utils/UtilPlayer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="38" lean-forward="false" selection-start-line="7" selection-start-column="38" selection-end-line="7" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/ui/ViewkitMenu.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="38" lean-forward="false" selection-start-line="12" selection-start-column="38" selection-end-line="12" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/Kit.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3951">
+          <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#6601#6955#0" expanded="true" />
+            <element signature="e#6954#6955#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitSupport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="61" column="29" lean-forward="false" selection-start-line="61" selection-start-column="29" selection-end-line="61" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/runnable/CrateRunnable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-164">
+          <caret line="38" column="5" lean-forward="false" selection-start-line="38" selection-start-column="5" selection-end-line="38" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/commands/Module.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitFireArcher.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="21" column="33" lean-forward="false" selection-start-line="21" selection-start-column="33" selection-end-line="21" selection-end-column="33" />
+        <state relative-caret-position="225">
+          <caret line="54" column="76" lean-forward="false" selection-start-line="54" selection-start-column="76" selection-end-line="54" selection-end-column="76" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/commands/Command.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitFisherman.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="160" column="19" lean-forward="false" selection-start-line="160" selection-start-column="19" selection-end-line="160" selection-end-column="19" />
+        <state relative-caret-position="208">
+          <caret line="63" column="15" lean-forward="false" selection-start-line="63" selection-start-column="15" selection-end-line="63" selection-end-column="15" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/coreclasses/utils/UtilMath.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitFireMage.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="50" column="20" lean-forward="false" selection-start-line="50" selection-start-column="20" selection-end-line="50" selection-end-column="20" />
+        <state relative-caret-position="173">
+          <caret line="40" column="72" lean-forward="false" selection-start-line="40" selection-start-column="72" selection-end-line="40" selection-end-column="72" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/bukkit/kitpvp/kit/Kit.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitPlush.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="288" column="32" lean-forward="false" selection-start-line="288" selection-start-column="32" selection-end-line="288" selection-end-column="32" />
+        <state relative-caret-position="11">
+          <caret line="59" column="49" lean-forward="false" selection-start-line="59" selection-start-column="49" selection-end-line="59" selection-end-column="49" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitMystic.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="56" column="68" lean-forward="false" selection-start-line="56" selection-start-column="68" selection-end-line="56" selection-end-column="68" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitSonic.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="68" column="5" lean-forward="false" selection-start-line="68" selection-start-column="5" selection-end-line="68" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitSoulMaster.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="55" column="78" lean-forward="false" selection-start-line="55" selection-start-column="78" selection-end-line="55" selection-end-column="78" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitWizard.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="58" column="82" lean-forward="false" selection-start-line="58" selection-start-column="82" selection-end-line="58" selection-end-column="82" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitShaco.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-167">
+          <caret line="82" column="53" lean-forward="false" selection-start-line="82" selection-start-column="53" selection-end-line="82" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/kit/kits/KitBarbarian.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="18" lean-forward="false" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/skycade/kitpvp/KitPvP.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="7" lean-forward="false" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="27" lean-forward="false" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dependency-reduced-pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="80" column="23" lean-forward="false" selection-start-line="80" selection-start-column="23" selection-end-line="80" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/plugin.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="39" lean-forward="false" selection-start-line="3" selection-start-column="39" selection-end-line="3" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitlab-ci.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <last-edited>KitPvP:jar</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.5" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>72b91a2c81</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>KitPvP</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Maven: com.google.code.gson:gson:2.2.4</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
   <component name="mavenExecuteGoalHistory">
     <option value="$PROJECT_DIR$" />

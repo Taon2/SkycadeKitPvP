@@ -1,4 +1,4 @@
 name: KitPvP
-main: me.bukkit.kitpvp.KitPvP
+main: net.skycade.SkycadeKitPVP
 version: 1.0
 author: [WhiteWalker72]
