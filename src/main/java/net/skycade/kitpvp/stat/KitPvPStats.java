@@ -1,9 +1,10 @@
 package net.skycade.kitpvp.stat;
 
-import net.skycade.kitpvp.Settings;
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.kit.KitType;
 import org.bson.Document;
+import org.json.simple.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,10 +18,8 @@ public class KitPvPStats {
         this.member = member;
     }
 
-    public Document getDocument() {
-        if (member.get("kitpvp") == null)
-            member.put("kitpvp", new Document());
-        return (Document) member.get("kitpvp");
+    public Map<String, Object> getProperties() {
+        return member.getProperties();
     }
 
     public int getKills() {
@@ -48,8 +47,6 @@ public class KitPvPStats {
     }
 
     public int getCoins() {
-        if (!getDocument().containsKey("coins"))
-            set("coins", Settings.START_COINS);
         return getInt("coins");
     }
 
@@ -76,8 +73,8 @@ public class KitPvPStats {
     }
 
     public int getCrateKeys() {
-        if (!getDocument().containsKey("keys"))
-            set("keys", Settings.START_KEYS);
+        if (!getProperties().containsKey("keys"))
+            set("keys", KitPvP.getInstance().getConfig().getInt("start-keys"));
         return getInt("keys");
     }
 
@@ -94,9 +91,9 @@ public class KitPvPStats {
     }
 
     public KitType getActiveKit() {
-        if (!getDocument().containsKey("kit"))
-            getDocument().put("kit", KitType.DEFAULT.toString());
-        return KitType.valueOf(getDocument().getString("kit"));
+        if (!getProperties().containsKey("kit"))
+            getProperties().put("kit", KitType.DEFAULT.toString());
+        return KitType.valueOf((String) getProperties().get("kit"));
     }
 
     public void setActiveKit(KitType kitType) {
@@ -104,13 +101,13 @@ public class KitPvPStats {
     }
 
     public KitType getKitPreference() {
-        if (getDocument().containsKey("kit_preference"))
-            return KitType.valueOf(getDocument().getString("kit_preference"));
+        if (getProperties().containsKey("kit_preference"))
+            return KitType.valueOf((String) getProperties().get("kit_preference"));
         return KitType.DEFAULT;
     }
 
     public void setKitPreference(KitType kitType) {
-        getDocument().put("kit_preference", kitType.toString());
+        getProperties().put("kit_preference", kitType.toString());
     }
 
     public boolean applyKitPreference() {
@@ -121,42 +118,42 @@ public class KitPvPStats {
     }
 
     public Map<KitType, KitData> getKits() {
-        Document document = getDocument();
-        if (!document.containsKey("kits")) {
-            document.put("kits", new Document());
+        Map<String, Object> properties = getProperties();
+        if (!properties.containsKey("kits")) {
+            properties.put("kits", new Document());
 
             //Unlocked from the start:
             KitType def = KitType.DEFAULT;
-            ((Document) document.get("kits")).put(def.toString(), new KitData(def).getDocument());
+            ((Document) properties.get("kits")).put(def.toString(), new KitData(def).getDocument());
 
-            for (KitType kitType : Settings.START_KITS) {
-                ((Document) document.get("kits")).put(kitType.toString(), new KitData(kitType).getDocument());
-                ((Document) document.get("kits")).put(kitType.toString(), new KitData(kitType).getDocument());
+            for (String kitType : KitPvP.getInstance().getConfig().getStringList("start-kits")) {
+                ((Document) properties.get("kits")).put(KitType.byAlias(kitType).toString(), new KitData(KitType.byAlias(kitType)).getDocument());
+                ((Document) properties.get("kits")).put(KitType.byAlias(kitType).toString(), new KitData(KitType.byAlias(kitType)).getDocument());
             }
 
         }
-        Document kits = (Document) document.get("kits");
+        Document kits = (Document) properties.get("kits");
         Map<KitType, KitData> kitDatas = new HashMap<>();
         kits.keySet().forEach(kit -> {
-            KitData data = new KitData((Document) kits.get(kit));
+            KitData data = new KitData(new Document((JSONObject) kits.get(kit)));
             kitDatas.put(KitType.valueOf(kit), data);
         });
         return kitDatas;
     }
 
     public void resetKits() {
-        Document document = getDocument();
-        document.put("kits", new Document());
+        Map<String, Object> properties = getProperties();
+        properties.put("kits", new Document());
         KitType kit = KitType.DEFAULT;
-        ((Document) document.get("kits")).put(kit.toString(), new KitData(kit).getDocument());
+        ((Document) properties.get("kits")).put(kit.toString(), new KitData(kit).getDocument());
     }
 
     public void removeKit(KitType type) {
-        Document document = getDocument();
-        Document kits = (Document) document.get("kits");
+        Map<String, Object> properties = getProperties();
+        Document kits = (Document) properties.get("kits");
         for (String kit : kits.keySet()) {
             if (type.equals(KitType.valueOf(kit))) {
-                ((Document) document.get("kits")).remove(kit);
+                ((Document) properties.get("kits")).remove(kit);
                 break;
             }
         }
@@ -169,20 +166,16 @@ public class KitPvPStats {
     public void addKit(KitType kit) {
         if (getKits().containsKey(kit))
             return;
-        ((Document) getDocument().get("kits")).put(kit.toString(), new KitData(kit).getDocument());
+        ((Document) getProperties().get("kits")).put(kit.toString(), new KitData(kit).getDocument());
     }
 
     private int getInt(String key) {
-        Document document = getDocument();
-        if (!document.containsKey(key))
-            document.put(key, 0);
-        return document.getInteger(key);
+        Object value = member.getProperties().getOrDefault(key, 0);
+        return (int) value;
     }
 
     private void set(String key, Object value) {
-        Document document = getDocument();
-        document.put(key, value);
-        member.put("kitpvp", document);
+        member.getProperties().put(key, value);
     }
 
     public Integer getLastStreak() {

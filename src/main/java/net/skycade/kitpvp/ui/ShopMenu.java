@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.ui;
 
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.Settings;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
@@ -64,7 +63,7 @@ public class ShopMenu implements Listener {
     }
 
     private int getMenuSize() {
-        int slots = Settings.KITS_ROTATION_AMOUNT;
+        int slots = KitPvP.getInstance().getConfig().getInt("kits-rotation-amount");
         int size = 9;
         while (slots - 9 > 0) {
             size += 9;

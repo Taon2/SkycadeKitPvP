@@ -65,14 +65,23 @@
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
             <version>1.11.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath>${basedir}/jars/craftbukkit-1.11.2.jar</systemPath>
         </dependency>
-        <!-- Mongo -->
+        <!-- Bson -->
         <dependency>
             <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
+            <artifactId>bson</artifactId>
             <version>3.4.1</version>
             <scope>compile</scope>
+        </dependency>
+        <!-- Skycade -->
+        <dependency>
+            <groupId>net.skycade</groupId>
+            <artifactId>SkycadeCore</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/jars/SkycadeCore-1.0.0-SNAPSHOT.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

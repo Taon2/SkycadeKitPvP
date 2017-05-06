@@ -1,33 +1,34 @@
 package net.skycade.kitpvp;
 
+import net.skycade.SkycadeCore.SkycadePlugin;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.region.DataPoint;
 import net.skycade.kitpvp.coreclasses.region.Region;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.KitManager;
+import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.listeners.WorldListeners;
 import net.skycade.kitpvp.listeners.chat.ChatClick;
 import net.skycade.kitpvp.listeners.player.*;
 import net.skycade.kitpvp.scoreboard.HighestKsUpdater;
-import net.skycade.kitpvp.stat.KitPvPDB;
 import net.skycade.kitpvp.scoreboard.KitPvPScoreboard;
-import net.skycade.kitpvp.stat.RotationManager;
+import net.skycade.kitpvp.stat.KitPvPDB;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import org.bson.Document;
+import net.skycade.kitpvp.stat.RotationManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class KitPvP extends JavaPlugin {
+public class KitPvP extends SkycadePlugin {
 
     private final Map<UUID, KitPvPStats> stats = new HashMap<>();
 
@@ -41,8 +42,42 @@ public class KitPvP extends JavaPlugin {
 
     private Location spawnLocation;
 
+    private void defaults() {
+        Map<String, Object> defaults = new HashMap<>();
+
+        defaults.put("start-coins", 3500);
+        defaults.put("start-kits", Arrays.asList(KitType.ARCHER.getAlias(), KitType.CHANCE.getAlias()));
+        defaults.put("start-keys", 1);
+        defaults.put("rotation-seconds", 3600);
+        defaults.put("kits-rotation-amount", 18);
+        defaults.put("required-xp-multiplier", 1);
+        defaults.put("display-hit-damage", true);
+        defaults.put("ks-update-time", 30);
+        defaults.put("kill-credits", 15);
+        defaults.put("chest-cooldown", 30);
+        defaults.put("sign-refresh-cooldown", 120);
+        defaults.put("stat-refresh-time", 1800);
+        defaults.put("spawn-region.point-1", new Location(Bukkit.getWorld("world"),-100, 0, 200));
+        defaults.put("spawn-region.point-2", new Location(Bukkit.getWorld("world"), 300, 250, 290));
+        defaults.put("spawn-location", new Location(Bukkit.getWorld("world"), -198, 72, 236));
+
+
+        defaults.put("database.host", "localhost");
+        defaults.put("database.port", 3306);
+        defaults.put("database.name", "skycade");
+        defaults.put("database.username", "skycade");
+        defaults.put("database.password", "h1ghl1s3cur3pa55");
+        defaults.put("database.kitpvp-table", "skycade_KitPvPMembers");
+        defaults.put("database.previous-names-table", "skycade_PreviousNames");
+        defaults.put("database.properties-table", "skycade_KitPvPProperties");
+
+        setConfigDefaults(defaults);
+        loadDefaultConfig();
+    }
+
     @Override
     public void onEnable() {
+        defaults();
         instance = this;
 
         KitPvPDB.getInstance();
@@ -55,24 +90,24 @@ public class KitPvP extends JavaPlugin {
         new KitPvPScoreboard(this);
 
         //Change the datapoint locations!
-        this.spawnRegion = new Region("spawn", new DataPoint(0, 60, 0), new DataPoint(0, 60, 0));
+        Location location1 = (Location) getConfig().get("spawn-region.point-1");
+        Location location2 = (Location) getConfig().get("spawn-region.point-2");
+        this.spawnRegion = new Region("spawn", new DataPoint(location1.getBlockX(), location1.getBlockY(), location1.getBlockZ()), new DataPoint(location2.getBlockX(), location2.getBlockY(), location2.getBlockZ()));
 
         //TODO: set spawnlocation
-        this.spawnLocation = new Location(getWorld(), -198, 72, 236);
+        this.spawnLocation = (Location) getConfig().get("spawn-location");
 
-       registerListeners();
+        registerListeners();
     }
 
     @Override
     public void onDisable() {
         Bukkit.getOnlinePlayers().forEach(p -> p.teleport(getSpawnpoint()));
-        MemberManager.getInstance().getMembers().entrySet().forEach(entry -> {
-                Member member = entry.getValue();
-                MemberManager.getInstance().getCollection().updateOne(new Document("_id", member.getDocument().get("_id")),
-                        new Document("$set", member.getDocument()));
-
-        });
-        rotationManager.updateToDB();
+        for (Map.Entry<UUID, Member> entry : MemberManager.getInstance().getMembers().entrySet()) {
+            Member member = entry.getValue();
+            KitPvPDB.getInstance().setMemberData(entry.getKey(), member.getName(), member.getPreviousNames(), member.getRawPermissions(), member.getKills(), member.getHighestStreak(), member.getDeaths(), member.getProperties());
+        }
+        rotationManager.update();
     }
 
     private void registerListeners() {

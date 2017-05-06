@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.listeners.player;
 
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.Settings;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -95,7 +94,7 @@ public class PlayerInteractListener implements Listener {
 
                 soupChestCooldown.add(p.getUniqueId());
                 Bukkit.getScheduler().runTaskLater(plugin, () -> soupChestCooldown.remove(p.getUniqueId()),
-                        Settings.CHEST_COOLDOWN * 20);
+                        KitPvP.getInstance().getConfig().getInt("chest-cooldown") * 20);
                 return;
             }
         }

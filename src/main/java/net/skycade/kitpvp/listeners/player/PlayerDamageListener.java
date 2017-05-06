@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.listeners.player;
 
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.Settings;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.kit.Kit;
@@ -143,7 +142,7 @@ public class PlayerDamageListener implements Listener {
         // Give rewards to the killer
         stats.setKills(stats.getKills() + 1);
         stats.setStreak(plugin.getStats(killer).getStreak() + 1);
-        stats.setCoins(stats.getCoins() + Settings.KILL_CREDITS + killstreakCredits);
+        stats.setCoins(stats.getCoins() + KitPvP.getInstance().getConfig().getInt("kill-credits") + killstreakCredits);
 
         // Increase kit xp depending on the kit and level of the player who died.
         int rewardXp = (diedStats.getActiveKit().getKit().getPrice() / 2000) * diedStats.getKits().get(diedStats.getActiveKit()).getLevel();
@@ -193,7 +192,7 @@ public class PlayerDamageListener implements Listener {
             return;
         Player damagee = (Player) e.getEntity();
 
-        if (Settings.DISPLAY_HIT_DAMAGE) {
+        if (KitPvP.getInstance().getConfig().getBoolean("display-hit-damage")) {
             // Show amount of damage
             int finalDamage = (int) e.getFinalDamage();
             if (finalDamage > 0)
@@ -287,7 +286,7 @@ public class PlayerDamageListener implements Listener {
             for (Map.Entry<UUID, Double> entry : inner.entrySet()) {
                 Player keyPlayer = Bukkit.getPlayer(entry.getKey());
                 if (keyPlayer != null) {
-                    int credits = Settings.KILL_CREDITS;
+                    int credits = KitPvP.getInstance().getConfig().getInt("kill-credits");
                     double percentage = ((entry.getValue() * 100) / total) / 100;
 
                     if (keyPlayer != killed && keyPlayer != killer) {

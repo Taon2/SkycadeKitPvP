@@ -1,6 +1,6 @@
 package net.skycade.kitpvp.listeners;
 
-import net.skycade.kitpvp.Settings;
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.member.Permission;
@@ -100,7 +100,7 @@ public class SignListeners implements Listener {
                 member.message("You §acan't §7use the sign yet.");
                 return;
             }
-            manager.getSignMap().put(member.getUUID(),Settings.SIGN_REFRESH_COOLDOWN);
+            manager.getSignMap().put(member.getUUID(), KitPvP.getInstance().getConfig().getInt("sign-refresh-cooldown"));
             UtilPlayer.reset(member.getPlayer());
             stats.getActiveKit().getKit().applyKit(member.getPlayer());
             stats.getActiveKit().getKit().giveSoup(member.getPlayer(), 32);

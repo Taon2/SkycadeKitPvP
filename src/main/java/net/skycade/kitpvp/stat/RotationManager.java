@@ -1,46 +1,60 @@
 package net.skycade.kitpvp.stat;
 
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.Settings;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.KitType;
-import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.logging.Level;
 
 public class RotationManager {
 
-    private final Document doc;
+    private final JavaPlugin plugin;
+    private final File file;
+    private YamlConfiguration yaml;
 
     public RotationManager() {
-        if (KitPvPDB.getInstance().getKitpvpCollection().count() == 0) {
-            doc = new Document();
-            doc.put("last_rotation", System.currentTimeMillis());
-            KitPvPDB.getInstance().getKitpvpCollection().insertOne(doc);
-        } else
-            doc = KitPvPDB.getInstance().getKitpvpCollection().find().first();
+        plugin = KitPvP.getInstance();
+
+        file = new File(plugin.getDataFolder(), "rotation.yml");
+        Map<String, Object> defaults = new HashMap<>();
+        defaults.put("last-rotation", System.currentTimeMillis());
+        defaults.put("current-rotation", new ArrayList<String>());
+
+        if (!file.exists()) {
+            yaml = new YamlConfiguration();
+            for (Map.Entry<String, Object> entry : defaults.entrySet()) {
+                yaml.set(entry.getKey(), entry.getValue());
+            }
+            save();
+        } else {
+            yaml = YamlConfiguration.loadConfiguration(file);
+            for (Map.Entry<String, Object> entry : defaults.entrySet()) {
+                if (yaml.get(entry.getKey(), null) == null) yaml.set(entry.getKey(), entry.getValue());
+            }
+            save();
+        }
         startRotationUpdater();
     }
 
-    public long getLastRotation() {
-        return doc.getLong("last_rotation");
+    private long getLastRotation() {
+        return yaml.getLong("last-rotation");
     }
 
-    public void setLastRotation(long time) {
-        doc.put("last_rotation", time);
+    private void setLastRotation() {
+        yaml.set("last-rotation", System.currentTimeMillis());
+        save();
     }
 
-    public void setLastRotation() {
-        doc.put("last_rotation", System.currentTimeMillis());
-    }
-
-    public List<String> getCurrentKitRotation() {
-        if (!doc.containsKey("current_rotation"))
-            updateRotation();
-        return (List<String>) doc.get("current_rotation");
+    private List<String> getCurrentKitRotation() {
+        List<String> list = yaml.getStringList("current-rotation");
+        if (list == null || list.isEmpty()) updateRotation();
+        return yaml.getStringList("current-rotation") == null ? new ArrayList<>() : yaml.getStringList("current-rotation");
     }
 
     public List<KitType> getCurrentKits() {
@@ -54,11 +68,16 @@ public class RotationManager {
         fillRotationList(rotationKits);
         sort(rotationKits);
         setLastRotation();
-        doc.put("current_rotation", rotationKits);
+        setRotationKits(rotationKits);
+    }
+
+    private void setRotationKits(List<String> rotationKits) {
+        yaml.set("current-rotation", rotationKits);
+        save();
     }
 
     private void fillRotationList(List<String> rotationKits) {
-        if (rotationKits.size() >= Settings.KITS_ROTATION_AMOUNT)
+        if (rotationKits.size() >= KitPvP.getInstance().getConfig().getInt("kits-rotation-amount"))
             return;
         KitType kitType = KitType.values()[UtilMath.getRandom(0, KitType.values().length - 1)];
 
@@ -72,11 +91,11 @@ public class RotationManager {
     }
 
     private void startRotationUpdater() {
-        int updateMilliSecs = Settings.ROTATION_SECONDS * 1000;
+        int updateMilliSecs = KitPvP.getInstance().getConfig().getInt("rotation-seconds") * 1000;
         long difference = System.currentTimeMillis() - getLastRotation();
         long nextUpdateSecs = (updateMilliSecs - difference) / 1000;
         if (nextUpdateSecs < 0)
-            updateRotation();;
+            updateRotation();
 
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
             updateRotation();
@@ -100,9 +119,16 @@ public class RotationManager {
 
     }
 
-    public void updateToDB() {
-        KitPvPDB.getInstance().getKitpvpCollection().drop();
-        KitPvPDB.getInstance().getKitpvpCollection().insertOne(doc);
+    private void save() {
+        try {
+            yaml.save(file);
+        } catch (IOException e) {
+            plugin.getLogger().log(Level.SEVERE, "Couldn't save rotation yaml file.", e);
+        }
+    }
+
+    public void update() {
+        save();
     }
 
 }

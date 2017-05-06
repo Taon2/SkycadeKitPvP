@@ -1,12 +1,11 @@
 package net.skycade.kitpvp.coreclasses.member.listeners;
 
-import com.mongodb.client.FindIterable;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
-import org.bson.Document;
+import net.skycade.kitpvp.stat.KitPvPDB;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,16 +46,14 @@ public class MemberJoinQuit implements Listener {
         Member member = memberManager.getMember(e.getUniqueId(), true);
         if (member == null) {
             member = new Member(e.getUniqueId(), e.getName());
-            memberManager.getMembers().put(member.getUUID(), member);
         } else {
-            member.put("name", e.getName());
-            List<String> previousNames = member.getPreviousNames();
+            member.setName(e.getName());
+            /* List<String> previousNames = member.getPreviousNames();
             if (!previousNames.contains(e.getName())) {
-                previousNames.add(0, e.getName());
-                member.put("previous_names", previousNames);
-            }
-
+                member.addPreviousName(e.getName());
+            } setName already handles this no? */
         }
+        memberManager.getMembers().put(member.getUUID(), member);
 
     }
 
@@ -93,17 +90,7 @@ public class MemberJoinQuit implements Listener {
         // works.
         new BukkitRunnable() {
             public void run() {
-                FindIterable<Document> result = memberManager.getCollection()
-                        .find(new Document("_id", member.getDocument().get("_id")));
-                Document newDocument = result.first();
-                if (newDocument != null) {
-                    for (Map.Entry<String, Object> entry : member.getChanges().entrySet())
-                        newDocument.put(entry.getKey(), entry.getValue());
-                    member.setLogChanges(false);
-                    member.getChanges().clear();
-                    member.setDocument(newDocument);
-                    member.update();
-                }
+                member.update();
             }
         }.runTaskLaterAsynchronously(KitPvP.getInstance(), 10);
     }
@@ -115,8 +102,8 @@ public class MemberJoinQuit implements Listener {
         UtilPlayer.removeAttachment(e.getPlayer());
 
         if (member != null) {
-            Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () -> memberManager.getCollection().updateOne(new Document("_id", member.getDocument().get("_id")),
-                    new Document("$set", member.getDocument())));
+            Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () ->
+                            KitPvPDB.getInstance().setMemberData(member.getUUID(), member.getName(), member.getPreviousNames(), member.getRawPermissions(), member.getKills(), member.getHighestStreak(), member.getKills(), member.getProperties()));
             Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () ->
                 memberManager.getMembers().remove(member.getUUID())
             );

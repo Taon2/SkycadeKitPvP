@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.scoreboard;
 
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.Settings;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 
@@ -31,7 +30,7 @@ public class HighestKsUpdater {
         if (uuid != null) {
             highestKsPlayer = uuid;
         }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, this::startUpdating, 20 * Settings.KS_UPDATE_TIME);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, this::startUpdating, 20 * KitPvP.getInstance().getConfig().getInt("ks-update-time"));
     }
 
     public UUID getHighestKsPlayer() {

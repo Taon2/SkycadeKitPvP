@@ -1,6 +1,6 @@
 package net.skycade.kitpvp.coreclasses.member;
 
-import org.bson.Document;
+import net.skycade.kitpvp.stat.KitPvPDB;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -9,59 +9,49 @@ import java.util.*;
 
 public class Member {
 
-    private Document document;
     private Map<String, Object> changes = new HashMap<>();
-    private boolean logChanges = true;
 
-    public Member(Document document) {
-        this.document = document;
-    }
+    private UUID uuid;
+    private String name;
+    private List<String> previousNames = new ArrayList<>();
+
+    private List<String> permissions = new ArrayList<>();
+
+    private Integer kills = 0;
+    private Integer highestStreak = 0;
+
+    private Map<String, Object> properties = new HashMap<>();
+
+    private Integer deaths = 0;
 
     public Member(UUID uuid, String name) {
-        this.document = new Document();
-        put("uuid", uuid.toString());
-        put("name", name);
-        put("previous_names", Collections.singletonList(name));
-        put("permissions", new ArrayList<>());
-        put("kitpvp", new Document());
-        MemberManager.getInstance().getCollection().insertOne(document);
-    }
-
-    public Document getDocument() {
-        return document;
-    }
-
-    public void setDocument(Document document) {
-        this.document = document;
+        this.uuid = uuid;
+        this.name = name;
+        previousNames.add(name);
+        KitPvPDB.getInstance().setMemberData(uuid, name, previousNames, permissions, kills, highestStreak, deaths, properties);
     }
 
     public Map<String, Object> getChanges() {
         return changes;
     }
 
-    public void setLogChanges(boolean logChanges) {
-        this.logChanges = logChanges;
-    }
-
     public UUID getUUID() {
-        return UUID.fromString(getString("uuid"));
+        return uuid;
     }
 
     public String getName() {
-        return getString("name");
+        return name;
     }
 
     public List<String> getPreviousNames() {
-        return (List<String>) document.get("previous_names");
+        return previousNames;
     }
 
     public void setName(String name) {
         if (getPreviousNames().contains(name))
             return;
-        List<String> previousNames = getPreviousNames();
+        this.name = name;
         previousNames.add(name);
-        put("name", name);
-        put("previous_names", previousNames);
     }
 
     public Player getPlayer() {
@@ -85,7 +75,7 @@ public class Member {
 
     public List<Permission> getPermissions(boolean inheritance) {
         Set<Permission> permissions = new HashSet<>();
-        for (String s : (List<String>) document.get("permissions")) {
+        for (String s : this.permissions) {
             Permission permission = Permission.fromString(s);
             if (permission == null)
                 continue;
@@ -99,51 +89,11 @@ public class Member {
     public void addPermission(Permission perm) {
         if (hasPermission(perm))
             return;
-        List<String> permissions = (List<String>) document.get("permissions");
         permissions.add(perm.toString());
-        put("permissions", permissions);
     }
 
     public void update() {
         MemberManager.getInstance().update(this);
-    }
-
-    public void put(String key, Object value) {
-        put(key, value, false);
-    }
-
-    public void put(String key, Object value, boolean update) {
-        document.put(key, value);
-        if (logChanges)
-            changes.put(key, value);
-        if (update)
-            update();
-    }
-
-    public Object get(String key) {
-        return document.get(key);
-    }
-
-    public String getString(String key) {
-        return document.getString(key);
-    }
-
-    public int getInt(String key) {
-        Object object = document.get(key);
-        if (object != null && object instanceof Integer)
-            return (Integer) object;
-        return -1;
-    }
-
-    public long getLong(String key) {
-        Object object = document.get(key);
-        if (object != null && object instanceof Long)
-            return (Long) object;
-        return -1;
-    }
-
-    public boolean getBoolean(String key) {
-        return document.containsKey(key) && document.getBoolean(key, false);
     }
 
     public DisplayRank getDisplayRank() {
@@ -165,6 +115,7 @@ public class Member {
             return displayRank;
         return DisplayRank.NONE;
     }
+
     public boolean isStaff() {
         return getPermissions(true).contains(Permission.staff());
     }
@@ -173,7 +124,6 @@ public class Member {
     public int hashCode() {
         return getUUID().hashCode();
     }
-
     @Override
     public String toString() {
         return getUUID().toString();
@@ -188,4 +138,51 @@ public class Member {
         return this instanceof ConsoleCommandSender;
     }
 
+    public Integer getKills() {
+        return kills;
+    }
+
+    public Integer getHighestStreak() {
+        return highestStreak;
+    }
+
+    public Integer getDeaths() {
+        return deaths;
+    }
+
+    public List<String> getRawPermissions() {
+        return permissions;
+    }
+
+    public void addPreviousName(String name) {
+        previousNames.add(name);
+    }
+
+    public Map<String, Object> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Map<String, Object> properties) {
+        this.properties = properties;
+    }
+
+    public void setPreviousNames(List<String> previousNames) {
+        this.previousNames = previousNames;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
+    }
+
+    public void setKills(Integer kills) {
+        this.kills = kills;
+    }
+
+    public void setHighestStreak(Integer highestStreak) {
+        this.highestStreak = highestStreak;
+    }
+
+    public void setDeaths(Integer deaths) {
+        this.deaths = deaths;
+    }
 }

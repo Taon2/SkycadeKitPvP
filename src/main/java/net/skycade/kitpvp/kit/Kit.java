@@ -1,16 +1,15 @@
 package net.skycade.kitpvp.kit;
 
 import com.mojang.authlib.GameProfile;
-import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.Settings;
-import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
-import net.skycade.kitpvp.runnable.ItemRunnable;
-import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
-import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
-import net.skycade.kitpvp.stat.KitData;
-import net.skycade.kitpvp.stat.KitPvPStats;
 import net.minecraft.server.v1_11_R1.EntityPlayer;
 import net.minecraft.server.v1_11_R1.PlayerInteractManager;
+import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
+import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
+import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
+import net.skycade.kitpvp.runnable.ItemRunnable;
+import net.skycade.kitpvp.stat.KitData;
+import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -356,7 +355,7 @@ public abstract class Kit implements Listener {
     }
 
     public int getLevelUpXp(Player p) {
-        return (getPrice() * getLevel(p) / 20) * Settings.REQUIRED_XP_MULTIPLIER;
+        return (getPrice() * getLevel(p) / 20) * KitPvP.getInstance().getConfig().getInt("required-xp-multiplier");
     }
 
     public void increaseXp(Player p, int xp) {
