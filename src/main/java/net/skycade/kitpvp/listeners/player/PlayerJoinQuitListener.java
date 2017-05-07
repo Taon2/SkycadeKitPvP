@@ -40,8 +40,6 @@ public class PlayerJoinQuitListener implements Listener {
         Player p = e.getPlayer();
 
         KitPvPStats stats = plugin.getStats(p);
-        //TODO: remove
-        plugin.getKitManager().getKits().keySet().forEach(stats::addKit);
 
         if (!stats.getActiveKit().getKit().isEnabled())
             stats.setActiveKit(KitType.DEFAULT);
@@ -57,8 +55,6 @@ public class PlayerJoinQuitListener implements Listener {
     public void onFirstJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         KitPvPStats stats = plugin.getStats(p);
-        //TODO: remove
-        plugin.getKitManager().getKits().keySet().forEach(stats::addKit);
 
         if (p.hasPlayedBefore())
             return;

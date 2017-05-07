@@ -128,4 +128,8 @@ public class Member {
     public void setDeaths(Integer deaths) {
         this.deaths = deaths;
     }
+
+    public void putProperty(String key, Object value) {
+        properties.put(key, value);
+    }
 }
