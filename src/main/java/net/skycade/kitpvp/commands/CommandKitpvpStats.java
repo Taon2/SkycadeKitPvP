@@ -2,14 +2,15 @@ package net.skycade.kitpvp.commands;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 public class CommandKitpvpStats extends Command<KitManager> {
 	
 	public CommandKitpvpStats(KitManager module) {
-		super(module, "Get an overview of all your KitPvP related stats", Permission.NONE, "kitpvpstats", "statskitpvp", "kitstats", "statskit");
+		super(module, "Get an overview of all your KitPvP related stats", new Permission("kitpvp.default", PermissionDefault.TRUE), "kitpvpstats", "statskitpvp", "kitstats", "statskit");
 	}
 
 	@Override

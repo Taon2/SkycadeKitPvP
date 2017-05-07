@@ -2,7 +2,6 @@ package net.skycade.kitpvp.commands;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.coreclasses.option.IOption;
 import net.skycade.kitpvp.coreclasses.option.None;
 import net.skycade.kitpvp.coreclasses.option.Some;
@@ -21,6 +20,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class CommandDuel extends Command<KitManager> implements Listener {
 	private final KitManager kitManager;
 
 	public CommandDuel(KitManager module) {
-		super(module, "Challenge someone to duel", Permission.NONE, "duel");
+		super(module, "Challenge someone to duel", new Permission("kitpvp.default", PermissionDefault.TRUE), "duel");
 		setUsage("<player/accept>", "<kit>");
 		this.kitManager = getModule();
 		Bukkit.getPluginManager().registerEvents(this, getModule().getPlugin());

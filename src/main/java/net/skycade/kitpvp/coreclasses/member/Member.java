@@ -15,8 +15,6 @@ public class Member {
     private String name;
     private List<String> previousNames = new ArrayList<>();
 
-    private List<String> permissions = new ArrayList<>();
-
     private Integer kills = 0;
     private Integer highestStreak = 0;
 
@@ -28,7 +26,7 @@ public class Member {
         this.uuid = uuid;
         this.name = name;
         previousNames.add(name);
-        KitPvPDB.getInstance().setMemberData(uuid, name, previousNames, permissions, kills, highestStreak, deaths, properties);
+        KitPvPDB.getInstance().setMemberData(uuid, name, previousNames, kills, highestStreak, deaths, properties);
     }
 
     public Map<String, Object> getChanges() {
@@ -69,55 +67,8 @@ public class Member {
         return getPlayer() != null;
     }
 
-    public boolean hasPermission(Permission permission) {
-        return getPermissions(true).contains(permission);
-    }
-
-    public List<Permission> getPermissions(boolean inheritance) {
-        Set<Permission> permissions = new HashSet<>();
-        for (String s : this.permissions) {
-            Permission permission = Permission.fromString(s);
-            if (permission == null)
-                continue;
-            permissions.add(permission);
-            if (inheritance)
-                permissions.addAll(Arrays.asList(permission.getInheritance()));
-        }
-        return new ArrayList<>(permissions);
-    }
-
-    public void addPermission(Permission perm) {
-        if (hasPermission(perm))
-            return;
-        permissions.add(perm.toString());
-    }
-
     public void update() {
         MemberManager.getInstance().update(this);
-    }
-
-    public DisplayRank getDisplayRank() {
-        List<Permission> permissions = getPermissions(false);
-        DisplayRank displayRank = null;
-        if (permissions.contains(Permission.RANK_SIX))
-            displayRank = Permission.RANK_SIX.getDisplayRank();
-        else if (permissions.contains(Permission.RANK_FIVE))
-            displayRank = Permission.RANK_FIVE.getDisplayRank();
-        else if (permissions.contains(Permission.RANK_FOUR))
-            displayRank = Permission.RANK_FOUR.getDisplayRank();
-        else if (permissions.contains(Permission.RANK_THREE))
-            displayRank = Permission.RANK_THREE.getDisplayRank();
-        else if (permissions.contains(Permission.RANK_TWO))
-            displayRank = Permission.RANK_TWO.getDisplayRank();
-        else if (permissions.contains(Permission.RANK_ONE))
-            displayRank = Permission.RANK_ONE.getDisplayRank();
-        if (displayRank != null)
-            return displayRank;
-        return DisplayRank.NONE;
-    }
-
-    public boolean isStaff() {
-        return getPermissions(true).contains(Permission.staff());
     }
 
     @Override
@@ -150,10 +101,6 @@ public class Member {
         return deaths;
     }
 
-    public List<String> getRawPermissions() {
-        return permissions;
-    }
-
     public void addPreviousName(String name) {
         previousNames.add(name);
     }
@@ -168,10 +115,6 @@ public class Member {
 
     public void setPreviousNames(List<String> previousNames) {
         this.previousNames = previousNames;
-    }
-
-    public void setPermissions(List<String> permissions) {
-        this.permissions = permissions;
     }
 
     public void setKills(Integer kills) {

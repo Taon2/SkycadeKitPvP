@@ -2,20 +2,21 @@ package net.skycade.kitpvp.commands;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.duel.Duel;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 public class CommandSoup extends Command<KitManager> {
 	
 	private final static int COST = 20;
 	
 	public CommandSoup(KitManager module) {
-		super(module, "Buy soup for " + COST + " credits", Permission.NONE, "soup");
+		super(module, "Buy soup for " + COST + " credits", new Permission("kitpvp.default", PermissionDefault.TRUE), "soup");
 	}
 
 	@Override

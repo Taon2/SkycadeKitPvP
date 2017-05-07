@@ -1,18 +1,17 @@
 package net.skycade.kitpvp.coreclasses.commands;
 
-import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.coreclasses.member.DisplayRank;
-import net.skycade.kitpvp.coreclasses.member.Permission;
-import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.MemberManager;
-import net.skycade.kitpvp.coreclasses.utils.UtilPacket;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.kitpvp.coreclasses.member.MemberManager;
+import net.skycade.kitpvp.coreclasses.utils.UtilPacket;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,13 +62,6 @@ public abstract class Command<M extends Module> {
 
     public List<Permission> getPermissions() {
         return permissions;
-    }
-
-    public boolean canDo(Member member) {
-        for (Permission permission : permissions)
-            if (member.hasPermission(permission))
-                return true;
-        return false;
     }
 
     public String[] getAliases() {
@@ -132,20 +124,6 @@ public abstract class Command<M extends Module> {
         return subject;
     }
 
-    public boolean getDisplayRank(Member member, String name) {
-        boolean rank = DisplayRank.exists(name);
-        if (!rank)
-            couldNotFind(member, "Rank", name);
-        return rank;
-    }
-
-    public boolean getPermission(Member member, String permission) {
-        boolean found = Permission.exists(permission);
-        if (!found)
-            couldNotFind(member, "Permission", permission);
-        return found;
-    }
-
     public boolean parseInt(Member member, String s) {
         try {
             Integer.parseInt(s);
@@ -177,13 +155,6 @@ public abstract class Command<M extends Module> {
         return check;
     }
 
-    public boolean isAvailable(Member member) {
-        for (Permission permission : permissions)
-            if (member.hasPermission(permission))
-                return true;
-        return false;
-    }
-
     /**
      * Must be added to plugin.yml!
      */
@@ -209,7 +180,7 @@ public abstract class Command<M extends Module> {
 
     public TextComponent getUsageFormatted(String aliasUsed) {
         TextComponent textComponent = UtilPacket.createTextComponent("/", ChatColor.GRAY);
-        TextComponent command = UtilPacket.createTextComponent(aliasUsed.toLowerCase(), getPermission().getChatColour());
+        TextComponent command = UtilPacket.createTextComponent(aliasUsed.toLowerCase(), ChatColor.RED);
         HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(getDescription() + ".").create());
         command.setHoverEvent(hoverEvent);
         String suggest = "/" + aliasUsed;
@@ -222,7 +193,7 @@ public abstract class Command<M extends Module> {
             if (s.length() < 3)
                 continue;
             textComponent.addExtra(UtilPacket.createTextComponent(" " + s.substring(0, 1), ChatColor.GRAY));
-            TextComponent textComponentUsage = UtilPacket.createTextComponent(s.substring(1, s.length() - 1), getPermission().getChatColour());
+            TextComponent textComponentUsage = UtilPacket.createTextComponent(s.substring(1, s.length() - 1), ChatColor.RED);
             textComponentUsage.setClickEvent(clickEvent);
             textComponentUsage.setHoverEvent(hoverEvent);
             textComponent.addExtra(textComponentUsage);

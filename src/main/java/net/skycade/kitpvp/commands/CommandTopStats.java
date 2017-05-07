@@ -7,12 +7,13 @@ import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.datastructures.binarytree.BTNode;
 import net.skycade.kitpvp.coreclasses.datastructures.binarytree.BinaryTree;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.managers.PageManager;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import org.bukkit.Bukkit;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,7 +34,7 @@ public class CommandTopStats extends Command<KitManager> {
     private boolean updating = true;
 
     public CommandTopStats(KitManager module) {
-        super(module, "View the top 10 kills/killstreak/deaths.", Permission.NONE, "topstats", "statstop");
+        super(module, "View the top 10 kills/killstreak/deaths.", new Permission("kitpvp.default", PermissionDefault.TRUE), "topstats", "statstop");
         setUsage("<kills/deaths/killstreak/kdr>");
         startStatRefresh();
     }

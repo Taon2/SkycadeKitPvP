@@ -2,16 +2,17 @@ package net.skycade.kitpvp.commands.staff;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 public class CommandGiveKeys extends Command<KitManager> {
 
 	public CommandGiveKeys(KitManager module) {
-		super(module, "Manage keys", Permission.DEV, "keys", "givekey", "givekeys");
+		super(module, "Manage keys", new Permission("kitpvp.admin", PermissionDefault.OP), "keys", "givekey", "givekeys");
 		setUsage("<reset/give/take> <player/all> <amount>");
 	}
 

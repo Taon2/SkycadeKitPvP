@@ -3,7 +3,6 @@ package net.skycade.kitpvp.commands;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
@@ -11,13 +10,15 @@ import net.skycade.kitpvp.ui.ViewkitMenu;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.util.Map;
 
 public class CommandViewKit extends Command<KitManager> implements Listener {
 
 	public CommandViewKit(KitManager module) {
-		super(module, "View a kit.", Permission.NONE, "viewkit");
+		super(module, "View a kit.", new Permission("kitpvp.default", PermissionDefault.TRUE), "viewkit");
 		setUsage("<kitname>");
 	}
 

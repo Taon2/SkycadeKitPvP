@@ -1,19 +1,21 @@
 package net.skycade.kitpvp.stat;
 
 import net.skycade.kitpvp.kit.KitType;
-import org.bson.Document;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class KitData {
 
-	private final Document document;
+	private final Map<String, Integer> map;
 
 	public KitData(KitType kitType) {
-		this(new Document());
+		this(new HashMap<>());
 		setLevel(1);
 	}
 
-	public KitData(Document document) {
-		this.document = document;
+	public KitData(Map<String, Integer> map) {
+		this.map = map;
 	}
 
 	public int getLevel() {
@@ -33,17 +35,17 @@ public class KitData {
     }
 
 	private int getInt(String key) {
-		if (!document.containsKey(key))
-			document.put(key, 0);
-		return document.getInteger(key);
+		if (!map.containsKey(key))
+			map.put(key, 0);
+        return map.get(key);
 	}
 
-	private void set(String key, Object value) {
-		document.put(key, value);
+	private void set(String key, int value) {
+		map.put(key, value);
 	}
 
-	public Document getDocument() {
-		return document;
+	public Map<String, Integer> getMap() {
+		return map;
 	}
 
 }

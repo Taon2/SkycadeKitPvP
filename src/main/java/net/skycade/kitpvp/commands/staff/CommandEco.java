@@ -2,16 +2,17 @@ package net.skycade.kitpvp.commands.staff;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 public class CommandEco extends Command<KitManager> {
 
 	public CommandEco(KitManager module) {
-		super(module, "Manage coins", Permission.ADMIN, "economy", "eco");
+		super(module, "Manage coins", new Permission("kitpvp.admin", PermissionDefault.OP), "economy", "eco");
 		setUsage("<reset/give/take> <player/all> <amount>");
 	}
 

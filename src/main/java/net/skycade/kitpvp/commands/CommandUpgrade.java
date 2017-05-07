@@ -2,18 +2,19 @@ package net.skycade.kitpvp.commands;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.util.Map;
 
 public class CommandUpgrade extends Command<KitManager> {
 
 	public CommandUpgrade(KitManager module) {
-		super(module, "Upgrade your kits.", Permission.NONE, "upgrade", "upgradekit");
+		super(module, "Upgrade your kits.", new Permission("kitpvp.default", PermissionDefault.TRUE), "upgrade", "upgradekit");
 	}
 
 	@Override

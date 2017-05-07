@@ -3,15 +3,16 @@ package net.skycade.kitpvp.commands.staff;
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 public class RefundCommand extends Command<KitManager> {
 
     public RefundCommand(KitManager module) {
-        super(module, "Refund the killstreak for a player", Permission.MOD, "refund", "refundks");
+        super(module, "Refund the killstreak for a player", new Permission("kitpvp.admin", PermissionDefault.OP), "refund", "refundks");
         setUsage("<player>");
     }
 

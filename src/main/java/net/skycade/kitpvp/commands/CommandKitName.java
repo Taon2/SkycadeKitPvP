@@ -2,16 +2,17 @@ package net.skycade.kitpvp.commands;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 public class CommandKitName extends Command<KitManager> {
 
 	public CommandKitName(KitManager module) {
-		super(module, "Get the kitname from a player", Permission.NONE, "kitname");
+		super(module, "Get the kitname from a player", new Permission("kitpvp.default", PermissionDefault.TRUE), "kitname");
 		setUsage("<player>");
 	}
 

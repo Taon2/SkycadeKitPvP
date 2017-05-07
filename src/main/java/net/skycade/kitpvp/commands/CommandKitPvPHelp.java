@@ -1,13 +1,14 @@
 package net.skycade.kitpvp.commands;
 
-import net.skycade.kitpvp.coreclasses.commands.Command;
-import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
-import net.skycade.kitpvp.kit.KitManager;
-import net.skycade.kitpvp.managers.PageManager;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.skycade.kitpvp.coreclasses.commands.Command;
+import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.kitpvp.kit.KitManager;
+import net.skycade.kitpvp.managers.PageManager;
 import org.bukkit.Bukkit;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class CommandKitPvPHelp extends Command<KitManager> {
 	private PageManager pageManager;
 
 	public CommandKitPvPHelp(KitManager module) {
-		super(module, "Get an overview of the KitPvP commands", Permission.NONE, "kitpvphelp", "kithelp", "kitpvpcommands", "kitcommands");
+		super(module, "Get an overview of the KitPvP commands", new Permission("kitpvp.default", PermissionDefault.TRUE), "kitpvphelp", "kithelp", "kitpvpcommands", "kitcommands");
         Bukkit.getScheduler().runTaskLater(getModule().getKitPvP(),
                 () -> this.pageManager = new PageManager("KitPvP commands ", "/kitpvphelp ", getPageElements(), 9, 6)
         , 100);

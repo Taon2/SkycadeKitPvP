@@ -2,7 +2,6 @@ package net.skycade.kitpvp.commands;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.coreclasses.utils.Recharge;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.KitManager;
@@ -13,6 +12,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.util.*;
 
@@ -21,7 +22,7 @@ public class CommandCrate extends Command<KitManager> implements Listener {
 	private final Map<UUID, Integer> crateCooldown = new HashMap<>();
 
 	public CommandCrate(KitManager module) {
-		super(module, "Randomly unlock a new kit.", Permission.NONE, "crate");
+		super(module, "Randomly unlock a new kit.", new Permission("kitpvp.default", PermissionDefault.TRUE), "crate");
 		Bukkit.getPluginManager().registerEvents(this, getModule().getPlugin());
 	}
 

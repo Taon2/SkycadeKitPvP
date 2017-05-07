@@ -3,7 +3,6 @@ package net.skycade.kitpvp.listeners;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
@@ -19,6 +18,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class SignListeners implements Listener {
     @EventHandler
     public void onSignChange(SignChangeEvent e) {
         Player p = e.getPlayer();
-        if (!(p.isOp() || MemberManager.getInstance().getMember(p).hasPermission(Permission.ADMIN)))
+        if (!(p.isOp() || MemberManager.getInstance().getMember(p).getPlayer().hasPermission(new Permission("kitpvp.admin", PermissionDefault.OP))))
             return;
 
         if (e.getLine(0).equalsIgnoreCase("[Unlock]")) {

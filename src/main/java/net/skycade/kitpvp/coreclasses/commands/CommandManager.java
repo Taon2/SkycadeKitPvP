@@ -1,6 +1,5 @@
 package net.skycade.kitpvp.coreclasses.commands;
 
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.Recharge;
@@ -11,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
+import org.bukkit.permissions.Permission;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +59,7 @@ public class CommandManager extends Module implements CommandExecutor {
                 if (alias.equalsIgnoreCase(aliasUsed)) {
                     e.setCancelled(true);
                     for (Permission permission : command.getPermissions())
-                        if (member.hasPermission(permission)) {
+                        if (member.getPlayer().hasPermission(permission)) {
                             command.execute(member, aliasUsed, args.toArray(new String[args.size()]));
                             return;
                         }
@@ -73,7 +73,7 @@ public class CommandManager extends Module implements CommandExecutor {
     }
 
     public String getPermissionMessage(Permission permission) {
-        return "§7This requires permission " + permission.toDisplayString() + "§7.";
+        return "§7This requires permission " + permission.getName() + "§7.";
     }
 
     public List<Command<? extends Module>> getCommands() {

@@ -2,7 +2,6 @@ package net.skycade.kitpvp.commands.staff;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.coreclasses.utils.UtilString;
 import net.skycade.kitpvp.kit.Kit;
@@ -13,6 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public class CommandTeam extends Command<KitManager> implements Listener {
 	final Map<String, String> playerTeam = new HashMap<>();
 
 	public CommandTeam(KitManager module) {
-		super(module, "Manage teams", Permission.SR_MOD, "team");
+		super(module, "Manage teams", new Permission("kitpvp.admin", PermissionDefault.OP), "team");
 		setUsage("<create/remove/teleport/setkit>");
 		Bukkit.getPluginManager().registerEvents(this, getModule().getPlugin());
 	}

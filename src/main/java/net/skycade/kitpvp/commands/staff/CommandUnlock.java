@@ -2,20 +2,21 @@ package net.skycade.kitpvp.commands.staff;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.util.Map;
 
 public class CommandUnlock extends Command<KitManager> {
 
 	public CommandUnlock(KitManager module) {
-		super(module, "Unlock kits for a player", Permission.ADMIN, "unlock", "unlockkit", "lock", "lockkit" );
+		super(module, "Unlock kits for a player", new Permission("kitpvp.admin", PermissionDefault.OP), "unlock", "unlockkit", "lock", "lockkit" );
 		setUsage("<player>", "<kit/all>", "<lock/unlock>");
 	}
 

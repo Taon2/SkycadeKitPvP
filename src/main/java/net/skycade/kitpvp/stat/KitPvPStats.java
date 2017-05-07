@@ -3,8 +3,6 @@ package net.skycade.kitpvp.stat;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.kit.KitType;
-import org.bson.Document;
-import org.json.simple.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -120,40 +118,48 @@ public class KitPvPStats {
     public Map<KitType, KitData> getKits() {
         Map<String, Object> properties = getProperties();
         if (!properties.containsKey("kits")) {
-            properties.put("kits", new Document());
+            Map<String, Map<String, Integer>> map = new HashMap<>();
 
             //Unlocked from the start:
             KitType def = KitType.DEFAULT;
-            ((Document) properties.get("kits")).put(def.toString(), new KitData(def).getDocument());
+            map.put(def.toString(), new KitData(def).getMap());
 
             for (String kitType : KitPvP.getInstance().getConfig().getStringList("start-kits")) {
-                ((Document) properties.get("kits")).put(KitType.byAlias(kitType).toString(), new KitData(KitType.byAlias(kitType)).getDocument());
-                ((Document) properties.get("kits")).put(KitType.byAlias(kitType).toString(), new KitData(KitType.byAlias(kitType)).getDocument());
+                map.put(KitType.byAlias(kitType).toString(), new KitData(KitType.byAlias(kitType)).getMap());
             }
-
+            properties.put("kits", map);
         }
-        Document kits = (Document) properties.get("kits");
+
+        Map<String, Map<String, Integer>> kits = (Map<String, Map<String, Integer>>) properties.get("kits");
+
         Map<KitType, KitData> kitDatas = new HashMap<>();
-        kits.keySet().forEach(kit -> {
-            KitData data = new KitData(new Document((JSONObject) kits.get(kit)));
-            kitDatas.put(KitType.valueOf(kit), data);
-        });
+        for (Map.Entry<String, Map<String, Integer>> entry : kits.entrySet()) {
+            KitType kitType = KitType.byAlias(entry.getKey());
+            KitData data = new KitData(kitType);
+            Map<String, Integer> kit = entry.getValue();
+            data.setLevel(kit.get("level"));
+            if (kit.get("xp") != null) {
+                data.setXp(kit.get("xp"));
+            }
+            kitDatas.put(kitType, data);
+        }
         return kitDatas;
     }
 
     public void resetKits() {
         Map<String, Object> properties = getProperties();
-        properties.put("kits", new Document());
         KitType kit = KitType.DEFAULT;
-        ((Document) properties.get("kits")).put(kit.toString(), new KitData(kit).getDocument());
+        Map<String, Map<String, Integer>> map = new HashMap<>();
+        map.put(kit.toString(), new KitData(kit).getMap());
+        properties.put("kits", map);
     }
 
     public void removeKit(KitType type) {
         Map<String, Object> properties = getProperties();
-        Document kits = (Document) properties.get("kits");
+        Map<String, Map<String, Integer>> kits = (Map<String, Map<String, Integer>>) properties.get("kits");
         for (String kit : kits.keySet()) {
             if (type.equals(KitType.valueOf(kit))) {
-                ((Document) properties.get("kits")).remove(kit);
+                properties.remove(kit);
                 break;
             }
         }
@@ -166,7 +172,7 @@ public class KitPvPStats {
     public void addKit(KitType kit) {
         if (getKits().containsKey(kit))
             return;
-        ((Document) getProperties().get("kits")).put(kit.toString(), new KitData(kit).getDocument());
+        ((Map<String, Map<String, Integer>>) getProperties().get("kits")).put(kit.toString(), new KitData(kit).getMap());
     }
 
     private int getInt(String key) {

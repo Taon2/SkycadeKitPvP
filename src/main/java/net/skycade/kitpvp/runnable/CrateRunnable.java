@@ -2,12 +2,11 @@ package net.skycade.kitpvp.runnable;
 
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
-import net.skycade.kitpvp.coreclasses.member.Permission;
+import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
+import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
-import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
@@ -68,18 +67,18 @@ public class CrateRunnable extends BukkitRunnable {
 
 	private void donatorCratePerk(Member member, Kit prize) {
 		int random = UtilMath.getRandom(0, 100);
-		if (member.hasPermission(Permission.RANK_FIVE)) {
+		/* if (member.hasPermission(Permission.RANK_FIVE)) { */
 			if (checkUnlock(member, random, 40, 2, prize))
 				return;
 			if (checkUnlock(member, random, 50, 3, prize))
                 return;
-		} else if (member.hasPermission(Permission.RANK_THREE)) {
+		/* } else if (member.hasPermission(Permission.RANK_THREE)) {
 			if (checkUnlock(member, random, 30, 2, prize))
 				return;
 		} else if (member.hasPermission(Permission.RANK_ONE)) {
 			if (checkUnlock(member, random, 15, 2, prize))
 				return;
-		}
+		} */
 	}
 	
 	private boolean checkUnlock(Member member, int random, int required, int level, Kit prize) {

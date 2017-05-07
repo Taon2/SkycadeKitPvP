@@ -3,7 +3,6 @@ package net.skycade.kitpvp.coreclasses.member.listeners;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import org.bukkit.Bukkit;
@@ -13,10 +12,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 
 public class MemberJoinQuit implements Listener {
@@ -62,25 +62,6 @@ public class MemberJoinQuit implements Listener {
         Player p = e.getPlayer();
         Member member = memberManager.getMember(p);
 
-        PermissionAttachment perms = UtilPlayer.getAttachment(e.getPlayer(), KitPvP.getInstance());
-        List<Permission> groups = member.getPermissions(true);
-        if (groups.isEmpty()) {
-            member.addPermission(Permission.NONE);
-            groups.add(Permission.NONE);
-        }
-        Collections.sort(groups);
-
-        for (Permission group : groups) {
-            for (String perm : group.getPermissions()) {
-                if (perm.startsWith("-")) {
-                    perms.setPermission(perm.substring(1), false);
-                } else {
-                    perms.setPermission(perm, true);
-                }
-            }
-            perms.setPermission(group.name().toLowerCase(), true);
-        }
-
         // Update name
         if (!p.getName().equals(member.getName()))
             member.setName(p.getName());
@@ -103,7 +84,7 @@ public class MemberJoinQuit implements Listener {
 
         if (member != null) {
             Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () ->
-                            KitPvPDB.getInstance().setMemberData(member.getUUID(), member.getName(), member.getPreviousNames(), member.getRawPermissions(), member.getKills(), member.getHighestStreak(), member.getKills(), member.getProperties()));
+                            KitPvPDB.getInstance().setMemberData(member.getUUID(), member.getName(), member.getPreviousNames(), member.getKills(), member.getHighestStreak(), member.getKills(), member.getProperties()));
             Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () ->
                 memberManager.getMembers().remove(member.getUUID())
             );

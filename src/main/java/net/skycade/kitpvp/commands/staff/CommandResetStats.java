@@ -2,16 +2,17 @@ package net.skycade.kitpvp.commands.staff;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 public class CommandResetStats  extends Command<KitManager> {
 
 	public CommandResetStats(KitManager module) {
-		super(module, "Reset stats for a player", Permission.DEV, "resetstats");
+		super(module, "Reset stats for a player", new Permission("kitpvp.admin", PermissionDefault.OP), "resetstats");
 		setUsage("<playername>");
 	}
 

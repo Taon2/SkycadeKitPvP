@@ -2,15 +2,16 @@ package net.skycade.kitpvp.commands.staff;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.kit.KitManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 public class CommandTp extends Command<KitManager> {
 
 	public CommandTp(KitManager module) {
-		super(module, "Tp commands", Permission.SR_MOD, "tpo");
+		super(module, "Tp commands", new Permission("kitpvp.admin", PermissionDefault.OP), "tpo");
 		setUsage("<player/all>", "<here>");
 	}
 

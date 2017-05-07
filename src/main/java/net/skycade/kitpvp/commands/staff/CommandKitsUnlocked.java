@@ -2,7 +2,6 @@ package net.skycade.kitpvp.commands.staff;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.Permission;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
@@ -14,11 +13,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 public class CommandKitsUnlocked extends Command<KitManager> implements Listener {
 
 	public CommandKitsUnlocked(KitManager module) {
-		super(module, "See the kits someone has unlocked.", Permission.ADMIN, "kitsunlocked", "seekits", "viewkits");
+		super(module, "See the kits someone has unlocked.", new Permission("kitpvp.admin", PermissionDefault.OP), "kitsunlocked", "seekits", "viewkits");
 		setUsage("<player>");
 		Bukkit.getPluginManager().registerEvents(this, getModule().getPlugin());
 	}
