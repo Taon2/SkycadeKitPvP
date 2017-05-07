@@ -53,7 +53,10 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("sign-refresh-cooldown", 120);
         defaults.put("stat-refresh-time", 1800);
         defaults.put("scoreboard.name", "SkycadeKitPvP");
+        defaults.put("spawn-region.point-1", new Location(Bukkit.getWorld("world"),-100, 0, 200));
+        defaults.put("spawn-region.point-2", new Location(Bukkit.getWorld("world"), 300, 250, 290));
         defaults.put("scoreboard.bottom-link", "play.skycade.net");
+
 
 
         defaults.put("database.host", "localhost");
