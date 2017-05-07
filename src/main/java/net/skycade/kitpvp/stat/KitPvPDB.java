@@ -2,6 +2,7 @@ package net.skycade.kitpvp.stat;
 
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -19,6 +20,7 @@ public class KitPvPDB {
     private final String kitPvPTable;
     private final String previousNamesTable;
     private final String propertiesTable;
+    private BukkitRunnable keepAlive;
     private Connection connection;
 
     private KitPvPDB() {
@@ -32,7 +34,21 @@ public class KitPvPDB {
         propertiesTable = KitPvP.getInstance().getConfig().getString("database.properties-table");
 
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?useSSL=true", username, password);
+            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?useSSL=true&autoReconnect=true", username, password);
+
+            keepAlive = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    try {
+                        Statement statement = connection.createStatement();
+                        statement.executeQuery("SELECT 1 FROM " + kitPvPTable);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            };
+            keepAlive.runTaskTimerAsynchronously(KitPvP.getInstance(), 100L, 100L);
+
         } catch (SQLException e) {
             KitPvP.getInstance().getLogger().log(Level.SEVERE, "Coulnd't connect to mysql.", e);
         }
@@ -162,6 +178,15 @@ public class KitPvPDB {
                     propertiesStatement.executeUpdate();
                 }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void closeConnection() {
+        try {
+            connection.close();
+            keepAlive.cancel();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

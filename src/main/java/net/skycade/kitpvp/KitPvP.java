@@ -107,6 +107,7 @@ public class KitPvP extends SkycadePlugin {
             Member member = entry.getValue();
             KitPvPDB.getInstance().setMemberData(entry.getKey(), member.getName(), member.getPreviousNames(), member.getKills(), member.getHighestStreak(), member.getDeaths(), member.getProperties());
         }
+        KitPvPDB.getInstance().closeConnection();
         rotationManager.update();
     }
 
