@@ -10,6 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 
 public class PlayerJoinQuitListener implements Listener {
@@ -26,7 +28,7 @@ public class PlayerJoinQuitListener implements Listener {
         Player p = e.getPlayer();
 
         // Reset killstreak
-        if (!plugin.getSpawnRegion().contains(p) && !MemberManager.getInstance().getMember(p).isStaff())
+        if (!plugin.getSpawnRegion().contains(p) && !MemberManager.getInstance().getMember(p).getPlayer().hasPermission(new Permission("kitpvp.admin", PermissionDefault.OP)))
             plugin.getStats(e.getPlayer()).setStreak(0);
 
         plugin.getStats().remove(e.getPlayer().getUniqueId());
