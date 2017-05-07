@@ -6,16 +6,12 @@ import net.skycade.kitpvp.commands.staff.*;
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.commands.CommandManager;
 import net.skycade.kitpvp.coreclasses.commands.Module;
-import net.skycade.kitpvp.coreclasses.region.DataPoint;
-import net.skycade.kitpvp.coreclasses.region.Region;
-import net.skycade.kitpvp.duel.Duel;
 import net.skycade.kitpvp.kit.kits.*;
 import net.skycade.kitpvp.listeners.SignListeners;
-import net.skycade.kitpvp.ui.KitsMenu;
 import net.skycade.kitpvp.ui.AchievementsMenu;
+import net.skycade.kitpvp.ui.KitsMenu;
 import net.skycade.kitpvp.ui.ShopMenu;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.*;
@@ -36,14 +32,6 @@ public class KitManager extends Module {
     //To check if moving
 
     private final World world = getKitPvP().getWorld();
-
-    //TODO add 4 duel arena's
-    private final Duel[] duels = {
-        new Duel(new Region("arena1", new DataPoint(0, 70, 0), new DataPoint(0, 70, 0)), new Location(world, 1273.5, 17, 76.4, -130, 0), new Location(world, 1333.4, 17, 16.5, 40, 0)),
-        new Duel(new Region("arena2", new DataPoint(0, 70, 0), new DataPoint(0, 70, 0)), new Location(world, 1339.4, 17, 75.5, -130, 0), new Location(world, 1399.7, 17, 15.7, 40, 0)),
-        new Duel(new Region("arena3", new DataPoint(0, 70, 0), new DataPoint(0, 70, 0)), new Location(world, 1338.5, 17, 140, -130, 0), new Location(world, 1398.5, 17, 80, 40, 0)),
-        new Duel(new Region("arena4", new DataPoint(0, 70, 0), new DataPoint(0, 70, 0)), new Location(world,  1273.5, 17, 140.5, -130, 0), new Location(world, 1334.4, 17, 80.5, 40, 0))
-    };
 	
 	private final KitsMenu kitsMenu;
 	private final ShopMenu shopMenu;
@@ -77,15 +65,15 @@ public class KitManager extends Module {
 		registerCommand(new CommandViewKit(this));
 		registerCommand(new CommandUnlock(this));
 		registerCommand(new CommandSetLevel(this));
-		registerCommand(new CommandSpawn(this));
+		//registerCommand(new CommandSpawn(this));
 		registerCommand(new CommandSetStats(this));
 		registerCommand(new CommandTopStats(this));
 		registerCommand(new CommandUnlock(this));
 		registerCommand(new CommandGiveKeys(this));
 		registerCommand(new CommandViewStats(this));
 		registerCommand(new CommandKitsUnlocked(this));
-		registerCommand(new CommandTp(this));
-		registerCommand(new CommandDuel(this));
+		//registerCommand(new CommandTp(this));
+		//registerCommand(new CommandDuel(this));
 		registerCommand(new RefundCommand(this));
 
 		registerListener(achievementsMenu);
@@ -208,10 +196,6 @@ public class KitManager extends Module {
     
     public Map<UUID, UUID> getLastPlayerFought() {
         return lastPlayerFought;
-    }
-    
-    public Duel[] getDuels() {
-        return duels;
     }
 
     public KitsMenu getMenu() {

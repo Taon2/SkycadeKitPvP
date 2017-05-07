@@ -2,7 +2,6 @@ package net.skycade.kitpvp.commands;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.duel.Duel;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Material;
@@ -48,9 +47,6 @@ public class CommandSoup extends Command<KitManager> {
 	}
 	
 	private boolean inDuel(Member mem) {
-        for (Duel duel : getModule().getDuels())
-            if (duel.getPlayers().contains(mem.getUUID())) 
-                return true;
         return false;
     }
 

@@ -8,6 +8,7 @@ import net.skycade.kitpvp.coreclasses.utils.UtilString;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scoreboard.*;
@@ -55,7 +56,7 @@ public class KitPvPScoreboard implements Listener {
         String kitsUnlocked = unlockColor + plugin.getStats().get(member.getUUID()).getKits().size() + "/§6" + KitType.values().length;
 
         Objective o = board.registerNewObjective("test", "dummy");
-        o.setDisplayName("  §b§lServerName"  );
+        o.setDisplayName(ChatColor.translateAlternateColorCodes('&', KitPvP.getInstance().getConfig().getString("scoreboard.name")));
         o.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         Score s15 = o.getScore(UtilString.getWhitespace(3));
@@ -107,7 +108,7 @@ public class KitPvPScoreboard implements Listener {
         Score s2 = o.getScore(UtilString.getWhitespace(0));
         s2.setScore(2);
 
-        Score s1 = o.getScore("play.something.net");
+        Score s1 = o.getScore(KitPvP.getInstance().getConfig().getString("scoreboard.bottom-link"));
         s1.setScore(1);
 
         member.getPlayer().setScoreboard(board);
