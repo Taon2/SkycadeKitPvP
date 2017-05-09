@@ -36,6 +36,7 @@ public class KitPvP extends SkycadePlugin {
     private ChatClick chatClick;
 
     private Region spawnRegion;
+    private Location spawnLocation;
 
     private void defaults() {
         Map<String, Object> defaults = new TreeMap<>();
@@ -55,6 +56,7 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("scoreboard.name", "SkycadeKitPvP");
         defaults.put("spawn-region.point-1", new Location(Bukkit.getWorld("world"),-100, 0, 200));
         defaults.put("spawn-region.point-2", new Location(Bukkit.getWorld("world"), 300, 250, 290));
+        defaults.put("spawn-location", new Location(Bukkit.getWorld("world"), 252.5, 73.0, -45.0, -45, 0));
         defaults.put("scoreboard.bottom-link", "play.skycade.net");
 
 
@@ -90,7 +92,7 @@ public class KitPvP extends SkycadePlugin {
         Location location1 = (Location) getConfig().get("spawn-region.point-1");
         Location location2 = (Location) getConfig().get("spawn-region.point-2");
         this.spawnRegion = new Region("spawn", new DataPoint(location1.getBlockX(), location1.getBlockY(), location1.getBlockZ()), new DataPoint(location2.getBlockX(), location2.getBlockY(), location2.getBlockZ()));
-
+        this.spawnLocation = (Location) getConfig().get("spawn-location");
         registerListeners();
     }
 
@@ -162,7 +164,7 @@ public class KitPvP extends SkycadePlugin {
         p.setHealth(p.getMaxHealth());
         p.setVelocity(new Vector(0, 0, 0));
         p.setGameMode(GameMode.SURVIVAL);
-        //p.teleport(spawnLocation);
+        p.teleport(spawnLocation);
         Bukkit.getScheduler().runTaskLater(this, p::updateInventory, 10);
         Bukkit.getScheduler().runTaskLater(this, () -> p.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
         KitPvPStats stats = getStats(p);
