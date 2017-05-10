@@ -8,7 +8,6 @@ import net.skycade.kitpvp.coreclasses.commands.CommandManager;
 import net.skycade.kitpvp.coreclasses.commands.Module;
 import net.skycade.kitpvp.kit.kits.*;
 import net.skycade.kitpvp.listeners.SignListeners;
-import net.skycade.kitpvp.ui.AchievementsMenu;
 import net.skycade.kitpvp.ui.KitsMenu;
 import net.skycade.kitpvp.ui.ShopMenu;
 import org.bukkit.Bukkit;
@@ -35,8 +34,7 @@ public class KitManager extends Module {
 	
 	private final KitsMenu kitsMenu;
 	private final ShopMenu shopMenu;
-	private final AchievementsMenu achievementsMenu;
-	
+
 	public KitManager(KitPvP plugin) {
 		this.plugin = plugin;
 
@@ -45,12 +43,11 @@ public class KitManager extends Module {
 
 		kitsMenu = new KitsMenu(this);
 		shopMenu = new ShopMenu(this);
-		achievementsMenu = new AchievementsMenu(this);
 		CommandCrate commandCrate = new CommandCrate(this);
 		CommandViewKit commandViewKit = new CommandViewKit(this);
 
 		registerCommand(commandViewKit);
-		registerCommand(new CommandAchievements(this));
+		//registerCommand(new CommandAchievements(this));
 		registerCommand(commandCrate);
 		registerCommand(new CommandEco(this));
 		registerCommand(new CommandKit(this));
@@ -76,7 +73,6 @@ public class KitManager extends Module {
 		//registerCommand(new CommandDuel(this));
 		registerCommand(new RefundCommand(this));
 
-		registerListener(achievementsMenu);
         registerListener(shopMenu);
         registerListener(kitsMenu);
         registerListener(commandViewKit);
@@ -204,10 +200,6 @@ public class KitManager extends Module {
 
     public ShopMenu getShopMenu() {
         return shopMenu;
-    }
-
-    public AchievementsMenu getAchievementsMenu() {
-        return achievementsMenu;
     }
 
 	public KitPvP getKitPvP() {

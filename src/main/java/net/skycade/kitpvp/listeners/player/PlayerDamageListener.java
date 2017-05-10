@@ -6,7 +6,6 @@ import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.*;
-import net.skycade.kitpvp.stat.Achievement;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.util.DamageDisplay;
 import org.bukkit.Bukkit;
@@ -151,7 +150,6 @@ public class PlayerDamageListener implements Listener {
         stats.getActiveKit().getKit().increaseXp(killer, rewardXp);
 
         checkAssist(died, killer);
-        checkAchievementsUnlock(stats, killer);
     }
 
     @EventHandler
@@ -304,37 +302,10 @@ public class PlayerDamageListener implements Listener {
 
                         plugin.getStats(keyPlayer).setCoins(plugin.getStats(keyPlayer).getCoins() + assist);
                         plugin.getStats(keyPlayer).setAssists(plugin.getStats(keyPlayer).getAssists() + 1);
-                        checkAssistUnlock(keyPlayer);
                     }
                 }
             }
             killAssist.remove(killed.getUniqueId());
-        }
-    }
-
-    private void checkAssistUnlock(Player p) {
-        KitPvPStats stats = plugin.getStats(p);
-        if (Achievement.ASSISTS.getValues().contains(stats.getAssists())) {
-            p.sendMessage("§aAchievement §7unlocked: get " + stats.getAssists()
-                    + " §aassists§7. You earned a §acrate key§7.");
-            stats.setCrateKeys(stats.getCrateKeys() + 1);
-            stats.setAssists(stats.getAssists() + 1);
-        }
-    }
-
-    private void checkAchievementsUnlock(KitPvPStats stats, Player p) {
-        int kills = stats.getKills();
-        int killstreak = stats.getStreak();
-
-        if (Achievement.KILLS.getValues().contains(kills)) {
-            p.sendMessage("§aAchievement §7unlocked: get " + kills + " §akills§7. You earned a §acrate key§7.");
-            stats.setCrateKeys(stats.getCrateKeys() + 1);
-        }
-        if (Achievement.KILLSTREAK.getValues().contains(killstreak) && killstreak > stats.getHighestStreak()) {
-            p.sendMessage("§aAchievement §7unlocked: get on a " + killstreak
-                    + " §akillstreak§7. You earned a §acrate key§7.");
-            stats.setCrateKeys(stats.getCrateKeys() + 1);
-            stats.setHighestStreak(killstreak);
         }
     }
 
