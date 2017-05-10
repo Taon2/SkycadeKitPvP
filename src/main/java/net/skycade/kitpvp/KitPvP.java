@@ -108,7 +108,7 @@ public class KitPvP extends SkycadePlugin {
         //Bukkit.getOnlinePlayers().forEach(p -> p.teleport(getSpawnpoint()));
         for (Map.Entry<UUID, Member> entry : MemberManager.getInstance().getMembers().entrySet()) {
             Member member = entry.getValue();
-            KitPvPDB.getInstance().setMemberData(entry.getKey(), member.getName(), member.getPreviousNames(), member.getKills(), member.getHighestStreak(), member.getDeaths(), member.getProperties());
+            KitPvPDB.getInstance().setMemberDataSync(entry.getKey(), member.getName(), member.getPreviousNames(), member.getKills(), member.getHighestStreak(), member.getDeaths(), member.getProperties());
         }
         KitPvPDB.getInstance().closeConnection();
         rotationManager.update();
