@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.runnable;
 
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
@@ -58,7 +59,7 @@ public class CrateRunnable extends BukkitRunnable {
 			p.sendMessage("§7You won the §a" + prize.getName() + "§7 kit.");
 			donatorCratePerk(MemberManager.getInstance().getMember(p), prize);
 
-			if (KitType.values().length - 1 == stats.getKits().size()) {
+			if (KitPvP.getInstance().getAvailableKits() - 1 == stats.getKits().size()) {
 				p.sendMessage("§7You unlocked §aall §7the kits! You unlocked the §aKitMaster §7kit.");
 				stats.addKit(KitType.KITMASTER);
 			}

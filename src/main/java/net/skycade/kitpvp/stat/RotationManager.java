@@ -79,7 +79,12 @@ public class RotationManager {
     private void fillRotationList(List<String> rotationKits) {
         if (rotationKits.size() >= KitPvP.getInstance().getConfig().getInt("kits-rotation-amount"))
             return;
-        KitType kitType = KitType.values()[UtilMath.getRandom(0, KitType.values().length - 1)];
+        List<KitType> available = new ArrayList<>();
+        for (KitType kitType : KitType.values()) {
+            if (kitType.getKit().isEnabled()) available.add(kitType);
+        }
+
+        KitType kitType = available.get(UtilMath.getRandom(0, available.size() - 1));
 
         if(rotationKits.contains(kitType.toString()) || !kitType.getKit().isEnabled() || Arrays.asList(KitType.DEFAULT, KitType.KITMASTER).contains(kitType)) {
             fillRotationList(rotationKits);

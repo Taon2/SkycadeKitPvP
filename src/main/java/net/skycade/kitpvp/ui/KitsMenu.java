@@ -34,7 +34,7 @@ public class KitsMenu implements Listener {
         Inventory menu = Bukkit.createInventory(null, MenuSize.SIX_LINE.getSize(), "§aKits");
         KitPvPStats stats = kitManager.getKitPvP().getStats(member);
 
-        // Rest maps
+        // Reset maps
         menuMap.remove(member.getUUID());
         pageMap.remove(member.getUUID());
 
@@ -47,6 +47,7 @@ public class KitsMenu implements Listener {
         for (Map.Entry<KitType, Kit> entry : kitManager.getKits().entrySet()) {
             KitType k = entry.getKey();
             Kit kit = entry.getValue();
+            if (!kit.isEnabled()) continue;
 
             if (i >= menu.getSize() - 1) {
                 menu.addItem(new ItemBuilder(Material.ARROW).setName("§aNext page").addLore("Click to go to the next page.").build());

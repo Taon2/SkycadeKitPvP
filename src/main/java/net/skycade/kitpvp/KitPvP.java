@@ -37,6 +37,7 @@ public class KitPvP extends SkycadePlugin {
 
     private Region spawnRegion;
     private Location spawnLocation;
+    private int availableKits = 0;
 
     private void defaults() {
         Map<String, Object> defaults = new TreeMap<>();
@@ -94,6 +95,12 @@ public class KitPvP extends SkycadePlugin {
         this.spawnRegion = new Region("spawn", new DataPoint(location1.getBlockX(), location1.getBlockY(), location1.getBlockZ()), new DataPoint(location2.getBlockX(), location2.getBlockY(), location2.getBlockZ()));
         this.spawnLocation = (Location) getConfig().get("spawn-location");
         registerListeners();
+
+        int i = 0;
+        for (KitType kitType : KitType.values()) {
+            if (kitType.getKit().isEnabled()) ++i;
+        }
+        this.availableKits = i;
     }
 
     @Override
@@ -177,4 +184,7 @@ public class KitPvP extends SkycadePlugin {
         return spawnRegion.contains(p);
     }
 
+    public int getAvailableKits() {
+        return availableKits;
+    }
 }

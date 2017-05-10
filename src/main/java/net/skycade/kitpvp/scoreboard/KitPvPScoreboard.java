@@ -5,7 +5,6 @@ import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.coreclasses.utils.UtilString;
-import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -53,7 +52,7 @@ public class KitPvPScoreboard implements Listener {
         int coins = stats.getCoins();
 
         String unlockColor = plugin.getStats().get(member.getUUID()).getKits().size() == plugin.getKitManager().getKits().size() ? "§6" : "§e";
-        String kitsUnlocked = unlockColor + plugin.getStats().get(member.getUUID()).getKits().size() + "/§6" + KitType.values().length;
+        String kitsUnlocked = unlockColor + plugin.getStats().get(member.getUUID()).getKits().size() + "/§6" + KitPvP.getInstance().getAvailableKits();
 
         Objective o = board.registerNewObjective("test", "dummy");
         o.setDisplayName(ChatColor.translateAlternateColorCodes('&', KitPvP.getInstance().getConfig().getString("scoreboard.name")));

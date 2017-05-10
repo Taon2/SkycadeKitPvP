@@ -91,7 +91,7 @@ public class SignListeners implements Listener {
             member.message("§7You unlocked the §a" + s.getLine(1) + " §7kit.");
             stats.addKit(kit);
 
-            if (stats.getKits().size() >= KitType.values().length - 1) {
+            if (stats.getKits().size() >= KitPvP.getInstance().getAvailableKits() - 1) {
                 member.message("§7You unlocked §aall §7the kits! You unlocked the §aKitMaster §7kit.");
                 stats.addKit(KitType.KITMASTER);
             }
