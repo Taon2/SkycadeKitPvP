@@ -8,10 +8,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 public class KitPvPDB {
@@ -132,6 +129,8 @@ public class KitPvPDB {
 
     @SuppressWarnings("unchecked")
     public void setMemberData(UUID uuid, String name, List<String> previousNames, Integer kills, Integer highestStreak, Integer death, Map<String, Object> properties) {
+        Map<String, Object> propertiesCopy = new HashMap<>(properties);
+        List<String> previousNamesCopy = new ArrayList<>(previousNames);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -146,14 +145,14 @@ public class KitPvPDB {
 
                     statement.executeUpdate();
 
-                    for (String previousName : previousNames) {
+                    for (String previousName : previousNamesCopy) {
                         PreparedStatement namesStatement = connection.prepareStatement("INSERT INTO " + previousNamesTable + " (PreviousName, UUID) VALUES (?, ?) ON DUPLICATE KEY UPDATE UUID = VALUES(UUID)");
                         namesStatement.setString(1, previousName);
                         namesStatement.setString(2, uuid.toString());
                         namesStatement.executeUpdate();
                     }
 
-                    for (Map.Entry<String, Object> entry : properties.entrySet()) {
+                    for (Map.Entry<String, Object> entry : propertiesCopy.entrySet()) {
                         PreparedStatement propertiesQuery = connection.prepareStatement("SELECT * FROM " + propertiesTable + " WHERE UUID = ? AND PropertyKey = ?");
                         propertiesQuery.setString(1, uuid.toString());
                         propertiesQuery.setString(2, entry.getKey());
@@ -185,6 +184,12 @@ public class KitPvPDB {
                 }
             }
         }.runTaskAsynchronously(KitPvP.getInstance());
+    }
+
+    public UUID getHighestKsPlayer() throws SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet results = statement.executeQuery("SELECT UUID FROM " + propertiesTable + " WHERE PropertyKey = 'highest_streak' ORDER BY PropertyValue * 1 DESC LIMIT 0, 1");
+        if (results.next()) return UUID.fromString(results.getString("UUID")); else return null;
     }
 
     public void closeConnection() {
