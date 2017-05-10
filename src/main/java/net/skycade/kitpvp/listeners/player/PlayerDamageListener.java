@@ -190,13 +190,6 @@ public class PlayerDamageListener implements Listener {
             return;
         Player damagee = (Player) e.getEntity();
 
-        if (KitPvP.getInstance().getConfig().getBoolean("display-hit-damage")) {
-            // Show amount of damage
-            int finalDamage = (int) e.getFinalDamage();
-            if (finalDamage > 0)
-                DamageDisplay.displayDamage(damagee.getLocation().subtract(0, 0.2, 0), 10, finalDamage);
-        }
-
         Entity damager = e.getDamager();
         if (damager.getCustomName() != null)
             lastDamagerMap.put(damagee.getUniqueId(), e.getDamager());
