@@ -7,7 +7,6 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.*;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import net.skycade.kitpvp.util.DamageDisplay;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.entity.Entity;
