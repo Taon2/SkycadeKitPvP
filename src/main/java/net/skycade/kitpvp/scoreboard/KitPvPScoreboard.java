@@ -81,9 +81,8 @@ public class KitPvPScoreboard implements Listener {
             Score s9 = o.getScore("Highest ks: §a");
             s9.setScore(9);
 
-            String name = Bukkit.getPlayer(highestKsUUID) != null ? Bukkit.getPlayer(highestKsUUID).getName()
-                    :  Bukkit.getOfflinePlayer(highestKsUUID).getName();
-            Score s8 = o.getScore("§7" + name + ": " + plugin.getStats().get(highestKsUUID).getStreak());
+            String name = Bukkit.getOfflinePlayer(highestKsUUID).getName();
+            Score s8 = o.getScore("§7" + name + ": " + plugin.getKsUpdater().getScore());
             s8.setScore(8);
         }
 

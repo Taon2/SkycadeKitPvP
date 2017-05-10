@@ -143,10 +143,15 @@ public class KitPvPDB {
         }.runTaskAsynchronously(KitPvP.getInstance());
     }
 
-    public UUID getHighestKsPlayer() throws SQLException {
+    public Map<String, Object> getHighestKs() throws SQLException {
         Statement statement = connection.createStatement();
-        ResultSet results = statement.executeQuery("SELECT UUID FROM " + propertiesTable + " WHERE PropertyKey = 'highest_streak' ORDER BY PropertyValue * 1 DESC LIMIT 0, 1");
-        if (results.next()) return UUID.fromString(results.getString("UUID")); else return null;
+        ResultSet results = statement.executeQuery("SELECT UUID, PropertyValue FROM " + propertiesTable + " WHERE PropertyKey = 'highest_streak' ORDER BY PropertyValue * 1 DESC LIMIT 0, 1");
+        Map<String, Object> map = new HashMap<>();
+        if (results.next()) {
+            map.put("uuid", results.getString("UUID"));
+            map.put("score", Integer.parseInt(results.getString("PropertyValue")));
+        }
+        return map;
     }
 
     public void closeConnection() {

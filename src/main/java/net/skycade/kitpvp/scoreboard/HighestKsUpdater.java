@@ -5,12 +5,14 @@ import net.skycade.kitpvp.stat.KitPvPDB;
 import org.bukkit.Bukkit;
 
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.UUID;
 
 public class HighestKsUpdater {
 
     private final KitPvP plugin;
     private UUID highestKsPlayer;
+    private int score;
     private boolean lock = false;
 
     public HighestKsUpdater(KitPvP plugin) {
@@ -22,9 +24,10 @@ public class HighestKsUpdater {
         if (lock) return;
         lock = true;
         try {
-            UUID uuid = KitPvPDB.getInstance().getHighestKsPlayer();
-            if (uuid != null) {
-                highestKsPlayer = uuid;
+            Map<String, Object> map = KitPvPDB.getInstance().getHighestKs();
+            if (map.containsKey("uuid")) {
+                highestKsPlayer = UUID.fromString((String) map.get("uuid"));
+                score = (Integer) map.get("score");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -51,4 +54,7 @@ public class HighestKsUpdater {
         return highestKsPlayer;
     }
 
+    public int getScore() {
+        return score;
+    }
 }
