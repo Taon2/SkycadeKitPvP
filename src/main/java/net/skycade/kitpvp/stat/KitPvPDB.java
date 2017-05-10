@@ -102,7 +102,6 @@ public class KitPvPDB {
                     }
                 }
             }
-
             return member;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -133,54 +132,59 @@ public class KitPvPDB {
 
     @SuppressWarnings("unchecked")
     public void setMemberData(UUID uuid, String name, List<String> previousNames, Integer kills, Integer highestStreak, Integer death, Map<String, Object> properties) {
-        try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths)");
-            statement.setString(1, uuid.toString());
-            statement.setString(2, name);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    PreparedStatement statement = connection.prepareStatement("INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths)");
+                    statement.setString(1, uuid.toString());
+                    statement.setString(2, name);
 
-            statement.setInt(3, kills);
-            statement.setInt(4, highestStreak);
-            statement.setInt(5, death);
+                    statement.setInt(3, kills);
+                    statement.setInt(4, highestStreak);
+                    statement.setInt(5, death);
 
-            statement.executeUpdate();
+                    statement.executeUpdate();
 
-            for (String previousName : previousNames) {
-                PreparedStatement namesStatement = connection.prepareStatement("INSERT INTO " + previousNamesTable + " (PreviousName, UUID) VALUES (?, ?) ON DUPLICATE KEY UPDATE UUID = VALUES(UUID)");
-                namesStatement.setString(1, previousName);
-                namesStatement.setString(2, uuid.toString());
-                namesStatement.executeUpdate();
-            }
-
-            for (Map.Entry<String, Object> entry : properties.entrySet()) {
-                PreparedStatement propertiesQuery = connection.prepareStatement("SELECT * FROM " + propertiesTable + " WHERE UUID = ? AND PropertyKey = ?");
-                propertiesQuery.setString(1, uuid.toString());
-                propertiesQuery.setString(2, entry.getKey());
-                ResultSet results = propertiesQuery.executeQuery();
-                if (results.next()) {
-                    PreparedStatement propertiesStatement = connection.prepareStatement("UPDATE " + propertiesTable + " SET PropertyValue = ? WHERE UUID = ? AND PropertyKey = ?");
-                    if (entry.getValue() instanceof Map) {
-                        propertiesStatement.setString(1, new JSONObject((Map) entry.getValue()).toJSONString());
-                    } else {
-                        propertiesStatement.setString(1, entry.getValue().toString());
+                    for (String previousName : previousNames) {
+                        PreparedStatement namesStatement = connection.prepareStatement("INSERT INTO " + previousNamesTable + " (PreviousName, UUID) VALUES (?, ?) ON DUPLICATE KEY UPDATE UUID = VALUES(UUID)");
+                        namesStatement.setString(1, previousName);
+                        namesStatement.setString(2, uuid.toString());
+                        namesStatement.executeUpdate();
                     }
-                    propertiesStatement.setString(2, uuid.toString());
-                    propertiesStatement.setString(3, entry.getKey());
-                    propertiesStatement.executeUpdate();
-                } else {
-                    PreparedStatement propertiesStatement = connection.prepareStatement("INSERT INTO " + propertiesTable + " (UUID, PropertyKey, PropertyValue) VALUES (?, ?, ?)");
-                    propertiesStatement.setString(1, uuid.toString());
-                    propertiesStatement.setString(2, entry.getKey());
-                    if (entry.getValue() instanceof Map) {
-                        propertiesStatement.setString(3, new JSONObject((Map) entry.getValue()).toJSONString());
-                    } else {
-                        propertiesStatement.setString(3, entry.getValue().toString());
+
+                    for (Map.Entry<String, Object> entry : properties.entrySet()) {
+                        PreparedStatement propertiesQuery = connection.prepareStatement("SELECT * FROM " + propertiesTable + " WHERE UUID = ? AND PropertyKey = ?");
+                        propertiesQuery.setString(1, uuid.toString());
+                        propertiesQuery.setString(2, entry.getKey());
+                        ResultSet results = propertiesQuery.executeQuery();
+                        if (results.next()) {
+                            PreparedStatement propertiesStatement = connection.prepareStatement("UPDATE " + propertiesTable + " SET PropertyValue = ? WHERE UUID = ? AND PropertyKey = ?");
+                            if (entry.getValue() instanceof Map) {
+                                propertiesStatement.setString(1, new JSONObject((Map) entry.getValue()).toJSONString());
+                            } else {
+                                propertiesStatement.setString(1, entry.getValue().toString());
+                            }
+                            propertiesStatement.setString(2, uuid.toString());
+                            propertiesStatement.setString(3, entry.getKey());
+                            propertiesStatement.executeUpdate();
+                        } else {
+                            PreparedStatement propertiesStatement = connection.prepareStatement("INSERT INTO " + propertiesTable + " (UUID, PropertyKey, PropertyValue) VALUES (?, ?, ?)");
+                            propertiesStatement.setString(1, uuid.toString());
+                            propertiesStatement.setString(2, entry.getKey());
+                            if (entry.getValue() instanceof Map) {
+                                propertiesStatement.setString(3, new JSONObject((Map) entry.getValue()).toJSONString());
+                            } else {
+                                propertiesStatement.setString(3, entry.getValue().toString());
+                            }
+                            propertiesStatement.executeUpdate();
+                        }
                     }
-                    propertiesStatement.executeUpdate();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        }.runTaskAsynchronously(KitPvP.getInstance());
     }
 
     public void closeConnection() {

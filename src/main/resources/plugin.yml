@@ -1,4 +1,4 @@
 name: KitPvP
 main: net.skycade.kitpvp.KitPvP
-version: ${project.version}
+version: 2.1.7-SNAPSHOT
 author: ["WhiteWalker72", "Riccardo Bello (RickyB98)"]

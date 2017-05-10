@@ -112,7 +112,7 @@ public class KitManager extends Module {
 		registerKit(new KitFrosty(this));
 		registerKit(new KitGank(this));
 		registerKit(new KitGhost(this));
-		registerKit(new KitGolem(this)); //kit is disabled.
+		//registerKit(new KitGolem(this)); //kit is disabled.
 		registerKit(new KitHades(this));
 		registerKit(new KitHuntsman(this));
 		registerKit(new KitHydra(this));

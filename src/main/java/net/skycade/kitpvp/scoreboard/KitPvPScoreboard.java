@@ -108,7 +108,7 @@ public class KitPvPScoreboard implements Listener {
         Score s2 = o.getScore(UtilString.getWhitespace(0));
         s2.setScore(2);
 
-        Score s1 = o.getScore(KitPvP.getInstance().getConfig().getString("scoreboard.bottom-link"));
+        Score s1 = o.getScore(ChatColor.translateAlternateColorCodes('&', KitPvP.getInstance().getConfig().getString("scoreboard.bottom-link")));
         s1.setScore(1);
 
         member.getPlayer().setScoreboard(board);
