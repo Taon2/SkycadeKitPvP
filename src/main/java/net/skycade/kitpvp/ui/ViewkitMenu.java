@@ -17,10 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class ViewkitMenu {
 
@@ -33,18 +30,18 @@ public class ViewkitMenu {
     private final Inventory menu;
 
     public ViewkitMenu(KitManager kitManager, Kit kit) {
-        menu = Bukkit.createInventory(null, MenuSize.THREE_LINE.getSize(), "§aView " + kit.getName());
+        menu = Bukkit.createInventory(null, MenuSize.TWO_LINE.getSize(), "§aView " + kit.getName());
         kit.applyKit(DUMMY_PLAYER, 1);
         addItems(0, getItems(), getPotionEffects(DUMMY_PLAYER.getActivePotionEffects()), 1);
         reset();
-        kit.applyKit(DUMMY_PLAYER, 2);
+        /* kit.applyKit(DUMMY_PLAYER, 2);
         addItems(9, getItems(), getPotionEffects(DUMMY_PLAYER.getActivePotionEffects()), 2);
         reset();
         kit.applyKit(DUMMY_PLAYER, 3);
         addItems(18, getItems(), getPotionEffects(DUMMY_PLAYER.getActivePotionEffects()), 3);
-        reset();
+        reset(); */
         if (kit.getAbilityDesc() != null) {
-            menu.addItem(new ItemBuilder(Material.PAPER).addLore(kit.getAbilityDesc()).build());
+            menu.setItem(13, new ItemBuilder(Material.PAPER).addLore(kit.getAbilityDesc()).build());
         }
     }
 
@@ -60,16 +57,16 @@ public class ViewkitMenu {
         for (ItemStack item : DUMMY_PLAYER.getInventory())
             if (item != null && item.getType() != null)
                 items.add(item);
-        for (ItemStack piece : DUMMY_PLAYER.getInventory().getArmorContents()) {
+        /* for (ItemStack piece : DUMMY_PLAYER.getInventory().getArmorContents()) {
             if (piece != null && piece.getType() != Material.AIR)
                 items.add(piece);
-        }
+        } */
         return items;
     }
 
     private void addItems(int index, List<ItemStack> items, List<PotionEffect> effects, int level) {
-        menu.setItem(index, new ItemBuilder(Material.EXP_BOTTLE).setName("§5Level " + level).build());
-        index++;
+        /*menu.setItem(index, new ItemBuilder(Material.EXP_BOTTLE).setName("§5Level " + level).build());
+        index++; */
 
         for (ItemStack item : items) {
             menu.setItem(index, item);
@@ -89,7 +86,7 @@ public class ViewkitMenu {
         effects.forEach(effect -> {
             lore.add("§7Type: " + effect.getType().getName().toLowerCase());
             lore.add(effect.getDuration() != Integer.MAX_VALUE ? "§7Duration: " + effect.getDuration() : "§7Duration: perm");
-            lore.add("§7Level: " + getPotionLevel(Integer.toString(effect.getAmplifier()).substring(0, 1)));
+            /* lore.add("§7Level: " + getPotionLevel(Integer.toString(effect.getAmplifier()).substring(0, 1))); */
         });
         return lore;
     }

@@ -25,7 +25,6 @@ public class CommandKitpvpStats extends Command<KitManager> {
 		member.message("§fKills - §a" + stats.getKills());
 		member.message("§fKillstreak - §a" + stats.getStreak());
 		member.message("§fAssists - §a" + stats.getAssists());
-		member.message("§fDuels - §a" + stats.getDuels());
 	}
 	
 }

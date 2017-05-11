@@ -8,8 +8,6 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.runnable.ItemRunnable;
-import net.skycade.kitpvp.stat.KitData;
-import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -359,6 +357,7 @@ public abstract class Kit implements Listener {
     }
 
     public void increaseXp(Player p, int xp) {
+        /*
         KitPvPStats stats = kitManager.getKitPvP().getStats(p);
 
         // KitMaster can't level up
@@ -378,7 +377,7 @@ public abstract class Kit implements Listener {
             p.sendMessage("§7Your kit §alevel increased §7to " + data.getLevel() + "!");
             applyKit(p);
             stats.getActiveKit().getKit().giveSoup(p, 30);
-        }
+        } */ // no leveling up
     }
 
     @EventHandler

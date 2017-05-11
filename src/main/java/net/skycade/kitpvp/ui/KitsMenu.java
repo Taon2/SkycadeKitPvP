@@ -7,7 +7,6 @@ import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import net.skycade.kitpvp.stat.KitData;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -60,9 +59,15 @@ public class KitsMenu implements Listener {
             if (!stats.hasKit(k)) {
                 menu.addItem(new ItemBuilder(Material.BEDROCK).setName("§c" + kit.getName()).build());
             } else {
+                /*
                 KitData data = stats.getKits().get(k);
                 menu.addItem(new ItemBuilder(kit.getIcon()).setName("§a" + kit.getName()).addLore("").addLore(kit.getDescription()).addLore("")
-                        .addLore("§7Level: §f" + data.getLevel(), data.getLevel() < 3 ? "§7Experience: §f" + data.getXp() + "/" + kit.getLevelUpXp(member.getPlayer()) : "").setGlow(stats.getActiveKit() == k).build());
+                        .addLore("§7Level: §f" + data.getLevel(), data.getLevel() < 3 ? "§7Experience: §f" + data.getXp() + "/" + kit.getLevelUpXp(member.getPlayer()) : "").setGlow(stats.getActiveKit() == k).build()); */
+
+                menu.addItem(new ItemBuilder(kit.getIcon()).setName("§a" + kit.getName()).addLore("")
+                        .addLore(kit.getDescription())
+                        .setGlow(stats.getActiveKit() == k)
+                        .build());
             }
             i++;
         }

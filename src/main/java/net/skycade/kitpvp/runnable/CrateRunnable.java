@@ -83,12 +83,13 @@ public class CrateRunnable extends BukkitRunnable {
 	}
 	
 	private boolean checkUnlock(Member member, int random, int required, int level, Kit prize) {
-		if (random <= required) {
+	    return false; // no more levels after 1
+		/* if (random <= required) {
 			member.message("You're lucky, " + prize.getName() + " upgraded to level " + level + " because of your donator perk.");
 			stats.getKits().get(prize.getKitType()).setLevel(level);
 			return true;
 		}
-		return false; 
+		return false; */
 	}
 
 }
