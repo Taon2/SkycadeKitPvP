@@ -6,6 +6,7 @@ import net.skycade.kitpvp.coreclasses.utils.Recharge;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -28,6 +29,14 @@ public class CommandManager extends Module implements CommandExecutor {
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
         for (String arg : args) label += " " + arg;
         Bukkit.getPluginManager().callEvent(new ServerCommandEvent(sender, label));
+        if (!(sender instanceof ConsoleCommandSender)) return true;
+        for (Command<? extends Module> command : commands) {
+            List<String> aliases = new ArrayList<>();
+            aliases.addAll(Arrays.asList(command.getAliases()));
+            if (aliases.contains(cmd.getName())) {
+                command.execute(null, cmd.getName(), args);
+            }
+        }
         return true;
     }
 

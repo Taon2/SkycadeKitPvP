@@ -128,7 +128,7 @@ public abstract class Command<M extends Module> {
         try {
             Integer.parseInt(s);
         } catch (NumberFormatException exception) {
-            couldNotFind(member, "number", s);
+            if (member != null) couldNotFind(member, "number", s);
             return false;
         }
         return true;
@@ -151,7 +151,7 @@ public abstract class Command<M extends Module> {
     public boolean checkArgs(Member member, String aliasUsed, String[] args, int required) {
         boolean check = args.length >= required;
         if (!check)
-            usage(member, aliasUsed);
+            if (member != null) usage(member, aliasUsed);
         return check;
     }
 
@@ -164,7 +164,7 @@ public abstract class Command<M extends Module> {
     }
 
     public static void couldNotFind(Member member, String thing, String attempt) {
-        member.message("Could not find " + thing + "§7 '§e" + attempt + "§7'.");
+        if (member != null) member.message("Could not find " + thing + "§7 '§e" + attempt + "§7'.");
     }
 
     public void usage(Member member, String aliasUsed) {
