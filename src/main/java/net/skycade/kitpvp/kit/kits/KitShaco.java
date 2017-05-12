@@ -80,11 +80,12 @@ public class KitShaco extends Kit {
 	
 	public void onSnowballUse(Player p, ProjectileLaunchEvent e) {
 		if (snowballCooldown.contains(p.getUniqueId())) {
-			p.getItemInHand().setAmount(p.getItemInHand().getAmount() + 1);
 			e.setCancelled(true);
 			return;
 		}
 		snowballCooldown.add(p.getUniqueId());
+		p.getInventory().getItemInMainHand().setAmount(p.getInventory().getItemInMainHand().getAmount() + 1);
+		p.updateInventory();
 		Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> snowballCooldown.remove(p.getUniqueId()), 10);
 		e.getEntity().setVelocity(e.getEntity().getVelocity().multiply(2.5D));
 	}
