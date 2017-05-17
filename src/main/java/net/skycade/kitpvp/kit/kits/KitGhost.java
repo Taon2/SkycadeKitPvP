@@ -24,7 +24,7 @@ import java.util.Set;
 public class KitGhost extends Kit {
 
 	public KitGhost(KitManager kitManager) {
-		super(kitManager, "Ghost", KitType.GHOST, 22000, "Very spooky");
+		super(kitManager, "Ghost", KitType.GHOST, 22000, false, "Very spooky");
 		setIcon(new ItemBuilder(new ItemStack(Material.POTION, 1, (short) 8270)).build());
 	}
 
