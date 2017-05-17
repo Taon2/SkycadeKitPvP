@@ -39,11 +39,11 @@ public class KitWolfPack extends Kit {
 		if (item.getType() != Material.IRON_SWORD)
 			return;
 		int level = getLevel(p);
-		if (!addCooldown(p, getName(),  level == 3 ? 20 : 30, false))
+		if (!addCooldown(p, getName(), 20, false))
 			return;
 		List<Wolf> wolfList = new ArrayList<>();
 	
-		int wolfAmount = level == 3 ? 2 : level;
+		int wolfAmount = 2;
 		for (int i = 0 ; i < wolfAmount ; i++) {
 			Wolf wolf = (Wolf) p.getWorld().spawnEntity(p.getLocation(), EntityType.WOLF);
 			wolf.setCustomName(p.getName() + "'s" + " wolf");
@@ -51,7 +51,7 @@ public class KitWolfPack extends Kit {
 			wolf.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 2));
 			wolfList.add(wolf);
 		}
-		removeWolf(10 + (level * 3), wolfList);
+		removeWolf(19, wolfList);
 	}
 	
 	private void removeWolf(Integer seconds, List<Wolf> wolfList) {

@@ -39,7 +39,7 @@ public class KitKnight extends Kit {
 	
 	@Override
 	public void onMove(Player p) {
-		for (Player target : UtilPlayer.getNearbyPlayers(p.getLocation(), 3 + getLevel(p))) {
+		for (Player target : UtilPlayer.getNearbyPlayers(p.getLocation(), 6)) {
 			if (getKitManager().getKitPvP().getStats(target).getActiveKit() == KitType.GHOST) {
 				Location location = target.getLocation();
 				for (int i = 0; i < 30; i++) {

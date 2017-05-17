@@ -50,7 +50,7 @@ public class KitChronos extends Kit {
         if (UtilPlayer.isMoving(p) && !getKitManager().getKitPvP().getSpawnRegion().contains(p)) {
             UtilPlayer.getNearbyPlayers(p.getLocation(), 2).forEach(target -> {
                 if (target != p)
-                    target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, getLevel(p) * 15, 1));
+                    target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 15, 1));
             });
         }
     }

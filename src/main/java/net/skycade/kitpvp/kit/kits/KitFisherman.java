@@ -38,7 +38,7 @@ public class KitFisherman extends Kit {
 		if (rodCd.contains(p.getUniqueId()))
 			return;
 		int level = getLevel(p);
-		Location target = getTarget(p, 15 + (level * 5));
+		Location target = getTarget(p, 30);
 		if (target == null) 
 			return;
 		

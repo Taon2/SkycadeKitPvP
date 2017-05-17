@@ -23,7 +23,7 @@ public class KitTank extends Kit {
 		p.getInventory().addItem(new ItemBuilder(level == 1 ? Material.IRON_SWORD : Material.DIAMOND_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, 2).build());
 		p.getInventory().setArmorContents(getArmour(Material.DIAMOND_HELMET, 0, 0));
 		p.getInventory().setHelmet(new ItemBuilder(p.getInventory().getArmorContents()[3]).addLore("§FReceive 50% more damage.").build());
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, level == 3 ? 0 : 1));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0));
 	}
 
 	@Override

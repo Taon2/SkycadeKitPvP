@@ -35,7 +35,7 @@ public class KitShaco extends Kit {
 		p.getInventory().addItem(new ItemBuilder(Material.IRON_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, level < 3 ? level + 1 : 3).build());
 		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 12, level, Color.BLACK));
 		p.getInventory().addItem(new ItemBuilder(Material.SNOW_BALL, level == 1 ? 5 : 7).build());
-		startItemRunnable(p, 25 - (level * 5), new ItemBuilder(Material.SNOW_BALL).build(), 8, KitType.SHACO);
+		startItemRunnable(p, 10, new ItemBuilder(Material.SNOW_BALL).build(), 8, KitType.SHACO);
 	}
 	
 	
@@ -59,23 +59,21 @@ public class KitShaco extends Kit {
 		if (item.getType() != Material.IRON_SWORD)
 			return;
 		int level = getLevel(p);
-		if (level == 1)
-			return;
-		if (!addCooldown(p, getName(), level == 2 ? 40 : 30, true))
+		if (!addCooldown(p, getName(), 30, true))
 			return;
 		p.sendMessage("§fPoof!");
-		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, level == 2 ? 140 : 200, 1));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1));
 		
 		shacoArmor.put(p.getUniqueId(), p.getInventory().getArmorContents());
 		p.getInventory().setArmorContents(null);
-		p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, level == 2 ? 140 : 200, 0));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 200, 0));
 		
 		Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
 			if (shacoArmor.containsKey(p.getUniqueId())) {
 				p.getInventory().setArmorContents(shacoArmor.get(p.getUniqueId()));
 				shacoArmor.remove(p.getUniqueId());
 			}
-		},  level == 2 ? 140 : 200);
+		}, 200);
 	}
 	
 	public void onSnowballUse(Player p, ProjectileLaunchEvent e) {

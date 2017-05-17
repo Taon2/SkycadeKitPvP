@@ -46,7 +46,7 @@ public class KitWizard extends Kit {
 				return;
 			if (lastWizardLoc.get(p.getUniqueId()).distance(p.getLocation()) > 30 || getKitManager().getKitPvP().getSpawnRegion().contains(lastWizardLoc.get(p.getUniqueId())))
 				return;
-			if (!addCooldown(p, getName() + " teleport", 40 - (level * 8), true))
+			if (!addCooldown(p, getName() + " teleport", 16, true))
 				return;
 			final Vector dir = p.getLocation().getDirection();
 			Location newLoc = lastWizardLoc.get(p.getUniqueId());
@@ -62,7 +62,7 @@ public class KitWizard extends Kit {
 			if (rodUse.contains(p.getUniqueId()))
 				return;
 			rodUse.add(p.getUniqueId());
-			Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> rodUse.remove(p.getUniqueId()),  (level == 3 ? 15 : 40) * 20);
+			Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> rodUse.remove(p.getUniqueId()),  15 * 20);
 
 			new BukkitRunnable() {
 				Location loc = p.getLocation();
@@ -80,7 +80,7 @@ public class KitWizard extends Kit {
 
 					for (Player target : UtilPlayer.getNearbyPlayers(loc, 1.5).stream().filter(player -> !player.equals(p) && player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList()))
 						if (target.getGameMode() == GameMode.SURVIVAL)
-							target.damage(8 + (level * 3), p);
+							target.damage(8 + (3 * 3), p);
 
 					if (t > 1.6)
 						this.cancel();
@@ -91,7 +91,7 @@ public class KitWizard extends Kit {
 
 	private void onMove() {
 		Bukkit.getScheduler().runTaskTimer(getKitManager().getKitPvP(), () -> getAllMovingPlayers().stream().filter(p -> getKitManager().getKitPvP().getStats(p).getActiveKit() == KitType.WIZARD && p.getItemInHand().getType() == Material.BOOK).collect(Collectors.toList()).forEach(p -> {
-			Block targetBlock = getTargetBlock(p, true, 15 + (getLevel(p) * 5));
+			Block targetBlock = getTargetBlock(p, true, 30);
 			if (targetBlock == null)
 				return;
 			if (targetBlock.getLocation().add(0, 1, 0).getBlock().getType() != Material.AIR || targetBlock.getLocation().add(0, 2, 0).getBlock().getType() != Material.AIR)

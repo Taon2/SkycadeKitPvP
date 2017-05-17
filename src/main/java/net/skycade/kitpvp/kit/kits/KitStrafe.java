@@ -30,11 +30,9 @@ public class KitStrafe extends Kit {
 		p.getInventory().addItem(new ItemBuilder(Material.STONE_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, level == 3 ? 0 : level + 1).build());
 		p.getInventory().setBoots(new ItemBuilder(Material.DIAMOND_BOOTS).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level).build());
 		
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, level == 1 ? 2 : 3));
-		if (level > 1)
-			p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, level - 1));
-		if (level == 3) 
-			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 0));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 3));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, 2));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 0));
 	}
 	
 	@Override
@@ -63,8 +61,7 @@ public class KitStrafe extends Kit {
 	
 	@Override
 	public void onMove(Player p) {
-		if (getLevel(p) >= 3)
-			particleTracerEffect(p, Color.RED, 30);
+		particleTracerEffect(p, Color.RED, 30);
 	}
 
 	@Override

@@ -33,7 +33,7 @@ public class KitCobra extends Kit {
 	public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
 		int level = getLevel(damager);
 		if (UtilMath.getRandom(0, 100) < 5 + level * 3)
-			damagee.addPotionEffect(new PotionEffect(PotionEffectType.POISON, level == 1 ? 60 : 60 + 20 * level - 1, 1));
+			damagee.addPotionEffect(new PotionEffect(PotionEffectType.POISON,  60 + 20 * 2, 1));
 	}
 	
 	@Override

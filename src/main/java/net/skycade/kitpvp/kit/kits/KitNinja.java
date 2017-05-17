@@ -31,7 +31,7 @@ public class KitNinja extends Kit {
 	public void applyKit(Player p, int level) {
 		p.getInventory().addItem(new ItemBuilder(Material.STONE_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, level + 2).build());
 		p.getInventory().setBoots(new ItemBuilder(Material.LEATHER_BOOTS).setColour(Color.BLACK).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level + 3).build());
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, level == 1 ? 0 : 1));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
 	}
 	
 	@Override
@@ -42,7 +42,7 @@ public class KitNinja extends Kit {
 			return; 
 		ninjaCooldown.add(p.getUniqueId());
 		Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> ninjaCooldown.remove(p.getUniqueId()), 60);
-		p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, getLevel(p) * 20, 0));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 60, 0));
 		tpDash(p, 6);
 	}
 	
@@ -69,8 +69,7 @@ public class KitNinja extends Kit {
 
 	@Override
 	public void onMove(Player p) {
-		if (getLevel(p) >= 3)
-			particleTracerEffect(p, Color.PURPLE, 30);
+		particleTracerEffect(p, Color.PURPLE, 30);
 	}
 	
 	@Override

@@ -32,7 +32,7 @@ public class KitZeus extends Kit {
 	
 	@Override
 	public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-		if (UtilMath.getRandom(0, 100) <= (5 + (6 * getLevel(damager)))) {
+		if (UtilMath.getRandom(0, 100) <= 23) {
 			damagee.getWorld().strikeLightning(damagee.getLocation());
 			e.setDamage(e.getDamage() * 1.4);
 			damagee.setFireTicks(60);

@@ -37,8 +37,7 @@ public class KitTribesman extends Kit {
 		
 		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0));
 		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 0));
-		if (level > 1)
-			p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 0));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 0));
 	}
 
 	@Override
@@ -48,9 +47,9 @@ public class KitTribesman extends Kit {
 		int level = getLevel(damagee);
 		
 		if (e.getFinalDamage() >= 4) {
-			tribesEffect(damagee, level == 1 ? 6 : 6 + 2 * level);
+			tribesEffect(damagee, 6 + 2 * 3);
 			tribesCd.add(damagee.getUniqueId());
-			Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> tribesCd.remove(damagee.getUniqueId()), 220 - (getLevel(damagee) * 20));
+			Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> tribesCd.remove(damagee.getUniqueId()), 220 - (3 * 20));
 		}
 	}
 	

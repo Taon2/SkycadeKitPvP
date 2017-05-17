@@ -37,11 +37,11 @@ public class KitChance extends Kit {
 	@Override
 	public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
 		int level = getLevel(damager);
-		if (level == 1)
+		/* if (level == 1)
 			chanceEffect(4, 3, 0, 3, 2, 4, 1, damager, damagee, e);
 		else if (level == 2) 
 			chanceEffect(5, 4, 0, 2, 3, 3, 2, damager, damagee, e);
-		else if (level == 3) 
+		else if (level == 3) */
 			chanceEffect(6, 5, 2, 1, 4, 2, 3, damager, damagee, e);
 	}
 	

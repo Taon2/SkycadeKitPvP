@@ -39,7 +39,7 @@ public class KitJesus extends Kit {
 	public void onMove(Player p) {
 		if (p.getLocation().getBlock().getType() == Material.WATER || p.getLocation().getBlock().getType() == Material.STATIONARY_WATER) {
 			if (!p.hasPotionEffect(PotionEffectType.SPEED)) 
-				p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * (3 * getLevel(p)), 1));
+				p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * (3 * 3), 1));
 		}
 		particleTracerEffect(p, Color.BLUE, 20);
 	}

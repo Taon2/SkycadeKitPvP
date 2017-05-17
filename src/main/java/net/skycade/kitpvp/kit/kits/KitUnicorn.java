@@ -44,16 +44,16 @@ public class KitUnicorn extends Kit {
 	
 	@Override
 	public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-		if (UtilMath.getRandom(0, 100) <= getLevel(damager)) {
-			damager.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 100 + (20 * getLevel(damager)), 3));
+		if (UtilMath.getRandom(0, 100) <= 3) {
+			damager.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 160, 3));
 			damager.sendMessage("§fSwing speed up!");
 		}
 	}
 	
 	@Override
 	public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-		if (UtilMath.getRandom(0, 100) <= getLevel(damager)) {
-			damagee.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100 + (20 * getLevel(damager)), 2));
+		if (UtilMath.getRandom(0, 100) <= 3) {
+			damagee.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 160, 2));
 			damagee.sendMessage("§fDefence up!");
 			shootParticlesFromLoc(damagee, ParticleEffect.WATER_WAKE, 500, 0.3F);
 		}
@@ -66,7 +66,7 @@ public class KitUnicorn extends Kit {
 			if (rodUse.contains(p.getUniqueId()))
 				return;
 			rodUse.add(p.getUniqueId());
-			Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> rodUse.remove(p.getUniqueId()), level == 3 ? 70 : 100);
+			Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> rodUse.remove(p.getUniqueId()), 70);
 			
 			new BukkitRunnable() {
 				Location loc = p.getEyeLocation().subtract(0, 0.2, 0);
@@ -87,7 +87,7 @@ public class KitUnicorn extends Kit {
 						ParticleEffect.LAVA.display(0, 0, 0, 0, 3, loc, 30);
 
 					for (Player target : UtilPlayer.getNearbyPlayers(loc, 1).stream().filter(player -> !player.equals(p) && player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList())) {
-						target.damage(8 + (level * 2), p);
+						target.damage(14, p);
 						target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 1));
 					}
 					if (t > 1.7)

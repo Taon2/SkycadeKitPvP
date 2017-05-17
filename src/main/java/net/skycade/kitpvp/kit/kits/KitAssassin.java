@@ -36,9 +36,8 @@ public class KitAssassin extends Kit {
 		ItemStack[] armor = getArmour(Material.LEATHER_HELMET, 12, level == 3 ? 3 : 2, Color.BLACK);
 		armor[0] = new ItemBuilder(Material.LEATHER_BOOTS).addEnchantment(Enchantment.DURABILITY, 20).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level + 2).setColour(Color.RED).build();
 		p.getInventory().setArmorContents(armor);
-		p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, level));
-		if (level == 3)
-			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE , 0));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, 3));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE , 0));
 	}
 	
 	@Override

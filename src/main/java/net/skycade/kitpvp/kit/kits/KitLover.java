@@ -35,10 +35,10 @@ public class KitLover extends Kit {
 		if (item.getType() != Material.RED_ROSE)
 			return;
 		int level = getLevel(p);
-		if (!addCooldown(p, getName(), level == 3 ? 15 : (4 - level) * 10, true))
+		if (!addCooldown(p, getName(), 15, true))
 			return;
-		target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, level == 1 ? 2 : 3));
-		target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, level == 3 ? 200 : 100, 1));
+		target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 3));
+		target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 200, 1));
 		target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 0));
 			
 		ParticleEffect.HEART.display(0.5F, 0.5F, 0.5F, 1, 10, target.getLocation().add(0, 2, 0), 100);

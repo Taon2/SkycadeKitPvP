@@ -31,7 +31,7 @@ public class KitWither extends Kit {
 	
 	@Override
 	public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-		witherEffect(damagee, getLevel(damager) * 4, getLevel(damager) * 2);
+		witherEffect(damagee, 12, 6);
 	}
 
 	private void witherEffect(Player p, int chance, int duration) {

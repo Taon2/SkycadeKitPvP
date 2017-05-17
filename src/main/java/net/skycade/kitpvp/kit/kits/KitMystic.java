@@ -39,7 +39,7 @@ public class KitMystic extends Kit {
 		if (item.getType() != Material.IRON_SWORD)
 			return;
 		int level = getLevel(p);
-		if (!addCooldown(p, getName(), level == 3 ? 3 : 7 - getLevel(p), true))
+		if (!addCooldown(p, getName(), 3, true))
 			return;
 		
 		Location loc = p.getEyeLocation();
@@ -62,11 +62,11 @@ public class KitMystic extends Kit {
 				targetPlayers.remove(p);
 			
 			targetPlayers.forEach(target -> {
-				if (level == 1)
+				/* if (level == 1)
 					mysticEffects(target, p, 20, 10, 20, 20, 15, 8, 7);
 				else if (level == 2)
 					mysticEffects(target, p, 12, 10, 20, 20, 20, 8, 7);
-				else
+				else */
 					mysticEffects(target, p, 5, 5, 20, 20, 20, 10, 12);
 			});
 			cat.getLocation().getWorld().createExplosion(cat.getLocation(), 0);

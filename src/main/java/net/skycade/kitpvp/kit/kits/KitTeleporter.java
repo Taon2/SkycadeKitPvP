@@ -26,7 +26,7 @@ public class KitTeleporter extends Kit {
 		p.getInventory().setChestplate(new ItemBuilder(Material.CHAINMAIL_CHESTPLATE).addEnchantment(Enchantment.DURABILITY, level).build());
 		p.getInventory().setLeggings(new ItemBuilder(Material.CHAINMAIL_LEGGINGS).addEnchantment(Enchantment.DURABILITY, level).build());
 		p.getInventory().setBoots(new ItemBuilder(Material.IRON_BOOTS).build());
-		startItemRunnable(p, 50 - (level * 7), new ItemBuilder(Material.ENDER_PEARL).build(), 8, KitType.TELEPORTER);
+		startItemRunnable(p, 30, new ItemBuilder(Material.ENDER_PEARL).build(), 8, KitType.TELEPORTER);
 	}
 	
 	@Override

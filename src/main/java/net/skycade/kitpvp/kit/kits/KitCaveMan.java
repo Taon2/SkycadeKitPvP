@@ -40,7 +40,7 @@ public class KitCaveMan extends Kit {
 		p.getInventory().setBoots(new ItemBuilder(Material.IRON_BOOTS).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level).addEnchantment(Enchantment.DURABILITY, level == 3 ? 2 : 0).build());
 	}
 
-	@SuppressWarnings("deprecation")	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onItemUse(Player p, ItemStack item) {
 		if (item.getType() != Material.WOOD_SPADE)
@@ -49,7 +49,7 @@ public class KitCaveMan extends Kit {
 		if (abilityCooldown.contains(p.getUniqueId()))
 			return;
 		abilityCooldown.add(p.getUniqueId());
-		Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> abilityCooldown.remove(p.getUniqueId()), (level == 3 ? 2 : 3) * 20);
+		Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> abilityCooldown.remove(p.getUniqueId()), 2 * 20);
 
 		Block currentBlock = p.getLocation().subtract(0, 1, 0).getBlock();
 		if (currentBlock.getType() == Material.AIR)

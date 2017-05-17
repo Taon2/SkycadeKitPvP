@@ -27,15 +27,15 @@ public class KitWarrior extends Kit {
 	
 	@Override
 	public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-		e.setDamage(e.getDamage() * getDamageMultiplier(getLevel(damagee)));
+		e.setDamage(e.getDamage() * getDamageMultiplier(3));
 	}
 	
 	private double getDamageMultiplier(int level) {
-		if (level == 1)
+		/* if (level == 1)
 			return 2;
 		else if (level == 2)
 			return 1.7;
-		else 
+		else */
 			return 1.4;
 	}
 

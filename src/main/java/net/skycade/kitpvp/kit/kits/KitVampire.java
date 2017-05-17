@@ -40,10 +40,10 @@ public class KitVampire extends Kit {
 	public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
 		int random = UtilMath.getRandom(0, 100);
 		int level = getLevel(damager);
-		int chance = 4 + level;
+		int chance = 7;
 		
 		if (random < chance) {
-			double healAmount = level == 3 ? 2.5 : 2;
+			double healAmount = 2.5;
 			if (damager.getHealth() + healAmount < damager.getMaxHealth()) 
 				damager.setHealth(damager.getHealth() + healAmount);				
 			else if (damager.getHealth() == damager.getMaxHealth()) 
@@ -53,7 +53,7 @@ public class KitVampire extends Kit {
 			damager.sendMessage("§cHealed!");
 			
 		} else if (random < chance * 2) {
-			damagee.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, level == 1 ? 80 : 80 + 20 * level - 1, 0));
+			damagee.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 80 + 20 * 3 - 1, 0));
 			damagee.sendMessage("§cYou are bit by §f" + damager.getName() + "§c.");
 		}
 	}
@@ -63,7 +63,7 @@ public class KitVampire extends Kit {
 		if (item.getType() != Material.IRON_SWORD)
 			return;
 		int level = getLevel(p);
-		if (!addCooldown(p, getName(), 45 - (level * 5), true))
+		if (!addCooldown(p, getName(), 30, true))
 			return;
 		Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 4);
 		if (targetPlayers.size() <= 1) {
@@ -74,7 +74,7 @@ public class KitVampire extends Kit {
 		double healAmount = 0.0;
 		for (Player target : targetPlayers) {
 			if (target != p) {
-				startBleed(p, target, level + 4);
+				startBleed(p, target, 7);
 				healAmount += 4;
 			}
 		}
@@ -103,7 +103,7 @@ public class KitVampire extends Kit {
 			Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
 				if (getKitManager().getKitPvP().getSpawnRegion().contains(p))
 					return;
-				p.setLastDamageCause(new EntityDamageByEntityEvent(vampire, p, DamageCause.ENTITY_ATTACK,  3 + getLevel(vampire)));
+				p.setLastDamageCause(new EntityDamageByEntityEvent(vampire, p, DamageCause.ENTITY_ATTACK,  6));
 				p.damage(4);
 				startBleed(vampire, p, seconds - 1);
 			}, 15);

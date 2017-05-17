@@ -38,7 +38,7 @@ public class KitHades extends Kit {
 
             UtilPlayer.getNearbyPlayers(p.getLocation(), 2).forEach(target -> {
                 if (target != p)
-                    target.setFireTicks(getLevel(p) * 20);
+                    target.setFireTicks(3 * 20);
             });
 
         }

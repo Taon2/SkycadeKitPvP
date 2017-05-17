@@ -37,9 +37,7 @@ public class KitPotionMaster extends Kit {
 		if (item.getType() != Material.IRON_SWORD)
 			return;
 		int level = getLevel(p);
-		if (level == 1)
-			return;
-		if (!addCooldown(p, getName(), level == 2 ? 45 : 30, true))
+		if (!addCooldown(p, getName(), 30, true))
 			return;
 		
 		for (int i = 0; i < 4; i++)
@@ -55,7 +53,7 @@ public class KitPotionMaster extends Kit {
 		}
 		
 		targetPlayers.forEach(target -> {
-			target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, level == 2 ? 120 : 180, 2));
+			target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 180, 2));
 			target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 120, 1));
 		});
 	}

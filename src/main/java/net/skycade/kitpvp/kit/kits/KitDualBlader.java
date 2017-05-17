@@ -37,13 +37,13 @@ public class KitDualBlader extends Kit {
 		int level = getLevel(damager);
 
 		if (damager.getItemInHand().getItemMeta().getDisplayName().contains("fire")) {
-			fireFreezeCalc(damagee, 10 + (level * 5), 4 + level, 0);
+			fireFreezeCalc(damagee, 25, 7, 0);
 		} else if (damager.getItemInHand().getItemMeta().getDisplayName().contains("ice")) {
-			if (level == 1)
+			/* if (level == 1)
 				fireFreezeCalc(damagee, 0, 0, 4);
 			else if (level == 2)
 				fireFreezeCalc(damagee, 0, 0, 7);
-			else
+			else */
 				fireFreezeCalc(damagee, 0, 0, 10);
 		}
 	}

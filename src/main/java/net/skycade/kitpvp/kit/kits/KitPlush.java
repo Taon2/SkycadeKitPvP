@@ -42,7 +42,7 @@ public class KitPlush extends Kit {
 	public void onItemUse(Player p, ItemStack item) {
 		if (item.getType() != Material.IRON_SWORD)
 			return;
-		if (!addCooldown(p, getName(), getLevel(p) == 3 ? 5 : 12 - (getLevel(p) * 2), true))
+		if (!addCooldown(p, getName(), 5, true))
 			return;
 		int level = getLevel(p);
 		
@@ -62,16 +62,16 @@ public class KitPlush extends Kit {
 		Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
 			Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(cat.getLocation(), 3.5);
 			targetPlayers.forEach(target -> {
-				if (level == 1) {
+				/* if (level == 1) {
 					target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 2));
 					target.setVelocity(new Vector(0, 2, 0));
 				} else if (level == 2) {
 					target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 3));
 					target.setVelocity(new Vector(0, 2.3, 0));
-				} else {
+				} else { */
 					target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 3));
 					target.setVelocity(new Vector(0, 2.5, 0));
-				}
+				//}
 			});
 			
 			cat.getLocation().getWorld().createExplosion(cat.getLocation(), 0);

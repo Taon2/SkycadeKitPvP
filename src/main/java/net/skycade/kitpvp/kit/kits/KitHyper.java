@@ -38,9 +38,9 @@ public class KitHyper extends Kit {
 	public void onItemUse(Player p, ItemStack item) {
 		if (item.getType() != Material.SUGAR)
 			return;
-		if (!addCooldown(p, getName(), (6 - getLevel(p)) * 10, true))
+		if (!addCooldown(p, getName(), 3 * 10, true))
 			return;
-		p.addPotionEffects(Arrays.asList(new PotionEffect(PotionEffectType.SPEED, 50 + getLevel(p) * 100, 2), new PotionEffect(PotionEffectType.REGENERATION, 50 + getLevel(p) * 100, 1)));
+		p.addPotionEffects(Arrays.asList(new PotionEffect(PotionEffectType.SPEED, 50 + 3 * 100, 2), new PotionEffect(PotionEffectType.REGENERATION, 50 + 3 * 100, 1)));
 		p.getWorld().playEffect(p.getLocation(), Effect.ENDER_SIGNAL, 0);
 	}
 	

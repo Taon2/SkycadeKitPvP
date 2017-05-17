@@ -43,15 +43,15 @@ public class KitKing extends Kit {
 	public void onItemUse(Player p, ItemStack item) {
 		if (item.getType() != Material.IRON_SWORD)
 			return;
-		if (!addCooldown(p, getName(), (7 - getLevel(p)) * 10, true))
+		if (!addCooldown(p, getName(), 4 * 10, true))
 			return;
 		int level = getLevel(p);
 		
 		IronGolem golem = (IronGolem) p.getWorld().spawnEntity(p.getLocation(), EntityType.IRON_GOLEM);
 		golem.setCustomName(p.getName() + " golem");
 
-		if (level < 3)
-			golem.setHealth(level == 1 ? golem.getMaxHealth() * 0.5 : golem.getMaxHealth() * 0.7);
+		/* if (level < 3)
+			golem.setHealth(level == 1 ? golem.getMaxHealth() * 0.5 : golem.getMaxHealth() * 0.7); */
 		
 		Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 5);
 		if (nearbyPlayers.contains(p))

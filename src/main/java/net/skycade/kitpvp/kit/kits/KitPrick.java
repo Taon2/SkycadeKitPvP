@@ -36,11 +36,11 @@ public class KitPrick extends Kit {
 		if (item.getType() != Material.CACTUS)
 			return;
 		int level = getLevel(p);
-		if (!addCooldown(p, getName(), 20 - (3 * level), true))
+		if (!addCooldown(p, getName(), 11, true))
 			return;
 		
 		ItemStack[] armor = target.getEquipment().getArmorContents();
-		target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, level == 3 ? 130 : 50 * level, 1));
+		target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 130, 1));
 
 		for (ItemStack anArmor : armor)
 			if (anArmor != null)

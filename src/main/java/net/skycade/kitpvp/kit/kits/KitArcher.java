@@ -39,7 +39,7 @@ public class KitArcher extends Kit {
 		p.getInventory().addItem(new ItemBuilder(Material.ARROW, 1).build());
 
 		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 5, level == 1 ? 2 : 3));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, level == 3 ? 1 : 0));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
 	}
 
 	public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
@@ -54,11 +54,11 @@ public class KitArcher extends Kit {
 	public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
 		int level = getLevel(shooter);
 		
-		if (level == 1) 
+		/* if (level == 1)
 			archerChanceEffects(shooter, damagee, e, 30, 30, 20, 20, 10, 5);
 		else if (level == 2) 
 			archerChanceEffects(shooter, damagee, e, 40, 40, 30, 20, 10, 7);
-		else 
+		else */
 			archerChanceEffects(shooter, damagee, e, 60, 50, 30, 30, 20, 10);
 	}
 

@@ -37,14 +37,14 @@ public class KitGhost extends Kit {
 	
 	@Override
 	public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-		if (getLevel(damagee) <= 2) {
+		/* if (getLevel(damagee) <= 2) {
 			damagee.removePotionEffect(PotionEffectType.INVISIBILITY);
 			
 			Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
 				if (getKitManager().getKitPvP().getStats(damagee).getActiveKit() == KitType.GHOST) 
 					damagee.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0));
 			}, 40);
-		}
+		} */
 	}
 	
 	@Override
@@ -52,10 +52,10 @@ public class KitGhost extends Kit {
 		if (item.getType() != Material.DIAMOND_SWORD)
 			return;
 		int level = getLevel(p);
-		if (!addCooldown(p, getName(), (4 - level) * 10, true))
+		if (!addCooldown(p, getName(), 10, true))
 			return;
 		
-		int range = level + 1;
+		int range = 4;
 		Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), range);
 		if (targetPlayers.size() <= 1)
 			removeCooldowns(p);

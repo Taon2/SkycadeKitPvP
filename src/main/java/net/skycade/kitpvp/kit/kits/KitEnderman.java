@@ -55,7 +55,7 @@ public class KitEnderman extends Kit {
         if (item.getType() != Material.IRON_SWORD)
             return;
         int level = getLevel(p);
-        if (onCooldown(p, getName()) || !addCooldown(p, getName(), 25 - (level * 3), true))
+        if (onCooldown(p, getName()) || !addCooldown(p, getName(), 16, true))
             return;
 
         Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 10);

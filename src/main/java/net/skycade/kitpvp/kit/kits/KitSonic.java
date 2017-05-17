@@ -40,11 +40,11 @@ public class KitSonic extends Kit {
 			else {
 				int value = sprinting.get(p.getUniqueId());
 				value++;
-				if (level == 1) 
+				/* if (level == 1)
 					soniceSprint(p, value, Arrays.asList(2, 5, 9, 15, 22));
 				else if (level == 2) 
 					soniceSprint(p, value, Arrays.asList(1, 4, 6, 11, 18));
-				else 
+				else */
 					soniceSprint(p, value, Arrays.asList(1, 2, 4, 8, 15));
 				sprinting.put(p.getUniqueId(), value);
 			}

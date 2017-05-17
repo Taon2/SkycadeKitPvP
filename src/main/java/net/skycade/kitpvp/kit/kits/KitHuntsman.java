@@ -44,9 +44,9 @@ public class KitHuntsman extends Kit implements Listener {
 	public void onItemUse(Player p, ItemStack item) {
 		if (item.getType() != Material.IRON_SWORD && item.getType() != Material.STONE_SWORD)
 			return;
-		if (getLevel(p) < 2)
-			return;
-		if (!addCooldown(p, getName(), getLevel(p) == 2 ? 30 : 20, true))
+		/* if (getLevel(p) < 2)
+			return; */
+		if (!addCooldown(p, getName(), 20, true))
 			return;
 		p.sendMessage("§aBleed §7activated.");
 		huntsmanActiveBleed.add(p.getUniqueId());		
@@ -62,7 +62,7 @@ public class KitHuntsman extends Kit implements Listener {
 			return;
 		if (bleeding.contains(damagee.getUniqueId()))
 			return;
-		startBleed(damager, (Player) e.getEntity(), getLevel(damager) == 3 ? 4 : 3);
+		startBleed(damager, (Player) e.getEntity(), 4);
 		bleeding.add(damagee.getUniqueId());
 	}
 	

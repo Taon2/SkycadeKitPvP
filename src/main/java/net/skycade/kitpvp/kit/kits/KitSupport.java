@@ -43,9 +43,7 @@ public class KitSupport extends Kit {
 		if (item.getType() != Material.STONE_SWORD)
 			return;
 		int level = getLevel(p);
-		if (level == 1)
-			return;
-		if (!addCooldown(p, getName(), 45 - (level * 5), true))
+		if (!addCooldown(p, getName(), 30, true))
 			return;
 		
 		Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 5);
@@ -55,8 +53,8 @@ public class KitSupport extends Kit {
 		}
 		
 		targetPlayers.forEach(target -> {
-				target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, level == 3 ? 200 : 100 + ((level - 1) * 50), 1));
-				target.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, level == 3 ? 200 : 100 + ((level - 1) * 50), 1));
+				target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1));
+				target.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1));
 		});
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_WOLF_HOWL, 1.0F, 1.0F);
 		shootParticlesFromLoc(p, ParticleEffect.PORTAL, 500, 1);

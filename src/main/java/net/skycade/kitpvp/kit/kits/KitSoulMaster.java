@@ -38,19 +38,17 @@ public class KitSoulMaster extends Kit {
 		if (item.getType() != Material.IRON_SWORD)
 			return;
 		int level = getLevel(p);
-		if (level == 1)
-			return;
-		if (!addCooldown(p, getName(), level == 3 ? 30 : 50 - (level * 5), true))
+		if (!addCooldown(p, getName(), 30, true))
 			return;
 
-		Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 3 + level);
+		Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 6);
 		if (targetPlayers.size() <= 1)
 			removeCooldowns(p);
 		
 		targetPlayers.forEach(target -> {
 			if (target != p)
 				target.addPotionEffect(
-						new PotionEffect(PotionEffectType.SLOW, level == 3 ? 200 : 100 + ((level - 1) * 50), 1));
+						new PotionEffect(PotionEffectType.SLOW, 200, 1));
 		});
 		p.getWorld().playEffect(p.getLocation(), Effect.ENDER_SIGNAL, 1);
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERDRAGON_GROWL, 1.0F, 1.0F);

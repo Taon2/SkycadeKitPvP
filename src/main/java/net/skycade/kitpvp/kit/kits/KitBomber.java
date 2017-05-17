@@ -38,7 +38,7 @@ public class KitBomber extends Kit {
 			piece.addUnsafeEnchantment(Enchantment.PROTECTION_EXPLOSIONS, 5);
 		p.getInventory().setArmorContents(armor);
 		
-		p.addPotionEffects(Collections.singletonList(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, level == 1 ? 0 : 1)));
+		p.addPotionEffects(Collections.singletonList(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1)));
 		startItemRunnable(p, 20 - (level * 5), getTnt(p, 1, level), 10, KitType.BOMBER);
 	}
 	

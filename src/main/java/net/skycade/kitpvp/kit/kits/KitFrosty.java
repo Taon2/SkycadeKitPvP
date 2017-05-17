@@ -33,7 +33,7 @@ public class KitFrosty extends Kit {
 		p.getInventory().setChestplate(new ItemBuilder(Material.LEATHER_CHESTPLATE).addEnchantment(Enchantment.DURABILITY, 12).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level == 1 ? 3 : 4).build());
 		p.getInventory().setLeggings(new ItemBuilder(Material.LEATHER_LEGGINGS).addEnchantment(Enchantment.DURABILITY, 12).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3).build());
 		p.getInventory().setBoots(new ItemBuilder(Material.LEATHER_BOOTS).addEnchantment(Enchantment.DURABILITY, 12).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level == 3 ? 4 : 3).build());
-		startItemRunnable(p, 35 - (level * 5), new ItemBuilder(Material.SNOW_BALL).build(), 8, KitType.FROSTY);
+		startItemRunnable(p, 20, new ItemBuilder(Material.SNOW_BALL).build(), 8, KitType.FROSTY);
 	}
 
 	public void onSnowballUse(Player shooter, ProjectileLaunchEvent e) {
@@ -49,7 +49,7 @@ public class KitFrosty extends Kit {
 
 	public void onSnowballHit(Player shooter, Player damagee) {
 		damagee.sendMessage("§bYou got frozen.");
-		freezePlayer(damagee, 2 + getLevel(shooter));
+		freezePlayer(damagee, 5);
 	}
 	
 	@Override

@@ -45,7 +45,7 @@ public class KitFireArcher extends Kit {
 		if (flameCooldown.contains(p.getUniqueId()))
 			return;
 		int level = getLevel(p);
-		int flameSeconds = 5 + (level * 5);
+		int flameSeconds = 20;
 		flameCooldown.add(p.getUniqueId());
 		Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> flameCooldown.remove(p.getUniqueId()), 60 - flameSeconds);
 		

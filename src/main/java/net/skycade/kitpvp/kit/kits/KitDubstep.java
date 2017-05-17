@@ -28,8 +28,8 @@ public class KitDubstep extends Kit {
 	
 	public void onMove(Player p) {
 		int level = getLevel(p);
-		if (level == 3 && UtilMath.getRandom(0, 100) <= 5)
-			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, level == 3 ? 2 : level));
+		if (UtilMath.getRandom(0, 100) <= 5)
+			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 3));
 	}
 
 }

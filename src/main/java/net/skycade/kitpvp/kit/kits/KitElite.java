@@ -27,7 +27,7 @@ public class KitElite extends Kit {
 		armor[3] = new ItemBuilder(Material.LEATHER_HELMET).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level * 2).addEnchantment(Enchantment.DURABILITY, level + 12).setColour(Color.WHITE).build();
 		p.getInventory().setArmorContents(armor);
 		
-		p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, level - 1));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, 2));
 	}
 
 }

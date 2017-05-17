@@ -32,14 +32,14 @@ public class KitKangaroo extends Kit {
 	public void onItemUse(Player p, ItemStack item) {
 		if (item.getType() != Material.GOLD_SWORD)
 			return;
-		if (!addCooldown(p, getName(), 15 - (getLevel(p) * 3), true))
+		if (!addCooldown(p, getName(), 6, true))
 			return;
-		if (getLevel(p) == 1)
+		/* if (getLevel(p) == 1)
 			p.setVelocity(new Vector(p.getLocation().getDirection().getX(), 0.15, p.getLocation().getDirection().getZ()).multiply(4));
-		else {
+		else { */
 			p.setVelocity(new Vector(p.getLocation().getDirection().getX(), 0.15, p.getLocation().getDirection().getZ()).multiply(4));
 			Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> p.setVelocity(new Vector(p.getLocation().getDirection().getX(), 0.15, p.getLocation().getDirection().getZ()).multiply(3)), 3);
-		}
+		// }
 	}
 	
 	@Override

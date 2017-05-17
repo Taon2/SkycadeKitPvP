@@ -8,6 +8,7 @@ import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -32,7 +33,7 @@ public class KitMedic extends Kit {
 		p.getInventory().addItem(new ItemBuilder(Material.LEATHER, 5).addLore(Arrays.asList("§cDrop to heal", "§cPlayers around you")).setName("§cMedpack").build());
 		p.getInventory().addItem(new ItemBuilder(Material.SHEARS).addLore("§cCan be used to heal a player.").build());
 		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 12, level == 1 ? 3 : (level - 1) + 4, Color.RED));
-		startItemRunnable(p, 20 - (level * 4), new ItemBuilder(Material.LEATHER).addLore(Arrays.asList("§cDrop to heal", "§cPlayers around you")).setName("§cMedpack").build(), 8, KitType.MEDIC);
+		startItemRunnable(p, 8, new ItemBuilder(Material.LEATHER).addLore(Arrays.asList("§cDrop to heal", "§cPlayers around you")).setName("§cMedpack").build(), 8, KitType.MEDIC);
 	}
 	
 	public void onMedpackUse(Player p, Item medpack) {
@@ -43,9 +44,8 @@ public class KitMedic extends Kit {
 
 		players.forEach((player) -> {
 			player.setHealth(player.getMaxHealth());
-			player.sendMessage("§cHealed");		
-			if (level > 1)
-				 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 1));
+			player.sendMessage("§cHealed");
+			player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 1));
 		});
 		Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), medpack::remove, 8);
 	}
@@ -55,9 +55,9 @@ public class KitMedic extends Kit {
 		if (item.getType() != Material.SHEARS)
 			return;
 		int level = getLevel(p);
-		if (!addCooldown(p, "Shears", 10 - (level * 2), false))
+		if (!addCooldown(p, "Shears", 4, false))
 			return;
-		target.setHealth(target.getMaxHealth());
+		target.setHealth(target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 		p.sendMessage("§c" + target.getName() + " got healed.");
 		target.sendMessage("§cHealed!");
 	}

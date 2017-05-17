@@ -37,18 +37,17 @@ public class KitSharingan extends Kit {
 		Collection<PotionEffect> effects = damager.getActivePotionEffects();
 
 		effects.forEach((eff) -> {
-			if (eff.getDuration() > 1200 * level)
-				damagee.addPotionEffect(new PotionEffect(eff.getType(), 1200 * level, eff.getAmplifier()));
+			if (eff.getDuration() > 1200 * 3)
+				damagee.addPotionEffect(new PotionEffect(eff.getType(), 1200 * 3, eff.getAmplifier()));
 			else
 				damagee.addPotionEffect(eff);
 		}); 
 		if (damagee.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE))
 			damagee.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
 
-		if (level == 3) 					
-			for (PotionEffectType effect : Arrays.asList(PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HARM, PotionEffectType.POISON, PotionEffectType.SLOW,	PotionEffectType.SLOW_DIGGING, PotionEffectType.WEAKNESS, PotionEffectType.WITHER))
-				if (damagee.hasPotionEffect(effect))
-					damagee.removePotionEffect(effect);
+		for (PotionEffectType effect : Arrays.asList(PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HARM, PotionEffectType.POISON, PotionEffectType.SLOW,	PotionEffectType.SLOW_DIGGING, PotionEffectType.WEAKNESS, PotionEffectType.WITHER))
+			if (damagee.hasPotionEffect(effect))
+				damagee.removePotionEffect(effect);
 	}
 
 	@Override
