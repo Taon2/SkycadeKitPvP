@@ -12,6 +12,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
@@ -26,11 +28,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public abstract class Kit implements Listener {
 
+    private ConfigurationSection config = new YamlConfiguration();
     private final Map<UUID, Long> cooldownDate = new HashMap<>();
     private final Map<UUID, List<String>> playerCooldown = new HashMap<>();
 
@@ -388,6 +394,35 @@ public abstract class Kit implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         frozenPlayers.remove(e.getPlayer().getUniqueId());
+    }
+
+    public ConfigurationSection getConfig() {
+        return config;
+    }
+
+    public void setConfigDefaults(Map<String, Object> defaultsMap) {
+        File configFile = new File(KitPvP.getInstance().getDataFolder(), "kits.yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        ConfigurationSection kitSection = config.getConfigurationSection(getName());
+        if (kitSection == null) {
+            kitSection = new YamlConfiguration();
+            for (Map.Entry<String, Object> entry : defaultsMap.entrySet()) {
+                kitSection.set(entry.getKey(), entry.getValue());
+            }
+        }
+
+        for (Map.Entry<String, Object> entry : defaultsMap.entrySet()) {
+            if (kitSection.get(entry.getKey(), null) == null) {
+                kitSection.set(entry.getKey(), entry.getValue());
+            }
+        }
+        config.set(getName(), kitSection);
+        try {
+            config.save(configFile);
+        } catch (IOException e) {
+            KitPvP.getInstance().getLogger().log(Level.SEVERE, "An error occurred while trying to save kits.yml", e);
+        }
+        this.config = kitSection;
     }
 
 }

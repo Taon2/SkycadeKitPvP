@@ -18,10 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class KitArcher extends Kit {
 	
@@ -30,16 +27,31 @@ public class KitArcher extends Kit {
 	public KitArcher(KitManager kitManager) {
 		super(kitManager, "Archer", KitType.ARCHER, 8000, "Chance-based archer kit");
 		setIcon(new ItemStack(Material.BOW));
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "STONE_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
+		defaultsMap.put("inventory.bow.enchantments.durability", 5);
+		defaultsMap.put("inventory.bow.enchantments.arrow-infinite", 1);
+        defaultsMap.put("inventory.bow.enchantments.arrow-damage", 1);
+        defaultsMap.put("inventory.armour.type", "LEATHER");
+        defaultsMap.put("inventory.armour.durability", 5);
+        defaultsMap.put("inventory.armour.protection", 2);
+        defaultsMap.put("potions.speed.amplifier", 1);
+
+        setConfigDefaults(defaultsMap);
 	}
 	
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.STONE_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, level >= 3 ? 1 : 0).build());
-		p.getInventory().addItem(new ItemBuilder(Material.BOW).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.ARROW_INFINITE, 1).addEnchantment(Enchantment.ARROW_DAMAGE, level).build());
+		p.getInventory().addItem(new ItemBuilder(Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase())).addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability")).addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+		p.getInventory().addItem(new ItemBuilder(Material.BOW).addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.bow.enchantments.durability")).addEnchantment(Enchantment.ARROW_INFINITE, getConfig().getInt("inventory.bow.enchantments.arrow-infinite")).addEnchantment(Enchantment.ARROW_DAMAGE, getConfig().getInt("inventory.bow.enchantments.arrow-damage")).build());
 		p.getInventory().addItem(new ItemBuilder(Material.ARROW, 1).build());
 
-		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 5, level == 1 ? 2 : 3));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
+		p.getInventory().setArmorContents(getArmour(Material.getMaterial(getConfig().getString("inventory.armour.type") + "_HELMET"), getConfig().getInt("inventory.armour.durability"), getConfig().getInt("inventory.armour.protection")));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, getConfig().getInt("potions.speed.amplifier")));
 	}
 
 	public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
