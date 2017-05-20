@@ -57,7 +57,7 @@ public class CommandCrate extends Command<KitManager> implements Listener {
 		stats.setCrateKeys(stats.getCrateKeys() - 1);
 		int randomNum = UtilMath.getRandom(0, kits.size() - 1);
 		crateCooldown.put(member.getUUID(), randomNum/3);
-		CrateRunnable runnable = new CrateRunnable(randomNum, member.getPlayer(), kits, stats);
+		CrateRunnable runnable = new CrateRunnable(randomNum, member.getPlayer(), member, kits, stats);
 		runnable.runTaskTimer(getModule().getPlugin(), 0, 7);
 	}
 	

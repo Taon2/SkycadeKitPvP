@@ -2,6 +2,7 @@ package net.skycade.kitpvp.commands.staff;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
@@ -60,6 +61,8 @@ public class CommandGiveKeys extends Command<KitManager> {
             incKeys(targetStats, member, target, amount);
         else if (args[0].equalsIgnoreCase("take"))
             takeKeys(targetStats, member, target, amount);
+
+        MemberManager.getInstance().update(member);
     }
 
     private void resetKeys(KitPvPStats targetStats, Member member, Player target) {

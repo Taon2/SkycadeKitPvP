@@ -52,8 +52,7 @@ public class MemberManager extends Module {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    public Member getMember(String name, boolean database) {
+    /* public Member getMember(String name, boolean database) {
         for (Member member : members.values())
             if (member.getName().equalsIgnoreCase(name))
                 return member;
@@ -65,9 +64,8 @@ public class MemberManager extends Module {
             if (uuid == null) return null; else return new Member(uuid, name);
         }
         return null;
-    }
+    } */
 
-    @SuppressWarnings("unchecked")
     public Member getMember(String name) {
         for (Member member : members.values())
             if (member.getName().equalsIgnoreCase(name))

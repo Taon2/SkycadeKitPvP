@@ -20,7 +20,8 @@ import java.util.List;
 
 public class CrateRunnable extends BukkitRunnable {
 
-	private int counter;
+    private final Member member;
+    private int counter;
 	private int randomNumber;
 	private Sound sound;
 	private Player p;
@@ -28,11 +29,12 @@ public class CrateRunnable extends BukkitRunnable {
 	private List<KitType> crateItems;
 	private KitPvPStats stats;
 
-	public CrateRunnable(int randomNumber, Player p, List<KitType> crateItems, KitPvPStats stats) {
+	public CrateRunnable(int randomNumber, Player p, Member member, List<KitType> crateItems, KitPvPStats stats) {
 		this.randomNumber = randomNumber;
 		this.p = p;
 		this.crateItems = crateItems;		
 		this.stats = stats;
+		this.member = member;
 		counter = -1;
 		inv = Bukkit.createInventory(p, 54, "§aCrate");
 		sound = Arrays.asList(Sound.BLOCK_NOTE_PLING, Sound.BLOCK_NOTE_SNARE, Sound.BLOCK_NOTE_BASS).get(UtilMath.getRandom(0, 2)); // NOTE_STICKS and PIANO were here
@@ -56,6 +58,7 @@ public class CrateRunnable extends BukkitRunnable {
 			p.closeInventory();
 			Kit prize = crateItems.get(counter <= 0 ? 0 : counter - 1).getKit();
 			stats.addKit(prize.getKitType());
+			MemberManager.getInstance().update(member);
 			p.sendMessage("§7You won the §a" + prize.getName() + "§7 kit.");
 			donatorCratePerk(MemberManager.getInstance().getMember(p), prize);
 
