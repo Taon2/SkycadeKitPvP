@@ -23,7 +23,7 @@ public class KitNinja extends Kit {
 	private final List<UUID> ninjaCooldown = new ArrayList<>();
 
 	public KitNinja(KitManager kitManager) {
-		super(kitManager, "Ninja", KitType.NINJA, 32000, "Dash to deal the damage.");
+		super(kitManager, "Ninja", KitType.NINJA, 32000, false, "Dash to deal the damage.");
 		setIcon(new ItemBuilder(Material.LEATHER_BOOTS).setColour(Color.BLACK).build());
 	}
 
