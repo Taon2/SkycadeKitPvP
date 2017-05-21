@@ -58,7 +58,7 @@ public class KitManager extends Module {
 		registerCommand(new CommandShop(this));
 		registerCommand(new CommandSoup(this));
 		registerCommand(new CommandTeam(this));
-		registerCommand(new CommandUpgrade(this));
+		//registerCommand(new CommandUpgrade(this));
 		registerCommand(new CommandViewKit(this));
 		registerCommand(new CommandUnlock(this));
 		registerCommand(new CommandSetLevel(this));
