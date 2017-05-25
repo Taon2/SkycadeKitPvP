@@ -28,16 +28,46 @@ public class KitAssassin extends Kit {
 	public KitAssassin(KitManager kitManager) {
 		super(kitManager, "Assassin", KitType.ASSASSIN, 50000, "Be a sneaky assassin");
 		setIcon(Material.COAL);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
+		defaultsMap.put("inventory.armour.type", "LEATHER");
+		defaultsMap.put("inventory.armour.durability", 12);
+		defaultsMap.put("inventory.armour.protection", 2);
+		defaultsMap.put("boots.enchantments.durability", 20);
+		defaultsMap.put("boots.enchantments.protection", 3);
+		defaultsMap.put("potions.digging.amplifier", 3);
+		defaultsMap.put("potions.speed.amplifier", 0);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.DIAMOND_SWORD).addEnchantment(Enchantment.DAMAGE_ALL, level == 3 ? 1 : 0).build());
-		ItemStack[] armor = getArmour(Material.LEATHER_HELMET, 12, level == 3 ? 3 : 2, Color.BLACK);
-		armor[0] = new ItemBuilder(Material.LEATHER_BOOTS).addEnchantment(Enchantment.DURABILITY, 20).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level + 2).setColour(Color.RED).build();
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+		ItemStack[] armor = getArmour(Material.getMaterial(
+				getConfig().getString("inventory.armour.type") + "_HELMET"),
+				getConfig().getInt("inventory.armour.durability"),
+				getConfig().getInt("inventory.armour.protection"),
+				Color.BLACK);
+
+		armor[0] = new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.armour.type") + "_BOOTS"))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("boots.enchantments.durability"))
+				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("boots.enchantments.protection"))
+				.setColour(Color.RED).build();
+
 		p.getInventory().setArmorContents(armor);
-		p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, 3));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE , 0));
+
+		p.addPotionEffect(new PotionEffect(
+				PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, getConfig().getInt("potions.digging.amplifier")));
+		p.addPotionEffect(new PotionEffect(
+				PotionEffectType.SPEED, Integer.MAX_VALUE , getConfig().getInt("potions.speed.amplifier")));
 	}
 	
 	@Override

@@ -14,20 +14,48 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class KitHydra extends Kit {
 
 	public KitHydra(KitManager kitManager) {
 		super(kitManager, "Hydra", KitType.HYDRA, 20000, "Wanna go for a swim?");
 		setIcon(Material.WATER_BUCKET);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+		defaultsMap.put("inventory.sword.enchantments.knockback", 1);
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
+
+		defaultsMap.put("armor.material", "LEATHER");
+		defaultsMap.put("armor.enchantments.durability", 12);
+		defaultsMap.put("armor.enchantments.protection", 1);
+
+		defaultsMap.put("potions.water-breathing.amplifier", 0);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.IRON_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.KNOCKBACK, level == 1 ? 1 : 0).addEnchantment(Enchantment.DAMAGE_ALL, level == 3 ? 1 : 0).build());
-		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 12, level == 1 ? 1 : 2, Color.BLUE));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, Integer.MAX_VALUE, 0));
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword.enchantments.knockback"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+		p.getInventory().setArmorContents(getArmour(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+				getConfig().getInt("armor.enchantments.durability"),
+				getConfig().getInt("armor.enchantments.protection"),
+				Color.BLUE));
+
+		p.addPotionEffect(new PotionEffect(
+				PotionEffectType.WATER_BREATHING, Integer.MAX_VALUE, getConfig().getInt("potions.water-breathing.amplifier")));
 	}
 	
 	@Override

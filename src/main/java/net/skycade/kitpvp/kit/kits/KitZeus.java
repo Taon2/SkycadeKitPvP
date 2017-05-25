@@ -14,20 +14,43 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class KitZeus extends Kit {
 
 	public KitZeus(KitManager kitManager) {
 		super(kitManager, "Zeus", KitType.ZEUS, 30000, "Lightning strikes!");
 		setIcon(Material.BLAZE_ROD);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.blaze-rod.enchantments.damage-all", 5);
+
+		defaultsMap.put("armor.material", "LEATHER");
+		defaultsMap.put("armor.enchantments.durability", 12);
+		defaultsMap.put("armor.enchantments.protection", 4);
+
+		defaultsMap.put("potions.fire-resistance.amplifier", 0);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.BLAZE_ROD).addEnchantment(Enchantment.DAMAGE_ALL, level + 4).build());
-		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 12, 4, Color.fromBGR(153, 255, 255)));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 0));
+		p.getInventory().addItem(new ItemBuilder(
+				Material.BLAZE_ROD)
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.blaze-rod.enchantments.damage-all")).build());
+
+		p.getInventory().setArmorContents(getArmour(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+				getConfig().getInt("armor.enchantments.durability"),
+				getConfig().getInt("armor.enchantments.protection"),
+				Color.fromBGR(153, 255, 255)));
+
+		p.addPotionEffect(new PotionEffect(
+				PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, getConfig().getInt("potions.fire-resistance.amplifier")));
 	}
 	
 	@Override

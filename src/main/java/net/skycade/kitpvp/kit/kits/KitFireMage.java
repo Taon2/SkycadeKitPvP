@@ -23,13 +23,41 @@ public class KitFireMage extends Kit {
     public KitFireMage(KitManager kitManager) {
         super(kitManager, "FireMage", KitType.FIREMAGE, 34000, "Use fire magic!");
         setIcon(new ItemStack(Material.FIREWORK_CHARGE));
+
+        Map<String, Object> defaultsMap = new HashMap<>();
+
+        defaultsMap.put("inventory.stick.enchantments.durability", 5);
+        defaultsMap.put("inventory.stick.enchantments.damage-all", 1);
+
+        defaultsMap.put("armor.material", "LEATHER");
+        defaultsMap.put("armor.enchantments.durability", 5);
+        defaultsMap.put("armor.enchantments.protection", 1);
+
+        defaultsMap.put("armor.helmet.material", "LEATHER");
+        defaultsMap.put("armor.helmet.enchantments.durability", 10);
+        defaultsMap.put("armor.helmet.enchantments.protection", 2);
+
+        setConfigDefaults(defaultsMap);
     }
 
     @Override
     public void applyKit(Player p, int level) {
-        p.getInventory().addItem(new ItemBuilder(Material.STICK).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, level).build());
-        p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 5, level, Color.RED));
-        p.getInventory().setHelmet(new ItemBuilder(Material.LEATHER_HELMET).addEnchantment(Enchantment.DURABILITY, 10).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level <= 2 ? 2 : 3).setColour(Color.YELLOW).build());
+        p.getInventory().addItem(new ItemBuilder(
+                Material.STICK)
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.stick.enchantments.durability"))
+                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.stick.enchantments.damage-all")).build());
+
+        p.getInventory().setArmorContents(getArmour(
+                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+                getConfig().getInt("armor.enchantments.durability"),
+                getConfig().getInt("armor.enchantments.protection"),
+                Color.RED));
+
+        p.getInventory().setHelmet(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments.durability"))
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.helmet.enchantments.protection"))
+                .setColour(Color.YELLOW).build());
     }
 
     @Override

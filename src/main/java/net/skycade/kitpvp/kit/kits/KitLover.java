@@ -14,20 +14,44 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class KitLover extends Kit {
 
 	public KitLover(KitManager kitManager) {
 		super(kitManager, "Lover", KitType.LOVER, 19000, "Love is a weird thing");
 		setIcon(Material.RED_ROSE);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "WOOD_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.durability", 10);
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
+
+		defaultsMap.put("armor.material", "LEATHER");
+		defaultsMap.put("armor.enchantments.durability", 12);
+		defaultsMap.put("armor.enchantments.protection", 4);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.WOOD_SWORD).addEnchantment(Enchantment.DURABILITY, 10).addEnchantment(Enchantment.DAMAGE_ALL, level == 3 ? 4 : level + 1).build());
-		p.getInventory().addItem(new ItemBuilder(Material.RED_ROSE).build());
-		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 12, level == 3 ? 5 : 4, Color.RED));
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+		p.getInventory().addItem(new ItemBuilder(
+				Material.RED_ROSE).build());
+
+		p.getInventory().setArmorContents(getArmour(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+				getConfig().getInt("armor.enchantments.durability"),
+				getConfig().getInt("armor.enchantments.protection"),
+				Color.RED));
 	}
 	
 	@Override

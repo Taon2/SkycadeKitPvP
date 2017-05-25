@@ -46,12 +46,27 @@ public class KitArcher extends Kit {
 	
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase())).addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability")).addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
-		p.getInventory().addItem(new ItemBuilder(Material.BOW).addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.bow.enchantments.durability")).addEnchantment(Enchantment.ARROW_INFINITE, getConfig().getInt("inventory.bow.enchantments.arrow-infinite")).addEnchantment(Enchantment.ARROW_DAMAGE, getConfig().getInt("inventory.bow.enchantments.arrow-damage")).build());
-		p.getInventory().addItem(new ItemBuilder(Material.ARROW, 1).build());
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
 
-		p.getInventory().setArmorContents(getArmour(Material.getMaterial(getConfig().getString("inventory.armour.type") + "_HELMET"), getConfig().getInt("inventory.armour.durability"), getConfig().getInt("inventory.armour.protection")));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, getConfig().getInt("potions.speed.amplifier")));
+		p.getInventory().addItem(new ItemBuilder(
+				Material.BOW)
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.bow.enchantments.durability"))
+				.addEnchantment(Enchantment.ARROW_INFINITE, getConfig().getInt("inventory.bow.enchantments.arrow-infinite"))
+				.addEnchantment(Enchantment.ARROW_DAMAGE, getConfig().getInt("inventory.bow.enchantments.arrow-damage")).build());
+
+		p.getInventory().addItem(new ItemBuilder(
+				Material.ARROW, 1).build());
+
+		p.getInventory().setArmorContents(getArmour(Material.getMaterial(
+						getConfig().getString("inventory.armour.type") + "_HELMET"),
+						getConfig().getInt("inventory.armour.durability"),
+						getConfig().getInt("inventory.armour.protection")));
+
+		p.addPotionEffect(new PotionEffect(
+				PotionEffectType.SPEED, Integer.MAX_VALUE, getConfig().getInt("potions.speed.amplifier")));
 	}
 
 	public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {

@@ -13,10 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class KitNinja extends Kit {
 	
@@ -25,13 +22,35 @@ public class KitNinja extends Kit {
 	public KitNinja(KitManager kitManager) {
 		super(kitManager, "Ninja", KitType.NINJA, 32000, false, "Dash to deal the damage.");
 		setIcon(new ItemBuilder(Material.LEATHER_BOOTS).setColour(Color.BLACK).build());
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "STONE_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 3);
+
+		defaultsMap.put("armor.material", "LEATHER");
+		defaultsMap.put("armor.enchantments.protection", 4);
+
+		defaultsMap.put("potions.speed.amplifier", 1);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.STONE_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, level + 2).build());
-		p.getInventory().setBoots(new ItemBuilder(Material.LEATHER_BOOTS).setColour(Color.BLACK).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level + 3).build());
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+		p.getInventory().setBoots(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_BOOTS"))
+				.setColour(Color.BLACK)
+				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.enchantments.protection")).build());
+
+		p.addPotionEffect(new PotionEffect(
+				PotionEffectType.SPEED, Integer.MAX_VALUE, getConfig().getInt("potions.speed.amplifier")));
 	}
 	
 	@Override

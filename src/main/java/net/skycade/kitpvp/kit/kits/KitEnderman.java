@@ -16,21 +16,39 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class KitEnderman extends Kit {
 
     public KitEnderman(KitManager kitManager) {
         super(kitManager, "Enderman", KitType.ENDERMAN, 35000, "Scared of water");
         setIcon(Material.ENDER_CHEST);
+
+        Map<String, Object> defaultsMap = new HashMap<>();
+
+        defaultsMap.put("inventory.sword.material", "IRON_SWORD");
+        defaultsMap.put("inventory.sword.enchantments.durability", 5);
+        defaultsMap.put("inventory.sword.enchantments.damage-all", 1);
+
+        defaultsMap.put("armor.material", "LEATHER");
+        defaultsMap.put("armor.enchantments.durability", 12);
+        defaultsMap.put("armor.enchantments.protection", 3);
+
+        setConfigDefaults(defaultsMap);
     }
 
     @Override
     public void applyKit(Player p, int level) {
-        p.getInventory().addItem(new ItemBuilder(Material.IRON_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL,  level < 3 ? 1 : 2).build());
-        p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 12, level == 1 ? 3 : 4, Color.PURPLE));
+        p.getInventory().addItem(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("inventory.sword.material")))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+        p.getInventory().setArmorContents(getArmour(
+                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+                getConfig().getInt("armor.enchantments.durability"),
+                getConfig().getInt("armor.enchantments.protection"),
+                Color.PURPLE));
     }
 
     //Shooter is archer, damagee is player with enderman kit

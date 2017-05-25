@@ -12,9 +12,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class KitKing extends Kit {
@@ -22,13 +20,38 @@ public class KitKing extends Kit {
 	public KitKing(KitManager kitManager) {
 		super(kitManager, "King", KitType.KING, 50000, "Not afraid to show his shiny crown");
 		setIcon(Material.GOLD_HELMET);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
+
+		defaultsMap.put("armor.material", "IRON");
+		defaultsMap.put("armor.enchantments.durability", 0);
+		defaultsMap.put("armor.enchantments.protection", 0);
+
+		defaultsMap.put("armor.helmet.material", "GOLD");
+		defaultsMap.put("armor.helmet.enchantments.durability", 1);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.IRON_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, level == 1 ? 0 : 1).build());
-		p.getInventory().setArmorContents(getArmour(Material.IRON_HELMET, 0, 0));
-		p.getInventory().setHelmet(new ItemBuilder(Material.GOLD_HELMET).addEnchantment(Enchantment.DURABILITY, level == 3 ? 5 : level).build());
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+		p.getInventory().setArmorContents(getArmour(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+				getConfig().getInt("armor.enchantments.durability"),
+				getConfig().getInt("armor.enchantments.protection")));
+
+		p.getInventory().setHelmet(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments.durability")).build());
 	}
 
 	@Override

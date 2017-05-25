@@ -18,10 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class KitHuntsman extends Kit implements Listener {
 	
@@ -31,13 +28,38 @@ public class KitHuntsman extends Kit implements Listener {
 	public KitHuntsman(KitManager kitManager) {
 		super(kitManager, "Huntsman", KitType.HUNTSMAN, 40000, "Hunt them down!");
 		setIcon(Material.SKULL_ITEM);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "STONE_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+		defaultsMap.put("inventory.sword.enchantments.knockback", 1);
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
+
+		defaultsMap.put("armor.material", "IRON");
+		defaultsMap.put("armor.enchantments.durability", 0);
+		defaultsMap.put("armor.enchantments.protection", 0);
+
+		defaultsMap.put("potions.jump.amplifier", 0);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.STONE_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.KNOCKBACK, level == 3 ? 0  : 1).addEnchantment(Enchantment.DAMAGE_ALL, level + 1).build());
-		p.getInventory().setArmorContents(getArmour(Material.IRON_HELMET, 0, 0));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 0));
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword.enchantments.knockback"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+		p.getInventory().setArmorContents(getArmour(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+				getConfig().getInt("armor.enchantments.durability"),
+				getConfig().getInt("armor.enchantments.protection")));
+
+		p.addPotionEffect(new PotionEffect(
+				PotionEffectType.JUMP, Integer.MAX_VALUE, getConfig().getInt("potions.jump.amplifier")));
 	}
 	
 	@Override

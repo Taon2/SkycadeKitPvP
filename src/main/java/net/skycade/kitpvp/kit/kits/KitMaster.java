@@ -17,6 +17,7 @@ import org.bukkit.potion.PotionEffect;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class KitMaster extends Kit {
@@ -24,13 +25,35 @@ public class KitMaster extends Kit {
 	public KitMaster(KitManager kitManager) {
 		super(kitManager, "KitMaster", KitType.KITMASTER, 0, "You are the true master of KitPvP");
 		// This kit unlocks once all other kits are unlocked.
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.spade.material", "DIAMOND_SPADE");
+		defaultsMap.put("inventory.spade.enchantments.durability", 5);
+		defaultsMap.put("inventory.spade.enchantments.damage-all", 5);
+
+		defaultsMap.put("armor.material", "LEATHER");
+		defaultsMap.put("armor.enchantments.durability", 5);
+		defaultsMap.put("armor.enchantments.protection", 5);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.DIAMOND_SPADE).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, 5).build());
-		p.getInventory().addItem(new ItemBuilder(Material.STICK).build());
-		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 5, 5, Color.fromBGR(0, 215, 255)));
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.spade.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.spade.enchantments.durability"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.spade.enchantments.damage-all")).build());
+
+		p.getInventory().addItem(new ItemBuilder(
+				Material.STICK).build());
+
+		p.getInventory().setArmorContents(getArmour(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+				getConfig().getInt("armor.enchantments.durability"),
+				getConfig().getInt("armor.enchantments.protection"),
+				Color.fromBGR(0, 215, 255)));
 	}
 
 	@Override

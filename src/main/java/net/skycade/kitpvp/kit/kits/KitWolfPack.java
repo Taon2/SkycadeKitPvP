@@ -17,21 +17,39 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class KitWolfPack extends Kit {
 
 	public KitWolfPack(KitManager kitManager) {
 		super(kitManager, "Wolfpack", KitType.WOLFPACK, 25000, "Tamer of beasts");
 		setIcon(Material.BONE);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
+
+		defaultsMap.put("armor.material", "LEATHER");
+		defaultsMap.put("armor.enchantments.durability", 12);
+		defaultsMap.put("armor.enchantments.protection", 4);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.IRON_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, level == 1 ? 0 : level - 1).build());
-		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 12, 4, Color.WHITE));
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+		p.getInventory().setArmorContents(getArmour(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+				getConfig().getInt("armor.enchantments.durability"),
+				getConfig().getInt("armor.enchantments.protection"),
+				Color.WHITE));
 	}
 	
 	@Override

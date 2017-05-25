@@ -17,10 +17,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class KitUnicorn extends Kit {
@@ -31,15 +28,59 @@ public class KitUnicorn extends Kit {
 	public KitUnicorn(KitManager kitManager) {
 		super(kitManager, "Unicorn", KitType.UNICORN, 40000, "Be a mythical creature");
 		setIcon(new ItemStack(Material.HAY_BLOCK));
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("armor.helmet.material", "LEATHER");
+		defaultsMap.put("armor.helmet.enchantments.protection", 3);
+		defaultsMap.put("armor.helmet.enchantments.durability", 14);
+
+		defaultsMap.put("armor.chestplate.material", "LEATHER");
+		defaultsMap.put("armor.chestplate.enchantments.protection", 3);
+		defaultsMap.put("armor.chestplate.enchantments.durability", 12);
+
+		defaultsMap.put("armor.leggings.material", "LEATHER");
+		defaultsMap.put("armor.leggings.enchantments.protection", 2);
+		defaultsMap.put("armor.leggings.enchantments.durability", 12);
+
+		defaultsMap.put("armor.boots.material", "LEATHER");
+		defaultsMap.put("armor.boots.enchantments.protection", 4);
+		defaultsMap.put("armor.boots.enchantments.durability", 12);
+
+		defaultsMap.put("inventory.stick.enchantments.damage-all", 5);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().setHelmet(new ItemBuilder(Material.LEATHER_HELMET).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level + 2).addEnchantment(Enchantment.DURABILITY, 14).setColour(Color.PURPLE).build());
-		p.getInventory().setChestplate(new ItemBuilder(Material.LEATHER_CHESTPLATE).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level + 2).addEnchantment(Enchantment.DURABILITY, 12).setColour(Color.WHITE).build());
-		p.getInventory().setLeggings(new ItemBuilder(Material.LEATHER_LEGGINGS).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level + 1).addEnchantment(Enchantment.DURABILITY, 12).setColour(Color.WHITE).build());
-		p.getInventory().setBoots(new ItemBuilder(Material.LEATHER_BOOTS).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4).addEnchantment(Enchantment.DURABILITY, 12).setColour(Color.WHITE).build());
-		p.getInventory().addItem(new ItemBuilder(Material.STICK).addEnchantment(Enchantment.DAMAGE_ALL, level == 3 ? 6 : 5).build());
+		p.getInventory().setHelmet(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
+				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.helmet.enchantments.protection"))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments.durability"))
+				.setColour(Color.PURPLE).build());
+
+		p.getInventory().setChestplate(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.chestplate.material").toUpperCase() + "_CHESTPLATE"))
+				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.chestplate.enchantments.protection"))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.chestplate.enchantments.durability"))
+				.setColour(Color.WHITE).build());
+
+		p.getInventory().setLeggings(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.leggings.material").toUpperCase() + "_LEGGINGS"))
+				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.leggings.enchantments.protection"))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.leggings.enchantments.durability"))
+				.setColour(Color.WHITE).build());
+
+		p.getInventory().setBoots(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS"))
+				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.boots.enchantments.protection"))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.boots.enchantments.durability"))
+				.setColour(Color.WHITE).build());
+
+		p.getInventory().addItem(new ItemBuilder(
+				Material.STICK)
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.stick.enchantments.damage-all")).build());
 	}
 	
 	@Override

@@ -14,19 +14,41 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class KitWither extends Kit {
 
 	public KitWither(KitManager kitManager) {
 		super(kitManager, "Wither", KitType.WITHER, 36000, "Wither can be an annoying guy");
 		setIcon(Material.NETHER_STALK);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 1);
+		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+
+		defaultsMap.put("armor.material", "LEATHER");
+		defaultsMap.put("armor.enchantments.durability", 10);
+		defaultsMap.put("armor.enchantments.protection", 4);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.IRON_SWORD).addEnchantment(Enchantment.DAMAGE_ALL, level == 3 ? 2 : 1).addEnchantment(Enchantment.DURABILITY, 5).build());
-		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 8 + (level * 2), 4, Color.BLACK));
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all"))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability")).build());
+
+		p.getInventory().setArmorContents(getArmour(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+				getConfig().getInt("armor.enchantments.durability"),
+				getConfig().getInt("armor.enchantments.protection"),
+				Color.BLACK));
 	}
 	
 	@Override

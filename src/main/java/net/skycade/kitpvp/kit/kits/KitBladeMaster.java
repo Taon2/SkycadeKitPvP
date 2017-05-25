@@ -11,24 +11,55 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class KitBladeMaster extends Kit {
 
 	public KitBladeMaster(KitManager kitManager) {
 		super(kitManager, "BladeMaster", KitType.BLADEMASTER, 29000, "Master of blades");
 		setIcon(Material.GOLD_SWORD);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "GOLD_SWORD");
+        defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
+        defaultsMap.put("inventory.sword.enchantments.durability", 10);
+        defaultsMap.put("inventory.sword.name", "Sword of damage");
+        defaultsMap.put("inventory.sword2.material", "GOLD_SWORD");
+        defaultsMap.put("inventory.sword2.enchantments.durability", 10);
+        defaultsMap.put("inventory.sword2.enchantments.knockback", 2);
+        defaultsMap.put("inventory.sword2.name", "Sword of knockback");
+		defaultsMap.put("armor.boots.material", "IRON");
+        defaultsMap.put("armor.leggings.material", "IRON");
+        defaultsMap.put("armor.chestplate.material", "IRON");
+        defaultsMap.put("armor.helmet.material", "GOLD");
+        defaultsMap.put("armor.helmet.enchantments.durability", 2);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.GOLD_SWORD).addEnchantment(Enchantment.DAMAGE_ALL, level + 1).addEnchantment(Enchantment.DURABILITY, 10).setName("Sword of damage").build());
-		p.getInventory().addItem(new ItemBuilder(Material.GOLD_SWORD).addEnchantment(Enchantment.DURABILITY, 10).addEnchantment(Enchantment.KNOCKBACK, level + 1).setName("Sword of knockback").build());
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all"))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.setName(getConfig().getString("inventory.sword.name")).build());
+
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword2.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword2.enchantments.durability"))
+				.addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword2.enchantments.knockback"))
+				.setName(getConfig().getString("inventory.sword2.name")).build());
 		
-		p.getInventory().setBoots(new ItemBuilder(Material.IRON_BOOTS).build());
-		p.getInventory().setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).build());
-		p.getInventory().setChestplate(new ItemBuilder(Material.IRON_CHESTPLATE).build());
-		p.getInventory().setHelmet(new ItemBuilder(Material.GOLD_HELMET).addEnchantment(Enchantment.DURABILITY, level + 1).build());
+		p.getInventory().setBoots(new ItemBuilder(Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS")).build());
+		p.getInventory().setLeggings(new ItemBuilder(Material.getMaterial(getConfig().getString("armor.leggings.material").toUpperCase() + "_LEGGINGS")).build());
+		p.getInventory().setChestplate(new ItemBuilder(Material.getMaterial(getConfig().getString("armor.chestplate.material").toUpperCase() + "_CHESTPLATE")).build());
+		p.getInventory().setHelmet(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments.durability")).build());
 	}
 	
 	@Override 

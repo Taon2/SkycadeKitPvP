@@ -17,22 +17,38 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class KitBarbarian extends Kit {
 
 	public KitBarbarian(KitManager kitManager) {
 		super(kitManager, "Barbarian", KitType.BARBARIAN, 7500, "RAWR!");
 		setIcon(Material.IRON_AXE);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.axe.material", "IRON_AXE");
+		defaultsMap.put("inventory.axe.enchantments.durability", 5);
+		defaultsMap.put("inventory.armour.type", "IRON");
+		defaultsMap.put("inventory.armour.durability", 0);
+		defaultsMap.put("inventory.armour.protection", 0);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(level == 1 ? Material.IRON_AXE : Material.DIAMOND_AXE).addEnchantment(Enchantment.DURABILITY, 5).build());
-		ItemStack[] armor = getArmour(Material.IRON_HELMET, 0, 0);
-		
-		if (level == 3)
-			armor[3] = new ItemBuilder(Material.IRON_HELMET).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.axe.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.axe.enchantments.durability")).build());
+
+		ItemStack[] armor = getArmour(Material.getMaterial(
+						getConfig().getString("inventory.armour.type") + "_HELMET"),
+						getConfig().getInt("inventory.armour.durability"),
+						getConfig().getInt("inventory.armour.protection"));
+
 		p.getInventory().setArmorContents(armor);
 	}
 

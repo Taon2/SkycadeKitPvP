@@ -11,9 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class KitFrosty extends Kit {
 
@@ -22,18 +20,63 @@ public class KitFrosty extends Kit {
 	public KitFrosty(KitManager kitManager) {
 		super(kitManager, "Frosty", KitType.FROSTY, 15000, "Always ready for a snowball fight");
 		setIcon(new ItemStack(Material.SNOW_BALL));
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
+
+		defaultsMap.put("inventory.snowball.amount", 6);
+		defaultsMap.put("inventory.snowball.max-amount", 8);
+
+		defaultsMap.put("armor.helmet.enchantments.durability", 2);
+
+		defaultsMap.put("armor.chestplate.material", "LEATHER");
+		defaultsMap.put("armor.chestplate.enchantments.durability", 12);
+		defaultsMap.put("armor.chestplate.enchantments.protection", 3);
+
+		defaultsMap.put("armor.leggings.material", "LEATHER");
+		defaultsMap.put("armor.leggings.enchantments.durability", 12);
+		defaultsMap.put("armor.leggings.enchantments.protection", 3);
+
+		defaultsMap.put("armor.boots.material", "LEATHER");
+		defaultsMap.put("armor.boots.enchantments.durability", 12);
+		defaultsMap.put("armor.boots.enchantments.protection", 3);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.IRON_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, level == 1 ? 0 : 1).build());
-		p.getInventory().addItem(new ItemBuilder(Material.SNOW_BALL, level == 1 ? 6 : 8).build());
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+		p.getInventory().addItem(new ItemBuilder(
+				Material.SNOW_BALL, getConfig().getInt("inventory.snowball.amount")).build());
 		
-		p.getInventory().setHelmet(new ItemBuilder(Material.JACK_O_LANTERN).addEnchantment(Enchantment.DURABILITY, 2).build());
-		p.getInventory().setChestplate(new ItemBuilder(Material.LEATHER_CHESTPLATE).addEnchantment(Enchantment.DURABILITY, 12).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level == 1 ? 3 : 4).build());
-		p.getInventory().setLeggings(new ItemBuilder(Material.LEATHER_LEGGINGS).addEnchantment(Enchantment.DURABILITY, 12).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3).build());
-		p.getInventory().setBoots(new ItemBuilder(Material.LEATHER_BOOTS).addEnchantment(Enchantment.DURABILITY, 12).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level == 3 ? 4 : 3).build());
-		startItemRunnable(p, 20, new ItemBuilder(Material.SNOW_BALL).build(), 8, KitType.FROSTY);
+		p.getInventory().setHelmet(new ItemBuilder(
+				Material.JACK_O_LANTERN)
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments.durability")).build());
+
+		p.getInventory().setChestplate(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.chestplate.material").toUpperCase() + "_CHESTPLATE"))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.chestplate.enchantments.durability"))
+				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.chestplate.enchantments.protection")).build());
+
+		p.getInventory().setLeggings(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.leggings.material").toUpperCase() + "_LEGGINGS"))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.leggings.enchantments.durability"))
+				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.leggings.enchantments.protection")).build());
+
+		p.getInventory().setBoots(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS"))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.boots.enchantments.durability"))
+				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.boots.enchantments.protection")).build());
+
+		startItemRunnable(p, 20, new ItemBuilder(Material.SNOW_BALL).build(), getConfig().getInt("inventory.snowball.max-amount"), KitType.FROSTY);
 	}
 
 	public void onSnowballUse(Player shooter, ProjectileLaunchEvent e) {

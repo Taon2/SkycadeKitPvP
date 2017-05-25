@@ -28,14 +28,42 @@ public class KitShaco extends Kit {
 	public KitShaco(KitManager kitManager) {
 		super(kitManager, "Shaco", KitType.SHACO, 42000, "Now you see me, now you don't");
 		setIcon(Material.FERMENTED_SPIDER_EYE);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
+
+		defaultsMap.put("armor.material", "LEATHER");
+		defaultsMap.put("armor.enchantments.durability", 12);
+		defaultsMap.put("armor.enchantments.protection", 1);
+
+		defaultsMap.put("inventory.snowball.amount", 5);
+		defaultsMap.put("inventory.snowball.regen-speed", 10);
+		defaultsMap.put("inventory.snowball.max-amount", 8);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.IRON_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, level < 3 ? level + 1 : 3).build());
-		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 12, level, Color.BLACK));
-		p.getInventory().addItem(new ItemBuilder(Material.SNOW_BALL, level == 1 ? 5 : 7).build());
-		startItemRunnable(p, 10, new ItemBuilder(Material.SNOW_BALL).build(), 8, KitType.SHACO);
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+		p.getInventory().setArmorContents(getArmour(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+				getConfig().getInt("armor.enchantments.durability"),
+				getConfig().getInt("armor.enchantments.protection"),
+				Color.BLACK));
+
+		p.getInventory().addItem(new ItemBuilder(
+				Material.SNOW_BALL, getConfig().getInt("inventory.snowball.amount")).build());
+
+		startItemRunnable(p, getConfig().getInt("inventory.snowball.regen-speed"), new ItemBuilder(
+				Material.SNOW_BALL).build(), getConfig().getInt("inventory.snowball.max-amount"), KitType.SHACO);
 	}
 	
 	

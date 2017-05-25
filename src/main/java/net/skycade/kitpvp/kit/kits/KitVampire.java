@@ -18,22 +18,49 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class KitVampire extends Kit {
 
 	public KitVampire(KitManager kitManager) {
 		super(kitManager, "Vampire", KitType.VAMPIRE, 25000, "Loves the taste of blood");
 		setIcon(Material.REDSTONE);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
+
+		defaultsMap.put("armor.material", "LEATHER");
+		defaultsMap.put("armor.enchantments.durability", 10);
+		defaultsMap.put("armor.enchantments.protection", 3);
+
+		defaultsMap.put("armor.helmet.material", "LEATHER");
+		defaultsMap.put("armor.helmet.enchantments.durability", 12);
+		defaultsMap.put("armor.helmet.enchantments.protection", 1);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.IRON_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, level == 3 ? 1 : 0).build());
-		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 10, level == 1 ? 3 : 4, Color.RED));
-		p.getInventory().setHelmet(new ItemBuilder(Material.LEATHER_HELMET).addEnchantment(Enchantment.DURABILITY, 12).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level).setColour(Color.BLACK).build());
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+		p.getInventory().setArmorContents(getArmour(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+				getConfig().getInt("armor.enchantments.durability"),
+				getConfig().getInt("armor.enchantments.protection"),
+				Color.RED));
+
+		p.getInventory().setHelmet(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments.durability"))
+				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.helmet.enchantments.protection"))
+				.setColour(Color.BLACK).build());
 	}
 	
 	@Override

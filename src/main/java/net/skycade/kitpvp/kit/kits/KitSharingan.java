@@ -12,23 +12,47 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class KitSharingan extends Kit {
 
 	public KitSharingan(KitManager kitManager) {
 		super(kitManager, "Sharingan", KitType.SHARINGAN, 40000, "His eyes are powerful");
 		setIcon(Material.EYE_OF_ENDER);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
+
+		defaultsMap.put("armor.material", "LEATHER");
+		defaultsMap.put("armor.enchantments.durability", 7);
+		defaultsMap.put("armor.enchantments.protection", 3);
+
+		defaultsMap.put("armor.boots.enchantments.protection", 4);
+		defaultsMap.put("armor.chestplate.enchantments.protection", 4);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.IRON_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, level - 1).build());
-		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, (level * 2) + 5, 3, Color.BLACK));
-		p.getInventory().getArmorContents()[0].addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
-		p.getInventory().getArmorContents()[2].addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+		p.getInventory().setArmorContents(getArmour(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+				getConfig().getInt("armor.enchantments.durability"),
+				getConfig().getInt("armor.enchantments.protection"),
+				Color.BLACK));
+
+		p.getInventory().getArmorContents()[0]
+				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.boots.enchantments.protection"));
+		p.getInventory().getArmorContents()[2]
+				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.chestplate.enchantments.protection"));
 	}
 
 	@Override

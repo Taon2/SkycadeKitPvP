@@ -23,16 +23,44 @@ public class KitStrafe extends Kit {
 	public KitStrafe(KitManager kitManager) {
 		super(kitManager, "Strafe", KitType.STRAFE, 41000, "Do you like to strafe?");
 		setIcon(Material.DIAMOND_BOOTS);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "STONE_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
+
+		defaultsMap.put("armor.boots.material", "DIAMOND");
+		defaultsMap.put("armor.boots.enchantments.durability", 5);
+		defaultsMap.put("armor.boots.enchantments.protection", 1);
+
+		defaultsMap.put("potions.speed.amplifier", 3);
+		defaultsMap.put("potions.fast-digging.amplifier", 2);
+		defaultsMap.put("potions.damage.amplfier", 0);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.STONE_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, level == 3 ? 0 : level + 1).build());
-		p.getInventory().setBoots(new ItemBuilder(Material.DIAMOND_BOOTS).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, level).build());
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+		p.getInventory().setBoots(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS"))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.boots.enchantments.durability"))
+				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.boots.enchantments.protection")).build());
 		
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 3));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, 2));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 0));
+		p.addPotionEffect(new PotionEffect(
+				PotionEffectType.SPEED, Integer.MAX_VALUE, getConfig().getInt("potions.speed.amplifier")));
+
+		p.addPotionEffect(new PotionEffect(
+				PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, getConfig().getInt("potions.fast-digging.amplifier")));
+
+		p.addPotionEffect(new PotionEffect(
+				PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, getConfig().getInt("potions.damage.amplifier")));
 	}
 	
 	@Override

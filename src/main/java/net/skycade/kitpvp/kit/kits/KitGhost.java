@@ -17,22 +17,40 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class KitGhost extends Kit {
 
 	public KitGhost(KitManager kitManager) {
 		super(kitManager, "Ghost", KitType.GHOST, 22000, false, "Very spooky");
 		setIcon(new ItemBuilder(new ItemStack(Material.POTION, 1, (short) 8270)).build());
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+		defaultsMap.put("inventory.sword.enchantments.knockback", 1);
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
+
+		defaultsMap.put("potions.invisibility.amplifier", 10);
+		defaultsMap.put("potions.resistance.amplifier", 1);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.DIAMOND_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.KNOCKBACK, level == 1  ? 1 : 0).addEnchantment(Enchantment.DAMAGE_ALL, level + 1).build());
-		p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 10, false, false));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 1));
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword.enchantments.knockback"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+		p.addPotionEffect(new PotionEffect(
+				PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, getConfig().getInt("potions.invisibility.amplifier"), false, false));
+
+		p.addPotionEffect(new PotionEffect(
+				PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, getConfig().getInt("potions.resistance.amplifier")));
 	}
 	
 	@Override

@@ -28,13 +28,32 @@ public class KitWizard extends Kit {
 		super(kitManager, "Wizard", KitType.WIZARD, 34000, "You're a wizard Harry!");
 		setIcon(Material.REDSTONE_TORCH_ON);
 		onMove();
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.stick.enchantments.damage-all", 5);
+
+		defaultsMap.put("armor.material", "LEATHER");
+		defaultsMap.put("armor.enchantments.durability", 12);
+		defaultsMap.put("armor.enchantments.protection", 3);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.STICK).addEnchantment(Enchantment.DAMAGE_ALL, level == 3 ? 6 : 5).build());
-		p.getInventory().addItem(new ItemBuilder(Material.BOOK).build());
-		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 12, level == 1 ? 3 : 4, Color.fromBGR(255, 153, 153)));
+		p.getInventory().addItem(new ItemBuilder(
+				Material.STICK)
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.stick.enchantments.damage-all")).build());
+
+		p.getInventory().addItem(new ItemBuilder(
+				Material.BOOK).build());
+
+		p.getInventory().setArmorContents(getArmour(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+				getConfig().getInt("armor.enchantments.durability"),
+				getConfig().getInt("armor.enchantments.protection"),
+				Color.fromBGR(255, 153, 153)));
 	}
 
 	@Override

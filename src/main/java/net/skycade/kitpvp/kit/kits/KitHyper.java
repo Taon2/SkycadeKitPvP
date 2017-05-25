@@ -14,24 +14,59 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class KitHyper extends Kit {
 
 	public KitHyper(KitManager kitManager) {
 		super(kitManager, "Hyper", KitType.HYPER, 28000, "Sugar makes him go crazy");
 		setIcon(Material.SUGAR);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
+		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+		defaultsMap.put("inventory.sword.enchantments.knockback", 1);
+		defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
+
+		defaultsMap.put("armor.helmet.material", "LEATHER");
+		defaultsMap.put("armor.helmet.enchantments.durability", 3);
+
+		defaultsMap.put("armor.chestplate.material", "IRON");
+
+		defaultsMap.put("armor.leggings.material", "IRON");
+
+		defaultsMap.put("armor.boots.material", "IRON");
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.IRON_SWORD).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.KNOCKBACK, level == 3 ? 0 : 1).addEnchantment(Enchantment.DAMAGE_ALL, level == 3 ? 1 : 0).build());
-		p.getInventory().addItem(new ItemBuilder(Material.SUGAR).build());
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+				.addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword.enchantments.knockback"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+		p.getInventory().addItem(new ItemBuilder(
+				Material.SUGAR).build());
 		
-		p.getInventory().setHelmet(new ItemBuilder(Material.LEATHER_HELMET).addEnchantment(Enchantment.DURABILITY, level + 2).setColour(Color.BLACK).build());
-		p.getInventory().setChestplate(new ItemBuilder(Material.IRON_CHESTPLATE).build());
-		p.getInventory().setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).build());
-		p.getInventory().setBoots(new ItemBuilder(Material.IRON_BOOTS).build());
+		p.getInventory().setHelmet(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments.durability"))
+				.setColour(Color.BLACK).build());
+
+		p.getInventory().setChestplate(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.chestplate.material").toUpperCase() + "_CHESTPLATE")).build());
+
+		p.getInventory().setLeggings(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.leggings.material").toUpperCase() + "_LEGGINGS")).build());
+
+		p.getInventory().setBoots(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS")).build());
 	}
 	
 	@Override

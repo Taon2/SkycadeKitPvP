@@ -16,24 +16,67 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class KitMedic extends Kit {
 
 	public KitMedic(KitManager kitManager) {
 		super(kitManager, "Medic", KitType.MEDIC, 16000, "Helpful in battle");
 		setIcon(Material.SHEARS);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.hoe.material", "IRON_HOE");
+		defaultsMap.put("inventory.hoe.enchantments.durability", 5);
+		defaultsMap.put("inventory.hoe.enchantments.damage-all", 5);
+
+		defaultsMap.put("inventory.leather.amount", 5);
+		defaultsMap.put("inventory.leather.max-amount", 5);
+		defaultsMap.put("inventory.leather.lore1", "§cDrop to heal");
+		defaultsMap.put("inventory.leather.lore2", "§cPlayers around you");
+		defaultsMap.put("inventory.leather.name", "§cMedpack");
+		defaultsMap.put("inventory.leather.interval", 8);
+
+		defaultsMap.put("inventory.shears.lore", "§cCan be used to heal a player.");
+
+		defaultsMap.put("armor.material", "LEATHER");
+		defaultsMap.put("armor.enchantments.durability", 12);
+		defaultsMap.put("armor.enchantments.protection", 3);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.IRON_HOE).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, level == 1 ? 5 : 6).build());
-		p.getInventory().addItem(new ItemBuilder(Material.LEATHER, 5).addLore(Arrays.asList("§cDrop to heal", "§cPlayers around you")).setName("§cMedpack").build());
-		p.getInventory().addItem(new ItemBuilder(Material.SHEARS).addLore("§cCan be used to heal a player.").build());
-		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, 12, level == 1 ? 3 : (level - 1) + 4, Color.RED));
-		startItemRunnable(p, 8, new ItemBuilder(Material.LEATHER).addLore(Arrays.asList("§cDrop to heal", "§cPlayers around you")).setName("§cMedpack").build(), 8, KitType.MEDIC);
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.hoe.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.hoe.enchantments.durability"))
+				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.hoe.enchantments.damage-all")).build());
+
+		p.getInventory().addItem(new ItemBuilder(
+				Material.LEATHER, getConfig().getInt("inventory.leather.amount"))
+				.addLore(Arrays.asList(
+						getConfig().getString("inventory.leather.lore1"),
+						getConfig().getString("inventory.leather.lore2")))
+				.setName(getConfig().getString("inventory.leather.name")).build());
+
+		p.getInventory().addItem(new ItemBuilder(
+				Material.SHEARS)
+				.addLore(getConfig().getString("inventory.shears.lore")).build());
+
+		p.getInventory().setArmorContents(getArmour(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+				getConfig().getInt("armor.enchantments.durability"),
+				getConfig().getInt("armor.enchantments.protection"),
+				Color.RED));
+
+		startItemRunnable(p, getConfig().getInt("inventory.leather.interval"), new ItemBuilder(
+				Material.LEATHER, getConfig().getInt("inventory.leather.amount"))
+						.addLore(Arrays.asList(
+								getConfig().getString("inventory.leather.lore1"),
+								getConfig().getString("inventory.leather.lore2")))
+						.setName(getConfig().getString("inventory.leather.name")).build(),
+				getConfig().getInt("inventory.leather.max-amount"), KitType.MEDIC);
 	}
 	
 	public void onMedpackUse(Player p, Item medpack) {

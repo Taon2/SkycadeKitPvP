@@ -30,13 +30,39 @@ public class KitSniper extends Kit {
 	public KitSniper(KitManager kitManager) {
 		super(kitManager, "Sniper", KitType.SNIPER, 41000, "Take time for your shots");
 		setIcon(Material.GHAST_TEAR);
+
+		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("inventory.bow.material", "BOW");
+		defaultsMap.put("inventory.bow.enchantments.durability", 5);
+		defaultsMap.put("inventory.bow.enchantments.arrow-infinite", 1);
+		defaultsMap.put("inventory.bow.enchantments.knockback", 1);
+		defaultsMap.put("inventory.bow.enchantments.arrow-damage", 3);
+
+		defaultsMap.put("armor.material", "LEATHER");
+		defaultsMap.put("armor.enchantments.durability", 5);
+		defaultsMap.put("armor.enchantments.protection", 2);
+
+		setConfigDefaults(defaultsMap);
 	}
 
 	@Override
 	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(Material.BOW).addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.ARROW_INFINITE, 1).addEnchantment(Enchantment.KNOCKBACK, level < 3 ? 1 : 2).addEnchantment(Enchantment.ARROW_DAMAGE, level == 3 ? 4 : 3).build());
-		p.getInventory().addItem(new ItemBuilder(Material.ARROW, 1).build());
-		p.getInventory().setArmorContents(getArmour(Material.LEATHER_HELMET, level + 4, level == 1 ? 2 : level, Color.fromBGR(0, 60, 0)));
+		p.getInventory().addItem(new ItemBuilder(
+				Material.getMaterial(getConfig().getString("inventory.bow.material").toUpperCase()))
+				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.bow.enchantments.durability"))
+				.addEnchantment(Enchantment.ARROW_INFINITE, getConfig().getInt("inventory.bow.enchantments.arrow-infinite"))
+				.addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.bow.enchantments.knockback"))
+				.addEnchantment(Enchantment.ARROW_DAMAGE, getConfig().getInt("inventory.bow.enchantments.arrow-damage")).build());
+
+		p.getInventory().addItem(new ItemBuilder(
+				Material.ARROW, 1).build());
+
+		p.getInventory().setArmorContents(getArmour(
+				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+				getConfig().getInt("armor.enchantments.durability"),
+				getConfig().getInt("armor.enchantments.protection"),
+				Color.fromBGR(0, 60, 0)));
 	}
 
 	public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
