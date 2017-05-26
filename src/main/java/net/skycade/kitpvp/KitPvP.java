@@ -59,7 +59,7 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("spawn-region.point-2", new Location(Bukkit.getWorld("world"), 300, 250, 290));
         defaults.put("spawn-location", new Location(Bukkit.getWorld("world"), 252.5, 73.0, -45.0, -45, 0));
         defaults.put("scoreboard.bottom-link", "play.skycade.net");
-
+        defaults.put("kill-bonus-percentage", 5);
 
 
         defaults.put("database.host", "localhost");
