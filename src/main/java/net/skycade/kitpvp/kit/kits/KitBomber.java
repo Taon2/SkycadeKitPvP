@@ -86,7 +86,8 @@ public class KitBomber extends Kit {
 	@Override
 	public void onItemUse(Player p, ItemStack item) {
 		if (item.getType() != Material.TNT)
-			return; 
+			return;
+		if (!addCooldown(p, getName(), 6, true)) return;
 		Location loc = p.getEyeLocation();
 		TNTPrimed tnt = (TNTPrimed) loc.getWorld().spawnEntity(loc.add(loc.getDirection()), EntityType.PRIMED_TNT);
 		tnt.setVelocity(loc.getDirection().multiply(1D));
