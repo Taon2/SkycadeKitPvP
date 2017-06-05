@@ -14,6 +14,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
+import java.util.logging.Logger;
+
+import static java.lang.Integer.parseInt;
 
 public class KitNinja extends Kit {
 	
@@ -21,9 +24,13 @@ public class KitNinja extends Kit {
 
 	public KitNinja(KitManager kitManager) {
 		super(kitManager, "Ninja", KitType.NINJA, 32000, false, "Dash to deal the damage.");
-		setIcon(new ItemBuilder(Material.LEATHER_BOOTS).setColour(Color.BLACK).build());
+        setIcon(new ItemBuilder(Material.LEATHER_BOOTS).setColour(Color.BLACK).build());
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+        defaultsMap.put("kit.icon.material", "LEATHER_BOOTS");
+        defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 32000);
 
 		defaultsMap.put("inventory.sword.material", "STONE_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
@@ -32,10 +39,22 @@ public class KitNinja extends Kit {
 		defaultsMap.put("armor.material", "LEATHER");
 		defaultsMap.put("armor.enchantments.protection", 4);
 
-		defaultsMap.put("potions.speed.amplifier", 1);
+        defaultsMap.put("potions.pot1", "SPEED:1");
 
 		setConfigDefaults(defaultsMap);
-	}
+
+		if (getConfig().getString("kit.icon.material") != null) {
+		    if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+            }
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
+    }
 
 	@Override
 	public void applyKit(Player p, int level) {
@@ -49,8 +68,11 @@ public class KitNinja extends Kit {
 				.setColour(Color.BLACK)
 				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.enchantments.protection")).build());
 
-		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.SPEED, Integer.MAX_VALUE, getConfig().getInt("potions.speed.amplifier")));
+        String[] pot1 = getConfig().getString("potions.pot1").split(":");
+        p.addPotionEffect(new PotionEffect(
+                PotionEffectType.getByName(pot1[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot1[1])));
 	}
 	
 	@Override

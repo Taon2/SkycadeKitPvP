@@ -10,18 +10,24 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
+import static java.lang.Integer.parseInt;
+
 public class KitKnight extends Kit {
 
 	public KitKnight(KitManager kitManager) {
 		super(kitManager, "Knight", KitType.KNIGHT, 26000, "Loyal to his king");
-		setIcon(Material.CHAINMAIL_CHESTPLATE);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "CHAINMAIL_CHESTPLATE");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 26000);
 
 		defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
@@ -34,9 +40,21 @@ public class KitKnight extends Kit {
 		defaultsMap.put("armor.boots.enchantments.protection", 2);
 		defaultsMap.put("armor.leggings.enchantments.protection", 2);
 
-		defaultsMap.put("potions.night-vision.amplifier", 0);
+		defaultsMap.put("potions.pot1", "NIGHT_VISION:0");
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override
@@ -61,8 +79,11 @@ public class KitKnight extends Kit {
 		p.getInventory().getArmorContents()[1]
 				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.leggings.enchantments.protection"));
 
-		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, getConfig().getInt("potions.night-vision.amplifier")));
+        String[] pot1 = getConfig().getString("potions.pot1").split(":");
+        p.addPotionEffect(new PotionEffect(
+                PotionEffectType.getByName(pot1[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot1[1])));
 	}
 	
 	@Override

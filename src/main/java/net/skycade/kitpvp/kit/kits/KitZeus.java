@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -18,13 +19,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Integer.parseInt;
+
 public class KitZeus extends Kit {
 
 	public KitZeus(KitManager kitManager) {
 		super(kitManager, "Zeus", KitType.ZEUS, 30000, "Lightning strikes!");
-		setIcon(Material.BLAZE_ROD);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+        defaultsMap.put("kit.icon.material", "BLAZE_ROD");
+        defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 30000);
 
 		defaultsMap.put("inventory.blaze-rod.enchantments.damage-all", 5);
 
@@ -32,9 +38,21 @@ public class KitZeus extends Kit {
 		defaultsMap.put("armor.enchantments.durability", 12);
 		defaultsMap.put("armor.enchantments.protection", 4);
 
-		defaultsMap.put("potions.fire-resistance.amplifier", 0);
+        defaultsMap.put("potions.pot1", "FIRE_RESISTANCE:0");
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override
@@ -49,8 +67,11 @@ public class KitZeus extends Kit {
 				getConfig().getInt("armor.enchantments.protection"),
 				Color.fromBGR(153, 255, 255)));
 
-		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, getConfig().getInt("potions.fire-resistance.amplifier")));
+        String[] pot1 = getConfig().getString("potions.pot1").split(":");
+        p.addPotionEffect(new PotionEffect(
+                PotionEffectType.getByName(pot1[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot1[1])));
 	}
 	
 	@Override

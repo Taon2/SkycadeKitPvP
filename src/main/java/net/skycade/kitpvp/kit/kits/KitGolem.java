@@ -29,9 +29,12 @@ public class KitGolem extends Kit {
 
 	public KitGolem(KitManager kitManager) {
 		super(kitManager, "Golem", KitType.GOLEM, 37000, false, "Smash the ground to cause players and blocks to fly!");
-		setIcon(Material.IRON_BLOCK);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "IRON_BLOCK");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 37000);
 
 		defaultsMap.put("inventory.sword.material", "WOOD_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
@@ -42,6 +45,18 @@ public class KitGolem extends Kit {
 		defaultsMap.put("armor.enchantments.protection", 0);
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

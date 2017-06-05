@@ -21,15 +21,20 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 
+import static java.lang.Integer.parseInt;
+
 public class KitAssassin extends Kit {
 	
 	private final Map<UUID, Integer> comboMap = new HashMap<>(); 
 	
 	public KitAssassin(KitManager kitManager) {
 		super(kitManager, "Assassin", KitType.ASSASSIN, 50000, "Be a sneaky assassin");
-		setIcon(Material.COAL);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "COAL");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 50000);
 
 		defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
@@ -38,10 +43,23 @@ public class KitAssassin extends Kit {
 		defaultsMap.put("inventory.armour.protection", 2);
 		defaultsMap.put("boots.enchantments.durability", 20);
 		defaultsMap.put("boots.enchantments.protection", 3);
-		defaultsMap.put("potions.digging.amplifier", 3);
-		defaultsMap.put("potions.speed.amplifier", 0);
+
+		defaultsMap.put("potions.pot1", "SPEED:0");
+		defaultsMap.put("potions.pot2", "FAST_DIGGING:3");
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override
@@ -64,10 +82,17 @@ public class KitAssassin extends Kit {
 
 		p.getInventory().setArmorContents(armor);
 
+		String[] pot1 = getConfig().getString("potions.pot1").split(":");
 		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, getConfig().getInt("potions.digging.amplifier")));
+				PotionEffectType.getByName(pot1[0]),
+				Integer.MAX_VALUE,
+				parseInt(pot1[1])));
+
+		String[] pot2 = getConfig().getString("potions.pot2").split(":");
 		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.SPEED, Integer.MAX_VALUE , getConfig().getInt("potions.speed.amplifier")));
+				PotionEffectType.getByName(pot2[0]),
+				Integer.MAX_VALUE,
+				parseInt(pot2[1])));
 	}
 	
 	@Override

@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -22,6 +23,10 @@ public class KitSharingan extends Kit {
 
 		Map<String, Object> defaultsMap = new HashMap<>();
 
+		defaultsMap.put("kit.icon.material", "EYE_OF_ENDER");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 40000);
+
 		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
 		defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
@@ -34,6 +39,18 @@ public class KitSharingan extends Kit {
 		defaultsMap.put("armor.chestplate.enchantments.protection", 4);
 
 		setConfigDefaults(defaultsMap);
+
+        if (getConfig().getString("kit.icon.material") != null) {
+            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+            } else {
+                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+            }
+        } else {
+            setIcon(new ItemStack(Material.DIRT));
+        }
+        setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

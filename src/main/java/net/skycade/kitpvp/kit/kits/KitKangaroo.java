@@ -21,9 +21,12 @@ public class KitKangaroo extends Kit {
 
 	public KitKangaroo(KitManager kitManager) {
 		super(kitManager, "Kangaroo", KitType.KANGAROO, 35000, "Jump everywhere!");
-		setIcon(new ItemBuilder(new ItemStack(Material.POTION, 1, (short) 8267)).build());
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "POTION");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 35000);
 
 		defaultsMap.put("inventory.sword.material", "GOLD_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 10);
@@ -34,6 +37,18 @@ public class KitKangaroo extends Kit {
 		defaultsMap.put("armor.enchantments.protection", 3);
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

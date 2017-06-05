@@ -25,9 +25,12 @@ public class KitBarbarian extends Kit {
 
 	public KitBarbarian(KitManager kitManager) {
 		super(kitManager, "Barbarian", KitType.BARBARIAN, 7500, "RAWR!");
-		setIcon(Material.IRON_AXE);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+        defaultsMap.put("kit.icon.material", "IRON_AXE");
+		defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 7500);
 
 		defaultsMap.put("inventory.axe.material", "IRON_AXE");
 		defaultsMap.put("inventory.axe.enchantments.durability", 5);
@@ -36,6 +39,18 @@ public class KitBarbarian extends Kit {
 		defaultsMap.put("inventory.armour.protection", 0);
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

@@ -15,13 +15,18 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.Integer.parseInt;
+
 public class KitElite extends Kit {
 
 	public KitElite(KitManager kitManager) {
 		super(kitManager, "Elite", KitType.ELITE, 16000, "Speed is everything");
-		setIcon(new ItemStack(Material.LEATHER_HELMET));
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "LEATHER_HELMET");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 16000);
 
 		defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
@@ -35,9 +40,21 @@ public class KitElite extends Kit {
 		defaultsMap.put("armor.helmet.enchantments.protection", 2);
 		defaultsMap.put("armor.helmet.enchantments.durability", 13);
 
-		defaultsMap.put("potions.fast-digging.amplifier", 2);
+		defaultsMap.put("potions.pot1", "FAST_DIGGING:2");
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override
@@ -60,9 +77,12 @@ public class KitElite extends Kit {
 				.setColour(Color.WHITE).build();
 
 		p.getInventory().setArmorContents(armor);
-		
+
+		String[] pot1 = getConfig().getString("potions.pot1").split(":");
 		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, getConfig().getInt("potions.fast-digging.amplifier")));
+				PotionEffectType.getByName(pot1[0]),
+				Integer.MAX_VALUE,
+				parseInt(pot1[1])));
 	}
 
 }

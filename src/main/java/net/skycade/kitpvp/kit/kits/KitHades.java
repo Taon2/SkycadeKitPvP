@@ -10,6 +10,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,9 +21,12 @@ public class KitHades extends Kit {
 
 	public KitHades(KitManager kitManager) {
 		super(kitManager, "Hades", KitType.HADES, 45000, "Hades has a burning aura around him");
-		setIcon(Material.NETHERRACK);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "NETHERRACK");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 45000);
 
 		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
@@ -46,6 +50,18 @@ public class KitHades extends Kit {
 		defaultsMap.put("armor.boots.enchantments.protection", 4);
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

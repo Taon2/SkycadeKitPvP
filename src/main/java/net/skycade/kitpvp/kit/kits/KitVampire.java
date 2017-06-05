@@ -24,9 +24,12 @@ public class KitVampire extends Kit {
 
 	public KitVampire(KitManager kitManager) {
 		super(kitManager, "Vampire", KitType.VAMPIRE, 25000, "Loves the taste of blood");
-		setIcon(Material.REDSTONE);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "REDSTONE");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 25000);
 
 		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
@@ -41,6 +44,18 @@ public class KitVampire extends Kit {
 		defaultsMap.put("armor.helmet.enchantments.protection", 1);
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

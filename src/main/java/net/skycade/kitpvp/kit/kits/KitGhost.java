@@ -19,23 +19,41 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 
+import static java.lang.Integer.parseInt;
+
 public class KitGhost extends Kit {
 
 	public KitGhost(KitManager kitManager) {
 		super(kitManager, "Ghost", KitType.GHOST, 22000, false, "Very spooky");
-		setIcon(new ItemBuilder(new ItemStack(Material.POTION, 1, (short) 8270)).build());
+		//setIcon(new ItemBuilder(new ItemStack(Material.POTION, 1, (short) 8270)).build());
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "POTION");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 22000);
 
 		defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
 		defaultsMap.put("inventory.sword.enchantments.knockback", 1);
 		defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
 
-		defaultsMap.put("potions.invisibility.amplifier", 10);
-		defaultsMap.put("potions.resistance.amplifier", 1);
+		defaultsMap.put("potions.pot1", "INVISIBILITY:10");
+		defaultsMap.put("potions.pot2", "DAMAGE_RESISTANCE:1");
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override
@@ -46,11 +64,17 @@ public class KitGhost extends Kit {
 				.addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword.enchantments.knockback"))
 				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
 
+		String[] pot1 = getConfig().getString("potions.pot1").split(":");
 		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, getConfig().getInt("potions.invisibility.amplifier"), false, false));
+				PotionEffectType.getByName(pot1[0]),
+				Integer.MAX_VALUE,
+				parseInt(pot1[1]), false, false));
 
+		String[] pot2 = getConfig().getString("potions.pot2").split(":");
 		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, getConfig().getInt("potions.resistance.amplifier")));
+				PotionEffectType.getByName(pot2[0]),
+				Integer.MAX_VALUE,
+				parseInt(pot2[1])));
 	}
 	
 	@Override

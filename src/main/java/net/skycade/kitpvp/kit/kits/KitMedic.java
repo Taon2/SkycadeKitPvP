@@ -22,9 +22,12 @@ public class KitMedic extends Kit {
 
 	public KitMedic(KitManager kitManager) {
 		super(kitManager, "Medic", KitType.MEDIC, 16000, "Helpful in battle");
-		setIcon(Material.SHEARS);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "SHEARS");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 16000);
 
 		defaultsMap.put("inventory.hoe.material", "IRON_HOE");
 		defaultsMap.put("inventory.hoe.enchantments.durability", 5);
@@ -44,6 +47,18 @@ public class KitMedic extends Kit {
 		defaultsMap.put("armor.enchantments.protection", 3);
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

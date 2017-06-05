@@ -20,9 +20,12 @@ public class KitDualBlader extends Kit {
 
 	public KitDualBlader(KitManager kitManager) {
 		super(kitManager, "DualBlader", KitType.DUALBLADER, 34000, "Use the sword of fire and ice");
-		setIcon(new ItemStack(Material.PACKED_ICE));
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "PACKED_ICE");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 34000);
 
 		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
@@ -37,6 +40,18 @@ public class KitDualBlader extends Kit {
 		defaultsMap.put("armor.enchantments.protection", 0);
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

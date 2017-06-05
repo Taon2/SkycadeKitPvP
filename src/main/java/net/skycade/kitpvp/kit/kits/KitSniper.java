@@ -29,9 +29,12 @@ public class KitSniper extends Kit {
 
 	public KitSniper(KitManager kitManager) {
 		super(kitManager, "Sniper", KitType.SNIPER, 41000, "Take time for your shots");
-		setIcon(Material.GHAST_TEAR);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "GHAST_TEAR");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 41000);
 
 		defaultsMap.put("inventory.bow.material", "BOW");
 		defaultsMap.put("inventory.bow.enchantments.durability", 5);
@@ -44,6 +47,18 @@ public class KitSniper extends Kit {
 		defaultsMap.put("armor.enchantments.protection", 2);
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

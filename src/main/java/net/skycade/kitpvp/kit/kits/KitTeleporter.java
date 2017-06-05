@@ -7,6 +7,7 @@ import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,9 +18,12 @@ public class KitTeleporter extends Kit {
 
 	public KitTeleporter(KitManager kitManager) {
 		super(kitManager, "Teleporter", KitType.TELEPORTER, 32000, "Where did he go?");
-		setIcon(Material.ENDER_PEARL);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+        defaultsMap.put("kit.icon.material", "ENDER_PEARL");
+        defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 32000);
 
 		defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
@@ -41,6 +45,18 @@ public class KitTeleporter extends Kit {
 		defaultsMap.put("armor.boots.material", "IRON");
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

@@ -22,9 +22,12 @@ public class KitLover extends Kit {
 
 	public KitLover(KitManager kitManager) {
 		super(kitManager, "Lover", KitType.LOVER, 19000, "Love is a weird thing");
-		setIcon(Material.RED_ROSE);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "RED_ROSE");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 19000);
 
 		defaultsMap.put("inventory.sword.material", "WOOD_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 10);
@@ -35,6 +38,18 @@ public class KitLover extends Kit {
 		defaultsMap.put("armor.enchantments.protection", 4);
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

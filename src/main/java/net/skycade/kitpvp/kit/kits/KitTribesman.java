@@ -11,19 +11,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
+
+import static java.lang.Integer.parseInt;
 
 public class KitTribesman extends Kit {
 	private final List<UUID> tribesCd = new ArrayList<>();
 
 	public KitTribesman(KitManager kitManager) {
 		super(kitManager, "Tribesman", KitType.TRIBESMAN, 37000, "Tribesman is good with herbs");
-		setIcon(Material.GOLD_CHESTPLATE);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "GOLD_CHESTPLATE");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 37000);
 
 		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
@@ -40,11 +46,23 @@ public class KitTribesman extends Kit {
 
 		defaultsMap.put("armor.boots.material", "IRON");
 
-		defaultsMap.put("potions.damage.amplifier", 0);
-		defaultsMap.put("potions.jump.amplifier", 0);
-		defaultsMap.put("potions.regeneration.amplifier", 0);
+        defaultsMap.put("potions.pot1", "DAMAGE_RESISTANCE:0");
+        defaultsMap.put("potions.pot2", "JUMP:0");
+        defaultsMap.put("potions.pot3", "REGENERATION:0");
 
 		setConfigDefaults(defaultsMap);
+
+        if (getConfig().getString("kit.icon.material") != null) {
+            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+            } else {
+                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+            }
+        } else {
+            setIcon(new ItemStack(Material.DIRT));
+        }
+        setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override
@@ -68,15 +86,24 @@ public class KitTribesman extends Kit {
 
 		p.getInventory().setBoots(new ItemBuilder(
 				Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS")).build());
-		
-		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, getConfig().getInt("potions.damage.amplifier")));
 
-		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.JUMP, Integer.MAX_VALUE, getConfig().getInt("potions.jump.amplifier")));
+        String[] pot1 = getConfig().getString("potions.pot1").split(":");
+        p.addPotionEffect(new PotionEffect(
+                PotionEffectType.getByName(pot1[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot1[1])));
 
-		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.REGENERATION, Integer.MAX_VALUE, getConfig().getInt("potions.regeneration.amplifier")));
+        String[] pot2 = getConfig().getString("potions.pot2").split(":");
+        p.addPotionEffect(new PotionEffect(
+                PotionEffectType.getByName(pot2[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot2[1])));
+
+        String[] pot3 = getConfig().getString("potions.pot3").split(":");
+        p.addPotionEffect(new PotionEffect(
+                PotionEffectType.getByName(pot3[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot3[1])));
 	}
 
 	@Override

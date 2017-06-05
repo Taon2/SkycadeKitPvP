@@ -23,9 +23,12 @@ public class KitFireArcher extends Kit {
 
 	public KitFireArcher(KitManager kitManager) {
 		super(kitManager, "FireArcher", KitType.FIREARCHER, 24000, "Some of his arrows are", "Enchanted with fire");
-		setIcon(new ItemStack(Material.ARROW));
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "ARROW");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 24000);
 
 		defaultsMap.put("inventory.sword.material", "STONE_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
@@ -44,6 +47,18 @@ public class KitFireArcher extends Kit {
 		defaultsMap.put("armor.helmet.enchantments.protection", 2);
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

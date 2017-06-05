@@ -11,10 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
+
+import static java.lang.Integer.parseInt;
 
 public class KitStrafe extends Kit {
 	
@@ -22,11 +25,14 @@ public class KitStrafe extends Kit {
 
 	public KitStrafe(KitManager kitManager) {
 		super(kitManager, "Strafe", KitType.STRAFE, 41000, "Do you like to strafe?");
-		setIcon(Material.DIAMOND_BOOTS);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
 
-		defaultsMap.put("inventory.sword.material", "STONE_SWORD");
+        defaultsMap.put("kit.icon.material", "DIAMOND_BOOTS");
+        defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 41000);
+
+        defaultsMap.put("inventory.sword.material", "STONE_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
 		defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
 
@@ -34,11 +40,23 @@ public class KitStrafe extends Kit {
 		defaultsMap.put("armor.boots.enchantments.durability", 5);
 		defaultsMap.put("armor.boots.enchantments.protection", 1);
 
-		defaultsMap.put("potions.speed.amplifier", 3);
-		defaultsMap.put("potions.fast-digging.amplifier", 2);
-		defaultsMap.put("potions.damage.amplfier", 0);
+        defaultsMap.put("potions.pot1", "SPEED:3");
+        defaultsMap.put("potions.pot2", "FAST_DIGGING:2");
+        defaultsMap.put("potions.pot3", "INCREASE_DAMAGE:0");
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override
@@ -52,15 +70,24 @@ public class KitStrafe extends Kit {
 				Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS"))
 				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.boots.enchantments.durability"))
 				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.boots.enchantments.protection")).build());
-		
-		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.SPEED, Integer.MAX_VALUE, getConfig().getInt("potions.speed.amplifier")));
 
-		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, getConfig().getInt("potions.fast-digging.amplifier")));
+        String[] pot1 = getConfig().getString("potions.pot1").split(":");
+        p.addPotionEffect(new PotionEffect(
+                PotionEffectType.getByName(pot1[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot1[1])));
 
-		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, getConfig().getInt("potions.damage.amplifier")));
+        String[] pot2 = getConfig().getString("potions.pot2").split(":");
+        p.addPotionEffect(new PotionEffect(
+                PotionEffectType.getByName(pot2[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot2[1])));
+
+        String[] pot3 = getConfig().getString("potions.pot3").split(":");
+        p.addPotionEffect(new PotionEffect(
+                PotionEffectType.getByName(pot3[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot3[1])));
 	}
 	
 	@Override

@@ -19,13 +19,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Integer.parseInt;
+
 public class KitCerberus extends Kit {
 
 	public KitCerberus(KitManager kitManager) {
 		super(kitManager, "Cerberus", KitType.CERBERUS, 14000, "Lava is his home");
-		setIcon(new ItemStack(Material.LAVA_BUCKET));
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "LAVA_BUCKET");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 14000);
 
 		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
@@ -35,9 +40,21 @@ public class KitCerberus extends Kit {
 		defaultsMap.put("armor.durability", 12);
 		defaultsMap.put("armor.protection", 1);
 
-		defaultsMap.put("potions.fire-resistance.amplifier", 0);
+		defaultsMap.put("potions.pot1", "FIRE_RESISTANCE:0");
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override
@@ -53,8 +70,11 @@ public class KitCerberus extends Kit {
 				getConfig().getInt("armor.protection"),
 				Color.ORANGE));
 
+		String[] pot1 = getConfig().getString("potions.pot1").split(":");
 		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, getConfig().getInt("potions.fire-resistance.amplifier")));
+				PotionEffectType.getByName(pot1[0]),
+				Integer.MAX_VALUE,
+				parseInt(pot1[1])));
 	}
 
 	@Override

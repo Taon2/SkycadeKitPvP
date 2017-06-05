@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>net.skycade.kitpvp</groupId>
-  <artifactId>KitPvP</artifactId>
-  <version>1.0</version>
+  <groupId>net.skycade</groupId>
+  <artifactId>SkycadeKitPvP</artifactId>
+  <version>2.3.2-SNAPSHOT</version>
   <build>
     <plugins>
       <plugin>
@@ -30,8 +30,8 @@
   </build>
   <repositories>
     <repository>
-      <id>project.local</id>
-      <url>file:///${project.basedir}/libraries</url>
+      <id>my</id>
+      <url>file://${project.basedir}/jars</url>
     </repository>
     <repository>
       <id>spigot-repo</id>
@@ -79,7 +79,8 @@
       <groupId>org.bukkit</groupId>
       <artifactId>craftbukkit</artifactId>
       <version>1.11.2-R0.1-SNAPSHOT</version>
-      <scope>provided</scope>
+      <scope>system</scope>
+      <systemPath>${basedir}/jars/craftbukkit-1.11.2.jar</systemPath>
     </dependency>
   </dependencies>
   <properties>

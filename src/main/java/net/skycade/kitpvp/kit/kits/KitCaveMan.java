@@ -21,6 +21,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
+import static java.lang.Integer.parseInt;
+
 public class KitCaveMan extends Kit {
 
 	private int blockCounter = 0;
@@ -28,15 +30,18 @@ public class KitCaveMan extends Kit {
 
 	public KitCaveMan(KitManager kitManager) {
 		super(kitManager, "Caveman", KitType.CAVEMAN, 7000, "Crazy caveman guy!");
-		setIcon(Material.WOOD_SPADE);
 
         Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "WOOD_SPADE");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 7000);
 
         defaultsMap.put("inventory.spade.material", "WOOD_SPADE");
         defaultsMap.put("inventory.spade.enchantments.durability", 7);
         defaultsMap.put("inventory.spade.enchantments.damage-all", 5);
 
-        defaultsMap.put("potions.resistance.amplifier", 0);
+		defaultsMap.put("potions.pot1", "DAMAGE_RESISTANCE:0");
 
         defaultsMap.put("armor.leggings.material", "LEATHER");
         defaultsMap.put("armor.leggings.enchantments.durability", 12);
@@ -51,6 +56,18 @@ public class KitCaveMan extends Kit {
         defaultsMap.put("armor.boots.enchantments.protection", 1);
 
         setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override
@@ -60,8 +77,11 @@ public class KitCaveMan extends Kit {
 				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.spade.enchantments.durability"))
 				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.spade.enchantments.damage-all")).build());
 
-        Collections.singletonList(new PotionEffect(
-        		PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, getConfig().getInt("potions.resistance.amplifier")));
+		String[] pot1 = getConfig().getString("potions.pot1").split(":");
+		p.addPotionEffect(new PotionEffect(
+				PotionEffectType.getByName(pot1[0]),
+				Integer.MAX_VALUE,
+				parseInt(pot1[1])));
 
 		p.getInventory().setLeggings(new ItemBuilder(
 				Material.getMaterial(getConfig().getString("armor.leggings.material").toUpperCase() + "_LEGGINGS"))

@@ -18,7 +18,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.io.Console;
 import java.util.*;
+import java.util.logging.Logger;
+
+import static java.lang.Integer.getInteger;
+import static java.lang.Integer.parseInt;
 
 public class KitArcher extends Kit {
 	
@@ -26,22 +31,38 @@ public class KitArcher extends Kit {
 
 	public KitArcher(KitManager kitManager) {
 		super(kitManager, "Archer", KitType.ARCHER, 8000, "Chance-based archer kit");
-		setIcon(new ItemStack(Material.BOW));
 
-		Map<String, Object> defaultsMap = new HashMap<>();
+        Map<String, Object> defaultsMap = new HashMap<>();
 
-		defaultsMap.put("inventory.sword.material", "STONE_SWORD");
-		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+        defaultsMap.put("kit.icon.material", "BOW");
+		defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 8000);
+
+        defaultsMap.put("inventory.sword.material", "STONE_SWORD");
+        defaultsMap.put("inventory.sword.enchantments.durability", 5);
         defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
-		defaultsMap.put("inventory.bow.enchantments.durability", 5);
-		defaultsMap.put("inventory.bow.enchantments.arrow-infinite", 1);
+        defaultsMap.put("inventory.bow.enchantments.durability", 5);
+        defaultsMap.put("inventory.bow.enchantments.arrow-infinite", 1);
         defaultsMap.put("inventory.bow.enchantments.arrow-damage", 1);
         defaultsMap.put("inventory.armour.type", "LEATHER");
         defaultsMap.put("inventory.armour.durability", 5);
         defaultsMap.put("inventory.armour.protection", 2);
-        defaultsMap.put("potions.speed.amplifier", 1);
+
+        defaultsMap.put("potions.pot1", "SPEED:1");
 
         setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 	
 	@Override
@@ -65,8 +86,11 @@ public class KitArcher extends Kit {
 						getConfig().getInt("inventory.armour.durability"),
 						getConfig().getInt("inventory.armour.protection")));
 
+		String[] pot1 = getConfig().getString("potions.pot1").split(":");
 		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.SPEED, Integer.MAX_VALUE, getConfig().getInt("potions.speed.amplifier")));
+				PotionEffectType.getByName(pot1[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot1[1])));
 	}
 
 	public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {

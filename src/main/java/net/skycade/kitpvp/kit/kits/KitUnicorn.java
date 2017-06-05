@@ -27,9 +27,12 @@ public class KitUnicorn extends Kit {
 	
 	public KitUnicorn(KitManager kitManager) {
 		super(kitManager, "Unicorn", KitType.UNICORN, 40000, "Be a mythical creature");
-		setIcon(new ItemStack(Material.HAY_BLOCK));
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "HAY_BLOCK");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 40000);
 
 		defaultsMap.put("armor.helmet.material", "LEATHER");
 		defaultsMap.put("armor.helmet.enchantments.protection", 3);
@@ -50,6 +53,18 @@ public class KitUnicorn extends Kit {
 		defaultsMap.put("inventory.stick.enchantments.damage-all", 5);
 
 		setConfigDefaults(defaultsMap);
+
+        if (getConfig().getString("kit.icon.material") != null) {
+            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+            } else {
+                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+            }
+        } else {
+            setIcon(new ItemStack(Material.DIRT));
+        }
+        setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

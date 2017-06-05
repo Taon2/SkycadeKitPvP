@@ -28,6 +28,10 @@ public class KitMaster extends Kit {
 
 		Map<String, Object> defaultsMap = new HashMap<>();
 
+		defaultsMap.put("kit.icon.material", "DIAMOND_SPADE");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 0);
+
 		defaultsMap.put("inventory.spade.material", "DIAMOND_SPADE");
 		defaultsMap.put("inventory.spade.enchantments.durability", 5);
 		defaultsMap.put("inventory.spade.enchantments.damage-all", 5);
@@ -37,6 +41,18 @@ public class KitMaster extends Kit {
 		defaultsMap.put("armor.enchantments.protection", 5);
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

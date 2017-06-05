@@ -23,9 +23,12 @@ public class KitMystic extends Kit {
 
 	public KitMystic(KitManager kitManager) {
 		super(kitManager, "Mystic", KitType.MYSTIC, 31000, "Cats can be good creatures");
-		setIcon(Material.STICK);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+        defaultsMap.put("kit.icon.material", "STICK");
+		defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 31000);
 
 		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
@@ -36,6 +39,18 @@ public class KitMystic extends Kit {
 		defaultsMap.put("armor.enchantments.protection", 4);
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override

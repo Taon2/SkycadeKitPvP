@@ -22,9 +22,12 @@ public class KitFireMage extends Kit {
 
     public KitFireMage(KitManager kitManager) {
         super(kitManager, "FireMage", KitType.FIREMAGE, 34000, "Use fire magic!");
-        setIcon(new ItemStack(Material.FIREWORK_CHARGE));
 
         Map<String, Object> defaultsMap = new HashMap<>();
+
+        defaultsMap.put("kit.icon.material", "FIREWORK_CHARGE");
+        defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 34000);
 
         defaultsMap.put("inventory.stick.enchantments.durability", 5);
         defaultsMap.put("inventory.stick.enchantments.damage-all", 1);
@@ -38,6 +41,18 @@ public class KitFireMage extends Kit {
         defaultsMap.put("armor.helmet.enchantments.protection", 2);
 
         setConfigDefaults(defaultsMap);
+
+        if (getConfig().getString("kit.icon.material") != null) {
+            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+            } else {
+                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+            }
+        } else {
+            setIcon(new ItemStack(Material.DIRT));
+        }
+        setPrice(getConfig().getInt("kit.price"));
     }
 
     @Override

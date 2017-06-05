@@ -22,9 +22,12 @@ public class KitEnderman extends Kit {
 
     public KitEnderman(KitManager kitManager) {
         super(kitManager, "Enderman", KitType.ENDERMAN, 35000, "Scared of water");
-        setIcon(Material.ENDER_CHEST);
 
         Map<String, Object> defaultsMap = new HashMap<>();
+
+        defaultsMap.put("kit.icon.material", "ENDER_CHEST");
+        defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 35000);
 
         defaultsMap.put("inventory.sword.material", "IRON_SWORD");
         defaultsMap.put("inventory.sword.enchantments.durability", 5);
@@ -35,6 +38,18 @@ public class KitEnderman extends Kit {
         defaultsMap.put("armor.enchantments.protection", 3);
 
         setConfigDefaults(defaultsMap);
+
+        if (getConfig().getString("kit.icon.material") != null) {
+            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+            } else {
+                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+            }
+        } else {
+            setIcon(new ItemStack(Material.DIRT));
+        }
+        setPrice(getConfig().getInt("kit.price"));
     }
 
     @Override

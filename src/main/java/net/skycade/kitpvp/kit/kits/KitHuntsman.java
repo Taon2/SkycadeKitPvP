@@ -20,6 +20,8 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
+import static java.lang.Integer.parseInt;
+
 public class KitHuntsman extends Kit implements Listener {
 	
 	private final List<UUID> huntsmanActiveBleed = new ArrayList<>();
@@ -27,9 +29,12 @@ public class KitHuntsman extends Kit implements Listener {
 
 	public KitHuntsman(KitManager kitManager) {
 		super(kitManager, "Huntsman", KitType.HUNTSMAN, 40000, "Hunt them down!");
-		setIcon(Material.SKULL_ITEM);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "SKULL_ITEM");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 40000);
 
 		defaultsMap.put("inventory.sword.material", "STONE_SWORD");
 		defaultsMap.put("inventory.sword.enchantments.durability", 5);
@@ -40,9 +45,21 @@ public class KitHuntsman extends Kit implements Listener {
 		defaultsMap.put("armor.enchantments.durability", 0);
 		defaultsMap.put("armor.enchantments.protection", 0);
 
-		defaultsMap.put("potions.jump.amplifier", 0);
+        defaultsMap.put("potions.pot1", "JUMP:0");
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override
@@ -58,8 +75,11 @@ public class KitHuntsman extends Kit implements Listener {
 				getConfig().getInt("armor.enchantments.durability"),
 				getConfig().getInt("armor.enchantments.protection")));
 
-		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.JUMP, Integer.MAX_VALUE, getConfig().getInt("potions.jump.amplifier")));
+        String[] pot1 = getConfig().getString("potions.pot1").split(":");
+        p.addPotionEffect(new PotionEffect(
+                PotionEffectType.getByName(pot1[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot1[1])));
 	}
 	
 	@Override

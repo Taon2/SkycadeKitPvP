@@ -7,6 +7,7 @@ import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -19,9 +20,12 @@ public class KitBladeMaster extends Kit {
 
 	public KitBladeMaster(KitManager kitManager) {
 		super(kitManager, "BladeMaster", KitType.BLADEMASTER, 29000, "Master of blades");
-		setIcon(Material.GOLD_SWORD);
 
 		Map<String, Object> defaultsMap = new HashMap<>();
+
+		defaultsMap.put("kit.icon.material", "GOLD_SWORD");
+		defaultsMap.put("kit.icon.color", "BLACK");
+		defaultsMap.put("kit.price", 29000);
 
 		defaultsMap.put("inventory.sword.material", "GOLD_SWORD");
         defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
@@ -38,6 +42,18 @@ public class KitBladeMaster extends Kit {
         defaultsMap.put("armor.helmet.enchantments.durability", 2);
 
 		setConfigDefaults(defaultsMap);
+
+		if (getConfig().getString("kit.icon.material") != null) {
+			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+			} else {
+				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+			}
+		} else {
+			setIcon(new ItemStack(Material.DIRT));
+		}
+		setPrice(getConfig().getInt("kit.price"));
 	}
 
 	@Override
