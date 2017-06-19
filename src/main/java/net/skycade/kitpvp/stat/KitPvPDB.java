@@ -17,22 +17,26 @@ public class KitPvPDB {
     private final String kitPvPTable;
     private final String previousNamesTable;
     private final String propertiesTable;
+    private final String host;
+    private final int port;
+    private final String databaseName;
+    private final String username;
+    private final String password;
     private BukkitRunnable keepAlive;
     private Connection connection;
 
     private KitPvPDB() {
-        String host = KitPvP.getInstance().getConfig().getString("database.host");
-        int port = KitPvP.getInstance().getConfig().getInt("database.port");
-        String databaseName = KitPvP.getInstance().getConfig().getString("database.name");
-        String username = KitPvP.getInstance().getConfig().getString("database.username");
-        String password = KitPvP.getInstance().getConfig().getString("database.password");
+        host = KitPvP.getInstance().getConfig().getString("database.host");
+        port = KitPvP.getInstance().getConfig().getInt("database.port");
+        databaseName = KitPvP.getInstance().getConfig().getString("database.name");
+        username = KitPvP.getInstance().getConfig().getString("database.username");
+        password = KitPvP.getInstance().getConfig().getString("database.password");
         kitPvPTable = KitPvP.getInstance().getConfig().getString("database.kitpvp-table");
         previousNamesTable = KitPvP.getInstance().getConfig().getString("database.previous-names-table");
         propertiesTable = KitPvP.getInstance().getConfig().getString("database.properties-table");
 
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?useSSL=true&autoReconnect=true", username, password);
-
+            openConnection();
             keepAlive = new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -44,15 +48,20 @@ public class KitPvPDB {
                     }
                 }
             };
-            keepAlive.runTaskTimerAsynchronously(KitPvP.getInstance(), 100L, 100L);
+            keepAlive.runTaskTimerAsynchronously(KitPvP.getInstance(), 10L, 80L);
 
         } catch (SQLException e) {
             KitPvP.getInstance().getLogger().log(Level.SEVERE, "Coulnd't connect to mysql.", e);
         }
     }
 
+    private void openConnection() throws SQLException {
+        connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?useSSL=true&autoReconnect=true", username, password);
+    }
+
     public Member getMemberData(UUID uuid) {
         try {
+            if (connection == null || connection.isClosed()) openConnection();
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + kitPvPTable + " WHERE UUID = ?");
             statement.setString(1, uuid.toString());
             statement.executeQuery();
@@ -107,6 +116,7 @@ public class KitPvPDB {
 
     public ResultSet getAllMembers() {
         try {
+            if (connection == null || connection.isClosed()) openConnection();
             Statement statement = connection.createStatement();
             return statement.executeQuery("SELECT * FROM " + kitPvPTable);
         } catch (SQLException e) {
@@ -116,6 +126,7 @@ public class KitPvPDB {
 
     public UUID getUUIDForName(String playerName) {
         try {
+            if (connection == null || connection.isClosed()) openConnection();
             PreparedStatement statement = connection.prepareStatement("SELECT UUID FROM " + previousNamesTable + " WHERE PlayerName = ?");
             statement.setString(1, playerName);
             ResultSet results = statement.executeQuery();
@@ -165,6 +176,7 @@ public class KitPvPDB {
 
     public void executeUpdate(UUID uuid, String name, List<String> previousNames, Integer kills, Integer highestStreak, Integer death, Map<String, Object> properties) {
         try {
+            if (connection == null || connection.isClosed()) openConnection();
             PreparedStatement statement = connection.prepareStatement("INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths)");
             statement.setString(1, uuid.toString());
             statement.setString(2, name);

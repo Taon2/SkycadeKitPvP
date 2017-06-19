@@ -21,6 +21,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitWorker;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -109,6 +110,10 @@ public class KitPvP extends SkycadePlugin {
         for (Map.Entry<UUID, Member> entry : MemberManager.getInstance().getMembers().entrySet()) {
             Member member = entry.getValue();
             KitPvPDB.getInstance().setMemberDataSync(entry.getKey(), member.getName(), member.getPreviousNames(), member.getKills(), member.getHighestStreak(), member.getDeaths(), member.getProperties());
+        }
+        for (BukkitWorker bukkitWorker : getServer().getScheduler().getActiveWorkers()) {
+            if (bukkitWorker.getOwner() == this)
+                while (bukkitWorker.getThread().isAlive()); // todo: hardcore test
         }
         KitPvPDB.getInstance().closeConnection();
         rotationManager.update();
