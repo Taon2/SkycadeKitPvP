@@ -76,7 +76,7 @@ public class CommandTopStats extends Command<KitManager> {
             kdrPageManager.setPageElements(getKdrPageElements(kdrTree.getInOrderArray()));
             updating = false;
         });
-        Bukkit.getScheduler().runTaskLater(getModule().getKitPvP(), this::startStatRefresh, 20 * KitPvP.getInstance().getConfig().getInt("stat-refresh-time"));
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getModule().getKitPvP(), this::startStatRefresh, 20 * KitPvP.getInstance().getConfig().getInt("stat-refresh-time"));
     }
 
     private Double getKd(Integer kills, Integer deaths) {

@@ -42,7 +42,7 @@ public class KitPvPDB {
                 public void run() {
                     try {
                         Statement statement = connection.createStatement();
-                        statement.executeQuery("SELECT 1 FROM " + kitPvPTable);
+                        statement.executeQuery("SELECT 1;");
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
