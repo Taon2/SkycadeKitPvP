@@ -144,7 +144,10 @@ public class PlayerDamageListener implements Listener {
         int base = KitPvP.getInstance().getConfig().getInt("kill-credits");
         int extra = (int) Math.ceil(base * Math.pow((100 + KitPvP.getInstance().getConfig().getInt("kill-bonus-percentage"))/((double) 100), stats.getStreak() - 1));
 
-        stats.setCoins(stats.getCoins() + extra + killstreakCredits);
+        double modifier = KitPvP.getInstance().getConfig().getDouble("credits-modifier");
+        int finalReward = (int) Math.ceil(modifier / (double) 100 * (extra + killstreakCredits));
+
+        stats.setCoins(stats.getCoins() + finalReward);
 
         // Increase kit xp depending on the kit and level of the player who died.
         int rewardXp = (diedStats.getActiveKit().getKit().getPrice() / 2000) * diedStats.getKits().get(diedStats.getActiveKit()).getLevel();

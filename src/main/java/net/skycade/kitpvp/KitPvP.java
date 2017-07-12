@@ -52,6 +52,7 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("display-hit-damage", true);
         defaults.put("ks-update-time", 30);
         defaults.put("kill-credits", 15);
+        defaults.put("credits-modifier", 100d);
         defaults.put("chest-cooldown", 30);
         defaults.put("sign-refresh-cooldown", 120);
         defaults.put("stat-refresh-time", 1800);
