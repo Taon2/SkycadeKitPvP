@@ -36,6 +36,8 @@ public class KitKangaroo extends Kit {
 		defaultsMap.put("armor.enchantments.durability", 12);
 		defaultsMap.put("armor.enchantments.protection", 3);
 
+		defaultsMap.put("ability.leap-y-velocity", 0.07);
+
 		setConfigDefaults(defaultsMap);
 
 		if (getConfig().getString("kit.icon.material") != null) {
@@ -74,7 +76,7 @@ public class KitKangaroo extends Kit {
 		/* if (getLevel(p) == 1)
 			p.setVelocity(new Vector(p.getLocation().getDirection().getX(), 0.15, p.getLocation().getDirection().getZ()).multiply(4));
 		else { */
-			p.setVelocity(new Vector(p.getLocation().getDirection().getX(), 0.15, p.getLocation().getDirection().getZ()).multiply(4));
+			p.setVelocity(new Vector(p.getLocation().getDirection().getX(), getConfig().getDouble("ability.leap-y-velocity"), p.getLocation().getDirection().getZ()).multiply(4));
 			Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> p.setVelocity(new Vector(p.getLocation().getDirection().getX(), 0.15, p.getLocation().getDirection().getZ()).multiply(3)), 3);
 		// }
 	}
