@@ -29,19 +29,22 @@ public class ItemRunnable {
 
 	public void startRunnable() {
 		Bukkit.getScheduler().runTaskLater(plugin, () -> {
-			if (!canRun())
-				return;
+			if (!canRun()) return;
 			Inventory inv = p.getInventory();
 			int amount = 0;
-			
+
+			Integer finalSlot = null;
 			for (Integer i = 0; i < inv.getSize(); i++)
 				if (inv.getItem(i) != null)
-					if (inv.getItem(i).getType() == item.getType())
-						amount += inv.getItem(i).getAmount();
-			if (amount > 0 && plugin.getStats(p).getActiveKit() == kit) {
-				ItemStack invItem = inv.getItem(inv.first(item.getType()));
+					if (inv.getItem(i).getType() == item.getType()) {
+                        amount += inv.getItem(i).getAmount();
+                        if (amount <= inv.getMaxStackSize())
+                            finalSlot = i;
+                    }
+			if (finalSlot != null && amount > 0 && plugin.getStats(p).getActiveKit() == kit) {
+				ItemStack invItem = inv.getItem(finalSlot);
 				if (amount < maxAmount)
-					inv.setItem(inv.first(item.getType()), new ItemStack(invItem.getType(), invItem.getAmount() + 1));
+					inv.setItem(finalSlot, new ItemStack(invItem.getType(), invItem.getAmount() + 1));
 			} else 
 				p.getInventory().addItem(item);
 			startRunnable();

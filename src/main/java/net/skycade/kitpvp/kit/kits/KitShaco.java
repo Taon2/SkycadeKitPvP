@@ -125,7 +125,7 @@ public class KitShaco extends Kit {
 			return;
 		}
 		snowballCooldown.add(p.getUniqueId());
-		ItemStack mainHand = p.getInventory().getItemInMainHand();
+		/* ItemStack mainHand = p.getInventory().getItemInMainHand();
 		ItemStack offHand = p.getInventory().getItemInOffHand();
 		if (mainHand.getType().equals(Material.SNOW_BALL))
 			p.getInventory().getItemInMainHand().setAmount(p.getInventory().getItemInMainHand().getAmount() + 1);
@@ -133,7 +133,7 @@ public class KitShaco extends Kit {
 			p.getInventory().getItemInOffHand().setAmount(p.getInventory().getItemInOffHand().getAmount() + 1);
 		else
 			p.getInventory().addItem(new ItemStack(Material.SNOW_BALL, 1));
-		p.updateInventory();
+		p.updateInventory(); */
 		Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> snowballCooldown.remove(p.getUniqueId()), 10);
 		e.getEntity().setVelocity(e.getEntity().getVelocity().multiply(2.5D));
 	}
