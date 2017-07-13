@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
-import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
@@ -89,10 +88,10 @@ public class KitChance extends Kit {
 		else if (level == 2) 
 			chanceEffect(5, 4, 0, 2, 3, 3, 2, damager, damagee, e);
 		else if (level == 3) */
-			chanceEffect(6, 5, 2, 1, 4, 2, 3, damager, damagee, e);
+			chanceEffect(6, 5, 2, 1, 4, 2, damager, damagee, e);
 	}
 	
-	private void chanceEffect(int healthPer, int doublePer, int soupPer, int swingDownPer, int swingUpPer, int backPer, int triplePer, Player damager, Player damagee, EntityDamageByEntityEvent e) {
+	private void chanceEffect(int healthPer, int doublePer, int soupPer, int swingDownPer, int swingUpPer, int backPer, Player damager, Player damagee, EntityDamageByEntityEvent e) {
 		int random = UtilMath.getRandom(0, 100);
 		
 		if (random <= healthPer) {
@@ -114,12 +113,12 @@ public class KitChance extends Kit {
 			damager.damage(e.getDamage());						
 			damager.sendMessage(ChatColor.DARK_RED + "Backfire!");
 			e.setCancelled(true);
-		} else if (random <= healthPer + doublePer + soupPer + swingDownPer + swingUpPer + backPer + triplePer) {
+		}/* else if (random <= healthPer + doublePer + soupPer + swingDownPer + swingUpPer + backPer + triplePer) {
 			e.setDamage(e.getDamage() * 3);
 			damager.sendMessage(ChatColor.YELLOW + "Triple damage!");
 			damagee.sendMessage(ChatColor.RED + damager.getName() + " got triple damage!");
 			ParticleEffect.EXPLOSION_NORMAL.display(0, 0, 0, 0, 1, damagee.getLocation(), 20);
-		}
+		}*/
 	}
 	
 	@Override

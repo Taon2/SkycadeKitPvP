@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
-import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
@@ -18,11 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.io.Console;
 import java.util.*;
-import java.util.logging.Logger;
 
-import static java.lang.Integer.getInteger;
 import static java.lang.Integer.parseInt;
 
 public class KitArcher extends Kit {
@@ -110,10 +106,10 @@ public class KitArcher extends Kit {
 		else if (level == 2) 
 			archerChanceEffects(shooter, damagee, e, 40, 40, 30, 20, 10, 7);
 		else */
-			archerChanceEffects(shooter, damagee, e, 60, 50, 30, 30, 20, 10);
+			archerChanceEffects(shooter, damagee, e, 60, 50, 30, 30, 20);
 	}
 
-	private void archerChanceEffects(Player archer, Player target, EntityDamageByEntityEvent e, int regainHealth, int doubleDamage, int slowEffect, int miningEffect, int blindEffect, int instaChance) {
+	private void archerChanceEffects(Player archer, Player target, EntityDamageByEntityEvent e, int regainHealth, int doubleDamage, int slowEffect, int miningEffect, int blindEffect) {
 		int randomNumber = UtilMath.getRandom(0, 1000);
 		if (randomNumber <= regainHealth) {
 			archer.setHealth(archer.getMaxHealth());
@@ -134,12 +130,12 @@ public class KitArcher extends Kit {
 			archer.sendMessage("§5Target blinded");
 			target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 6 * 20, 0));
 			target.sendMessage("§5You got blinded by " + archer.getName());
-		} else if (randomNumber <= regainHealth + doubleDamage + slowEffect + miningEffect + blindEffect + instaChance) {
+		} /* else if (randomNumber <= regainHealth + doubleDamage + slowEffect + miningEffect + blindEffect + instaChance) {
 			archer.sendMessage("§4Triple damage!");
 			target.sendMessage("§7" + archer.getName() + " got triple damage on you");
 			e.setDamage(e.getDamage() * 3);
 			ParticleEffect.EXPLOSION_NORMAL.display(0, 0, 0, 0, 1, target.getLocation(), 20);
-		}
+		}*/
 	}
 	
 	@Override
