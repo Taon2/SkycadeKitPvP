@@ -72,6 +72,7 @@ public class KitManager extends Module {
 		//registerCommand(new CommandTp(this));
 		//registerCommand(new CommandDuel(this));
 		registerCommand(new RefundCommand(this));
+		registerCommand(new CommandReload(this));
 
         registerListener(shopMenu);
         registerListener(kitsMenu);

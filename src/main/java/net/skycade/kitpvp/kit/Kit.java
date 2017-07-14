@@ -415,9 +415,11 @@ public abstract class Kit implements Listener {
             }
         }
 
-        for (Map.Entry<String, Object> entry : defaultsMap.entrySet()) {
-            if (kitSection.get(entry.getKey(), null) == null) {
-                kitSection.set(entry.getKey(), entry.getValue());
+        if (defaultsMap != null) {
+            for (Map.Entry<String, Object> entry : defaultsMap.entrySet()) {
+                if (kitSection.get(entry.getKey(), null) == null) {
+                    kitSection.set(entry.getKey(), entry.getValue());
+                }
             }
         }
         config.set(getName(), kitSection);
@@ -427,6 +429,10 @@ public abstract class Kit implements Listener {
             KitPvP.getInstance().getLogger().log(Level.SEVERE, "An error occurred while trying to save kits.yml", e);
         }
         this.config = kitSection;
+    }
+
+    public void reloadConfig() {
+        setConfigDefaults(null);
     }
 
     public Color getColor(String paramString) {
