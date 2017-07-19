@@ -126,6 +126,7 @@ public class ShopMenu implements Listener {
             member.message("§7You bought §a" + kit.getName() + "§7 for §a" + kit.getPrice() + "§7 coins.");
             stats.addKit(kitType);
             stats.setCoins(stats.getCoins() - kit.getPrice());
+            MemberManager.getInstance().update(member);
             Bukkit.getScheduler().runTaskLater(kitManager.getPlugin(), () -> member.getPlayer().closeInventory(), 1);
             return;
         }
