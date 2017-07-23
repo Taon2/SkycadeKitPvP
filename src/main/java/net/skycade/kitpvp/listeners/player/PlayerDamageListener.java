@@ -314,7 +314,7 @@ public class PlayerDamageListener implements Listener {
         lastDamagerMap.remove(uuid);
         killAssist.remove(uuid);
         samePlayerKill.remove(uuid);
-        plugin.getStats().remove(uuid); // todo: remove
+        //plugin.getStats().remove(uuid); // todo: remove
     }
 
 }
