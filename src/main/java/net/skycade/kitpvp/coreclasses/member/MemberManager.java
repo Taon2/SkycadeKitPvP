@@ -93,7 +93,7 @@ public class MemberManager extends Module {
     public void onDisable() {
         for (Map.Entry<UUID, Member> entry : members.entrySet()) {
             Member member = entry.getValue();
-            KitPvPDB.getInstance().setMemberData(entry.getKey(), member.getName(), member.getPreviousNames(), member.getKills(), member.getHighestStreak(), member.getDeaths(), member.getProperties());
+            KitPvPDB.getInstance().setMemberDataSync(entry.getKey(), member.getName(), member.getPreviousNames(), member.getKills(), member.getHighestStreak(), member.getDeaths(), member.getProperties());
         }
     }
 

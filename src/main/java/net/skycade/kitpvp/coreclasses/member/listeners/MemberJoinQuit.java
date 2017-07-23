@@ -86,7 +86,7 @@ public class MemberJoinQuit implements Listener {
             Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () ->
                             KitPvPDB.getInstance().setMemberData(member.getUUID(), member.getName(), member.getPreviousNames(), member.getKills(), member.getHighestStreak(), member.getKills(), member.getProperties()));
             Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () ->
-                memberManager.getMembers().remove(member.getUUID())
+                memberManager.getMembers().remove(member.getUUID()) // todo: remove
             );
         } else
             e.setQuitMessage(null);

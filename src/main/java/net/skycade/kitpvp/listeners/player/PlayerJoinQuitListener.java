@@ -31,7 +31,7 @@ public class PlayerJoinQuitListener implements Listener {
         if (!plugin.getSpawnRegion().contains(p) && !MemberManager.getInstance().getMember(p).getPlayer().hasPermission(new Permission("kitpvp.admin", PermissionDefault.OP)))
             plugin.getStats(e.getPlayer()).setStreak(0);
 
-        plugin.getStats().remove(e.getPlayer().getUniqueId());
+        plugin.getStats().remove(e.getPlayer().getUniqueId()); // todo: remove
     }
 
     @EventHandler

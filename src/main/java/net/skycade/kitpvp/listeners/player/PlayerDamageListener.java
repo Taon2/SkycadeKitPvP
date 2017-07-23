@@ -72,7 +72,7 @@ public class PlayerDamageListener implements Listener {
     public void on(PlayerDeathEvent e) {
         e.getDrops().clear();
         e.setDeathMessage("");
-        plugin.respawn(e.getEntity());
+        if (e.getEntity().isOnline()) plugin.respawn(e.getEntity());
 
         Player died = e.getEntity();
         Member diedMem = MemberManager.getInstance().getMember(died);
@@ -314,7 +314,7 @@ public class PlayerDamageListener implements Listener {
         lastDamagerMap.remove(uuid);
         killAssist.remove(uuid);
         samePlayerKill.remove(uuid);
-        plugin.getStats().remove(uuid);
+        plugin.getStats().remove(uuid); // todo: remove
     }
 
 }

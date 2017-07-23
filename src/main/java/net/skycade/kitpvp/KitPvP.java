@@ -176,9 +176,9 @@ public class KitPvP extends SkycadePlugin {
         Bukkit.getScheduler().runTaskLater(this, p::updateInventory, 10);
         Bukkit.getScheduler().runTaskLater(this, () -> p.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
         KitPvPStats stats = getStats(p);
-        Bukkit.getScheduler().runTaskLater(this, () -> stats.getActiveKit().getKit().giveSoup(p, 32), 5);
+        Bukkit.getScheduler().runTaskLater(this, () -> { stats.getActiveKit().getKit().giveSoup(p, 32); }, 5);
         stats.applyKitPreference();
-        Bukkit.getScheduler().runTaskLater(this, () -> stats.getActiveKit().getKit().applyKit(p), 3);
+        Bukkit.getScheduler().runTaskLater(this, () -> { stats.getActiveKit().getKit().applyKit(p); }, 3);
     }
 
     public boolean isInSpawnArea(Player p) {
