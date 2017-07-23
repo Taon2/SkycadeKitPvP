@@ -82,6 +82,7 @@ public abstract class Kit implements Listener {
     }
 
     public void applyKit(Player p) {
+        if (p == null || !p.isOnline()) return;
         applyKit(p, getLevel(p));
     }
 
@@ -240,6 +241,7 @@ public abstract class Kit implements Listener {
     }
 
     public void giveSoup(Player p, int amount) {
+        if (p == null || !p.isOnline()) return;
         for (int x = 0; x < amount; x++) {
             if (p.getInventory().firstEmpty() == -1)
                 break;
