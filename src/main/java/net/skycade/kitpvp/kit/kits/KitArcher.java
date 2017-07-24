@@ -38,11 +38,13 @@ public class KitArcher extends Kit {
         defaultsMap.put("inventory.sword.enchantments.durability", 5);
         defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
         defaultsMap.put("inventory.bow.enchantments.durability", 5);
-        defaultsMap.put("inventory.bow.enchantments.arrow-infinite", 1);
         defaultsMap.put("inventory.bow.enchantments.arrow-damage", 1);
         defaultsMap.put("inventory.armour.type", "LEATHER");
         defaultsMap.put("inventory.armour.durability", 5);
         defaultsMap.put("inventory.armour.protection", 2);
+        defaultsMap.put("inventory.arrow.amount", 16);
+		defaultsMap.put("inventory.arrow.regen-speed", 3);
+		defaultsMap.put("inventory.arrow.max-amount", 64);
 
         defaultsMap.put("potions.pot1", "SPEED:1");
 
@@ -71,11 +73,10 @@ public class KitArcher extends Kit {
 		p.getInventory().addItem(new ItemBuilder(
 				Material.BOW)
 				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.bow.enchantments.durability"))
-				.addEnchantment(Enchantment.ARROW_INFINITE, getConfig().getInt("inventory.bow.enchantments.arrow-infinite"))
 				.addEnchantment(Enchantment.ARROW_DAMAGE, getConfig().getInt("inventory.bow.enchantments.arrow-damage")).build());
 
 		p.getInventory().addItem(new ItemBuilder(
-				Material.ARROW, 1).build());
+				Material.ARROW, getConfig().getInt("inventory.arrow.amount")).build());
 
 		p.getInventory().setArmorContents(getArmour(Material.getMaterial(
 						getConfig().getString("inventory.armour.type") + "_HELMET"),
@@ -87,6 +88,9 @@ public class KitArcher extends Kit {
 				PotionEffectType.getByName(pot1[0]),
                 Integer.MAX_VALUE,
                 parseInt(pot1[1])));
+
+		startItemRunnable(p, getConfig().getInt("inventory.arrow.regen-speed"), new ItemBuilder(
+				Material.ARROW).build(), getConfig().getInt("inventory.arrow.max-amount"), KitType.ARCHER);
 	}
 
 	public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
