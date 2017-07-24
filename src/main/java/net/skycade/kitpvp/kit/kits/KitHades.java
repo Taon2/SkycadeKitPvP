@@ -11,11 +11,12 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static java.lang.Integer.parseInt;
 
 public class KitHades extends Kit {
 
@@ -48,6 +49,10 @@ public class KitHades extends Kit {
 		defaultsMap.put("armor.boots.material", "LEATHER");
 		defaultsMap.put("armor.boots.enchantments.durability", 12);
 		defaultsMap.put("armor.boots.enchantments.protection", 4);
+
+		List<String> defPotions = new ArrayList<>();
+		defPotions.add("FIRE_RESISTANCE:1");
+		defaultsMap.put("potions", defPotions);
 
 		setConfigDefaults(defaultsMap);
 
@@ -95,6 +100,14 @@ public class KitHades extends Kit {
 				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.boots.enchantments.durability"))
 				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.boots.enchantments.protection"))
 				.setColour(Color.fromBGR(51, 51, 255)).build());
+
+		for (String pot : getConfig().getStringList("potions")) {
+			String[] split = pot.split(":");
+			p.addPotionEffect(new PotionEffect(
+					PotionEffectType.getByName(split[0]),
+					Integer.MAX_VALUE,
+					parseInt(split[1])));
+		}
 	}
 	
 	@Override
