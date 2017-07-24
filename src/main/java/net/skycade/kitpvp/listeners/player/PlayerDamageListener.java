@@ -9,16 +9,10 @@ import net.skycade.kitpvp.kit.kits.*;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
@@ -66,6 +60,12 @@ public class PlayerDamageListener implements Listener {
 
         if (!damager.equals(damagee))
             addAssist(damagee, damager, e.getDamage());
+    }
+
+    @EventHandler
+    public void on(EntityTargetLivingEntityEvent event) {
+        if (!(event.getEntity() instanceof Golem)) return;
+        if (event.getEntity().getName().equalsIgnoreCase(event.getTarget().getName() + " golem")) event.setCancelled(true);
     }
 
     @EventHandler
