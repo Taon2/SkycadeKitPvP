@@ -36,7 +36,7 @@ public class CommandTopStats extends Command<KitManager> {
     public CommandTopStats(KitManager module) {
         super(module, "View the top 10 kills/killstreak/deaths.", new Permission("kitpvp.default", PermissionDefault.TRUE), "topstats", "statstop");
         setUsage("<kills/deaths/killstreak/kdr>");
-        startStatRefresh();
+        /* startStatRefresh(); */
     }
 
     @SuppressWarnings("unchecked")
@@ -88,6 +88,8 @@ public class CommandTopStats extends Command<KitManager> {
 
     @Override
     public void execute(Member member, String aliasUsed, String... args) {
+        member.message("§cStats are currently disabled, they will return at a later time.");
+        /*
         if (!checkArgs(member, aliasUsed, args))
             return;
         if (updating) {
@@ -115,6 +117,7 @@ public class CommandTopStats extends Command<KitManager> {
             kdrPageManager.sendToPlayer(member.getPlayer(), page);
         } else
             couldNotFind(member, "stats", args[0]);
+            */
     }
 
     private List<BaseComponent[]> getPageElements(BTNode<Integer, UUID>[] array) {
