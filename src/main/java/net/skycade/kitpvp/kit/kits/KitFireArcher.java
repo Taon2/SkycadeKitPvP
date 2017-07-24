@@ -99,8 +99,8 @@ public class KitFireArcher extends Kit {
 		int flameSeconds = 20;
 		flameCooldown.add(p.getUniqueId());
 		Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> flameCooldown.remove(p.getUniqueId()), 60 - flameSeconds);
-		
-		p.getItemInHand().addEnchantment(Enchantment.ARROW_FIRE, 1);
+
+		item.addEnchantment(Enchantment.ARROW_FIRE, 1);
 		p.getWorld().playSound(p.getLocation(), Sound.ITEM_FLINTANDSTEEL_USE, 1.0F, 1.0F);
 
 		Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), ()  -> p.getInventory().forEach((itemStack) -> {
