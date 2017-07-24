@@ -46,6 +46,8 @@ public class KitShaco extends Kit {
 		defaultsMap.put("inventory.snowball.regen-speed", 10);
 		defaultsMap.put("inventory.snowball.max-amount", 8);
 
+		defaultsMap.put("damage.backstab-multiplier", 1.2);
+
 		setConfigDefaults(defaultsMap);
 
 		if (getConfig().getString("kit.icon.material") != null) {
@@ -92,7 +94,7 @@ public class KitShaco extends Kit {
 		if (diffX > 0 && diffX < 1 || diffX < 0 && diffX > -1) {
 			if (diffZ > 0 && diffZ < 1 || diffZ < 0 && diffZ > -1) {
 				damagee.sendMessage("§7You got backstabbed");
-				e.setDamage(e.getDamage() * 1.3);
+				e.setDamage(e.getDamage() * getConfig().getDouble("damage.backstab-multiplier"));
 			}
 		}
 	}
