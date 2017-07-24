@@ -100,7 +100,7 @@ public class KitMystic extends Kit {
 				else if (level == 2)
 					mysticEffects(target, p, 12, 10, 20, 20, 20, 8, 7);
 				else */
-					mysticEffects(target, p, 5, 5, 20, 20, 20, 10, 12);
+					mysticEffects(target, p, 7, 7, 22, 22, 22, 12, 14);
 			});
 			cat.getLocation().getWorld().createExplosion(cat.getLocation(), 0);
 			cat.remove();
@@ -121,18 +121,18 @@ public class KitMystic extends Kit {
 			onCatHit(target, p, "§2POISON", PotionEffectType.POISON, 140, 0);
 		} else if (percentage <= speedPer + regPer + slowPer + weakPer + poisPer + blindPer) {
 			onCatHit(target, p, "§0BLINDNESS", PotionEffectType.BLINDNESS, 140, 0);
-		} else if (percentage <= speedPer + regPer + slowPer + weakPer + poisPer + blindPer + freezePer) {
+		} else /* if (percentage <= speedPer + regPer + slowPer + weakPer + poisPer + blindPer + freezePer) */ {
 			freezePlayer(target, 5);
 			target.sendMessage(catLable + "§bFROZEN!");
 			p.sendMessage(catLable + "§bFREEZE!");
-		} else {
+		}/* else {
 			if (target.getHealth() - 16 > 0) 
 				target.setHealth(target.getHealth() - 16);
 			else 
 				target.setHealth(1);
 			target.sendMessage(catLable + ChatColor.DARK_RED + "8HIT!.");
 			p.sendMessage(ChatColor.DARK_RED + "Player got 8 hearts damage.");
-		}
+		} */
 	}
 	
 	private void onCatHit(Player target, Player p, String playerMsg, PotionEffectType effect, int duration, int amplifier) {
