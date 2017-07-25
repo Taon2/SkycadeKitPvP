@@ -2,6 +2,7 @@ package net.skycade.kitpvp.stat;
 
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -177,13 +178,22 @@ public class KitPvPDB {
     public void executeUpdate(UUID uuid, String name, List<String> previousNames, Integer kills, Integer highestStreak, Integer death, Map<String, Object> properties) {
         try {
             if (connection == null || connection.isClosed()) openConnection();
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, Assists, ChosenKit, CrateKeys) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), Coins = VALUES(Coins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), CrateKeys = VALUES(CrateKeys)");
             statement.setString(1, uuid.toString());
             statement.setString(2, name);
 
             statement.setInt(3, kills);
             statement.setInt(4, highestStreak);
             statement.setInt(5, death);
+
+            statement.setFloat(6, (float) UtilMath.getKDR(kills, death));
+            statement.setString(7, properties.containsKey("kit") ? (String) properties.get("kit") : "DEFAULT");
+            statement.setString(8, new JSONObject((Map<String, Map<String, Integer>>) properties.get("kits")).toJSONString());
+
+            statement.setInt(9, properties.containsKey("coins") ? (int) properties.get("coins"): 0);
+            statement.setInt(10, properties.containsKey("assists") ? (int) properties.get("assists") : 0);
+            statement.setString(11, properties.containsKey("kit_preference") ? (String) properties.get("kit_preference") : "DEFAULT");
+            statement.setInt(12, properties.containsKey("keys") ? (int) properties.get("keys") : 0);
 
             statement.executeUpdate();
 

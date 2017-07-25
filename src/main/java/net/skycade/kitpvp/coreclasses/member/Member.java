@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.coreclasses.member;
 
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
@@ -15,18 +16,14 @@ public class Member {
     private String name;
     private List<String> previousNames = new ArrayList<>();
 
-    private Integer kills = 0;
-    private Integer highestStreak = 0;
-
     private Map<String, Object> properties = new HashMap<>();
-
-    private Integer deaths = 0;
 
     public Member(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
         previousNames.add(name);
-        KitPvPDB.getInstance().setMemberData(uuid, name, previousNames, kills, highestStreak, deaths, properties);
+        KitPvP.getInstance().getStats(this).getKits();
+        KitPvPDB.getInstance().setMemberData(uuid, name, previousNames, getKills(), getHighestStreak(), getDeaths(), properties);
     }
 
     public Map<String, Object> getChanges() {
@@ -90,15 +87,15 @@ public class Member {
     }
 
     public Integer getKills() {
-        return kills;
+        return KitPvP.getInstance().getStats(this).getKills();
     }
 
     public Integer getHighestStreak() {
-        return highestStreak;
+        return KitPvP.getInstance().getStats(this).getHighestStreak();
     }
 
     public Integer getDeaths() {
-        return deaths;
+        return KitPvP.getInstance().getStats(this).getDeaths();
     }
 
     public void addPreviousName(String name) {
@@ -118,15 +115,15 @@ public class Member {
     }
 
     public void setKills(Integer kills) {
-        this.kills = kills;
+        KitPvP.getInstance().getStats(this).setKills(kills);
     }
 
     public void setHighestStreak(Integer highestStreak) {
-        this.highestStreak = highestStreak;
+        KitPvP.getInstance().getStats(this).setHighestStreak(highestStreak);
     }
 
     public void setDeaths(Integer deaths) {
-        this.deaths = deaths;
+        KitPvP.getInstance().getStats(this).setDeaths(deaths);
     }
 
     public void putProperty(String key, Object value) {
