@@ -83,6 +83,7 @@ public abstract class Kit implements Listener {
 
     public void applyKit(Player p) {
         if (p == null || !p.isOnline()) return;
+        p.getInventory().clear();
         applyKit(p, getLevel(p));
     }
 
