@@ -1,6 +1,6 @@
 name: KitPvP
 main: net.skycade.kitpvp.KitPvP
-version: 2.7.1-SNAPSHOT
+version: 2.7.2-SNAPSHOT
 author: ["WhiteWalker72", "Riccardo Bello (RickyB98)"]
 commands:
     givekey:
