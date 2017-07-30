@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.coreclasses.member;
 
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.stat.KitPvPDB;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -22,8 +21,6 @@ public class Member {
         this.uuid = uuid;
         this.name = name;
         previousNames.add(name);
-        KitPvP.getInstance().getStats(this).getKits();
-        KitPvPDB.getInstance().setMemberData(uuid, name, previousNames, getKills(), getHighestStreak(), getDeaths(), properties);
     }
 
     public Map<String, Object> getChanges() {

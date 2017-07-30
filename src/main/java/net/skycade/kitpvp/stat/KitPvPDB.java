@@ -1,16 +1,25 @@
 package net.skycade.kitpvp.stat;
 
+import com.google.common.base.Joiner;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
 import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 public class KitPvPDB {
 
@@ -23,10 +32,45 @@ public class KitPvPDB {
     private final String databaseName;
     private final String username;
     private final String password;
+    private FileHandler logger = null;
     private BukkitRunnable keepAlive;
     private Connection connection;
 
+    private int transactionId = 1;
+
+    private void log(int transactionId, String msg) {
+        if (logger == null) return;
+        logger.publish(new LogRecord(Level.FINE, "#" + transactionId + ": " + msg));
+    }
+
     private KitPvPDB() {
+        try {
+            this.logger = new FileHandler("logs/db.log", true);
+            logger.setFormatter(new Formatter() {
+                @Override
+                public String format(LogRecord record) {
+                    StringBuilder builder = new StringBuilder();
+                    Throwable ex = record.getThrown();
+                    builder.append(new SimpleDateFormat().format(record.getMillis()));
+                    builder.append(" [");
+                    builder.append(record.getLevel().getLocalizedName().toUpperCase());
+                    builder.append("] ");
+                    builder.append(this.formatMessage(record));
+                    builder.append('\n');
+                    if(ex != null) {
+                        StringWriter writer = new StringWriter();
+                        ex.printStackTrace(new PrintWriter(writer));
+                        builder.append(writer);
+                    }
+
+                    return builder.toString();
+                }
+            });
+        } catch (IOException e) {
+            KitPvP.getInstance().getLogger().log(Level.SEVERE, "An error occurred while trying to create a database log file.", e);
+        }
+
+
         host = KitPvP.getInstance().getConfig().getString("database.host");
         port = KitPvP.getInstance().getConfig().getInt("database.port");
         databaseName = KitPvP.getInstance().getConfig().getString("database.name");
@@ -56,8 +100,11 @@ public class KitPvPDB {
         }
     }
 
-    private void openConnection() throws SQLException {
+    private synchronized void openConnection() throws SQLException {
+        int tid = transactionId;
+        ++transactionId;
         connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?useSSL=true&autoReconnect=true", username, password);
+        log(tid, "Connection to database established.");
     }
 
     public Member getMemberData(UUID uuid) {
@@ -109,6 +156,7 @@ public class KitPvPDB {
                     }
                 }
             }
+            MemberManager.getInstance().getMembers().put(uuid, member);
             return member;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -143,7 +191,6 @@ public class KitPvPDB {
         executeUpdate(uuid, name, previousNames, kills, highestStreak, death, properties);
     }
 
-    @SuppressWarnings("unchecked")
     public void setMemberData(UUID uuid, String name, List<String> previousNames, Integer kills, Integer highestStreak, Integer death, Map<String, Object> properties) {
         Map<String, Object> propertiesCopy = new HashMap<>(properties);
         List<String> previousNamesCopy = new ArrayList<>(previousNames);
@@ -166,19 +213,29 @@ public class KitPvPDB {
         return map;
     }
 
-    public void closeConnection() {
+    public synchronized void closeConnection() {
         try {
             connection.close();
+            int tid = transactionId;
+            ++transactionId;
+            log(tid, "Connection to database closed.");
             keepAlive.cancel();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void executeUpdate(UUID uuid, String name, List<String> previousNames, Integer kills, Integer highestStreak, Integer death, Map<String, Object> properties) {
+    public synchronized void executeUpdate(UUID uuid, String name, List<String> previousNames, Integer kills, Integer highestStreak, Integer death, Map<String, Object> properties) {
+        int tid = ++transactionId;
+        log(tid, "Saving data for " + uuid.toString() + ":");
+        log(tid, "Name: " + name + ", Previous names: " + Joiner.on(", ").join(previousNames));
+        log(tid, "Kills: " + kills + ", Highest streak: " + highestStreak + ", Deaths: " + death);
+        log(tid, "Other properties (JSON): " + new JSONObject(properties).toJSONString());
         try {
             if (connection == null || connection.isClosed()) openConnection();
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, Assists, ChosenKit, CrateKeys) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), Coins = VALUES(Coins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), CrateKeys = VALUES(CrateKeys)");
+            String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, Assists, ChosenKit, CrateKeys) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), Coins = VALUES(Coins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), CrateKeys = VALUES(CrateKeys)";
+            log(tid, "Query: " + query);
+            PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, uuid.toString());
             statement.setString(2, name);
 
@@ -196,6 +253,7 @@ public class KitPvPDB {
             statement.setInt(12, properties.containsKey("keys") ? (int) properties.get("keys") : 0);
 
             statement.executeUpdate();
+            log(tid, "Executed.");
 
             for (String previousName : previousNames) {
                 PreparedStatement namesStatement = connection.prepareStatement("INSERT INTO " + previousNamesTable + " (PreviousName, UUID) VALUES (?, ?) ON DUPLICATE KEY UPDATE UUID = VALUES(UUID)");
@@ -203,6 +261,7 @@ public class KitPvPDB {
                 namesStatement.setString(2, uuid.toString());
                 namesStatement.executeUpdate();
             }
+            log(tid, "Previous names saved.");
 
             for (Map.Entry<String, Object> entry : properties.entrySet()) {
                 PreparedStatement propertiesQuery = connection.prepareStatement("SELECT * FROM " + propertiesTable + " WHERE UUID = ? AND PropertyKey = ?");
@@ -230,8 +289,14 @@ public class KitPvPDB {
                     }
                     propertiesStatement.executeUpdate();
                 }
+                log(tid, "Property '" + entry.getKey() + "' saved with value: " + entry.getValue().toString() + ".");
             }
         } catch (SQLException e) {
+            if (logger != null) {
+                LogRecord lr = new LogRecord(Level.SEVERE, "An error occurred for #" + tid + ":");
+                lr.setThrown(e);
+                logger.publish(lr);
+            }
             throw new RuntimeException(e);
         }
     }
