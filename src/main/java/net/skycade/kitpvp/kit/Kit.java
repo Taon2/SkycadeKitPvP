@@ -25,6 +25,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -84,6 +85,7 @@ public abstract class Kit implements Listener {
     public void applyKit(Player p) {
         if (p == null || !p.isOnline()) return;
         p.getInventory().clear();
+        for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
         applyKit(p, getLevel(p));
     }
 

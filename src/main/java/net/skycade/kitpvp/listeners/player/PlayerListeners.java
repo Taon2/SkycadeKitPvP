@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.potion.PotionEffect;
 
 public class PlayerListeners implements Listener {
 
@@ -100,7 +101,7 @@ public class PlayerListeners implements Listener {
         KitPvPStats stats = plugin.getStats(p);
         stats.applyKitPreference();
         p.getInventory().clear();
-        p.getActivePotionEffects().clear();
+        for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
         Bukkit.getScheduler().runTaskLater(plugin, () -> { stats.getActiveKit().getKit().applyKit(p); }, 3);
         Bukkit.getScheduler().runTaskLater(plugin, () -> { stats.getActiveKit().getKit().giveSoup(p, 32); }, 5);
         Bukkit.getScheduler().runTaskLater(plugin, p::updateInventory, 10);
