@@ -37,7 +37,7 @@ public class CrateRunnable extends BukkitRunnable {
 		this.member = member;
 		counter = -1;
 		inv = Bukkit.createInventory(p, 54, "§aCrate");
-		sound = Arrays.asList(Sound.BLOCK_NOTE_PLING, Sound.BLOCK_NOTE_SNARE, Sound.BLOCK_NOTE_BASS).get(UtilMath.getRandom(0, 2)); // NOTE_STICKS and PIANO were here
+		sound = Arrays.asList(Sound.NOTE_PLING, Sound.NOTE_SNARE_DRUM, Sound.NOTE_BASS, Sound.NOTE_STICKS, Sound.NOTE_PIANO).get(UtilMath.getRandom(0, 4));
 	}
 
 	@Override

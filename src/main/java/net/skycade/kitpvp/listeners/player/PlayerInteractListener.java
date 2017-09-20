@@ -5,7 +5,6 @@ import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,7 +13,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,13 +31,13 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEntityEvent e) {
-        if (e.getHand().equals(EquipmentSlot.OFF_HAND)) return;
+        // (if (e.getHand().equals(EquipmentSlot.OFF_HAND)) return;
         if (!(e.getRightClicked() instanceof Player))
             return;
         if (plugin.isInSpawnArea(e.getPlayer()))
             return;
         plugin.getStats(e.getPlayer()).getActiveKit().getKit().onInteract(e.getPlayer(), (Player) e.getRightClicked(),
-                e.getPlayer().getInventory().getItemInMainHand());
+                e.getPlayer().getInventory().getItemInHand());
     }
 
     @EventHandler
@@ -63,28 +61,19 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void on(PlayerInteractEvent e) {
-        EquipmentSlot hand = e.getHand();
         Player p = e.getPlayer();
         if (e.getItem() == null)
             return;
         if (e.getItem().getType() == Material.MUSHROOM_SOUP) {
-            double maxHealth = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+            double maxHealth = p.getMaxHealth();
             if (p.getHealth() < maxHealth) {
                 if (p.getHealth() < maxHealth - 7) {
                     p.setHealth(p.getHealth() + 7);
-                    if (hand.equals(EquipmentSlot.OFF_HAND)) {
-                        p.getInventory().getItemInOffHand().setAmount(0);
-                    } else {
-                        p.getInventory().getItemInMainHand().setAmount(0);
-                    }
+                    p.getInventory().getItemInHand().setAmount(0);
                     addBowl(p);
                 } else {
                     p.setHealth(maxHealth);
-                    if (hand.equals(EquipmentSlot.OFF_HAND)) {
-                        p.getInventory().getItemInOffHand().setAmount(0);
-                    } else {
-                        p.getInventory().getItemInMainHand().setAmount(0);
-                    }
+                    p.getInventory().getItemInHand().setAmount(0);
                     addBowl(p);
                 }
 

@@ -87,7 +87,7 @@ public class KitMystic extends Kit {
 					ent.remove();
 
 		cat.setVelocity(loc.getDirection().multiply(1D));
-		p.getWorld().playSound(loc, Sound.ENTITY_CAT_AMBIENT, 0, 0);
+		p.getWorld().playSound(loc, Sound.CAT_MEOW, 0, 0);
 		
 		Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
 			Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(cat.getLocation(), 4);

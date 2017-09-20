@@ -8,7 +8,6 @@ import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -115,7 +114,7 @@ public class KitMedic extends Kit {
 		int level = getLevel(p);
 		if (!addCooldown(p, "Shears", 4, false))
 			return;
-		target.setHealth(target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+		target.setHealth(target.getMaxHealth());
 		p.sendMessage("§c" + target.getName() + " got healed.");
 		target.sendMessage("§cHealed!");
 	}

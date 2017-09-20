@@ -79,7 +79,7 @@ public class KitWolfPack extends Kit {
 		int wolfAmount = 2;
 		for (int i = 0 ; i < wolfAmount ; i++) {
 			Wolf wolf = (Wolf) p.getWorld().spawnEntity(p.getLocation(), EntityType.WOLF);
-			wolf.setAI(true);
+			// wolf.setAI(true); // <- 1.11
 			wolf.setAngry(true);
 			wolf.setCustomName(p.getName() + "'s" + " wolf");
 			wolf.setOwner(p);

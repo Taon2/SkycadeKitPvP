@@ -77,7 +77,7 @@ public class KitBarbarian extends Kit {
 				damagee.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
 			damagee.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 0));
 			damagee.getWorld().playEffect(damagee.getLocation(), Effect.FLAME, 1);
-			damagee.getWorld().playSound(damagee.getLocation(), Sound.ENTITY_ZOMBIE_PIG_ANGRY, 1, 1);
+			damagee.getWorld().playSound(damagee.getLocation(), Sound.ZOMBIE_PIG_ANGRY, 1, 1);
 			shootParticlesFromLoc(damagee, ParticleEffect.FLAME, 500, 0.3F);
 		}
 	}

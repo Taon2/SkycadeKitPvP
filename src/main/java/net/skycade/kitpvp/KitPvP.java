@@ -20,7 +20,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -170,7 +169,7 @@ public class KitPvP extends SkycadePlugin {
     // Not the best place for this method..
     public void respawn(Player p) {
         Bukkit.getScheduler().runTaskLater(this, () -> UtilPlayer.reset(p), 1);
-        p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+        p.setHealth(p.getMaxHealth());
         p.setVelocity(new Vector(0, 0, 0));
         p.setGameMode(GameMode.SURVIVAL);
         p.teleport(spawnLocation);

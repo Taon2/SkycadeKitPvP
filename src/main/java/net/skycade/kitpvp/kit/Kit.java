@@ -1,8 +1,8 @@
 package net.skycade.kitpvp.kit;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.server.v1_11_R1.EntityPlayer;
-import net.minecraft.server.v1_11_R1.PlayerInteractManager;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.PlayerInteractManager;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
@@ -14,9 +14,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

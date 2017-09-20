@@ -1,6 +1,6 @@
 package net.skycade.kitpvp.coreclasses.utils;
 
-import net.minecraft.server.v1_11_R1.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;

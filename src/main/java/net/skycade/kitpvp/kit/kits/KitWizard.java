@@ -90,7 +90,7 @@ public class KitWizard extends Kit {
 			p.getLocation().setDirection(dir);
 			p.sendMessage(ChatColor.DARK_PURPLE + "Woosh!");
 			p.getWorld().playEffect(p.getLocation(), Effect.ENDER_SIGNAL, 1);
-			p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1, 1);
+			p.getWorld().playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1, 1);
 
 		} else if (item.getType() == Material.STICK) {
 			if (rodUse.contains(p.getUniqueId()))
