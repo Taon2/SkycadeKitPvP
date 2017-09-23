@@ -13,6 +13,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -24,6 +25,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerListeners implements Listener {
 
@@ -85,16 +87,27 @@ public class PlayerListeners implements Listener {
                 e.setCancelled(true);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void on(PlayerTeleportEvent e) {
         if (!plugin.getSpawnRegion().contains(e.getTo()) || plugin.getSpawnRegion().contains(e.getFrom())) return;
-        resetKitAndKS(e.getPlayer());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!e.isCancelled()) resetKitAndKS(e.getPlayer());
+            }
+        }.runTaskLater(plugin, 2);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void on(PlayerMoveEvent e) {
+        if (e.getFrom().getBlock().equals(e.getTo().getBlock())) return;
         if (!plugin.getSpawnRegion().contains(e.getTo()) || plugin.getSpawnRegion().contains(e.getFrom())) return;
-        resetKitAndKS(e.getPlayer());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!e.isCancelled()) resetKitAndKS(e.getPlayer());
+            }
+        }.runTaskLater(plugin, 2);
     }
 
     public void resetKitAndKS(Player p) {
