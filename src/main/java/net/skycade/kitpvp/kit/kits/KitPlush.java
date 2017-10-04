@@ -47,6 +47,8 @@ public class KitPlush extends Kit {
 		defaultsMap.put("armor.boots.material", "LEATHER");
 		defaultsMap.put("armor.boots.enchantments.durability", 5);
 
+		defaultsMap.put("ability.jump-power", 1d);
+
 		setConfigDefaults(defaultsMap);
 
 		if (getConfig().getString("kit.icon.material") != null) {
@@ -118,7 +120,7 @@ public class KitPlush extends Kit {
 					target.setVelocity(new Vector(0, 2.3, 0));
 				} else { */
 					target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 3));
-					target.setVelocity(new Vector(0, 2.5, 0));
+					target.setVelocity(new Vector(0, getConfig().getDouble("ability.jump-power"), 0));
 				//}
 			});
 			

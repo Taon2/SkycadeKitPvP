@@ -96,7 +96,6 @@ public class KitFrosty extends Kit {
 
 	public void onSnowballUse(Player shooter, ProjectileLaunchEvent e) {
 		if (snowballCooldown.contains(shooter)) {
-			shooter.getItemInHand().setAmount(shooter.getItemInHand().getAmount() + 1);
 			e.setCancelled(true);
 			return;
 		}
