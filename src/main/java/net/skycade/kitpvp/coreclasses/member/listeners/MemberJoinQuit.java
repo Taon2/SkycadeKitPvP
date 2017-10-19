@@ -60,7 +60,7 @@ public class MemberJoinQuit implements Listener {
     @EventHandler
     public void on(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        Member member = memberManager.getMember(p);
+        Member member = memberManager.getMember(p, false);
 
         // Update name
         if (!p.getName().equals(member.getName()))
@@ -84,7 +84,7 @@ public class MemberJoinQuit implements Listener {
 
         if (member != null) {
             Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () ->
-                            KitPvPDB.getInstance().setMemberData(member.getUUID(), member.getName(), member.getPreviousNames(), member.getKills(), member.getHighestStreak(), member.getDeaths(), member.getProperties()));
+                            KitPvPDB.getInstance().setMemberData(member));
             /* Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () ->
                 memberManager.getMembers().remove(member.getUUID()) // todo: remove
             ); */

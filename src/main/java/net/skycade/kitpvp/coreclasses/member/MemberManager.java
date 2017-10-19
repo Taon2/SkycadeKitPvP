@@ -85,15 +85,14 @@ public class MemberManager extends Module {
     public void update(Member member) {
         new BukkitRunnable() {
             public void run() {
-                KitPvPDB.getInstance().setMemberData(member.getUUID(), member.getName(), member.getPreviousNames(), member.getKills(), member.getHighestStreak(), member.getDeaths(), member.getProperties());
+                KitPvPDB.getInstance().setMemberData(member);
             }
         }.runTaskAsynchronously(getPlugin());
     }
 
     public void onDisable() {
-        for (Map.Entry<UUID, Member> entry : members.entrySet()) {
-            Member member = entry.getValue();
-            KitPvPDB.getInstance().setMemberDataSync(entry.getKey(), member.getName(), member.getPreviousNames(), member.getKills(), member.getHighestStreak(), member.getDeaths(), member.getProperties());
+        for (Member member : members.values()) {
+            KitPvPDB.getInstance().setMemberDataSync(member);
         }
     }
 

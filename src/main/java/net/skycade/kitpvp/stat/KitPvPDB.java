@@ -5,6 +5,7 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
+import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -26,7 +27,6 @@ public class KitPvPDB {
     private static KitPvPDB instance;
     private final String kitPvPTable;
     private final String previousNamesTable;
-    private final String propertiesTable;
     private final String host;
     private final int port;
     private final String databaseName;
@@ -70,7 +70,6 @@ public class KitPvPDB {
             KitPvP.getInstance().getLogger().log(Level.SEVERE, "An error occurred while trying to create a database log file.", e);
         }
 
-
         host = KitPvP.getInstance().getConfig().getString("database.host");
         port = KitPvP.getInstance().getConfig().getInt("database.port");
         databaseName = KitPvP.getInstance().getConfig().getString("database.name");
@@ -78,7 +77,6 @@ public class KitPvPDB {
         password = KitPvP.getInstance().getConfig().getString("database.password");
         kitPvPTable = KitPvP.getInstance().getConfig().getString("database.kitpvp-table");
         previousNamesTable = KitPvP.getInstance().getConfig().getString("database.previous-names-table");
-        propertiesTable = KitPvP.getInstance().getConfig().getString("database.properties-table");
 
         try {
             openConnection();
@@ -117,8 +115,30 @@ public class KitPvPDB {
             if (!result.next()) return null;
 
             Member member = new Member(uuid, result.getString("PlayerName"));
-            member.setDeaths(result.getInt("Deaths"));
-            member.setHighestStreak(result.getInt("HighestStreak"));
+            KitPvPStats stats = KitPvP.getInstance().getStats(member);
+            stats.setKills(result.getInt("Kills"));
+            stats.setHighestStreak(result.getInt("HighestStreak"));
+            stats.setDeaths(result.getInt("Deaths"));
+            stats.setActiveKit(KitType.valueOf(result.getString("CurrentKit")));
+
+            try {
+                JSONObject kitsJson = (JSONObject) new JSONParser().parse(result.getString("Kits"));
+                for (Object o : kitsJson.keySet()) {
+                    KitType type = KitType.valueOf((String) o);
+                    JSONObject obj = (JSONObject) kitsJson.get(o);
+                    Long level = (Long) obj.get("level");
+                    KitData kitData = new KitData(type);
+                    kitData.setLevel(level.intValue());
+                    stats.getKits().put(type, kitData);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            stats.setCoins(result.getInt("Coins"));
+            stats.setAssists(result.getInt("Assists"));
+            stats.setKitPreference(KitType.valueOf(result.getString("ChosenKit")));
+            stats.setCrateKeys(result.getInt("CrateKeys"));
 
             PreparedStatement previousNamesStatement = connection.prepareStatement("SELECT * FROM " + previousNamesTable + " WHERE UUID = ?");
             previousNamesStatement.setString(1, uuid.toString());
@@ -127,35 +147,6 @@ public class KitPvPDB {
                 member.addPreviousName(previousNamesResults.getString("PreviousName"));
             }
 
-            PreparedStatement propertiesStatement = connection.prepareStatement("SELECT * FROM " + propertiesTable + " WHERE UUID = ?");
-            propertiesStatement.setString(1, uuid.toString());
-            ResultSet propertiesResults = propertiesStatement.executeQuery();
-            while (propertiesResults.next()) {
-                String propertyKey = propertiesResults.getString("PropertyKey");
-                String propertyValue = propertiesResults.getString("PropertyValue");
-                try {
-                    member.getProperties().put(propertyKey, Integer.parseInt(propertyValue));
-                } catch (NumberFormatException e1) {
-                    try {
-                        JSONObject json = (JSONObject) new JSONParser().parse(propertyValue); // {"KIT": {"level": 1}, "SOMETHING": {"level: 2}}
-                        Map<String, Map<String, Integer>> subProperties = new HashMap<>(); // final
-
-                        for (Object entry : json.entrySet()) {
-                            Map.Entry<String, JSONObject> jsonEntry = (Map.Entry<String, JSONObject>) entry; // "KIT": {"level": 1}
-                            String kitName = jsonEntry.getKey(); // "KIT"
-                            Map<String, Long> kitMap = jsonEntry.getValue(); // {"level": 1}
-                            Map<String, Integer> conversion = new HashMap<>();
-                            for (Map.Entry<String, Long> entry2 : kitMap.entrySet()) {
-                                conversion.put(entry2.getKey(), entry2.getValue().intValue());
-                            }
-                            subProperties.put(kitName, conversion);
-                        }
-                        member.getProperties().put(propertyKey, subProperties);
-                    } catch (ParseException e) {
-                        member.getProperties().put(propertyKey, propertyValue);
-                    }
-                }
-            }
             MemberManager.getInstance().getMembers().put(uuid, member);
             return member;
         } catch (SQLException e) {
@@ -187,28 +178,26 @@ public class KitPvPDB {
         }
     }
 
-    public void setMemberDataSync(UUID uuid, String name, List<String> previousNames, Integer kills, Integer highestStreak, Integer death, Map<String, Object> properties) {
-        executeUpdate(uuid, name, previousNames, kills, highestStreak, death, properties);
+    public void setMemberDataSync(Member member) {
+        executeUpdate(member);
     }
 
-    public void setMemberData(UUID uuid, String name, List<String> previousNames, Integer kills, Integer highestStreak, Integer death, Map<String, Object> properties) {
-        Map<String, Object> propertiesCopy = new HashMap<>(properties);
-        List<String> previousNamesCopy = new ArrayList<>(previousNames);
+    public void setMemberData(Member member) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                executeUpdate(uuid, name, previousNamesCopy, kills, highestStreak, death, propertiesCopy);
+                executeUpdate(member);
             }
         }.runTaskAsynchronously(KitPvP.getInstance());
     }
 
     public Map<String, Object> getHighestKs() throws SQLException {
         Statement statement = connection.createStatement();
-        ResultSet results = statement.executeQuery("SELECT UUID, PropertyValue FROM " + propertiesTable + " WHERE PropertyKey = 'highest_streak' ORDER BY PropertyValue * 1 DESC LIMIT 0, 1");
+        ResultSet results = statement.executeQuery("SELECT UUID, HighestStreak FROM " + kitPvPTable + " ORDER BY HighestStreak * 1 DESC LIMIT 0, 1");
         Map<String, Object> map = new HashMap<>();
         if (results.next()) {
             map.put("uuid", results.getString("UUID"));
-            map.put("score", Integer.parseInt(results.getString("PropertyValue")));
+            map.put("score", results.getInt("HighestStreak"));
         }
         return map;
     }
@@ -225,72 +214,51 @@ public class KitPvPDB {
         }
     }
 
-    public synchronized void executeUpdate(UUID uuid, String name, List<String> previousNames, Integer kills, Integer highestStreak, Integer death, Map<String, Object> properties) {
+    public synchronized void executeUpdate(Member member) {
         int tid = ++transactionId;
-        log(tid, "Saving data for " + uuid.toString() + ":");
-        log(tid, "Name: " + name + ", Previous names: " + Joiner.on(", ").join(previousNames));
-        log(tid, "Kills: " + kills + ", Highest streak: " + highestStreak + ", Deaths: " + death);
-        log(tid, "Other properties (JSON): " + new JSONObject(properties).toJSONString());
+        log(tid, "Saving data for " + member.getUUID().toString() + ":");
+        log(tid, "Name: " + member.getName() + ", Previous names: " + Joiner.on(", ").join(member.getPreviousNames()));
+        log(tid, "Kills: " + member.getKills() + ", Highest streak: " + member.getHighestStreak() + ", Deaths: " + member.getDeaths());
         try {
+            KitPvPStats stats = KitPvP.getInstance().getStats(member);
             if (connection == null || connection.isClosed()) openConnection();
             String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, Assists, ChosenKit, CrateKeys) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), Coins = VALUES(Coins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), CrateKeys = VALUES(CrateKeys)";
             log(tid, "Query: " + query);
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, uuid.toString());
-            statement.setString(2, name);
+            statement.setString(1, member.getUUID().toString());
+            statement.setString(2, member.getName());
 
-            statement.setInt(3, kills);
-            statement.setInt(4, highestStreak);
-            statement.setInt(5, death);
+            statement.setInt(3, member.getKills());
+            statement.setInt(4, member.getHighestStreak());
+            statement.setInt(5, member.getDeaths());
 
-            statement.setFloat(6, (float) UtilMath.getKDR(kills, death));
-            statement.setString(7, properties.containsKey("kit") ? (String) properties.get("kit") : "DEFAULT");
-            statement.setString(8, new JSONObject((Map<String, Map<String, Integer>>) properties.get("kits")).toJSONString());
+            statement.setFloat(6, (float) UtilMath.getKDR(member.getKills(), member.getDeaths()));
+            statement.setString(7, stats.getActiveKit().getAlias());
 
-            statement.setInt(9, properties.containsKey("coins") ? (int) properties.get("coins"): 0);
-            statement.setInt(10, properties.containsKey("assists") ? (int) properties.get("assists") : 0);
-            statement.setString(11, properties.containsKey("kit_preference") ? (String) properties.get("kit_preference") : "DEFAULT");
-            statement.setInt(12, properties.containsKey("keys") ? (int) properties.get("keys") : 0);
+            Map<String, Map<String, Integer>> kitMap = new HashMap<>();
+            for (Map.Entry<KitType, KitData> entry : stats.getKits().entrySet()) {
+                Map<String, Integer> map = new HashMap<>();
+                map.put("level", entry.getValue().getLevel());
+                kitMap.put(entry.getKey().getAlias(), map);
+            }
+
+            statement.setString(8, new JSONObject(kitMap).toJSONString());
+
+            statement.setInt(9, stats.getCoins());
+            statement.setInt(10, stats.getAssists());
+            statement.setString(11, stats.getKitPreference().getAlias());
+            statement.setInt(12, stats.getCrateKeys());
 
             statement.executeUpdate();
             log(tid, "Executed.");
 
-            for (String previousName : previousNames) {
+            for (String previousName : member.getPreviousNames()) {
                 PreparedStatement namesStatement = connection.prepareStatement("INSERT INTO " + previousNamesTable + " (PreviousName, UUID) VALUES (?, ?) ON DUPLICATE KEY UPDATE UUID = VALUES(UUID)");
                 namesStatement.setString(1, previousName);
-                namesStatement.setString(2, uuid.toString());
+                namesStatement.setString(2, member.getUUID().toString());
                 namesStatement.executeUpdate();
             }
             log(tid, "Previous names saved.");
-
-            for (Map.Entry<String, Object> entry : properties.entrySet()) {
-                PreparedStatement propertiesQuery = connection.prepareStatement("SELECT * FROM " + propertiesTable + " WHERE UUID = ? AND PropertyKey = ?");
-                propertiesQuery.setString(1, uuid.toString());
-                propertiesQuery.setString(2, entry.getKey());
-                ResultSet results = propertiesQuery.executeQuery();
-                if (results.next()) {
-                    PreparedStatement propertiesStatement = connection.prepareStatement("UPDATE " + propertiesTable + " SET PropertyValue = ? WHERE UUID = ? AND PropertyKey = ?");
-                    if (entry.getValue() instanceof Map) {
-                        propertiesStatement.setString(1, new JSONObject((Map) entry.getValue()).toJSONString());
-                    } else {
-                        propertiesStatement.setString(1, entry.getValue().toString());
-                    }
-                    propertiesStatement.setString(2, uuid.toString());
-                    propertiesStatement.setString(3, entry.getKey());
-                    propertiesStatement.executeUpdate();
-                } else {
-                    PreparedStatement propertiesStatement = connection.prepareStatement("INSERT INTO " + propertiesTable + " (UUID, PropertyKey, PropertyValue) VALUES (?, ?, ?)");
-                    propertiesStatement.setString(1, uuid.toString());
-                    propertiesStatement.setString(2, entry.getKey());
-                    if (entry.getValue() instanceof Map) {
-                        propertiesStatement.setString(3, new JSONObject((Map) entry.getValue()).toJSONString());
-                    } else {
-                        propertiesStatement.setString(3, entry.getValue().toString());
-                    }
-                    propertiesStatement.executeUpdate();
-                }
-                log(tid, "Property '" + entry.getKey() + "' saved with value: " + entry.getValue().toString() + ".");
-            }
         } catch (SQLException e) {
             if (logger != null) {
                 LogRecord lr = new LogRecord(Level.SEVERE, "An error occurred for #" + tid + ":");
