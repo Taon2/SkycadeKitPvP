@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,14 +70,17 @@ public class PlayerInteractListener implements Listener {
             if (p.getHealth() < maxHealth) {
                 if (p.getHealth() < maxHealth - 7) {
                     p.setHealth(p.getHealth() + 7);
-                    p.getInventory().getItemInHand().setAmount(0);
-                    addBowl(p);
                 } else {
                     p.setHealth(maxHealth);
-                    p.getInventory().getItemInHand().setAmount(0);
-                    addBowl(p);
                 }
-
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        e.getPlayer().getInventory().setItem(e.getPlayer().getInventory().getHeldItemSlot(), null);
+                        p.updateInventory();
+                    }
+                }.runTask(plugin);
+                addBowl(p);
             }
             return;
         }

@@ -80,8 +80,6 @@ public class PlayerDamageListener implements Listener {
 
         // Increase highest killstreak
         int diedStreak = diedStats.getStreak();
-        if (diedStreak > diedStats.getHighestStreak())
-            diedStats.setHighestStreak(diedStats.getStreak());
 
         // Give extra xp for a high ks.
         if (diedStreak > 5) {

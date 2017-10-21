@@ -233,20 +233,20 @@ public class KitPvPDB {
             statement.setInt(5, member.getDeaths());
 
             statement.setFloat(6, (float) UtilMath.getKDR(member.getKills(), member.getDeaths()));
-            statement.setString(7, stats.getActiveKit().getAlias());
+            statement.setString(7, stats.getActiveKit().name());
 
             Map<String, Map<String, Integer>> kitMap = new HashMap<>();
             for (Map.Entry<KitType, KitData> entry : stats.getKits().entrySet()) {
                 Map<String, Integer> map = new HashMap<>();
                 map.put("level", entry.getValue().getLevel());
-                kitMap.put(entry.getKey().getAlias(), map);
+                kitMap.put(entry.getKey().name(), map);
             }
 
             statement.setString(8, new JSONObject(kitMap).toJSONString());
 
             statement.setInt(9, stats.getCoins());
             statement.setInt(10, stats.getAssists());
-            statement.setString(11, stats.getKitPreference().getAlias());
+            statement.setString(11, stats.getKitPreference().name());
             statement.setInt(12, stats.getCrateKeys());
 
             statement.executeUpdate();
