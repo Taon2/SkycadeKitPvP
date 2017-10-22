@@ -73,14 +73,16 @@ public class PlayerInteractListener implements Listener {
                 } else {
                     p.setHealth(maxHealth);
                 }
+                //e.getPlayer().getInventory().setItem(e.getPlayer().getInventory().getHeldItemSlot(), new ItemStack(Material.AIR, 1));
+                final int heldItemSlot = e.getPlayer().getInventory().getHeldItemSlot();
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        e.getPlayer().getInventory().setItem(e.getPlayer().getInventory().getHeldItemSlot(), null);
+                        e.getPlayer().getInventory().clear(heldItemSlot);
                         p.updateInventory();
+                        addBowl(p);
                     }
-                }.runTask(plugin);
-                addBowl(p);
+                }.runTaskLater(plugin, 1L);
             }
             return;
         }
@@ -118,6 +120,8 @@ public class PlayerInteractListener implements Listener {
             inv.setItem(inv.first(Material.BOWL), new ItemStack(Material.BOWL, bowl.getAmount() + 1));
         } else
             inv.setItem(17, new ItemStack(Material.BOWL));
+
+        p.updateInventory();
     }
 
     @EventHandler

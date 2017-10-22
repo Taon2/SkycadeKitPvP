@@ -119,7 +119,8 @@ public class KitPvPDB {
             stats.setKills(result.getInt("Kills"));
             stats.setHighestStreak(result.getInt("HighestStreak"));
             stats.setDeaths(result.getInt("Deaths"));
-            stats.setActiveKit(KitType.valueOf(result.getString("CurrentKit")));
+            String currentKit = result.getString("CurrentKit");
+            stats.setActiveKit(currentKit == null ? KitType.DEFAULT : KitType.valueOf(currentKit));
 
             try {
                 JSONObject kitsJson = (JSONObject) new JSONParser().parse(result.getString("Kits"));

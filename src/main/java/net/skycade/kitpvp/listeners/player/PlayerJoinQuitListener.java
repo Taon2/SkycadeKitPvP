@@ -44,6 +44,10 @@ public class PlayerJoinQuitListener implements Listener {
         if (!stats.getActiveKit().getKit().isEnabled())
             stats.setActiveKit(KitType.DEFAULT);
 
+        if (plugin.isInSpawnArea(p)) {
+            stats.getActiveKit().getKit().applyKit(p);
+        }
+
         //Unlock KitMaster
         if (KitPvP.getInstance().getAvailableKits() - 1 == stats.getKits().size()) {
             p.sendMessage("§7You unlocked §aall §7the kits! You unlocked the §aKitMaster §7kit.");
