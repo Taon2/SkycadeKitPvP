@@ -107,9 +107,9 @@ public class KitPvP extends SkycadePlugin {
     @Override
     public void onDisable() {
         //Bukkit.getOnlinePlayers().forEach(p -> p.teleport(getSpawnpoint()));
-        for (Member member : MemberManager.getInstance().getMembers().values()) {
+        /*for (Member member : MemberManager.getInstance().getMembers().values()) {
             KitPvPDB.getInstance().setMemberDataSync(member);
-        }
+        }*/
         KitPvPDB.getInstance().closeConnection();
         rotationManager.update();
     }
