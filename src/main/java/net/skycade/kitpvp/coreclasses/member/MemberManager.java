@@ -83,11 +83,17 @@ public class MemberManager extends Module {
     }
 
     public void update(Member member) {
+        update(member, false);
+    }
+
+    public void update(Member member, boolean unload) {
         new BukkitRunnable() {
             public void run() {
                 KitPvPDB.getInstance().setMemberData(member);
             }
         }.runTaskAsynchronously(getPlugin());
+
+        if (unload) members.remove(member.getUUID());
     }
 
     public void onDisable() {

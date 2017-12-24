@@ -204,6 +204,7 @@ public class KitPvPDB {
     }
 
     public synchronized void closeConnection() {
+
         try {
             connection.close();
             int tid = transactionId;

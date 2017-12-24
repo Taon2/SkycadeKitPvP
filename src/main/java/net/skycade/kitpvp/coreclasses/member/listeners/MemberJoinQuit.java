@@ -1,18 +1,14 @@
 package net.skycade.kitpvp.coreclasses.member.listeners;
 
-import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
-import net.skycade.kitpvp.stat.KitPvPDB;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,20 +56,16 @@ public class MemberJoinQuit implements Listener {
     @EventHandler
     public void on(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        Member member = memberManager.getMember(p, false);
+        Member member = memberManager.getMember(p, true);
+
+        if (member == null) {
+            e.getPlayer().kickPlayer("§cSorry, your data was not loaded correctly! Please re-join!");
+            return;
+        }
 
         // Update name
         if (!p.getName().equals(member.getName()))
             member.setName(p.getName());
-
-        // This is because the Mongo doesn't update fast enough on leave to be
-        // up to date by the time they change server. Its not pretty, but it
-        // works.
-        new BukkitRunnable() {
-            public void run() {
-                member.update();
-            }
-        }.runTaskLaterAsynchronously(KitPvP.getInstance(), 10);
     }
 
     @EventHandler
@@ -83,10 +75,9 @@ public class MemberJoinQuit implements Listener {
         UtilPlayer.removeAttachment(e.getPlayer());
 
         if (member != null) {
-            Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () ->
-                            KitPvPDB.getInstance().setMemberData(member));
+            MemberManager.getInstance().update(member, true);
             /* Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () ->
-                memberManager.getMembers().remove(member.getUUID()) // todo: remove
+                memberManager.getMembers().remove(member.getUUID())
             ); */
         } else
             e.setQuitMessage(null);
