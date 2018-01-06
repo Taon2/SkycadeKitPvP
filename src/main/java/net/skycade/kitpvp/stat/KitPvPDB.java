@@ -83,8 +83,7 @@ public class KitPvPDB {
             keepAlive = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    try {
-                        Statement statement = connection.createStatement();
+                    try (Statement statement = connection.createStatement()) {
                         statement.executeQuery("SELECT 1;");
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
@@ -93,35 +92,37 @@ public class KitPvPDB {
             };
             keepAlive.runTaskTimerAsynchronously(KitPvP.getInstance(), 10L, 80L);
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             KitPvP.getInstance().getLogger().log(Level.SEVERE, "Coulnd't connect to mysql.", e);
         }
     }
 
-    private synchronized void openConnection() throws SQLException {
+    private synchronized void openConnection() {
         int tid = transactionId;
         ++transactionId;
-        connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?useSSL=true&autoReconnect=true", username, password);
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?useSSL=true&autoReconnect=true", username, password);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         log(tid, "Connection to database established.");
     }
 
     public Member getMemberData(UUID uuid) {
-        try {
-            if (connection == null || connection.isClosed()) openConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + kitPvPTable + " WHERE UUID = ?");
+        String sql = "SELECT * FROM " + kitPvPTable + " WHERE UUID = ?";
+        Member member;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, uuid.toString());
             statement.executeQuery();
             ResultSet result = statement.getResultSet();
             if (!result.next()) return null;
-
-            Member member = new Member(uuid, result.getString("PlayerName"));
+            member = new Member(uuid, result.getString("PlayerName"));
             KitPvPStats stats = KitPvP.getInstance().getStats(member);
             stats.setKills(result.getInt("Kills"));
             stats.setHighestStreak(result.getInt("HighestStreak"));
             stats.setDeaths(result.getInt("Deaths"));
             String currentKit = result.getString("CurrentKit");
             stats.setActiveKit(currentKit == null ? KitType.DEFAULT : KitType.valueOf(currentKit));
-
             try {
                 JSONObject kitsJson = (JSONObject) new JSONParser().parse(result.getString("Kits"));
                 for (Object o : kitsJson.keySet()) {
@@ -141,24 +142,29 @@ public class KitPvPDB {
             stats.setKitPreference(KitType.valueOf(result.getString("ChosenKit")));
             stats.setCrateKeys(result.getInt("CrateKeys"));
 
-            PreparedStatement previousNamesStatement = connection.prepareStatement("SELECT * FROM " + previousNamesTable + " WHERE UUID = ?");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        String previousNamesSql = "SELECT * FROM " + previousNamesTable + " WHERE UUID = ?";
+        try (PreparedStatement previousNamesStatement = connection.prepareStatement(previousNamesSql)) {
             previousNamesStatement.setString(1, uuid.toString());
             ResultSet previousNamesResults = previousNamesStatement.executeQuery();
             while (previousNamesResults.next()) {
                 member.addPreviousName(previousNamesResults.getString("PreviousName"));
             }
-
-            MemberManager.getInstance().getMembers().put(uuid, member);
-            return member;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        MemberManager.getInstance().getMembers().put(uuid, member);
+        return member;
     }
 
     public ResultSet getAllMembers() {
-        try {
-            if (connection == null || connection.isClosed()) openConnection();
-            Statement statement = connection.createStatement();
+        Connection connection = getConnection();
+        try (Statement statement = connection.createStatement()) {
             return statement.executeQuery("SELECT * FROM " + kitPvPTable);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -166,9 +172,9 @@ public class KitPvPDB {
     }
 
     public UUID getUUIDForName(String playerName) {
-        try {
-            if (connection == null || connection.isClosed()) openConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT UUID FROM " + previousNamesTable + " WHERE PlayerName = ?");
+        Connection connection = getConnection();
+        String sql = "SELECT UUID FROM " + previousNamesTable + " WHERE PlayerName = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, playerName);
             ResultSet results = statement.executeQuery();
             if (results.next())
@@ -192,15 +198,18 @@ public class KitPvPDB {
         }.runTaskAsynchronously(KitPvP.getInstance());
     }
 
-    public Map<String, Object> getHighestKs() throws SQLException {
-        Statement statement = connection.createStatement();
-        ResultSet results = statement.executeQuery("SELECT UUID, HighestStreak FROM " + kitPvPTable + " ORDER BY HighestStreak * 1 DESC LIMIT 0, 1");
-        Map<String, Object> map = new HashMap<>();
-        if (results.next()) {
-            map.put("uuid", results.getString("UUID"));
-            map.put("score", results.getInt("HighestStreak"));
+    public Map<String, Object> getHighestKs() {
+        try (Statement statement = connection.createStatement()) {
+            ResultSet results = statement.executeQuery("SELECT UUID, HighestStreak FROM " + kitPvPTable + " ORDER BY HighestStreak * 1 DESC LIMIT 0, 1");
+            Map<String, Object> map = new HashMap<>();
+            if (results.next()) {
+                map.put("uuid", results.getString("UUID"));
+                map.put("score", results.getInt("HighestStreak"));
+            }
+            return map;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return map;
     }
 
     public synchronized void closeConnection() {
@@ -221,12 +230,11 @@ public class KitPvPDB {
         log(tid, "Saving data for " + member.getUUID().toString() + ":");
         log(tid, "Name: " + member.getName() + ", Previous names: " + Joiner.on(", ").join(member.getPreviousNames()));
         log(tid, "Kills: " + member.getKills() + ", Highest streak: " + member.getHighestStreak() + ", Deaths: " + member.getDeaths());
-        try {
+        Connection connection = getConnection();
+        String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, Assists, ChosenKit, CrateKeys) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), Coins = VALUES(Coins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), CrateKeys = VALUES(CrateKeys)";
+        log(tid, "Query: " + query);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
             KitPvPStats stats = KitPvP.getInstance().getStats(member);
-            if (connection == null || connection.isClosed()) openConnection();
-            String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, Assists, ChosenKit, CrateKeys) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), Coins = VALUES(Coins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), CrateKeys = VALUES(CrateKeys)";
-            log(tid, "Query: " + query);
-            PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, member.getUUID().toString());
             statement.setString(2, member.getName());
 
@@ -255,10 +263,14 @@ public class KitPvPDB {
             log(tid, "Executed.");
 
             for (String previousName : member.getPreviousNames()) {
-                PreparedStatement namesStatement = connection.prepareStatement("INSERT INTO " + previousNamesTable + " (PreviousName, UUID) VALUES (?, ?) ON DUPLICATE KEY UPDATE UUID = VALUES(UUID)");
-                namesStatement.setString(1, previousName);
-                namesStatement.setString(2, member.getUUID().toString());
-                namesStatement.executeUpdate();
+                String sql = "INSERT INTO " + previousNamesTable + " (PreviousName, UUID) VALUES (?, ?) ON DUPLICATE KEY UPDATE UUID = VALUES(UUID)";
+                try (PreparedStatement namesStatement = connection.prepareStatement(sql)) {
+                    namesStatement.setString(1, previousName);
+                    namesStatement.setString(2, member.getUUID().toString());
+                    namesStatement.executeUpdate();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
             log(tid, "Previous names saved.");
         } catch (SQLException e) {
@@ -278,4 +290,12 @@ public class KitPvPDB {
         return instance;
     }
 
+    public Connection getConnection() {
+        try {
+            if (connection == null || connection.isClosed()) openConnection();
+            return connection;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
