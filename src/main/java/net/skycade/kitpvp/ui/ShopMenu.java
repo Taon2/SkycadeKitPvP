@@ -122,6 +122,8 @@ public class ShopMenu implements Listener {
             if (kitType == null)
                 return;
             Kit kit = kitType.getKit();
+            if (stats.getCoins() - kit.getPrice() < 0)
+                return;
 
             member.message("§7You bought §a" + kit.getName() + "§7 for §a" + kit.getPrice() + "§7 coins.");
             stats.addKit(kitType);
