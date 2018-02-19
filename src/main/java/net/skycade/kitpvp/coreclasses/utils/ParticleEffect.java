@@ -443,7 +443,7 @@ public enum ParticleEffect {
 
 	/**
 	 * Determine if this particle effect has a specific property
-	 *
+	 * @param property ParticleProperty to check for
 	 * @return Whether it has the property or not
 	 */
 	public boolean hasProperty(ParticleProperty property) {
@@ -629,7 +629,7 @@ public enum ParticleEffect {
 	 * @throws ParticleVersionException If the particle effect is not supported by the server version
 	 * @throws ParticleDataException If the particle effect requires additional data
 	 * @throws IllegalArgumentException If the particle effect is not directional or if it requires water and none is at the center location
-	 * @see ParticlePacket#ParticlePacket(ParticleEffect, Vector, float, boolean, ParticleData)
+	 * @see ParticleEffect.ParticlePacket#ParticlePacket(ParticleEffect, Vector, float, boolean, ParticleData)
 	 * @see ParticlePacket#sendTo(Location, double)
 	 */
 	public void display(Vector direction, float speed, Location center, double range) throws ParticleVersionException, ParticleDataException, IllegalArgumentException {
