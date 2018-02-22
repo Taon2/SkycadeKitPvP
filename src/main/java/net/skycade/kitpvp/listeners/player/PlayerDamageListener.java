@@ -65,7 +65,8 @@ public class PlayerDamageListener implements Listener {
     @EventHandler
     public void on(EntityTargetLivingEntityEvent event) {
         if (!(event.getEntity() instanceof Golem)) return;
-        if (event.getEntity().getName().equalsIgnoreCase(event.getTarget().getName() + " golem")) event.setCancelled(true);
+        if (event.getEntity().getName().equalsIgnoreCase(event.getTarget().getName() + " golem"))
+            event.setCancelled(true);
     }
 
     @EventHandler
@@ -113,8 +114,9 @@ public class PlayerDamageListener implements Listener {
         if (killer == null || killer.equals(died))
             return;
 
-
         Member killerMem = MemberManager.getInstance().getMember(killer);
+        diedMem.setLastKiller(killer.getUniqueId());
+
         diedMem.message("You got killed by " + killerMem.getName() + "§7.");
         killerMem.message("You killed " + diedMem.getName() + "§7.");
 
@@ -140,7 +142,7 @@ public class PlayerDamageListener implements Listener {
         stats.setStreak(plugin.getStats(killer).getStreak() + 1);
 
         int base = KitPvP.getInstance().getConfig().getInt("kill-credits");
-        int extra = (int) Math.ceil(base * Math.pow((100 + KitPvP.getInstance().getConfig().getInt("kill-bonus-percentage"))/((double) 100), stats.getStreak() - 1));
+        int extra = (int) Math.ceil(base * Math.pow((100 + KitPvP.getInstance().getConfig().getInt("kill-bonus-percentage")) / ((double) 100), stats.getStreak() - 1));
 
         double modifier = KitPvP.getInstance().getConfig().getDouble("credits-modifier");
         int finalReward = (int) Math.ceil(modifier / (double) 100 * (extra + killstreakCredits));
@@ -309,6 +311,10 @@ public class PlayerDamageListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         UUID uuid = e.getPlayer().getUniqueId();
+        Member member = MemberManager.getInstance().getMember(e.getPlayer().getUniqueId(), false);
+        if (member != null) {
+            member.setLastKiller(null);
+        }
         lastDamagerMap.remove(uuid);
         killAssist.remove(uuid);
         samePlayerKill.remove(uuid);

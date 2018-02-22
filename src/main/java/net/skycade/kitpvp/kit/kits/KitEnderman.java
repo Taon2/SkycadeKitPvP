@@ -71,7 +71,7 @@ public class KitEnderman extends Kit {
         Location loc = damagee.getLocation();
 
         for (int i = 0; i < 10; i++) {
-            Location newLoc = new Location(damagee.getWorld(), loc.getX() + UtilMath.getRandom(-10, 10), loc.getY(), loc.getZ() + + UtilMath.getRandom(-10, 10));
+            Location newLoc = new Location(damagee.getWorld(), loc.getX() + UtilMath.getRandom(-10, 10), loc.getY(), loc.getZ() + +UtilMath.getRandom(-10, 10));
             if (newLoc.getBlock().getType() != Material.AIR || newLoc.add(0, 1, 0).getBlock().getType() != Material.AIR)
                 continue;
             else {
@@ -105,8 +105,8 @@ public class KitEnderman extends Kit {
         for (Player pl : targetPlayers) {
             double dis = pl.getLocation().distance(playerLoc);
             if (dis < distance) {
-               target = pl;
-               distance = dis;
+                target = pl;
+                distance = dis;
             }
         }
 

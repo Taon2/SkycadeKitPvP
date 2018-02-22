@@ -19,29 +19,29 @@ import java.util.*;
 
 public class CommandCrate extends Command<KitManager> implements Listener {
 
-	private final Map<UUID, Integer> crateCooldown = new HashMap<>();
+    private final Map<UUID, Integer> crateCooldown = new HashMap<>();
 
-	public CommandCrate(KitManager module) {
-		super(module, "Randomly unlock a new kit.", new Permission("kitpvp.default", PermissionDefault.TRUE), "crate");
-		Bukkit.getPluginManager().registerEvents(this, getModule().getPlugin());
-	}
+    public CommandCrate(KitManager module) {
+        super(module, "Randomly unlock a new kit.", new Permission("kitpvp.default", PermissionDefault.TRUE), "crate");
+        Bukkit.getPluginManager().registerEvents(this, getModule().getPlugin());
+    }
 
-	@Override
-	public void execute(Member member, String aliasUsed, String... args) {
-		KitPvPStats stats = getModule().getKitPvP().getStats(member);
-		if (crateCooldown.containsKey(member.getUUID())) {
-			if (!Recharge.recharge(member, "KitPvP Crate", crateCooldown.get(member.getUUID()))) {
-				member.message("§7You can't use the crate yet.");
-				return;
-			}
-		}
-		if (stats.getCrateKeys() <= 0) {
-			member.message("§7Not enough §akeys§7.");
-			return;
-		}
-		List<KitType> kits = new ArrayList<>();
-		int counter = 1;
-		for (KitType kit : KitType.values()) {
+    @Override
+    public void execute(Member member, String aliasUsed, String... args) {
+        KitPvPStats stats = getModule().getKitPvP().getStats(member);
+        if (crateCooldown.containsKey(member.getUUID())) {
+            if (!Recharge.recharge(member, "KitPvP Crate", crateCooldown.get(member.getUUID()))) {
+                member.message("§7You can't use the crate yet.");
+                return;
+            }
+        }
+        if (stats.getCrateKeys() <= 0) {
+            member.message("§7Not enough §akeys§7.");
+            return;
+        }
+        List<KitType> kits = new ArrayList<>();
+        int counter = 1;
+        for (KitType kit : KitType.values()) {
             if (kit != KitType.KITMASTER && kit.getKit().isEnabled() && !stats.hasKit(kit)) {
                 if (counter++ >= 54)
                     break;
@@ -49,22 +49,22 @@ public class CommandCrate extends Command<KitManager> implements Listener {
             }
         }
 
-		if (kits.isEmpty()) {
-			member.message("§7All kits are §aunlocked§7.");
-			return;
-		}
+        if (kits.isEmpty()) {
+            member.message("§7All kits are §aunlocked§7.");
+            return;
+        }
 
-		stats.setCrateKeys(stats.getCrateKeys() - 1);
-		int randomNum = UtilMath.getRandom(0, kits.size() - 1);
-		crateCooldown.put(member.getUUID(), randomNum/3);
-		CrateRunnable runnable = new CrateRunnable(randomNum, member.getPlayer(), member, kits, stats);
-		runnable.runTaskTimer(getModule().getPlugin(), 0, 7);
-	}
-	
-	@EventHandler
-	public void on(InventoryClickEvent e) {
-		if (e.getClickedInventory() != null && e.getClickedInventory().getName() != null && e.getClickedInventory().getName().equalsIgnoreCase("§aCrate"))
-			e.setCancelled(true);
-	}
+        stats.setCrateKeys(stats.getCrateKeys() - 1);
+        int randomNum = UtilMath.getRandom(0, kits.size() - 1);
+        crateCooldown.put(member.getUUID(), randomNum / 3);
+        CrateRunnable runnable = new CrateRunnable(randomNum, member.getPlayer(), member, kits, stats);
+        runnable.runTaskTimer(getModule().getPlugin(), 0, 7);
+    }
+
+    @EventHandler
+    public void on(InventoryClickEvent e) {
+        if (e.getClickedInventory() != null && e.getClickedInventory().getName() != null && e.getClickedInventory().getName().equalsIgnoreCase("§aCrate"))
+            e.setCancelled(true);
+    }
 
 }

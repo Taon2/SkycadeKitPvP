@@ -1,7 +1,7 @@
 package net.skycade.kitpvp.coreclasses.utils;
 
-import net.skycade.kitpvp.listeners.player.LastMoveListener;
 import net.minecraft.server.v1_8_R3.Packet;
+import net.skycade.kitpvp.listeners.player.LastMoveListener;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -18,42 +18,42 @@ import java.util.UUID;
 
 public class UtilPlayer {
 
-	private static final HashMap<UUID, PermissionAttachment> perms = new HashMap<>();
+    private static final HashMap<UUID, PermissionAttachment> perms = new HashMap<>();
 
-	public static PermissionAttachment getAttachment(Player player, JavaPlugin plugin) {
-		if (perms.containsKey(player.getUniqueId())) {
-			return perms.get(player.getUniqueId());
-		}
-		PermissionAttachment perm = player.addAttachment(plugin);
-		perms.put(player.getUniqueId(), perm);
-		return perm;
-	}
+    public static PermissionAttachment getAttachment(Player player, JavaPlugin plugin) {
+        if (perms.containsKey(player.getUniqueId())) {
+            return perms.get(player.getUniqueId());
+        }
+        PermissionAttachment perm = player.addAttachment(plugin);
+        perms.put(player.getUniqueId(), perm);
+        return perm;
+    }
 
-	public static void removeAttachment(Player player) {
-		perms.remove(player.getUniqueId());
-	}
+    public static void removeAttachment(Player player) {
+        perms.remove(player.getUniqueId());
+    }
 
-	public static void reset(Player p) {
-		for (PotionEffect effect : p.getActivePotionEffects())
-			p.removePotionEffect(effect.getType());
-		p.setWalkSpeed(0.2F);
-		p.setAllowFlight(false);
-		p.setFlying(false);
-		p.getInventory().clear();
-		p.getInventory().setArmorContents(null);
-		p.setMaxHealth(20);
-		p.setHealth(20);
-		p.setFoodLevel(20);
-		p.setSaturation(20);
-		p.setExp(0);
-		p.setLevel(0);
-		p.setFireTicks(0);
-		p.setGameMode(GameMode.SURVIVAL);
-		if (p.getVehicle() != null)
-			p.leaveVehicle();
-		if (p.getPassenger() != null)
-			p.getPassenger().leaveVehicle();
-	}
+    public static void reset(Player p) {
+        for (PotionEffect effect : p.getActivePotionEffects())
+            p.removePotionEffect(effect.getType());
+        p.setWalkSpeed(0.2F);
+        p.setAllowFlight(false);
+        p.setFlying(false);
+        p.getInventory().clear();
+        p.getInventory().setArmorContents(null);
+        p.setMaxHealth(20);
+        p.setHealth(20);
+        p.setFoodLevel(20);
+        p.setSaturation(20);
+        p.setExp(0);
+        p.setLevel(0);
+        p.setFireTicks(0);
+        p.setGameMode(GameMode.SURVIVAL);
+        if (p.getVehicle() != null)
+            p.leaveVehicle();
+        if (p.getPassenger() != null)
+            p.getPassenger().leaveVehicle();
+    }
 
     public static Set<Player> getNearbyPlayers(Location loc, double r) {
         Set<Player> players = new HashSet<>();
@@ -67,12 +67,12 @@ public class UtilPlayer {
         return players;
     }
 
-	public static void sendPacket(Player p, Object packet) {
+    public static void sendPacket(Player p, Object packet) {
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket((Packet<?>) packet);
-	}
+    }
 
     public static boolean isMoving(Player p) {
-		return LastMoveListener.getInstance().getLastMoved().containsKey(p.getUniqueId()) && (System.currentTimeMillis() - LastMoveListener.getInstance().getLastMoved().get(p.getUniqueId())) < 250;
-	}
+        return LastMoveListener.getInstance().getLastMoved().containsKey(p.getUniqueId()) && (System.currentTimeMillis() - LastMoveListener.getInstance().getLastMoved().get(p.getUniqueId())) < 250;
+    }
 
 }

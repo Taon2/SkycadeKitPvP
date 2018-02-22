@@ -19,70 +19,70 @@ import static java.lang.Integer.parseInt;
 
 public class KitElite extends Kit {
 
-	public KitElite(KitManager kitManager) {
-		super(kitManager, "Elite", KitType.ELITE, 16000, "Speed is everything");
+    public KitElite(KitManager kitManager) {
+        super(kitManager, "Elite", KitType.ELITE, 16000, "Speed is everything");
 
-		Map<String, Object> defaultsMap = new HashMap<>();
+        Map<String, Object> defaultsMap = new HashMap<>();
 
-		defaultsMap.put("kit.icon.material", "LEATHER_HELMET");
-		defaultsMap.put("kit.icon.color", "BLACK");
-		defaultsMap.put("kit.price", 16000);
+        defaultsMap.put("kit.icon.material", "LEATHER_HELMET");
+        defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 16000);
 
-		defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
-		defaultsMap.put("inventory.sword.enchantments.durability", 5);
-		defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
+        defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
+        defaultsMap.put("inventory.sword.enchantments.durability", 5);
+        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
 
-		defaultsMap.put("armor.material", "LEATHER");
-		defaultsMap.put("armor.enchantments.durability", 10);
-		defaultsMap.put("armor.enchantments.protection", 3);
+        defaultsMap.put("armor.material", "LEATHER");
+        defaultsMap.put("armor.enchantments.durability", 10);
+        defaultsMap.put("armor.enchantments.protection", 3);
 
-		defaultsMap.put("armor.helmet.material", "LEATHER");
-		defaultsMap.put("armor.helmet.enchantments.protection", 2);
-		defaultsMap.put("armor.helmet.enchantments.durability", 13);
+        defaultsMap.put("armor.helmet.material", "LEATHER");
+        defaultsMap.put("armor.helmet.enchantments.protection", 2);
+        defaultsMap.put("armor.helmet.enchantments.durability", 13);
 
-		defaultsMap.put("potions.pot1", "FAST_DIGGING:2");
+        defaultsMap.put("potions.pot1", "FAST_DIGGING:2");
 
-		setConfigDefaults(defaultsMap);
+        setConfigDefaults(defaultsMap);
 
-		if (getConfig().getString("kit.icon.material") != null) {
-			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-			} else {
-				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-			}
-		} else {
-			setIcon(new ItemStack(Material.DIRT));
-		}
-		setPrice(getConfig().getInt("kit.price"));
-	}
+        if (getConfig().getString("kit.icon.material") != null) {
+            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+            } else {
+                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+            }
+        } else {
+            setIcon(new ItemStack(Material.DIRT));
+        }
+        setPrice(getConfig().getInt("kit.price"));
+    }
 
-	@Override
-	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(
-				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
-		
-		ItemStack[] armor = getArmour(
-				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-				getConfig().getInt("armor.enchantments.durability"),
-				getConfig().getInt("armor.enchantments.protection"),
-				Color.BLUE);
+    @Override
+    public void applyKit(Player p, int level) {
+        p.getInventory().addItem(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
 
-		armor[3] = new ItemBuilder(
-				Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
-				.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.helmet.enchantments.protection"))
-				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments. durability"))
-				.setColour(Color.WHITE).build();
+        ItemStack[] armor = getArmour(
+                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+                getConfig().getInt("armor.enchantments.durability"),
+                getConfig().getInt("armor.enchantments.protection"),
+                Color.BLUE);
 
-		p.getInventory().setArmorContents(armor);
+        armor[3] = new ItemBuilder(
+                Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.helmet.enchantments.protection"))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments. durability"))
+                .setColour(Color.WHITE).build();
 
-		String[] pot1 = getConfig().getString("potions.pot1").split(":");
-		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.getByName(pot1[0]),
-				Integer.MAX_VALUE,
-				parseInt(pot1[1])));
-	}
+        p.getInventory().setArmorContents(armor);
+
+        String[] pot1 = getConfig().getString("potions.pot1").split(":");
+        p.addPotionEffect(new PotionEffect(
+                PotionEffectType.getByName(pot1[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot1[1])));
+    }
 
 }

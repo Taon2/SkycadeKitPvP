@@ -115,8 +115,12 @@ public class PlayerListeners implements Listener {
         stats.applyKitPreference();
         p.getInventory().clear();
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
-        Bukkit.getScheduler().runTaskLater(plugin, () -> { stats.getActiveKit().getKit().applyKit(p); }, 3);
-        Bukkit.getScheduler().runTaskLater(plugin, () -> { stats.getActiveKit().getKit().giveSoup(p, 32); }, 5);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            stats.getActiveKit().getKit().applyKit(p);
+        }, 3);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            stats.getActiveKit().getKit().giveSoup(p, 32);
+        }, 5);
         Bukkit.getScheduler().runTaskLater(plugin, p::updateInventory, 10);
         int streak = stats.getStreak();
         if (streak > stats.getHighestStreak())

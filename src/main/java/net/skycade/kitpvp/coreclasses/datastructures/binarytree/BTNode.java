@@ -6,8 +6,8 @@ public class BTNode<K, V> {
     private V value;
 
     private BTNode<K, V> left;
-    private  BTNode<K, V> right;
-    private  BTNode<K, V> parent;
+    private BTNode<K, V> right;
+    private BTNode<K, V> parent;
 
     public BTNode(K key, V value) {
         this.key = key;

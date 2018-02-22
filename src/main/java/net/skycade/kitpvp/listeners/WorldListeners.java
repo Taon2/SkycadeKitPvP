@@ -18,37 +18,37 @@ import java.util.Arrays;
 
 public class WorldListeners implements Listener {
 
-	private final KitPvP plugin;
+    private final KitPvP plugin;
 
-	public WorldListeners(KitPvP plugin) {
-		this.plugin = plugin;
-	}
+    public WorldListeners(KitPvP plugin) {
+        this.plugin = plugin;
+    }
 
-	@EventHandler(priority = EventPriority.HIGH)
-	public void on(WeatherChangeEvent e) {
-		World w = e.getWorld();
-		if (!w.hasStorm())
-			e.setCancelled(true);
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-			if (w.hasStorm())
-				w.setStorm(false);
-		}, 5);
-	}
+    @EventHandler(priority = EventPriority.HIGH)
+    public void on(WeatherChangeEvent e) {
+        World w = e.getWorld();
+        if (!w.hasStorm())
+            e.setCancelled(true);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            if (w.hasStorm())
+                w.setStorm(false);
+        }, 5);
+    }
 
-	@EventHandler
-	public void on(EntityExplodeEvent e) {
-		if (!(e.getEntity() instanceof TNTPrimed))
-			return;
-		for (Entity en : e.getEntity().getNearbyEntities(4, 4, 4)) 
-			if (en instanceof FallingBlock) 
-				e.getEntity().remove();
-		e.setCancelled(true);
-	}
+    @EventHandler
+    public void on(EntityExplodeEvent e) {
+        if (!(e.getEntity() instanceof TNTPrimed))
+            return;
+        for (Entity en : e.getEntity().getNearbyEntities(4, 4, 4))
+            if (en instanceof FallingBlock)
+                e.getEntity().remove();
+        e.setCancelled(true);
+    }
 
-	@EventHandler
-	public void on(EntitySpawnEvent e) {
+    @EventHandler
+    public void on(EntitySpawnEvent e) {
         if (!Arrays.asList(EntityType.ARMOR_STAND, EntityType.WOLF, EntityType.PRIMED_TNT, EntityType.IRON_GOLEM).contains(e.getEntityType()))
             e.setCancelled(true);
-	}
+    }
 
 }

@@ -16,7 +16,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.*;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
@@ -57,7 +59,7 @@ public class KitPvPDB {
                     builder.append("] ");
                     builder.append(this.formatMessage(record));
                     builder.append('\n');
-                    if(ex != null) {
+                    if (ex != null) {
                         StringWriter writer = new StringWriter();
                         ex.printStackTrace(new PrintWriter(writer));
                         builder.append(writer);

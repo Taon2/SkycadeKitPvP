@@ -26,8 +26,8 @@ public class KitPvPScoreboard implements Listener {
 
     private void startRefresh() {
         Bukkit.getScheduler().runTaskTimer(plugin, () ->
-            Bukkit.getOnlinePlayers().forEach(this::updateScoreBoard)
-        , 5 * 20, 5 * 20);
+                        Bukkit.getOnlinePlayers().forEach(this::updateScoreBoard)
+                , 5 * 20, 5 * 20);
     }
 
     public void updateScoreBoard(Player p) {

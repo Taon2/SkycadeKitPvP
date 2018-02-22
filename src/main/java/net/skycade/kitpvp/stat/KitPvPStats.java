@@ -14,7 +14,7 @@ public class KitPvPStats {
 
     private int kills = 0;
     private int deaths = 0;
-    private int keys =  KitPvP.getInstance().getConfig().getInt("start-keys");
+    private int keys = KitPvP.getInstance().getConfig().getInt("start-keys");
     private int duels = 0;
     private int coins = 0;
     private int streak = 0;

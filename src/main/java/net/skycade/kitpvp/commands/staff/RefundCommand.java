@@ -20,16 +20,16 @@ public class RefundCommand extends Command<KitManager> {
     public void execute(Member member, String aliasUsed, String... args) {
         if (!checkArgs(member, aliasUsed, args))
             return;
-        if (!getPlayer(member, args[0])) 
+        if (!getPlayer(member, args[0]))
             return;
         Member target = MemberManager.getInstance().getMember(Bukkit.getPlayer(args[0]));
         KitPvPStats stats = getModule().getKitPvP().getStats(target);
         if (stats.getLastStreak() == null || stats.getLastStreak() < 0) {
             member.message("Last killstreak can't be found for " + target.getName() + "§7.");
             return;
-        } 
+        }
         if (stats.getStreak() > stats.getLastStreak()) {
-            member.message("Current killstreak is higher than last killstreak." );
+            member.message("Current killstreak is higher than last killstreak.");
             return;
         }
         stats.setStreak(stats.getLastStreak());

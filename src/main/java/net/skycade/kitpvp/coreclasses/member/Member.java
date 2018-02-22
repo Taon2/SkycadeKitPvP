@@ -5,13 +5,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class Member {
 
     private UUID uuid;
     private String name;
     private List<String> previousNames = new ArrayList<>();
+    private UUID lastKiller = null;
 
     public Member(UUID uuid, String name) {
         this.uuid = uuid;
@@ -57,6 +60,7 @@ public class Member {
     public int hashCode() {
         return getUUID().hashCode();
     }
+
     @Override
     public String toString() {
         return getUUID().toString();
@@ -85,5 +89,13 @@ public class Member {
 
     public void addPreviousName(String name) {
         previousNames.add(name);
+    }
+
+    public UUID getLastKiller() {
+        return lastKiller;
+    }
+
+    public void setLastKiller(UUID lastKiller) {
+        this.lastKiller = lastKiller;
     }
 }

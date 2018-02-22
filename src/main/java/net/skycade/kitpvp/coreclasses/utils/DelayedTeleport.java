@@ -49,8 +49,10 @@ public class DelayedTeleport extends BukkitRunnable {
         }
     }
 
-    public void onCancel() {}
+    public void onCancel() {
+    }
 
-    public void onTeleport() {}
+    public void onTeleport() {
+    }
 
 }

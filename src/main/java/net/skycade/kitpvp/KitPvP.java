@@ -1,6 +1,7 @@
 package net.skycade.kitpvp;
 
 import net.skycade.SkycadeCore.SkycadePlugin;
+import net.skycade.SkycadeCore.displays.Displays;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.region.DataPoint;
@@ -12,7 +13,8 @@ import net.skycade.kitpvp.listeners.WorldListeners;
 import net.skycade.kitpvp.listeners.chat.ChatClick;
 import net.skycade.kitpvp.listeners.player.*;
 import net.skycade.kitpvp.scoreboard.HighestKsUpdater;
-import net.skycade.kitpvp.scoreboard.KitPvPScoreboard;
+import net.skycade.kitpvp.scoreboard.NametagHandler;
+import net.skycade.kitpvp.scoreboard.ScoreboardHandler;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.stat.RotationManager;
@@ -56,7 +58,7 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("sign-refresh-cooldown", 120);
         defaults.put("stat-refresh-time", 1800);
         defaults.put("scoreboard.name", "SkycadeKitPvP");
-        defaults.put("spawn-region.point-1", new Location(Bukkit.getWorld("world"),-100, 0, 200));
+        defaults.put("spawn-region.point-1", new Location(Bukkit.getWorld("world"), -100, 0, 200));
         defaults.put("spawn-region.point-2", new Location(Bukkit.getWorld("world"), 300, 250, 290));
         defaults.put("spawn-location", new Location(Bukkit.getWorld("world"), 252.5, 73.0, -45.0, -45, 0));
         defaults.put("scoreboard.bottom-link", "play.skycade.net");
@@ -88,7 +90,8 @@ public class KitPvP extends SkycadePlugin {
         this.rotationManager = new RotationManager();
         this.ksUpdater = new HighestKsUpdater(this);
         Bukkit.getPluginManager().registerEvents(chatClick = new ChatClick(), this);
-        new KitPvPScoreboard(this);
+        //new KitPvPScoreboard(this);
+        Displays.registerDisplay(new ScoreboardHandler());
 
         //Change the datapoint locations!
         Location location1 = (Location) getConfig().get("spawn-region.point-1");
@@ -102,6 +105,8 @@ public class KitPvP extends SkycadePlugin {
             if (kitType.getKit().isEnabled()) ++i;
         }
         this.availableKits = i;
+
+        Displays.registerDisplay(new NametagHandler());
     }
 
     @Override
@@ -175,9 +180,13 @@ public class KitPvP extends SkycadePlugin {
         Bukkit.getScheduler().runTaskLater(this, p::updateInventory, 10);
         Bukkit.getScheduler().runTaskLater(this, () -> p.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
         KitPvPStats stats = getStats(p);
-        Bukkit.getScheduler().runTaskLater(this, () -> { stats.getActiveKit().getKit().giveSoup(p, 32); }, 5);
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            stats.getActiveKit().getKit().giveSoup(p, 32);
+        }, 5);
         stats.applyKitPreference();
-        Bukkit.getScheduler().runTaskLater(this, () -> { stats.getActiveKit().getKit().applyKit(p); }, 3);
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            stats.getActiveKit().getKit().applyKit(p);
+        }, 3);
     }
 
     public boolean isInSpawnArea(Player p) {

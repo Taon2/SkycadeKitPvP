@@ -29,7 +29,8 @@ public class CommandTopStats extends Command<KitManager> {
     private BinaryTree<Double, UUID> kdrTree;
     private PageManager killsPageManager = new PageManager("Top 10 kills ", "/topstats kills ", new ArrayList<>(), 9, 6);
     private PageManager deathsPageManager = new PageManager("Top 10 deaths ", "/topstats deaths ", new ArrayList<>(), 9, 6);
-    private PageManager streakPageManager = new PageManager("Top 10 killstreak ", "/topstats ks ", new ArrayList<>(), 9, 6);;
+    private PageManager streakPageManager = new PageManager("Top 10 killstreak ", "/topstats ks ", new ArrayList<>(), 9, 6);
+    ;
     private PageManager kdrPageManager = new PageManager("Top 10 kd ", "/topstats kd ", new ArrayList<>(), 9, 6);
     private boolean updating = true;
 
@@ -66,13 +67,13 @@ public class CommandTopStats extends Command<KitManager> {
                 throw new RuntimeException(e);
             }
 
-            killTree = new BinaryTree<>(false,  killsStartList.toArray(new BTNode[killsStartList.size()]));
+            killTree = new BinaryTree<>(false, killsStartList.toArray(new BTNode[killsStartList.size()]));
             killsPageManager.setPageElements(getPageElements(killTree.getInOrderArray()));
-            deathTree = new BinaryTree<>(false,  deathsStartList.toArray(new BTNode[deathsStartList.size()]));
+            deathTree = new BinaryTree<>(false, deathsStartList.toArray(new BTNode[deathsStartList.size()]));
             deathsPageManager.setPageElements(getPageElements(deathTree.getInOrderArray()));
             streakTree = new BinaryTree<>(false, streakStartList.toArray(new BTNode[streakStartList.size()]));
             streakPageManager.setPageElements(getPageElements(streakTree.getInOrderArray()));
-            kdrTree = new BinaryTree<>(false,  kdStartList.toArray(new BTNode[kdStartList.size()]));
+            kdrTree = new BinaryTree<>(false, kdStartList.toArray(new BTNode[kdStartList.size()]));
             kdrPageManager.setPageElements(getKdrPageElements(kdrTree.getInOrderArray()));
             updating = false;
         });

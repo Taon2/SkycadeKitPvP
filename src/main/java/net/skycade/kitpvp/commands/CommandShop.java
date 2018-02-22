@@ -8,13 +8,13 @@ import org.bukkit.permissions.PermissionDefault;
 
 public class CommandShop extends Command<KitManager> {
 
-	public CommandShop(KitManager module) {
-		super(module, "Opens the shop GUI.", new Permission("kitpvp.default", PermissionDefault.TRUE), "shop");
-	}
+    public CommandShop(KitManager module) {
+        super(module, "Opens the shop GUI.", new Permission("kitpvp.default", PermissionDefault.TRUE), "shop");
+    }
 
-	@Override
-	public void execute(Member member, String aliasUsed, String... args) {
-		getModule().getShopMenu().open(member);
-	}
+    @Override
+    public void execute(Member member, String aliasUsed, String... args) {
+        getModule().getShopMenu().open(member);
+    }
 
 }

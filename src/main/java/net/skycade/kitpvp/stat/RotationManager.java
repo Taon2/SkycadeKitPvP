@@ -86,7 +86,7 @@ public class RotationManager {
 
         KitType kitType = available.get(UtilMath.getRandom(0, available.size() - 1));
 
-        if(rotationKits.contains(kitType.toString()) || !kitType.getKit().isEnabled() || Arrays.asList(KitType.DEFAULT, KitType.KITMASTER).contains(kitType)) {
+        if (rotationKits.contains(kitType.toString()) || !kitType.getKit().isEnabled() || Arrays.asList(KitType.DEFAULT, KitType.KITMASTER).contains(kitType)) {
             fillRotationList(rotationKits);
             return;
         }
@@ -114,7 +114,7 @@ public class RotationManager {
         String temp;
         for (int i = 0; i < rotationKits.size(); i++) {
             for (int j = i; j > 0; j--) {
-                if (KitType.valueOf(rotationKits.get(j)).getKit().getPrice()< KitType.valueOf(rotationKits.get(j - 1)).getKit().getPrice()) {
+                if (KitType.valueOf(rotationKits.get(j)).getKit().getPrice() < KitType.valueOf(rotationKits.get(j - 1)).getKit().getPrice()) {
                     temp = rotationKits.get(j);
                     rotationKits.set(j, rotationKits.get(j - 1));
                     rotationKits.set(j - 1, temp);

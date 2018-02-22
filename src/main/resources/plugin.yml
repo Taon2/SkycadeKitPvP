@@ -1,6 +1,6 @@
 name: KitPvP
 main: net.skycade.kitpvp.KitPvP
-version: 3.0.8-SNAPSHOT
+version: 3.1.0-SNAPSHOT
 author: ["WhiteWalker72", "Riccardo Bello (RickyB98)"]
 depend: [SkycadeCore]
 commands:
@@ -11,3 +11,6 @@ commands:
     unlockkit:
     lock:
     lockkit:
+permission:
+  kitpvp.nametag.view:
+    default: op

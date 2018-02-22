@@ -22,129 +22,129 @@ import java.util.*;
 
 public class KitPlush extends Kit {
 
-	public KitPlush(KitManager kitManager) {
-		super(kitManager, "Plush", KitType.PLUSH, 24000, "Launch players into oblivion");
+    public KitPlush(KitManager kitManager) {
+        super(kitManager, "Plush", KitType.PLUSH, 24000, "Launch players into oblivion");
 
-		Map<String, Object> defaultsMap = new HashMap<>();
+        Map<String, Object> defaultsMap = new HashMap<>();
 
-		defaultsMap.put("kit.icon.material", "RAW_FISH");
-		defaultsMap.put("kit.icon.color", "BLACK");
-		defaultsMap.put("kit.price", 24000);
+        defaultsMap.put("kit.icon.material", "RAW_FISH");
+        defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 24000);
 
-		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
-		defaultsMap.put("inventory.sword.enchantments.durability", 5);
-		defaultsMap.put("inventory.sword.enchantments.damage-all", 1);
-		defaultsMap.put("inventory.sword.enchantments.knockback", 1);
+        defaultsMap.put("inventory.sword.material", "IRON_SWORD");
+        defaultsMap.put("inventory.sword.enchantments.durability", 5);
+        defaultsMap.put("inventory.sword.enchantments.damage-all", 1);
+        defaultsMap.put("inventory.sword.enchantments.knockback", 1);
 
-		defaultsMap.put("armor.helmet.material", "LEATHER");
-		defaultsMap.put("armor.helmet.enchantments.durability", 10);
-		defaultsMap.put("armor.helmet.enchantments.protection", 0);
+        defaultsMap.put("armor.helmet.material", "LEATHER");
+        defaultsMap.put("armor.helmet.enchantments.durability", 10);
+        defaultsMap.put("armor.helmet.enchantments.protection", 0);
 
-		defaultsMap.put("armor.chestplate.material", "IRON");
+        defaultsMap.put("armor.chestplate.material", "IRON");
 
-		defaultsMap.put("armor.leggings.material", "IRON");
+        defaultsMap.put("armor.leggings.material", "IRON");
 
-		defaultsMap.put("armor.boots.material", "LEATHER");
-		defaultsMap.put("armor.boots.enchantments.durability", 5);
+        defaultsMap.put("armor.boots.material", "LEATHER");
+        defaultsMap.put("armor.boots.enchantments.durability", 5);
 
-		defaultsMap.put("ability.jump-power", 1d);
+        defaultsMap.put("ability.jump-power", 1d);
 
-		setConfigDefaults(defaultsMap);
+        setConfigDefaults(defaultsMap);
 
-		if (getConfig().getString("kit.icon.material") != null) {
-			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-			} else {
-				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-			}
-		} else {
-			setIcon(new ItemStack(Material.DIRT));
-		}
-		setPrice(getConfig().getInt("kit.price"));
-	}
+        if (getConfig().getString("kit.icon.material") != null) {
+            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+            } else {
+                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+            }
+        } else {
+            setIcon(new ItemStack(Material.DIRT));
+        }
+        setPrice(getConfig().getInt("kit.price"));
+    }
 
-	@Override
-	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(
-		        Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+    @Override
+    public void applyKit(Player p, int level) {
+        p.getInventory().addItem(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
                 .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all"))
                 .addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword.enchantments.knockback")).build());
 
-		p.getInventory().setHelmet(new ItemBuilder(
-		        Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
+        p.getInventory().setHelmet(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments.durability"))
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.helmet.enchantments.protection")).build());
 
-		p.getInventory().setChestplate(new ItemBuilder(
-		        Material.getMaterial(getConfig().getString("armor.chestplate.material").toUpperCase() + "_CHESTPLATE")).build());
+        p.getInventory().setChestplate(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("armor.chestplate.material").toUpperCase() + "_CHESTPLATE")).build());
 
-		p.getInventory().setLeggings(new ItemBuilder(
-		        Material.getMaterial(getConfig().getString("armor.leggings.material").toUpperCase() + "_LEGGINGS")).build());
+        p.getInventory().setLeggings(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("armor.leggings.material").toUpperCase() + "_LEGGINGS")).build());
 
-		p.getInventory().setBoots(new ItemBuilder(
-		        Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS"))
+        p.getInventory().setBoots(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS"))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.boots.enchantments.durability")).build());
-	}
-	
-	@Override
-	public void onItemUse(Player p, ItemStack item) {
-		if (item.getType() != Material.IRON_SWORD)
-			return;
-		if (!addCooldown(p, getName(), 5, true))
-			return;
-		int level = getLevel(p);
-		
-		Location loc = p.getEyeLocation();
-		LivingEntity cat = (LivingEntity) p.getWorld().spawnEntity(loc.add(loc.getDirection()), EntityType.OCELOT);
-		cat.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 99));
+    }
 
-		for (Entity ent : loc.getChunk().getEntities()) 
-		if (ent.getType() == EntityType.OCELOT) 
-			if (!((Ocelot) ent).isAdult())
-				ent.remove();
+    @Override
+    public void onItemUse(Player p, ItemStack item) {
+        if (item.getType() != Material.IRON_SWORD)
+            return;
+        if (!addCooldown(p, getName(), 5, true))
+            return;
+        int level = getLevel(p);
 
-		cat.setVelocity(loc.getDirection().multiply(0.5D));
-		cat.setCustomName("Plush cat");
-		p.playSound(loc, Sound.CAT_MEOW, 0, 0);
-		
-		Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
-			Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(cat.getLocation(), 3.5);
-			targetPlayers.forEach(target -> {
-				/* if (level == 1) {
+        Location loc = p.getEyeLocation();
+        LivingEntity cat = (LivingEntity) p.getWorld().spawnEntity(loc.add(loc.getDirection()), EntityType.OCELOT);
+        cat.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 99));
+
+        for (Entity ent : loc.getChunk().getEntities())
+            if (ent.getType() == EntityType.OCELOT)
+                if (!((Ocelot) ent).isAdult())
+                    ent.remove();
+
+        cat.setVelocity(loc.getDirection().multiply(0.5D));
+        cat.setCustomName("Plush cat");
+        p.playSound(loc, Sound.CAT_MEOW, 0, 0);
+
+        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
+            Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(cat.getLocation(), 3.5);
+            targetPlayers.forEach(target -> {
+                /* if (level == 1) {
 					target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 2));
 					target.setVelocity(new Vector(0, 2, 0));
 				} else if (level == 2) {
 					target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 3));
 					target.setVelocity(new Vector(0, 2.3, 0));
 				} else { */
-					target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 3));
-					target.setVelocity(new Vector(0, getConfig().getDouble("ability.jump-power"), 0));
-				//}
-			});
-			
-			cat.getLocation().getWorld().createExplosion(cat.getLocation(), 0);
-			cat.remove();
-		}, 10);
-	}
-	
-	@EventHandler
-	public void onCatHit(EntityDamageByEntityEvent e) {
-		if (!(e.getDamager() instanceof Player))
-			return;
-		if (e.getEntity() instanceof Player)
-			return;
-		if (e.getEntity().getCustomName() != null) {
-			if (e.getEntity().getCustomName().contains("Plush cat")) {
-				e.setCancelled(true);
-			}
-		}
-	}
-	
-	@Override
-	public List<String> getAbilityDesc() {
-		return Arrays.asList("§7Use your sword to throw a cat", "§7the cat can launch players");
-	}
+                target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 3));
+                target.setVelocity(new Vector(0, getConfig().getDouble("ability.jump-power"), 0));
+                //}
+            });
+
+            cat.getLocation().getWorld().createExplosion(cat.getLocation(), 0);
+            cat.remove();
+        }, 10);
+    }
+
+    @EventHandler
+    public void onCatHit(EntityDamageByEntityEvent e) {
+        if (!(e.getDamager() instanceof Player))
+            return;
+        if (e.getEntity() instanceof Player)
+            return;
+        if (e.getEntity().getCustomName() != null) {
+            if (e.getEntity().getCustomName().contains("Plush cat")) {
+                e.setCancelled(true);
+            }
+        }
+    }
+
+    @Override
+    public List<String> getAbilityDesc() {
+        return Arrays.asList("§7Use your sword to throw a cat", "§7the cat can launch players");
+    }
 
 }

@@ -21,7 +21,7 @@ public abstract class CustomEvent extends Event {
     }
 
     public void setCancelled(boolean cancelled) {
-        this.setCancelled(cancelled, (String)null);
+        this.setCancelled(cancelled, (String) null);
     }
 
     public void setCancelled(boolean cancelled, String cancelReason) {

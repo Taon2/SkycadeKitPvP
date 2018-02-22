@@ -42,7 +42,8 @@ public class CommandUnlock extends Command<KitManager> {
             if (kit == null)
                 return;
             stats.addKit(kit.getKitType());
-            if (member != null) member.message("§a" + target.getName() + " §7now has the §a" + kit.getName() + " §7kit unlocked.");
+            if (member != null)
+                member.message("§a" + target.getName() + " §7now has the §a" + kit.getName() + " §7kit unlocked.");
             if (member != null && !member.getPlayer().equals(target))
                 target.sendMessage("§a" + kit.getName() + " §7got unlocked.");
             return;

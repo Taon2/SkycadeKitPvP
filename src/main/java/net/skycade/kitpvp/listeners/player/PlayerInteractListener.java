@@ -93,7 +93,7 @@ public class PlayerInteractListener implements Listener {
                 e.setCancelled(true);
                 Inventory soupInv = Bukkit.createInventory(p, 45, "Soup");
                 for (int i = 0; i < soupInv.getSize(); i++)
-                    soupInv.addItem(plugin.getStats(p).getActiveKit() == KitType.POTIONMASTER  ?
+                    soupInv.addItem(plugin.getStats(p).getActiveKit() == KitType.POTIONMASTER ?
                             new ItemStack(Material.POTION, 1, (short) 16421) : new ItemStack(Material.MUSHROOM_SOUP, 1));
 
                 p.openInventory(soupInv);

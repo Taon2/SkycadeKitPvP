@@ -69,7 +69,7 @@ public class CommandGiveKeys extends Command<KitManager> {
         targetStats.setCrateKeys(0);
         target.sendMessage("§7Your keys got §Areset§7.");
         if (member != null)
-            member.message("§7" + target.getName() + "'s keys got §Areset§7." );
+            member.message("§7" + target.getName() + "'s keys got §Areset§7.");
     }
 
     private void incKeys(KitPvPStats targetStats, Member member, Player target, int amount) {

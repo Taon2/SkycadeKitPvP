@@ -47,7 +47,8 @@ public class MemberManager extends Module {
             return members.get(uuid);
         if (database) {
             Member member = KitPvPDB.getInstance().getMemberData(uuid);
-            if (member != null) return member; else return null;
+            if (member != null) return member;
+            else return null;
         }
         return null;
     }
@@ -79,7 +80,8 @@ public class MemberManager extends Module {
         if (uuid == null) return null;
 
         Member member = KitPvPDB.getInstance().getMemberData(uuid);
-        if (member == null) return null; else return member;
+        if (member == null) return null;
+        else return member;
     }
 
     public void update(Member member) {

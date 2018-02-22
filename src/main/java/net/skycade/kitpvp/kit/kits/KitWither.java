@@ -21,66 +21,66 @@ import java.util.Map;
 
 public class KitWither extends Kit {
 
-	public KitWither(KitManager kitManager) {
-		super(kitManager, "Wither", KitType.WITHER, 36000, "Wither can be an annoying guy");
+    public KitWither(KitManager kitManager) {
+        super(kitManager, "Wither", KitType.WITHER, 36000, "Wither can be an annoying guy");
 
-		Map<String, Object> defaultsMap = new HashMap<>();
+        Map<String, Object> defaultsMap = new HashMap<>();
 
-		defaultsMap.put("kit.icon.material", "NETHER_STALK");
-		defaultsMap.put("kit.icon.color", "BLACK");
-		defaultsMap.put("kit.price", 36000);
+        defaultsMap.put("kit.icon.material", "NETHER_STALK");
+        defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 36000);
 
-		defaultsMap.put("inventory.sword.material", "IRON_SWORD");
-		defaultsMap.put("inventory.sword.enchantments.damage-all", 1);
-		defaultsMap.put("inventory.sword.enchantments.durability", 5);
+        defaultsMap.put("inventory.sword.material", "IRON_SWORD");
+        defaultsMap.put("inventory.sword.enchantments.damage-all", 1);
+        defaultsMap.put("inventory.sword.enchantments.durability", 5);
 
-		defaultsMap.put("armor.material", "LEATHER");
-		defaultsMap.put("armor.enchantments.durability", 10);
-		defaultsMap.put("armor.enchantments.protection", 4);
+        defaultsMap.put("armor.material", "LEATHER");
+        defaultsMap.put("armor.enchantments.durability", 10);
+        defaultsMap.put("armor.enchantments.protection", 4);
 
-		setConfigDefaults(defaultsMap);
+        setConfigDefaults(defaultsMap);
 
-		if (getConfig().getString("kit.icon.material") != null) {
-			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-			} else {
-				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-			}
-		} else {
-			setIcon(new ItemStack(Material.DIRT));
-		}
-		setPrice(getConfig().getInt("kit.price"));
-	}
+        if (getConfig().getString("kit.icon.material") != null) {
+            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+            } else {
+                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+            }
+        } else {
+            setIcon(new ItemStack(Material.DIRT));
+        }
+        setPrice(getConfig().getInt("kit.price"));
+    }
 
-	@Override
-	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(
-				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all"))
-				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability")).build());
+    @Override
+    public void applyKit(Player p, int level) {
+        p.getInventory().addItem(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all"))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability")).build());
 
-		p.getInventory().setArmorContents(getArmour(
-				Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-				getConfig().getInt("armor.enchantments.durability"),
-				getConfig().getInt("armor.enchantments.protection"),
-				Color.BLACK));
-	}
-	
-	@Override
-	public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-		witherEffect(damagee, 12, 6);
-	}
+        p.getInventory().setArmorContents(getArmour(
+                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+                getConfig().getInt("armor.enchantments.durability"),
+                getConfig().getInt("armor.enchantments.protection"),
+                Color.BLACK));
+    }
 
-	private void witherEffect(Player p, int chance, int duration) {
-		int random = UtilMath.getRandom(0, 100);
-		if (random <= chance)
-			p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, duration * 20, 1));
-	}
-	
-	@Override
-	public List<String> getAbilityDesc() {
-		return Arrays.asList("§7There is a chance to give players", "§7a wither effect when you hit them");
-	}
+    @Override
+    public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+        witherEffect(damagee, 12, 6);
+    }
+
+    private void witherEffect(Player p, int chance, int duration) {
+        int random = UtilMath.getRandom(0, 100);
+        if (random <= chance)
+            p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, duration * 20, 1));
+    }
+
+    @Override
+    public List<String> getAbilityDesc() {
+        return Arrays.asList("§7There is a chance to give players", "§7a wither effect when you hit them");
+    }
 
 }

@@ -48,7 +48,7 @@ public class BinaryTree<K extends Comparable<K>, V> {
     }
 
     public void add(BTNode<K, V> node) {
-        if(node == null)
+        if (node == null)
             return;
         if (root == null) {
             root = node;
@@ -80,7 +80,7 @@ public class BinaryTree<K extends Comparable<K>, V> {
     }
 
     private void printPreOrder(BTNode<K, V> node) {
-        if(node == null)
+        if (node == null)
             return;
         System.out.print(node.getKey() + ", ");
         printPreOrder(node.getLeft());
@@ -88,11 +88,11 @@ public class BinaryTree<K extends Comparable<K>, V> {
     }
 
 
-    public void printInorder(){
+    public void printInorder() {
         printInOrderRec(root);
     }
 
-    private void printInOrderRec(BTNode<K, V> node){
+    private void printInOrderRec(BTNode<K, V> node) {
         if (node == null)
             return;
         printInOrderRec(node.getLeft());
@@ -153,20 +153,17 @@ public class BinaryTree<K extends Comparable<K>, V> {
                 node.getParent().setLeft(null);
             else
                 node.getParent().setRight(null);
-        }
-        else if (node.getRight() == null) { // Child left
+        } else if (node.getRight() == null) { // Child left
             if (node.getParent().getLeft().equals(node))
                 node.getParent().setLeft(node.getLeft());
             else
                 node.getParent().setRight(node.getLeft());
-        }
-        else if (node.getLeft() == null) { // Child right
+        } else if (node.getLeft() == null) { // Child right
             if (node.getParent().getLeft() == null)
                 node.getParent().setLeft(node.getRight());
             else
                 node.getParent().setRight(node.getRight());
-        }
-        else { // Has two children
+        } else { // Has two children
             BTNode<K, V> maxRightNode = node.getLeft();
             while (maxRightNode.getRight() != null)
                 maxRightNode = maxRightNode.getRight();
@@ -198,7 +195,7 @@ public class BinaryTree<K extends Comparable<K>, V> {
 
     private BTNode findMedian(BTNode<K, V>[] array) {
         sort(array);
-        return array[array.length/2];
+        return array[array.length / 2];
     }
 
     private void sort(BTNode<K, V>[] array) {

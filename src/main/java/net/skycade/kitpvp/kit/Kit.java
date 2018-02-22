@@ -268,7 +268,7 @@ public abstract class Kit implements Listener {
                 damageeLoc.getZ() - nZ, damageeLoc.getYaw(), damageeLoc.getPitch());
 
         if (!isValidBlock(newDamagerLoc.getBlock().getType()))
-            if (newDamagerLoc.getBlock().getType() != Material.AIR  && newDamagerLoc.add(0, 1, 0).getBlock().getType() != Material.AIR)
+            if (newDamagerLoc.getBlock().getType() != Material.AIR && newDamagerLoc.add(0, 1, 0).getBlock().getType() != Material.AIR)
                 return false;
 
         newDamagerLoc.setDirection(new Vector(newDamagerLoc.getDirection().getX(),
@@ -289,7 +289,7 @@ public abstract class Kit implements Listener {
         if (!freezeRunning) {
             onFreezeMove();
         }
-        
+
         frozenPlayers.remove(p.getUniqueId());
         lastLocation.remove(p.getUniqueId());
 

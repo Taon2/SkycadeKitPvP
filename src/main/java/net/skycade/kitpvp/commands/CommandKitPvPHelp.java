@@ -16,30 +16,30 @@ import java.util.List;
 // Not well coded, improve if you have the time to.
 public class CommandKitPvPHelp extends Command<KitManager> {
 
-	private PageManager pageManager;
+    private PageManager pageManager;
 
-	public CommandKitPvPHelp(KitManager module) {
-		super(module, "Get an overview of the KitPvP commands", new Permission("kitpvp.default", PermissionDefault.TRUE), "kitpvphelp", "kithelp", "kitpvpcommands", "kitcommands");
+    public CommandKitPvPHelp(KitManager module) {
+        super(module, "Get an overview of the KitPvP commands", new Permission("kitpvp.default", PermissionDefault.TRUE), "kitpvphelp", "kithelp", "kitpvpcommands", "kitcommands");
         Bukkit.getScheduler().runTaskLater(getModule().getKitPvP(),
                 () -> this.pageManager = new PageManager("KitPvP commands ", "/kitpvphelp ", getPageElements(), 9, 6)
-        , 100);
-	}
+                , 100);
+    }
 
-	@Override
-	public void execute(Member member, String aliasUsed, String... args) {
-	    if (pageManager == null) {
-	        member.message("Something went wrong.");
-	        return;
+    @Override
+    public void execute(Member member, String aliasUsed, String... args) {
+        if (pageManager == null) {
+            member.message("Something went wrong.");
+            return;
         }
 
-		int page = 1;
-		if (args.length > 0) {
+        int page = 1;
+        if (args.length > 0) {
             if (!parseInt(member, args[0]))
                 return;
             page = Integer.parseInt(args[0]);
         }
         pageManager.sendToPlayer(member.getPlayer(), page);
-	}
+    }
 
 
     private List<BaseComponent[]> getPageElements() {

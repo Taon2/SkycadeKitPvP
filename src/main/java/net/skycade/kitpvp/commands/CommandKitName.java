@@ -11,20 +11,20 @@ import org.bukkit.permissions.PermissionDefault;
 
 public class CommandKitName extends Command<KitManager> {
 
-	public CommandKitName(KitManager module) {
-		super(module, "Get the kitname from a player", new Permission("kitpvp.default", PermissionDefault.TRUE), "kitname");
-		setUsage("<player>");
-	}
+    public CommandKitName(KitManager module) {
+        super(module, "Get the kitname from a player", new Permission("kitpvp.default", PermissionDefault.TRUE), "kitname");
+        setUsage("<player>");
+    }
 
-	@Override
-	public void execute(Member member, String aliasUsed, String... args) {
-		if (!checkArgs(member, aliasUsed, args, 1))
-			return;
-		if (!getPlayer(member, args[0])) 
-			return;
-		Player target = Bukkit.getPlayer(args[0]);
-		KitPvPStats stats = getModule().getKitPvP().getStats(target);
-		member.message("§a" + target.getName() + "§7 is using the §a" + stats.getActiveKit().getKit().getName() + "§7 kit at level §a" + stats.getActiveKit().getKit().getLevel(target) + "§7.");
-	}
+    @Override
+    public void execute(Member member, String aliasUsed, String... args) {
+        if (!checkArgs(member, aliasUsed, args, 1))
+            return;
+        if (!getPlayer(member, args[0]))
+            return;
+        Player target = Bukkit.getPlayer(args[0]);
+        KitPvPStats stats = getModule().getKitPvP().getStats(target);
+        member.message("§a" + target.getName() + "§7 is using the §a" + stats.getActiveKit().getKit().getName() + "§7 kit at level §a" + stats.getActiveKit().getKit().getLevel(target) + "§7.");
+    }
 
 }

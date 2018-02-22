@@ -1,8 +1,8 @@
 package net.skycade.kitpvp.managers;
 
-import net.skycade.kitpvp.coreclasses.utils.UtilPacket;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.skycade.kitpvp.coreclasses.utils.UtilPacket;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -85,7 +85,7 @@ public class PageManager {
         return UtilPacket.createChatComponent(p,
                 "§7[" + leftColor + "<§7]",
                 "Left page",
-                currentPage - 1 > 0 ? (x) -> x.chat(command +  (currentPage - 1)) : null
+                currentPage - 1 > 0 ? (x) -> x.chat(command + (currentPage - 1)) : null
         );
     }
 
@@ -95,7 +95,7 @@ public class PageManager {
         return UtilPacket.createChatComponent(p,
                 "§7[" + rightColor + ">§7]",
                 "Right page",
-                currentPage < amountOfPages ? (x) -> x.chat(command +  (currentPage + 1)) : null
+                currentPage < amountOfPages ? (x) -> x.chat(command + (currentPage + 1)) : null
         );
     }
 

@@ -41,7 +41,7 @@ public class CommandManager extends Module implements CommandExecutor {
     }
 
 	/*
-	 * All permanent commands should have their own class that extends Command
+     * All permanent commands should have their own class that extends Command
 	 * CommandEvent is to be used only for debugging
 	 */
 

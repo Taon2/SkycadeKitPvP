@@ -23,63 +23,63 @@ import static java.lang.Integer.parseInt;
 
 public class KitGhost extends Kit {
 
-	public KitGhost(KitManager kitManager) {
-		super(kitManager, "Ghost", KitType.GHOST, 22000, false, "Very spooky");
-		//setIcon(new ItemBuilder(new ItemStack(Material.POTION, 1, (short) 8270)).build());
+    public KitGhost(KitManager kitManager) {
+        super(kitManager, "Ghost", KitType.GHOST, 22000, false, "Very spooky");
+        //setIcon(new ItemBuilder(new ItemStack(Material.POTION, 1, (short) 8270)).build());
 
-		Map<String, Object> defaultsMap = new HashMap<>();
+        Map<String, Object> defaultsMap = new HashMap<>();
 
-		defaultsMap.put("kit.icon.material", "POTION");
-		defaultsMap.put("kit.icon.color", "BLACK");
-		defaultsMap.put("kit.price", 22000);
+        defaultsMap.put("kit.icon.material", "POTION");
+        defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 22000);
 
-		defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
-		defaultsMap.put("inventory.sword.enchantments.durability", 5);
-		defaultsMap.put("inventory.sword.enchantments.knockback", 1);
-		defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
+        defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
+        defaultsMap.put("inventory.sword.enchantments.durability", 5);
+        defaultsMap.put("inventory.sword.enchantments.knockback", 1);
+        defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
 
-		defaultsMap.put("potions.pot1", "INVISIBILITY:10");
-		defaultsMap.put("potions.pot2", "DAMAGE_RESISTANCE:1");
+        defaultsMap.put("potions.pot1", "INVISIBILITY:10");
+        defaultsMap.put("potions.pot2", "DAMAGE_RESISTANCE:1");
 
-		setConfigDefaults(defaultsMap);
+        setConfigDefaults(defaultsMap);
 
-		if (getConfig().getString("kit.icon.material") != null) {
-			if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-				setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-						.setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-			} else {
-				setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-			}
-		} else {
-			setIcon(new ItemStack(Material.DIRT));
-		}
-		setPrice(getConfig().getInt("kit.price"));
-	}
+        if (getConfig().getString("kit.icon.material") != null) {
+            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+            } else {
+                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+            }
+        } else {
+            setIcon(new ItemStack(Material.DIRT));
+        }
+        setPrice(getConfig().getInt("kit.price"));
+    }
 
-	@Override
-	public void applyKit(Player p, int level) {
-		p.getInventory().addItem(new ItemBuilder(
-				Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-				.addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-				.addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword.enchantments.knockback"))
-				.addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+    @Override
+    public void applyKit(Player p, int level) {
+        p.getInventory().addItem(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+                .addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword.enchantments.knockback"))
+                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
 
-		String[] pot1 = getConfig().getString("potions.pot1").split(":");
-		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.getByName(pot1[0]),
-				Integer.MAX_VALUE,
-				parseInt(pot1[1]), false, false));
+        String[] pot1 = getConfig().getString("potions.pot1").split(":");
+        p.addPotionEffect(new PotionEffect(
+                PotionEffectType.getByName(pot1[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot1[1]), false, false));
 
-		String[] pot2 = getConfig().getString("potions.pot2").split(":");
-		p.addPotionEffect(new PotionEffect(
-				PotionEffectType.getByName(pot2[0]),
-				Integer.MAX_VALUE,
-				parseInt(pot2[1])));
-	}
-	
-	@Override
-	public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-		/* if (getLevel(damagee) <= 2) {
+        String[] pot2 = getConfig().getString("potions.pot2").split(":");
+        p.addPotionEffect(new PotionEffect(
+                PotionEffectType.getByName(pot2[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot2[1])));
+    }
+
+    @Override
+    public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+        /* if (getLevel(damagee) <= 2) {
 			damagee.removePotionEffect(PotionEffectType.INVISIBILITY);
 			
 			Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
@@ -87,48 +87,48 @@ public class KitGhost extends Kit {
 					damagee.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0));
 			}, 40);
 		} */
-	}
-	
-	@Override
-	public void onItemUse(Player p, ItemStack item) {
-		if (item.getType() != Material.DIAMOND_SWORD)
-			return;
-		int level = getLevel(p);
-		if (!addCooldown(p, getName(), 10, true))
-			return;
-		
-		int range = 4;
-		Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), range);
-		if (targetPlayers.size() <= 1)
-			removeCooldowns(p);
-		
-		targetPlayers.forEach(target -> {
-			if (!target.equals(p)) {
-				target.sendMessage("Get spooked!");
-				levitateInAir(target, 40);
-			}
-		});
-	}
-	
-	private void levitateInAir(Player target, Integer ticks) {
-		if (ticks > 0) {
-			int remainingTicks = ticks - 1;
-			Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
-				particleEffect(target);
-				target.setVelocity(new Vector(0, 0.1, 0));
-				levitateInAir(target, remainingTicks);
-			}, 1);
-		}
-	}
-	
-	private void particleEffect(Player target) {
-		for (int i = 0 ; i < 5 ; i++)
-			ParticleEffect.SPELL_MOB.display(new ParticleEffect.OrdinaryColor(Color.WHITE), target.getLocation().add(0, 0.1F, 0), 1F);
-	}
-	
-	@Override
-	public List<String> getAbilityDesc() {
-		return Arrays.asList("§7Right click with your sword", "§7to spook players around you");
-	}
+    }
+
+    @Override
+    public void onItemUse(Player p, ItemStack item) {
+        if (item.getType() != Material.DIAMOND_SWORD)
+            return;
+        int level = getLevel(p);
+        if (!addCooldown(p, getName(), 10, true))
+            return;
+
+        int range = 4;
+        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), range);
+        if (targetPlayers.size() <= 1)
+            removeCooldowns(p);
+
+        targetPlayers.forEach(target -> {
+            if (!target.equals(p)) {
+                target.sendMessage("Get spooked!");
+                levitateInAir(target, 40);
+            }
+        });
+    }
+
+    private void levitateInAir(Player target, Integer ticks) {
+        if (ticks > 0) {
+            int remainingTicks = ticks - 1;
+            Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
+                particleEffect(target);
+                target.setVelocity(new Vector(0, 0.1, 0));
+                levitateInAir(target, remainingTicks);
+            }, 1);
+        }
+    }
+
+    private void particleEffect(Player target) {
+        for (int i = 0; i < 5; i++)
+            ParticleEffect.SPELL_MOB.display(new ParticleEffect.OrdinaryColor(Color.WHITE), target.getLocation().add(0, 0.1F, 0), 1F);
+    }
+
+    @Override
+    public List<String> getAbilityDesc() {
+        return Arrays.asList("§7Right click with your sword", "§7to spook players around you");
+    }
 
 }

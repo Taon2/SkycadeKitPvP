@@ -37,7 +37,7 @@ public class Recharge {
             return true;
         }
         if (time > 1)
-            member.message("§7You must wait §b"  + new DecimalFormat("0.0").format((sessions.get(item) + time * 1000 - System.currentTimeMillis()) / 1000) + "§7 seconds to use §e" + item + "§7.");
+            member.message("§7You must wait §b" + new DecimalFormat("0.0").format((sessions.get(item) + time * 1000 - System.currentTimeMillis()) / 1000) + "§7 seconds to use §e" + item + "§7.");
         if (notifyOnRecharge)
             Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> member.message("§7You can now use §e" + item + "§7."), 20);
         return false;
