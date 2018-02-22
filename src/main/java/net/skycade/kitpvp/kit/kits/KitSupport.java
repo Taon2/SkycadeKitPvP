@@ -89,7 +89,7 @@ public class KitSupport extends Kit {
 				target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1));
 				target.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1));
 		});
-		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_WOLF_HOWL, 1.0F, 1.0F);
+		p.getWorld().playSound(p.getLocation(), Sound.WOLF_HOWL, 1.0F, 1.0F);
 		shootParticlesFromLoc(p, ParticleEffect.PORTAL, 500, 1);
 	}
 

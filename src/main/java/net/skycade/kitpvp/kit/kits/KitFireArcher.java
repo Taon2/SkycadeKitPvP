@@ -101,7 +101,7 @@ public class KitFireArcher extends Kit {
 		Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> flameCooldown.remove(p.getUniqueId()), 60 - flameSeconds);
 
 		item.addEnchantment(Enchantment.ARROW_FIRE, 1);
-		p.getWorld().playSound(p.getLocation(), Sound.ITEM_FLINTANDSTEEL_USE, 1.0F, 1.0F);
+		p.getWorld().playSound(p.getLocation(), Sound.FIRE_IGNITE, 1.0F, 1.0F);
 
 		Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), ()  -> p.getInventory().forEach((itemStack) -> {
             if (itemStack != null && itemStack.getType() == Material.BOW) {

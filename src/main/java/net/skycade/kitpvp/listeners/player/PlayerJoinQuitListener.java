@@ -1,17 +1,20 @@
 package net.skycade.kitpvp.listeners.player;
 
 import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.scheduler.BukkitRunnable;
 
 
 public class PlayerJoinQuitListener implements Listener {
@@ -28,34 +31,43 @@ public class PlayerJoinQuitListener implements Listener {
         Player p = e.getPlayer();
 
         // Reset killstreak
-        if (!plugin.getSpawnRegion().contains(p) && !MemberManager.getInstance().getMember(p).getPlayer().hasPermission(new Permission("kitpvp.admin", PermissionDefault.OP)))
+        Member member = MemberManager.getInstance().getMember(p);
+        if (member == null) return;
+        if (!plugin.getSpawnRegion().contains(p) && !member.getPlayer().hasPermission(new Permission("kitpvp.admin", PermissionDefault.OP)))
             plugin.getStats(e.getPlayer()).setStreak(0);
 
-        //plugin.getStats().remove(e.getPlayer().getUniqueId()); // todo: remove
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void on(PlayerJoinEvent e) {
         e.setJoinMessage(null);
         Player p = e.getPlayer();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!p.isOnline()) return;
 
-        KitPvPStats stats = plugin.getStats(p);
+                KitPvPStats stats = plugin.getStats(p);
 
-        if (!stats.getActiveKit().getKit().isEnabled())
-            stats.setActiveKit(KitType.DEFAULT);
+                if (!stats.getActiveKit().getKit().isEnabled())
+                    stats.setActiveKit(KitType.DEFAULT);
 
-        //Unlock KitMaster
-        if (KitPvP.getInstance().getAvailableKits() - 1 == stats.getKits().size()) {
-            p.sendMessage("§7You unlocked §aall §7the kits! You unlocked the §aKitMaster §7kit.");
-            stats.addKit(KitType.KITMASTER);
-        }
+                if (plugin.isInSpawnArea(p)) {
+                    stats.getActiveKit().getKit().applyKit(p);
+                }
+
+                //Unlock KitMaster
+                if (KitPvP.getInstance().getAvailableKits() - 1 == stats.getKits().size()) {
+                    p.sendMessage("§7You unlocked §aall §7the kits! You unlocked the §aKitMaster §7kit.");
+                    stats.addKit(KitType.KITMASTER);
+                }
+            }
+        }.runTaskLater(KitPvP.getInstance(), 1L);
     }
 
     @EventHandler
     public void onFirstJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        KitPvPStats stats = plugin.getStats(p);
-
         if (p.hasPlayedBefore())
             return;
 

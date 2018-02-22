@@ -9,22 +9,14 @@ import java.util.*;
 
 public class Member {
 
-    private Map<String, Object> changes = new HashMap<>();
-
     private UUID uuid;
     private String name;
     private List<String> previousNames = new ArrayList<>();
-
-    private Map<String, Object> properties = new HashMap<>();
 
     public Member(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
         previousNames.add(name);
-    }
-
-    public Map<String, Object> getChanges() {
-        return changes;
     }
 
     public UUID getUUID() {
@@ -55,10 +47,6 @@ public class Member {
         if (p != null) {
             p.sendMessage("§7" + message);
         }
-    }
-
-    public boolean isOnline() {
-        return getPlayer() != null;
     }
 
     public void update() {
@@ -97,33 +85,5 @@ public class Member {
 
     public void addPreviousName(String name) {
         previousNames.add(name);
-    }
-
-    public Map<String, Object> getProperties() {
-        return properties;
-    }
-
-    public void setProperties(Map<String, Object> properties) {
-        this.properties = properties;
-    }
-
-    public void setPreviousNames(List<String> previousNames) {
-        this.previousNames = previousNames;
-    }
-
-    public void setKills(Integer kills) {
-        KitPvP.getInstance().getStats(this).setKills(kills);
-    }
-
-    public void setHighestStreak(Integer highestStreak) {
-        KitPvP.getInstance().getStats(this).setHighestStreak(highestStreak);
-    }
-
-    public void setDeaths(Integer deaths) {
-        KitPvP.getInstance().getStats(this).setDeaths(deaths);
-    }
-
-    public void putProperty(String key, Object value) {
-        properties.put(key, value);
     }
 }

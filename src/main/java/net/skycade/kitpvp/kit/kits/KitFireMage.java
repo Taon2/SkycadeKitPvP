@@ -81,7 +81,7 @@ public class KitFireMage extends Kit {
             return;
         fireCooldown.add(p.getUniqueId());
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> fireCooldown.remove(p.getUniqueId()), 4);
-        p.getWorld().playSound(p.getLocation(), Sound.BLOCK_FIRE_AMBIENT, 1, 1);
+        p.getWorld().playSound(p.getLocation(), Sound.FIRE, 1, 1);
 
         new BukkitRunnable() {
             Location loc = p.getEyeLocation().subtract(0, 0.5, 0);

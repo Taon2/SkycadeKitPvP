@@ -270,9 +270,13 @@ public class UtilString {
 	}
 
 	/**
-	 * Useful for making A, B & C.
-	 * For example, {@code join(Arrays.asList("A", "B", "C"), ", ", " & ")} will return "A, B & C".
-	 */
+	 * Useful for making A, B &amp; C.
+	 * For example, {@code join(Arrays.asList("A", "B", "C"), ", ", " & ")} will return "A, B &amp; C".
+	 * @param values the values to be joined
+	 * @param delimiter1 the standard delimiter to be used if not before last object
+	 * @param delimiter2 the delimiter to be used prior to last value
+	 * @return the joined string
+	*/
 	public static String join(List<String> values, String delimiter1, String delimiter2) {
 		String join = "";
 		for (int i = 0; i < values.size(); i++)

@@ -12,100 +12,115 @@ public class KitPvPStats {
     private final Member member;
     private Integer lastStreak;
 
+    private int kills = 0;
+    private int deaths = 0;
+    private int keys =  KitPvP.getInstance().getConfig().getInt("start-keys");
+    private int duels = 0;
+    private int coins = 0;
+    private int streak = 0;
+    private int highestStreak = 0;
+    private int assists = 0;
+    private KitType activeKit = KitType.DEFAULT;
+    private KitType kitPreference = KitType.DEFAULT;
+    private Map<KitType, KitData> kits = new HashMap<>();
+
+
     public KitPvPStats(Member member) {
         this.member = member;
-    }
 
-    public Map<String, Object> getProperties() {
-        return member.getProperties();
+        //Unlocked from the start:
+        KitType def = KitType.DEFAULT;
+        kits.put(def, new KitData(def));
+
+        for (String kitType : KitPvP.getInstance().getConfig().getStringList("start-kits")) {
+            kits.put(KitType.byAlias(kitType), new KitData(KitType.byAlias(kitType)));
+        }
     }
 
     public int getKills() {
-        return getInt("kills");
+        return kills;
     }
 
     public void setKills(int kills) {
-        set("kills", kills);
+        this.kills = kills;
     }
 
     public int getDeaths() {
-        return getInt("deaths");
+        return deaths;
     }
 
     public void setDeaths(int deaths) {
-        set("deaths", deaths);
+        this.deaths = deaths;
     }
 
     public int getDuels() {
-        return getInt("duels");
+        return duels;
     }
 
     public void setDuels(int duels) {
-        set("duels", duels);
+        this.duels = duels;
     }
 
     public int getCoins() {
-        return getInt("coins");
+        return coins;
     }
 
     public void setCoins(int coins) {
-        set("coins", coins);
+        this.coins = coins;
     }
 
     public int getStreak() {
-        return getInt("streak");
+        return streak;
     }
 
     public void setStreak(int streak) {
         if (streak < getStreak())
             lastStreak = getStreak();
-        set("streak", streak);
+        this.streak = streak;
+        if (streak > highestStreak) {
+            highestStreak = streak;
+            member.update();
+        }
     }
 
     public int getHighestStreak() {
-        return getInt("highest_streak");
+        return highestStreak;
     }
 
     public void setHighestStreak(int highestStreak) {
-        set("highest_streak", highestStreak);
+        this.highestStreak = highestStreak;
     }
 
     public int getCrateKeys() {
-        if (!getProperties().containsKey("keys"))
-            set("keys", KitPvP.getInstance().getConfig().getInt("start-keys"));
-        return getInt("keys");
+        return keys;
     }
 
     public void setCrateKeys(int keys) {
-        set("keys", keys);
+        this.keys = keys;
     }
 
     public int getAssists() {
-        return getInt("assists");
+        return assists;
     }
 
     public void setAssists(int assists) {
-        set("assists", assists);
+        this.assists = assists;
     }
 
     public KitType getActiveKit() {
-        if (!getProperties().containsKey("kit"))
-            set("kit", KitType.DEFAULT.toString());
-        return KitType.valueOf((String) getProperties().get("kit"));
+        return activeKit;
     }
 
     public void setActiveKit(KitType kitType) {
-        set("kit", kitType.toString());
+        this.activeKit = kitType;
     }
 
     public KitType getKitPreference() {
-        if (getProperties().containsKey("kit_preference"))
-            return KitType.valueOf((String) getProperties().get("kit_preference"));
-        return KitType.DEFAULT;
+        return kitPreference;
     }
 
     public void setKitPreference(KitType kitType) {
-        set("kit_preference", kitType.toString());
+        this.kitPreference = kitType;
     }
 
     public boolean applyKitPreference() {
@@ -116,53 +131,18 @@ public class KitPvPStats {
     }
 
     public Map<KitType, KitData> getKits() {
-        Map<String, Object> properties = getProperties();
-        if (!properties.containsKey("kits")) {
-            Map<String, Map<String, Integer>> map = new HashMap<>();
-
-            //Unlocked from the start:
-            KitType def = KitType.DEFAULT;
-            map.put(def.toString(), new KitData(def).getMap());
-
-            for (String kitType : KitPvP.getInstance().getConfig().getStringList("start-kits")) {
-                map.put(KitType.byAlias(kitType).toString(), new KitData(KitType.byAlias(kitType)).getMap());
-            }
-            set("kits", map);
-        }
-
-        Map<String, Map<String, Integer>> kits = (Map<String, Map<String, Integer>>) properties.get("kits");
-
-        Map<KitType, KitData> kitDatas = new HashMap<>();
-        for (Map.Entry<String, Map<String, Integer>> entry : kits.entrySet()) {
-            KitType kitType = KitType.valueOf(entry.getKey());
-            KitData data = new KitData(kitType);
-            Map<String, Integer> kit = entry.getValue();
-            data.setLevel(kit.get("level"));
-            if (kit.get("xp") != null) {
-                data.setXp(kit.get("xp"));
-            }
-            kitDatas.put(kitType, data);
-        }
-        return kitDatas;
+        return kits;
     }
 
     public void resetKits() {
         KitType kit = KitType.DEFAULT;
-        Map<String, Map<String, Integer>> map = new HashMap<>();
-        map.put(kit.toString(), new KitData(kit).getMap());
-        set("kits", map);
+        Map<KitType, KitData> map = new HashMap<>();
+        map.put(kit, new KitData(kit));
+        kits = map;
     }
 
     public void removeKit(KitType type) {
-        Map<String, Object> properties = getProperties();
-        Map<String, Map<String, Integer>> kits = (Map<String, Map<String, Integer>>) properties.get("kits");
-        for (String kit : kits.keySet()) {
-            if (type.equals(KitType.valueOf(kit))) {
-                properties.remove(kit);
-                break;
-            }
-        }
-        set("kits", kits);
+        kits.remove(type);
     }
 
     public boolean hasKit(KitType kit) {
@@ -172,18 +152,7 @@ public class KitPvPStats {
     public void addKit(KitType kit) {
         if (getKits().containsKey(kit))
             return;
-        Map<String, Map<String, Integer>> kits = (Map<String, Map<String, Integer>>) getProperties().get("kits");
-        kits.put(kit.toString(), new KitData(kit).getMap());
-        set("kits", kits);
-    }
-
-    private int getInt(String key) {
-        Object value = member.getProperties().getOrDefault(key, 0);
-        return (int) value;
-    }
-
-    private void set(String key, Object value) {
-        member.putProperty(key, value);
+        kits.put(kit, new KitData(kit));
     }
 
     public Integer getLastStreak() {

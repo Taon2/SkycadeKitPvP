@@ -1,11 +1,11 @@
 package net.skycade.kitpvp.coreclasses.utils;
 
 import net.skycade.kitpvp.listeners.player.LastMoveListener;
-import net.minecraft.server.v1_11_R1.Packet;
+import net.minecraft.server.v1_8_R3.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;

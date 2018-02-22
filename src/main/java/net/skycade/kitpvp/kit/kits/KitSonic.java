@@ -100,7 +100,7 @@ public class KitSonic extends Kit {
 				p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, values.indexOf(value)));
 			if (values.indexOf(value) == values.size() - 1) {
 				p.getWorld().playEffect(p.getLocation(), Effect.POTION_BREAK, 1);
-				p.getWorld().playSound(p.getLocation(), Sound.ENTITY_WOLF_SHAKE, 1, 1);
+				p.getWorld().playSound(p.getLocation(), Sound.WOLF_SHAKE, 1, 1);
 			}
 		}			
 	}

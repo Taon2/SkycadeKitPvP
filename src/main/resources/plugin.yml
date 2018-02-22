@@ -1,8 +1,13 @@
 name: KitPvP
 main: net.skycade.kitpvp.KitPvP
-version: 2.8.0-SNAPSHOT
+version: 3.0.8-SNAPSHOT
 author: ["WhiteWalker72", "Riccardo Bello (RickyB98)"]
+depend: [SkycadeCore]
 commands:
     givekey:
     keys:
     givekeys:
+    unlock:
+    unlockkit:
+    lock:
+    lockkit:

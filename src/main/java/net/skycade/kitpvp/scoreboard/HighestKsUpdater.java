@@ -4,7 +4,6 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import org.bukkit.Bukkit;
 
-import java.sql.SQLException;
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,7 +28,7 @@ public class HighestKsUpdater {
                 highestKsPlayer = UUID.fromString((String) map.get("uuid"));
                 score = (Integer) map.get("score");
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
             lock = false;
