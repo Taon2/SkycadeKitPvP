@@ -5,6 +5,7 @@ import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -68,7 +69,7 @@ public class MemberJoinQuit implements Listener {
             member.setName(p.getName());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void on(PlayerQuitEvent e) {
         Member member = memberManager.getMember(e.getPlayer());
 

@@ -6,6 +6,8 @@ import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class NametagHandler extends NametagType {
     public NametagHandler() {
         super(4);
@@ -25,7 +27,8 @@ public class NametagHandler extends NametagType {
     public ChatColor[] getColor(Player player, Player viewer) {
         Member member = MemberManager.getInstance().getMember(viewer, false);
         if (member == null) return null;
-        return member.getLastKiller().equals(player.getUniqueId()) ? new ChatColor[]{ChatColor.RED} : null;
+        UUID lastKiller = member.getLastKiller();
+        return lastKiller != null && lastKiller.equals(player.getUniqueId()) ? new ChatColor[]{ChatColor.RED} : null;
     }
 
     @Override

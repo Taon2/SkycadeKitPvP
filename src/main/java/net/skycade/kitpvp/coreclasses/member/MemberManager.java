@@ -4,6 +4,7 @@ import net.skycade.kitpvp.coreclasses.commands.Module;
 import net.skycade.kitpvp.coreclasses.member.listeners.MemberJoinQuit;
 import net.skycade.kitpvp.coreclasses.member.listeners.MemberListeners;
 import net.skycade.kitpvp.stat.KitPvPDB;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -95,7 +96,14 @@ public class MemberManager extends Module {
             }
         }.runTaskAsynchronously(getPlugin());
 
-        if (unload) members.remove(member.getUUID());
+        if (unload) new BukkitRunnable() {
+            @Override
+            public void run() {
+                Player player = Bukkit.getPlayer(member.getUUID());
+                if (player == null || !player.isOnline())
+                    members.remove(member.getUUID());
+            }
+        }.runTaskLater(plugin, 2L);
     }
 
     public void onDisable() {

@@ -20,10 +20,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -108,6 +105,11 @@ public class PlayerListeners implements Listener {
                 if (!e.isCancelled()) resetKitAndKS(e.getPlayer());
             }
         }.runTaskLater(plugin, 2);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    public void on(PlayerRespawnEvent event) {
+        resetKitAndKS(event.getPlayer());
     }
 
     public void resetKitAndKS(Player p) {
