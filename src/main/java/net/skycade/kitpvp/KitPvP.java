@@ -133,6 +133,7 @@ public class KitPvP extends SkycadePlugin {
     }
 
     public KitPvPStats getStats(Member member) {
+        if (member == null) return null;
         if (!stats.containsKey(member.getUUID()))
             stats.put(member.getUUID(), new KitPvPStats(member));
         return stats.get(member.getUUID());

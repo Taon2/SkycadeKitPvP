@@ -65,6 +65,7 @@ public class PlayerDamageListener implements Listener {
     @EventHandler
     public void on(EntityTargetLivingEntityEvent event) {
         if (!(event.getEntity() instanceof Golem)) return;
+        if (event.getTarget() == null) return;
         if (event.getEntity().getName().equalsIgnoreCase(event.getTarget().getName() + " golem"))
             event.setCancelled(true);
     }
@@ -150,10 +151,10 @@ public class PlayerDamageListener implements Listener {
         stats.setCoins(stats.getCoins() + finalReward);
 
         // Increase kit xp depending on the kit and level of the player who died.
-        int rewardXp = (diedStats.getActiveKit().getKit().getPrice() / 2000) * diedStats.getKits().get(diedStats.getActiveKit()).getLevel();
+        /*int rewardXp = (diedStats.getActiveKit().getKit().getPrice() / 2000) * diedStats.getKits().get(diedStats.getActiveKit()).getLevel();
         if (rewardXp < 1)
             rewardXp = 1;
-        stats.getActiveKit().getKit().increaseXp(killer, rewardXp);
+        stats.getActiveKit().getKit().increaseXp(killer, rewardXp);*/ // we're not using XP...
 
         checkAssist(died, killer);
     }

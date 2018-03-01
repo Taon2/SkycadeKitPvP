@@ -114,15 +114,19 @@ public class PlayerListeners implements Listener {
 
     public void resetKitAndKS(Player p) {
         KitPvPStats stats = plugin.getStats(p);
+        if (stats == null) return;
         stats.applyKitPreference();
         p.getInventory().clear();
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            stats.getActiveKit().getKit().applyKit(p);
-        }, 3);
+            if (p.isOnline()) {
+                stats.getActiveKit().getKit().applyKit(p);
+            }
+        }, 1);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            stats.getActiveKit().getKit().giveSoup(p, 32);
-        }, 5);
+            if (p.isOnline()) stats.getActiveKit().getKit().giveSoup(p, 32);
+        }, 1);
+
         Bukkit.getScheduler().runTaskLater(plugin, p::updateInventory, 10);
         int streak = stats.getStreak();
         if (streak > stats.getHighestStreak())
