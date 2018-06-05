@@ -1,8 +1,11 @@
 package net.skycade.kitpvp.listeners.player;
 
+import net.skycade.SkycadeCore.leveling.achievements.Achievement;
+import net.skycade.SkycadeCore.leveling.achievements.CoreAchievementEvent;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
+import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.*;
@@ -109,7 +112,7 @@ public class PlayerDamageListener implements Listener {
             if (customName == null)
                 return;
 
-            killer = Bukkit.getPlayer(customName.substring(0, customName.length()));
+            killer = Bukkit.getPlayer(customName);
             lastDamagerMap.remove(died.getUniqueId());
         }
         if (killer == null || killer.equals(died))
@@ -139,8 +142,34 @@ public class PlayerDamageListener implements Listener {
         KitPvPStats stats = plugin.getStats(killerMem);
 
         // Give rewards to the killer
-        stats.setKills(stats.getKills() + 1);
-        stats.setStreak(plugin.getStats(killer).getStreak() + 1);
+        final int kills = stats.getKills() + 1;
+        stats.setKills(kills);
+
+        Bukkit.getServer().getPluginManager().callEvent(new CoreAchievementEvent(killer, "kitpvpkills") {
+            @Override
+            public boolean matcher(Achievement achievement) {
+                return achievement.getJsonParams().get("kills").getAsInt() <= kills;
+            }
+        });
+
+        double kdr = UtilMath.getKDR(kills, stats.getDeaths());
+
+        Bukkit.getServer().getPluginManager().callEvent(new CoreAchievementEvent(killer, "kitpvpkdr") {
+            @Override
+            public boolean matcher(Achievement achievement) {
+                return achievement.getJsonParams().get("kdr").getAsDouble() <= kdr;
+            }
+        });
+
+        final int streak = plugin.getStats(killer).getStreak() + 1;
+        stats.setStreak(streak);
+
+        Bukkit.getServer().getPluginManager().callEvent(new CoreAchievementEvent(killer, "kitpvpstreak") {
+            @Override
+            public boolean matcher(Achievement achievement) {
+                return achievement.getJsonParams().get("streak").getAsInt() <= streak;
+            }
+        });
 
         int base = KitPvP.getInstance().getConfig().getInt("kill-credits");
         int extra = (int) Math.ceil(base * Math.pow((100 + KitPvP.getInstance().getConfig().getInt("kill-bonus-percentage")) / ((double) 100), stats.getStreak() - 1));
