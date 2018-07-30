@@ -1,8 +1,10 @@
 package net.skycade.kitpvp.coreclasses.member.listeners;
 
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,6 +16,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 
 public class MemberJoinQuit implements Listener {
@@ -40,17 +43,23 @@ public class MemberJoinQuit implements Listener {
         }
 
         lastLogin.put(e.getUniqueId(), System.currentTimeMillis());
-        Member member = memberManager.getMember(e.getUniqueId(), true);
-        if (member == null) {
-            member = new Member(e.getUniqueId(), e.getName());
-        } else {
-            member.setName(e.getName());
+        Member member;
+        try {
+            member = memberManager.getMember(e.getUniqueId(), true);
+            if (member == null) {
+                member = new Member(e.getUniqueId(), e.getName());
+            } else {
+                member.setName(e.getName());
             /* List<String> previousNames = member.getPreviousNames();
             if (!previousNames.contains(e.getName())) {
                 member.addPreviousName(e.getName());
             } setName already handles this no? */
+            }
+            memberManager.getMembers().put(member.getUUID(), member);
+        } catch (Exception a) {
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "Sorry, your data was not loaded correctly! Please re-join!");
+            KitPvP.getInstance().getLogger().log(Level.WARNING, "An error occurred while loading player's data.", a);
         }
-        memberManager.getMembers().put(member.getUUID(), member);
 
     }
 
