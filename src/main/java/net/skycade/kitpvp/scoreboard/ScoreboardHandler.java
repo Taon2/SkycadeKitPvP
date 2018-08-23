@@ -1,28 +1,76 @@
 package net.skycade.kitpvp.scoreboard;
 
-import net.skycade.SkycadeCore.displays.SidebarType;
+import net.skycade.SkycadeCore.utility.scoreboard.Display;
+import net.skycade.SkycadeCore.utility.scoreboard.ScoreboardManager;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
-import net.skycade.kitpvp.coreclasses.utils.UtilString;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-public class ScoreboardHandler extends SidebarType {
-    public ScoreboardHandler() {
-        super(2);
+public class ScoreboardHandler {
+    private ScoreboardHandler() {}
+
+    public static void init() {
+        ScoreboardManager.getInstance().setCurrentInitializer((p, d) -> {
+            Member member = MemberManager.getInstance().getMember(p);
+            KitPvP plugin = KitPvP.getInstance();
+            KitPvPStats stats = plugin.getStats(member);
+            int kills = stats.getKills();
+            int deaths = stats.getDeaths();
+            double kd = UtilMath.getKDR(kills, deaths);
+            double kdr = (Math.round(kd * 10.0) / 10.0);
+            String kdColor = kdr >= 1 ? "\u00A7a" : "\u00A7c";
+            int ks = stats.getStreak();
+            String kit = stats.getActiveKit().getKit().getName();
+            int coins = stats.getCoins();
+            String unlockColor = plugin.getStats().get(member.getUUID()).getKits().size() == plugin.getKitManager().getKits().size() ? "§6" : "§e";
+            String kitsUnlocked = unlockColor + plugin.getStats().get(member.getUUID()).getKits().size() + "/§6" + KitPvP.getInstance().getAvailableKits();
+
+            int i = 21;
+
+            d.setTitle(ChatColor.translateAlternateColorCodes('&', "&b&lSkycade &f&lKitPvP"));
+
+            d.setScore("w1", "    ", --i);
+            d.setScore("kills", "Kills: \u00A7a" + kills, --i);
+            d.setScore("deaths", "Deaths: \u00A7c" + deaths, --i);
+            d.setScore("kd", "K/D: " + kdColor + kdr, --i);
+            d.setScore("w2", "   ", --i);
+            d.setScore("killstreak", "Killstreak: §a" + ks, --i);
+
+            UUID highestKsUUID = plugin.getKsUpdater().getHighestKsPlayer();
+            if (highestKsUUID != null && plugin.getStats().containsKey(highestKsUUID)) {
+                d.setScore("highks1","Highest ks: " + ChatColor.GREEN, --i);
+
+                String name = Bukkit.getOfflinePlayer(highestKsUUID).getName();
+                d.setScore("highks2","§7" + name + ": " + plugin.getKsUpdater().getScore(), --i);
+            } else {
+                d.setScore("highks1","Highest ks: " + ChatColor.GREEN, --i);
+                d.setScore("highks2","§7N/A", --i);
+            }
+
+            d.setScore("w3", "  ", --i);
+
+            d.setScore("kit","Kit: §a" + kit, --i);
+            d.setScore("coins","Coins: §6" + coins, --i);
+            d.setScore("kits","Kits unlocked: " + unlockColor + kitsUnlocked, --i);
+
+            d.setScore("w4", " ", --i);
+
+            d.setScore("footer", ChatColor.translateAlternateColorCodes('&', "&b&lplay.skycade.net"), --i);
+        });
     }
 
-    @Override
-    public List<String> getText(Player viewer) {
-        Member member = MemberManager.getInstance().getMember(viewer);
+    public static void updatePlayer(Player p) {
+        Display d = ScoreboardManager.getInstance().getDisplay(p);
+        if (d == null) return;
+
+        Member member = MemberManager.getInstance().getMember(p);
         KitPvP plugin = KitPvP.getInstance();
         KitPvPStats stats = plugin.getStats(member);
         int kills = stats.getKills();
@@ -36,42 +84,25 @@ public class ScoreboardHandler extends SidebarType {
         String unlockColor = plugin.getStats().get(member.getUUID()).getKits().size() == plugin.getKitManager().getKits().size() ? "§6" : "§e";
         String kitsUnlocked = unlockColor + plugin.getStats().get(member.getUUID()).getKits().size() + "/§6" + KitPvP.getInstance().getAvailableKits();
 
-        List<String> text = new ArrayList<>();
-
-        text.add(UtilString.getWhitespace(3));
-        text.add("Kills: \u00A7a" + kills);
-        text.add("Deaths: \u00A7c" + deaths);
-        text.add("K/D: " + kdColor + kdr);
-        text.add(UtilString.getWhitespace(2));
-        text.add("Killstreak: §a" + ks);
+        d.updateScore("kills", "Kills: \u00A7a" + kills);
+        d.updateScore("deaths", "Deaths: \u00A7c" + deaths);
+        d.updateScore("kd", "K/D: " + kdColor + kdr);
+        d.updateScore("killstreak", "Killstreak: §a" + ks);
 
         UUID highestKsUUID = plugin.getKsUpdater().getHighestKsPlayer();
         if (highestKsUUID != null && plugin.getStats().containsKey(highestKsUUID)) {
-            text.add("Highest ks: §a");
+            d.updateScore("highks1","Highest ks: " + ChatColor.GREEN);
 
             String name = Bukkit.getOfflinePlayer(highestKsUUID).getName();
-            text.add("§7" + name + ": " + plugin.getKsUpdater().getScore());
+            d.updateScore("highks2","§7" + name + ": " + plugin.getKsUpdater().getScore());
+        } else {
+            d.updateScore("highks1","Highest ks: " + ChatColor.GREEN);
+            d.updateScore("highks2","§7N/A");
         }
 
-        if (plugin.getKitManager().getSignMap().containsKey(member.getUUID())) {
-            text.add("Refresh cd: §a" + plugin.getKitManager().getSignMap().get(member.getUUID()) + "s");
-        }
-
-        text.add(UtilString.getWhitespace(1));
-        text.add("Kit: §a" + kit);
-        text.add("Coins: §6" + coins);
-        text.add("Kits unlocked: " + unlockColor + kitsUnlocked);
-
-        text.add(UtilString.getWhitespace(0));
-
-        text.add(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("scoreboard.bottom-link")));
-
-        return text;
-    }
-
-    @Override
-    public boolean isVisible(Player player) {
-        return true;
+        d.updateScore("kit","Kit: §a" + kit);
+        d.updateScore("coins","Coins: §6" + coins);
+        d.updateScore("kits","Kits unlocked: " + unlockColor + kitsUnlocked);
     }
 }
 

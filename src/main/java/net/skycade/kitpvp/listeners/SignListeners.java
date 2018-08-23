@@ -7,6 +7,7 @@ import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.scoreboard.ScoreboardHandler;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -95,7 +96,7 @@ public class SignListeners implements Listener {
                 member.message("§7You unlocked §aall §7the kits! You unlocked the §aKitMaster §7kit.");
                 stats.addKit(KitType.KITMASTER);
             }
-
+            ScoreboardHandler.updatePlayer(member.getPlayer());
         } else if (s.getLine(0).equalsIgnoreCase("§4[Refresh kit]")) {
             if (manager.getSignMap().containsKey(member.getUUID())) {
                 member.message("You §acan't §7use the sign yet.");
@@ -106,7 +107,10 @@ public class SignListeners implements Listener {
             stats.getActiveKit().getKit().applyKit(member.getPlayer());
             stats.getActiveKit().getKit().giveSoup(member.getPlayer(), 32);
             member.message("Your kit has been §arefreshed§7!");
+            ScoreboardHandler.updatePlayer(member.getPlayer());
         }
+
+
     }
 
     @EventHandler

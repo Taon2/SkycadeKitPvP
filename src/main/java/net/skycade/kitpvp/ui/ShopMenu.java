@@ -7,6 +7,7 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.scoreboard.ScoreboardHandler;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -128,6 +129,8 @@ public class ShopMenu implements Listener {
             member.message("§7You bought §a" + kit.getName() + "§7 for §a" + kit.getPrice() + "§7 coins.");
             stats.addKit(kitType);
             stats.setCoins(stats.getCoins() - kit.getPrice());
+
+            ScoreboardHandler.updatePlayer(member.getPlayer());
             MemberManager.getInstance().update(member);
             Bukkit.getScheduler().runTaskLater(kitManager.getPlugin(), () -> member.getPlayer().closeInventory(), 1);
             return;

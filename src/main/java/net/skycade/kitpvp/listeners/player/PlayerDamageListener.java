@@ -9,6 +9,7 @@ import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.*;
+import net.skycade.kitpvp.scoreboard.ScoreboardHandler;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -104,6 +105,8 @@ public class PlayerDamageListener implements Listener {
         died.getLocation().getWorld().playEffect(died.getLocation(), Effect.SMOKE, 1);
         plugin.getKitManager().getSignMap().remove(died.getUniqueId());
 
+        ScoreboardHandler.updatePlayer(died);
+
         // Try to get the killer
         Player killer = died.getKiller();
         if (killer == null && lastDamagerMap.get(died.getUniqueId()) != null) {
@@ -186,6 +189,8 @@ public class PlayerDamageListener implements Listener {
         stats.getActiveKit().getKit().increaseXp(killer, rewardXp);*/ // we're not using XP...
 
         checkAssist(died, killer);
+
+        ScoreboardHandler.updatePlayer(killer);
     }
 
     @EventHandler
@@ -336,6 +341,8 @@ public class PlayerDamageListener implements Listener {
             }
             killAssist.remove(killed.getUniqueId());
         }
+        ScoreboardHandler.updatePlayer(killer);
+        ScoreboardHandler.updatePlayer(killed);
     }
 
     @EventHandler

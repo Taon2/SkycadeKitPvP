@@ -1,7 +1,6 @@
 package net.skycade.kitpvp;
 
 import net.skycade.SkycadeCore.SkycadePlugin;
-import net.skycade.SkycadeCore.displays.Displays;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.region.DataPoint;
@@ -13,15 +12,11 @@ import net.skycade.kitpvp.listeners.WorldListeners;
 import net.skycade.kitpvp.listeners.chat.ChatClick;
 import net.skycade.kitpvp.listeners.player.*;
 import net.skycade.kitpvp.scoreboard.HighestKsUpdater;
-import net.skycade.kitpvp.scoreboard.NametagHandler;
 import net.skycade.kitpvp.scoreboard.ScoreboardHandler;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.stat.RotationManager;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -91,7 +86,9 @@ public class KitPvP extends SkycadePlugin {
         this.ksUpdater = new HighestKsUpdater(this);
         Bukkit.getPluginManager().registerEvents(chatClick = new ChatClick(), this);
         //new KitPvPScoreboard(this);
-        Displays.registerDisplay(new ScoreboardHandler());
+        //Displays.registerDisplay(new ScoreboardHandler());
+
+        ScoreboardHandler.init();
 
         //Change the datapoint locations!
         Location location1 = (Location) getConfig().get("spawn-region.point-1");
@@ -106,7 +103,12 @@ public class KitPvP extends SkycadePlugin {
         }
         this.availableKits = i;
 
-        Displays.registerDisplay(new NametagHandler());
+        net.skycade.SkycadeCore.utility.scoreboard.ScoreboardManager.getInstance().registerNametag(2, (p, v) -> null, (player, viewer) -> {
+            Member member = MemberManager.getInstance().getMember(viewer, false);
+            if (member == null) return null;
+            UUID lastKiller = member.getLastKiller();
+            return lastKiller != null && lastKiller.equals(player.getUniqueId()) ? Collections.singletonList(ChatColor.RED) : null;
+        }, (p, v) -> null);
     }
 
     @Override
