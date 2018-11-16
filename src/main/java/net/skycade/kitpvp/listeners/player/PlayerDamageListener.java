@@ -6,6 +6,7 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
+import net.skycade.kitpvp.events.DoubleCoinsEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.*;
@@ -137,10 +138,24 @@ public class PlayerDamageListener implements Listener {
 //            return;
 //        }
 
-        //Extra credits when a high ks gets broken
-        int killstreakCredits = diedStats.getStreak() >= 10 ? diedStats.getStreak() : 0;
+        // Bounties!
+        int bounty = 0;
+
+        int bountyLevel;
+        for (bountyLevel = diedStreak; bountyLevel > 0; --bountyLevel) {
+            bounty = KitPvP.getInstance().getConfig().getInt("bounties." + bountyLevel, 0);
+
+            if (bounty != 0) break;
+        }
+
+        if (bounty != 0) {
+            killerMem.message("§aYou got " + bounty + " extra coins as a reward for breaking " + diedMem.getName() + "'s killstreak!");
+        }
+
+        //Extra coins when a high ks gets broken
+        int killstreakCoins = diedStats.getStreak() >= 10 ? diedStats.getStreak() : 0;
         if (diedStats.getStreak() >= 10)
-            killerMem.message("Killstreak broken, you got §a" + diedStats.getStreak() + " extra credits§7.");
+            killerMem.message("Killstreak broken, you got §a" + diedStats.getStreak() + " extra coins§7.");
 
         KitPvPStats stats = plugin.getStats(killerMem);
 
@@ -174,11 +189,14 @@ public class PlayerDamageListener implements Listener {
             }
         });
 
-        int base = KitPvP.getInstance().getConfig().getInt("kill-credits");
-        int extra = (int) Math.ceil(base * Math.pow((100 + KitPvP.getInstance().getConfig().getInt("kill-bonus-percentage")) / ((double) 100), stats.getStreak() - 1));
+        int base = KitPvP.getInstance().getConfig().getInt("kill-coins");
+        int extra = (int) Math.ceil(base * Math.pow((100 + KitPvP.getInstance().getConfig().getInt("kill-bonus-percentage")) / ((double) 100), stats.getStreak() - 1)) + bounty;
 
-        double modifier = KitPvP.getInstance().getConfig().getDouble("credits-modifier");
-        int finalReward = (int) Math.ceil(modifier / (double) 100 * (extra + killstreakCredits));
+        double modifier = KitPvP.getInstance().getConfig().getDouble("coins-modifier");
+        int finalReward = (int) Math.ceil(modifier / (double) 100 * (extra + killstreakCoins));
+
+        if (DoubleCoinsEvent.isActive())
+            finalReward = finalReward * 2;
 
         stats.setCoins(stats.getCoins() + finalReward);
 
@@ -318,14 +336,14 @@ public class PlayerDamageListener implements Listener {
             for (Map.Entry<UUID, Double> entry : inner.entrySet()) {
                 Player keyPlayer = Bukkit.getPlayer(entry.getKey());
                 if (keyPlayer != null) {
-                    int credits = KitPvP.getInstance().getConfig().getInt("kill-credits");
+                    int coins = KitPvP.getInstance().getConfig().getInt("kill-coins");
                     double percentage = ((entry.getValue() * 100) / total) / 100;
 
                     if (keyPlayer != killed && keyPlayer != killer) {
-                        int assist = (int) (credits * percentage);
+                        int assist = (int) (coins * percentage);
                         if (assist > 0) {
                             keyPlayer.sendMessage("§7You got §6" + assist +
-                                    " §7credits for assisting to kill " + killed.getName() + "§7!");
+                                    " §7coins for assisting to kill " + killed.getName() + "§7!");
 
                             // Give xp reward
                             KitPvPStats diedStats = plugin.getStats(killed);

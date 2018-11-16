@@ -21,7 +21,9 @@ public class PlayerMoveListener implements Listener {
     // Might cause lagg.
     private void startLilypadEffect() {
         Bukkit.getOnlinePlayers().stream()
-                .filter(p -> p.getLocation().getBlock().getType() == Material.WATER_LILY && UtilPlayer.isMoving(p)).collect(Collectors.toList())
+                .filter(p -> (p.getLocation().getBlock().getType() == Material.WATER_LILY ||
+                                p.getLocation().getBlock().getType().equals(Material.GOLD_PLATE))
+                                && UtilPlayer.isMoving(p)).collect(Collectors.toList())
                 .forEach(p -> p.setVelocity(new org.bukkit.util.Vector(p.getLocation().getDirection().getX(), 1.3,
                         p.getLocation().getDirection().getZ())));
         Bukkit.getScheduler().runTaskLater(plugin, this::startLilypadEffect, 5);

@@ -1,11 +1,13 @@
 package net.skycade.kitpvp;
 
 import net.skycade.SkycadeCore.SkycadePlugin;
+import net.skycade.SkycadeCore.utility.scoreboard.ScoreboardManager;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.region.DataPoint;
 import net.skycade.kitpvp.coreclasses.region.Region;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
+import net.skycade.kitpvp.events.RandomEvent;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.listeners.WorldListeners;
@@ -17,6 +19,7 @@ import net.skycade.kitpvp.stat.KitPvPDB;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.stat.RotationManager;
 import org.bukkit.*;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -47,8 +50,8 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("required-xp-multiplier", 1);
         defaults.put("display-hit-damage", true);
         defaults.put("ks-update-time", 30);
-        defaults.put("kill-credits", 15);
-        defaults.put("credits-modifier", 100d);
+        defaults.put("kill-coins", 15);
+        defaults.put("coins-modifier", 100d);
         defaults.put("chest-cooldown", 30);
         defaults.put("sign-refresh-cooldown", 120);
         defaults.put("stat-refresh-time", 1800);
@@ -59,15 +62,9 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("scoreboard.bottom-link", "play.skycade.net");
         defaults.put("kill-bonus-percentage", 5);
 
+        defaults.put("bounties", new YamlConfiguration());
 
-        defaults.put("database.host", "localhost");
-        defaults.put("database.port", 3306);
-        defaults.put("database.name", "skycade");
-        defaults.put("database.username", "skycade");
-        defaults.put("database.password", "h1ghl1s3cur3pa55");
         defaults.put("database.kitpvp-table", "skycade_KitPvPMembers");
-        defaults.put("database.previous-names-table", "skycade_PreviousNames");
-        defaults.put("database.properties-table", "skycade_KitPvPProperties");
 
         setConfigDefaults(defaults);
         loadDefaultConfig();
@@ -109,6 +106,25 @@ public class KitPvP extends SkycadePlugin {
             UUID lastKiller = member.getLastKiller();
             return lastKiller != null && lastKiller.equals(player.getUniqueId()) ? Collections.singletonList(ChatColor.RED) : null;
         }, (p, v) -> null);
+
+        ScoreboardManager.getInstance().registerNametag(3, (p, v) -> null, (p, v) -> null, (p, v) -> {
+            // Bounties!
+            int bounty = 0;
+
+            int bountyLevel;
+            int killStreak = getStats(p).getStreak();
+            for (bountyLevel = killStreak; bountyLevel > 0; --bountyLevel) {
+                bounty = KitPvP.getInstance().getConfig().getInt("bounties." + bountyLevel, 0);
+
+                if (bounty != 0) break;
+            }
+
+            if (bounty == 0) return null;
+
+            return ChatColor.GOLD + " - $" + bounty;
+        });
+
+        RandomEvent.init();
     }
 
     @Override
@@ -117,7 +133,7 @@ public class KitPvP extends SkycadePlugin {
         for (Member member : MemberManager.getInstance().getMembers().values()) {
             KitPvPDB.getInstance().setMemberDataSync(member);
         }
-        KitPvPDB.getInstance().closeConnection();
+
         rotationManager.update();
     }
 

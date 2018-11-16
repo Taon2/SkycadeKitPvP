@@ -4,18 +4,25 @@ import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class CommandSoup extends Command<KitManager> {
 
     private final static int COST = 20;
 
+    private Map<UUID, Long> lastSoup = new HashMap<>();
+
     public CommandSoup(KitManager module) {
-        super(module, "Buy soup for " + COST + " credits", new Permission("kitpvp.default", PermissionDefault.TRUE), "soup");
+        super(module, "Buy soup for " + COST + " coins", new Permission("kitpvp.default", PermissionDefault.TRUE), "soup");
     }
 
     @Override
@@ -24,6 +31,16 @@ public class CommandSoup extends Command<KitManager> {
             member.message("You can't use this command when you're in a duel.");
             return;
         }
+
+        long now = System.currentTimeMillis();
+        if (lastSoup.containsKey(member.getUUID())) {
+            long diff = (now - lastSoup.get(member.getUUID())) / 1000L;
+            if (diff < 60) {
+                member.message(ChatColor.RED + "You need to wait another " + (60 - diff) + " second" + ((60 - diff) == 1 ? "" : "s") + " before using /soup again!");
+                return;
+            }
+        }
+
         KitPvPStats stats = getModule().getKitPvP().getStats(member);
         int coins = stats.getCoins();
         if (coins - COST < 0) {
@@ -36,7 +53,8 @@ public class CommandSoup extends Command<KitManager> {
         }
         stats.getActiveKit().getKit().giveSoup(member.getPlayer(), 30);
         stats.setCoins(coins - COST);
-        member.message("§7You bought soup for §a" + COST + " credits§7.");
+        lastSoup.put(member.getUUID(), now);
+        member.message("§7You bought soup for §a" + COST + " coins§7.");
     }
 
     private boolean hasSpace(Player p) {

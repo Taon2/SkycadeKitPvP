@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@Deprecated
 public class NametagHandler extends NametagType {
     public NametagHandler() {
         super(4);

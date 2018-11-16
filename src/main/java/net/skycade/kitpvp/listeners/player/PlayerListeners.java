@@ -2,6 +2,8 @@ package net.skycade.kitpvp.listeners.player;
 
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
+import net.skycade.kitpvp.events.RandomEvent;
+import net.skycade.kitpvp.events.TagEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.KitMedic;
@@ -118,6 +120,20 @@ public class PlayerListeners implements Listener {
         stats.applyKitPreference();
         p.getInventory().clear();
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
+        int streak = stats.getStreak();
+        if (streak > stats.getHighestStreak())
+            stats.setHighestStreak(stats.getStreak());
+        stats.setStreak(0);
+
+        if (RandomEvent.getCurrent() instanceof TagEvent) {
+            TagEvent tagEvent = (TagEvent) RandomEvent.getCurrent();
+            if (tagEvent.getInfected().equals(p.getUniqueId())) {
+                tagEvent.stop();
+            } else {
+                tagEvent.remove(p.getUniqueId());
+            }
+        }
+
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (p.isOnline()) {
                 stats.getActiveKit().getKit().applyKit(p);
@@ -128,10 +144,6 @@ public class PlayerListeners implements Listener {
         }, 1);
 
         Bukkit.getScheduler().runTaskLater(plugin, p::updateInventory, 10);
-        int streak = stats.getStreak();
-        if (streak > stats.getHighestStreak())
-            stats.setHighestStreak(stats.getStreak());
-        stats.setStreak(0);
     }
 
 }
