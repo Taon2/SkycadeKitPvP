@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.events;
 
+import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.scoreboard.ScoreboardHandler;
 import net.skycade.kitpvp.stat.KitPvPStats;
@@ -13,10 +14,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
@@ -45,7 +49,10 @@ public class TagEvent extends RandomEvent implements Listener {
     @Override
     public void run() {
         List<Player> p = Bukkit.getOnlinePlayers()
-                .stream().filter(e -> !KitPvP.getInstance().isInSpawnArea(e)).collect(Collectors.toList());
+                .stream().filter(e ->
+                        !KitPvP.getInstance().isInSpawnArea(e)
+                                && !VanishStatus.isVanished(e.getUniqueId())
+                ).collect(Collectors.toList());
 
         if (p.isEmpty()) {
             super.end();
@@ -76,6 +83,8 @@ public class TagEvent extends RandomEvent implements Listener {
         for (UUID uuid : inGame) {
             Player player = Bukkit.getPlayer(uuid);
             if (player == null || !player.isOnline()) continue;
+            for (PotionEffect potionEffect : player.getActivePotionEffects())
+                player.removePotionEffect(potionEffect.getType());
             PlayerInventory inventory = player.getInventory();
             inventory.clear();
             inventory.setHelmet(helmet.clone());
@@ -90,6 +99,8 @@ public class TagEvent extends RandomEvent implements Listener {
         leggings.setItemMeta(meta);
         boobs.setItemMeta(meta);
 
+        for (PotionEffect potionEffect : infectedPlayer.getActivePotionEffects())
+            infectedPlayer.removePotionEffect(potionEffect.getType());
         PlayerInventory inventory = infectedPlayer.getInventory();
         inventory.clear();
         inventory.setHelmet(helmet.clone());
@@ -142,6 +153,12 @@ public class TagEvent extends RandomEvent implements Listener {
         Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "INFECTION ENDED!");
         if (infectedPlayer == null) return;
 
+        infectedPlayer.getInventory().clear();
+        infectedPlayer.getInventory().setHelmet(null);
+        infectedPlayer.getInventory().setChestplate(null);
+        infectedPlayer.getInventory().setLeggings(null);
+        infectedPlayer.getInventory().setBoots(null);
+
         KitPvPStats stats = KitPvP.getInstance().getStats(infectedPlayer);
 
         stats.getActiveKit().getKit().applyKit(infectedPlayer);
@@ -162,9 +179,18 @@ public class TagEvent extends RandomEvent implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
         if (begin == null) return;
-        inGame.remove(event.getPlayer().getUniqueId());
 
-        if (this.infected.equals(event.getPlayer().getUniqueId())) {
+        Player player = event.getPlayer();
+        inGame.remove(player.getUniqueId());
+
+        if (this.infected.equals(player.getUniqueId())) {
+            player.getInventory().clear();
+
+            player.getInventory().setHelmet(null);
+            player.getInventory().setChestplate(null);
+            player.getInventory().setLeggings(null);
+            player.getInventory().setBoots(null);
+
             stop();
         }
     }
@@ -187,8 +213,18 @@ public class TagEvent extends RandomEvent implements Listener {
             Player damager = (Player) event.getDamager();
 
             if (damager.getUniqueId().equals(infected)) {
+
+                if (!inGame.contains(damagee.getUniqueId()))
+                    event.setCancelled(true);
+
                 boolean remove = inGame.remove(damagee.getUniqueId());
                 if (!remove) return;
+
+                damagee.getInventory().clear();
+                damagee.getInventory().setHelmet(null);
+                damagee.getInventory().setChestplate(null);
+                damagee.getInventory().setLeggings(null);
+                damagee.getInventory().setBoots(null);
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(damagee);
                 stats.getActiveKit().getKit().applyKit(damagee);
@@ -199,10 +235,18 @@ public class TagEvent extends RandomEvent implements Listener {
 
                 ScoreboardHandler.updatePlayer(damager);
 
-            } else if (inGame.contains(damagee.getUniqueId()) && inGame.contains(damager.getUniqueId())) {
+            } else if (inGame.contains(damagee.getUniqueId()) || inGame.contains(damager.getUniqueId())) {
                 event.setCancelled(true);
             }
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onInventoryClick(InventoryClickEvent event) {
+        UUID uuid = event.getWhoClicked().getUniqueId();
+        if (begin != null && (inGame.contains(uuid) || infected == uuid) &&
+                event.getClickedInventory().getType() == InventoryType.PLAYER)
+            event.setCancelled(true);
     }
 
     public void remove(UUID uuid) {

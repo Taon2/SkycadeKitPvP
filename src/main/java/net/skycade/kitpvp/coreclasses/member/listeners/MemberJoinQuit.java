@@ -59,6 +59,7 @@ public class MemberJoinQuit implements Listener {
         } catch (Exception a) {
             e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "Sorry, your data was not loaded correctly! Please re-join!");
             KitPvP.getInstance().getLogger().log(Level.WARNING, "An error occurred while loading player's data.", a);
+            memberManager.getMembers().remove(e.getUniqueId());
         }
 
     }

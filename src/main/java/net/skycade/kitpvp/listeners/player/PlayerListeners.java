@@ -127,10 +127,12 @@ public class PlayerListeners implements Listener {
 
         if (RandomEvent.getCurrent() instanceof TagEvent) {
             TagEvent tagEvent = (TagEvent) RandomEvent.getCurrent();
-            if (tagEvent.getInfected().equals(p.getUniqueId())) {
-                tagEvent.stop();
-            } else {
-                tagEvent.remove(p.getUniqueId());
+            if (tagEvent.getInfected() != null) {
+                if (tagEvent.getInfected().equals(p.getUniqueId())) {
+                    tagEvent.stop();
+                } else {
+                    tagEvent.remove(p.getUniqueId());
+                }
             }
         }
 
