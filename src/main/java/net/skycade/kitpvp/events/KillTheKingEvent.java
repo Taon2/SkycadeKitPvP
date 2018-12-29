@@ -152,16 +152,19 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
 
         Player died = (Player) e.getEntity();
         if (this.king.equals(died.getUniqueId())){
-            Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The King has been killed!");
-            stop();
-
+            Player killer = null;
             //try to get the killer
             try {
-                Player killer = died.getKiller();
+                killer = died.getKiller();
                 killer.sendMessage(ChatColor.GREEN + "You have killed the King!");
             }
             catch (Exception ex){}
+            if (killer != null)
+                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + killer.getName() + ChatColor.GREEN + "" + ChatColor.BOLD + " has killed the King!");
+            else
+                Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The King has been killed!");
 
+            stop();
             //add reward for killer
         }
 
