@@ -84,10 +84,13 @@ public abstract class Kit implements Listener {
 
     public void applyKit(Player p) {
         if (p == null || !p.isOnline()) return;
+        clearArmor(p);
         p.getInventory().clear();
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
         applyKit(p, getLevel(p));
     }
+
+
 
     public abstract void applyKit(Player p, int level);
 
@@ -241,6 +244,13 @@ public abstract class Kit implements Listener {
                     .addEnchantment(Enchantment.DURABILITY, durability)
                     .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, protection).build());
         return armour.toArray(new ItemStack[armour.size()]);
+    }
+
+    public void clearArmor(Player player){
+        player.getInventory().setHelmet(null);
+        player.getInventory().setChestplate(null);
+        player.getInventory().setLeggings(null);
+        player.getInventory().setBoots(null);
     }
 
     public void giveSoup(Player p, int amount) {

@@ -147,7 +147,7 @@ public class KitCaveMan extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Use your shovel to throw a dirt block", "§7higher level results in a lower cooldown");
+        return Arrays.asList("§7Use your shovel to throw a dirt block.");
     }
 
 }

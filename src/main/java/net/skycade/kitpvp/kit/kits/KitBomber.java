@@ -125,7 +125,7 @@ public class KitBomber extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7You can fire tnt", "§7you will regain tnt overtime", "§7you will get tnt faster if you're a higher level");
+        return Arrays.asList("§7You can fire tnt", "§7you will regain tnt overtime.");
     }
 
 }

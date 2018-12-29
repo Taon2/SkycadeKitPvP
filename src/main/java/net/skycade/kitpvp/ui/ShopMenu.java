@@ -22,18 +22,30 @@ import java.util.*;
 
 public class ShopMenu implements Listener {
 
-    private final Inventory menu;
-    private final Inventory confirmMenu;
+    private Inventory menu;
+    private Inventory confirmMenu = Bukkit.createInventory(null, MenuSize.THREE_LINE.getSize(), "§aConfirm");
     private final KitManager kitManager;
     private final Map<UUID, KitType> chosenKitMap = new HashMap<>();
 
     public ShopMenu(KitManager kitManager) {
         this.kitManager = kitManager;
-        menu = Bukkit.createInventory(null, getMenuSize(), "§aShop");
+        if (KitPvP.getInstance().getConfig().getString("kits-rotation-enabled").equals("false")){
+            menu = Bukkit.createInventory(null, MenuSize.SIX_LINE.getSize(), "§aShop");
+        }
+        else{
+            menu = Bukkit.createInventory(null, getMenuSize(), "§aShop");
+        }
         confirmMenu = Bukkit.createInventory(null, MenuSize.THREE_LINE.getSize(), "§aConfirm");
     }
 
+
     private void updateValues(Member member) {
+        if (KitPvP.getInstance().getConfig().getString("kits-rotation-enabled").equals("false")){
+            menu = Bukkit.createInventory(null, MenuSize.SIX_LINE.getSize(), "§aShop");
+        }
+        else{
+            menu = Bukkit.createInventory(null, getMenuSize(), "§aShop");
+        }
         menu.clear();
         KitPvPStats stats = kitManager.getKitPvP().getStats(member);
 
@@ -46,6 +58,7 @@ public class ShopMenu implements Listener {
                 menu.addItem(new ItemBuilder(kit.getIcon()).addLore(Arrays.asList("Price: §6" + kit.getPrice(), "", "§7Click to buy this kit")).setName("§a" + kit.getName()).build());
         }
     }
+
 
     private void openConfirmMenu(Member member) {
         if (!chosenKitMap.containsKey(member.getUUID())) {

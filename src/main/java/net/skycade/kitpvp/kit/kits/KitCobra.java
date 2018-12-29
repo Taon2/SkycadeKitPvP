@@ -76,7 +76,7 @@ public class KitCobra extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Your sword can poison players", "§7you got a higher chance when", "§7you have a higher level");
+        return Arrays.asList("§7Your sword can poison players.");
     }
 
 }

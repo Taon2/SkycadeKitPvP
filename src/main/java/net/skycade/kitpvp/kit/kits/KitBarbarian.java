@@ -84,7 +84,7 @@ public class KitBarbarian extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7You got a chance to gain", "§7strength when you're getting hit", "§7higher level means a higher chance");
+        return Arrays.asList("§7You got a chance to gain", "§7strength when you're getting hit.");
     }
 
 }

@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -69,8 +70,7 @@ public class KitFrosty extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
                 .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
 
-        p.getInventory().addItem(new ItemBuilder(
-                Material.SNOW_BALL, getConfig().getInt("inventory.snowball.amount")).build());
+        p.getInventory().addItem(new ItemBuilder(Material.SNOW_BALL, getConfig().getInt("inventory.snowball.amount")).build());
 
         p.getInventory().setHelmet(new ItemBuilder(
                 Material.JACK_O_LANTERN)
@@ -95,8 +95,11 @@ public class KitFrosty extends Kit {
     }
 
     public void onSnowballUse(Player shooter, ProjectileLaunchEvent e) {
-        if (snowballCooldown.contains(shooter)) {
+        if (!addCooldown(shooter, getName(), 10, true) || snowballCooldown.contains(shooter)) {
             e.setCancelled(true);
+            ItemStack ball = (new ItemStack(Material.SNOW_BALL, 1));
+            ball.setItemMeta(shooter.getItemInHand().getItemMeta());
+            shooter.getInventory().addItem(ball);
             return;
         }
         snowballCooldown.add(shooter);

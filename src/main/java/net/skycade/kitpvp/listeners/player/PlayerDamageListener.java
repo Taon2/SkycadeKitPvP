@@ -44,27 +44,30 @@ public class PlayerDamageListener implements Listener {
 
     @EventHandler
     public void on(EntityDamageByEntityEvent e) {
-        if (plugin.getSpawnRegion().contains(e.getEntity().getLocation())) {
-            e.setCancelled(true);
-            return;
-        }
-        if (!(e.getEntity() instanceof Player))
-            return;
-        Player damagee = (Player) e.getEntity();
-        if (lastProjLaunch.containsKey(damagee)) {
-            addAssist(damagee, Bukkit.getPlayer(lastProjLaunch.get(damagee)), e.getDamage());
-            lastProjLaunch.remove(damagee);
-            return;
-        }
-        if (!(e.getDamager() instanceof Player))
-            return;
-        Player damager = (Player) e.getDamager();
+            if (plugin.getSpawnRegion().contains(e.getEntity().getLocation())) {
+                e.setCancelled(true);
+                return;
+            }
+            if (!(e.getEntity() instanceof Player))
+                return;
+            Player damagee = (Player) e.getEntity();
+            if (lastProjLaunch.containsKey(damagee)) {
+                addAssist(damagee, Bukkit.getPlayer(lastProjLaunch.get(damagee)), e.getDamage());
+                lastProjLaunch.remove(damagee);
+                return;
+            }
+            if (!(e.getDamager() instanceof Player))
+                return;
+            if (plugin.getStats(damagee).getActiveKit().getKit().getKitType() == KitType.SONIC)
+                ((KitSonic) plugin.getStats(damagee).getActiveKit().getKit()).disableSprint(damagee);
 
-        plugin.getStats(damager).getActiveKit().getKit().onDamageDealHit(e, damager, damagee);
-        plugin.getStats(damagee).getActiveKit().getKit().onDamageGetHit(e, damager, damagee);
+            Player damager = (Player) e.getDamager();
 
-        if (!damager.equals(damagee))
-            addAssist(damagee, damager, e.getDamage());
+            plugin.getStats(damager).getActiveKit().getKit().onDamageDealHit(e, damager, damagee);
+            plugin.getStats(damagee).getActiveKit().getKit().onDamageGetHit(e, damager, damagee);
+
+            if (!damager.equals(damagee))
+                addAssist(damagee, damager, e.getDamage());
     }
 
     @EventHandler
@@ -125,6 +128,7 @@ public class PlayerDamageListener implements Listener {
         Member killerMem = MemberManager.getInstance().getMember(killer);
         diedMem.setLastKiller(killer.getUniqueId());
 
+        killer.playSound(killer.getLocation(), "minecraft:entity.experience_orb.pickup", 1, 1);
         diedMem.message("You got killed by " + killerMem.getName() + "§7.");
         killerMem.message("You killed " + diedMem.getName() + "§7.");
 
@@ -212,7 +216,7 @@ public class PlayerDamageListener implements Listener {
     }
 
     @EventHandler
-    public void onProjectileLaunch(ProjectileLaunchEvent e) {
+    public void on(ProjectileLaunchEvent e) {
         Projectile proj = e.getEntity();
         if (!(proj.getShooter() instanceof Player))
             return;
@@ -241,15 +245,17 @@ public class PlayerDamageListener implements Listener {
             else if (kit.getKitType() == KitType.SNIPER)
                 ((KitSniper) kit).onArrowLaunch(shooter, e);
         }
+
     }
 
     @EventHandler
     public void onProjectileHit(EntityDamageByEntityEvent e) {
         if (!(e.getEntity() instanceof Player))
             return;
-        Player damagee = (Player) e.getEntity();
 
+        Player damagee = (Player) e.getEntity();
         Entity damager = e.getDamager();
+
         if (damager.getCustomName() != null)
             lastDamagerMap.put(damagee.getUniqueId(), e.getDamager());
         if (!(e.getDamager() instanceof Projectile))
@@ -277,6 +283,9 @@ public class PlayerDamageListener implements Listener {
             ((KitFireArcher) kit).onArrowHit(shooter, damagee, e);
         else if (kit.getKitType() == KitType.SNIPER)
             ((KitSniper) kit).onArrowHit(shooter, damagee, e);
+
+        if (!damager.equals(damagee))
+            addAssist(damagee, shooter, e.getDamage());
     }
 
     private void addAssist(Player damaged, Player damager, double damage) {

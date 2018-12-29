@@ -1,6 +1,6 @@
 package net.skycade.kitpvp.events;
 
-public class RandomSchedule {
+public class    RandomSchedule {
     private RandomEvent event;
     private Long timeToRun;
 

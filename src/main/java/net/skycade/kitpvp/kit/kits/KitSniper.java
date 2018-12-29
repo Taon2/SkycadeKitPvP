@@ -36,6 +36,8 @@ public class KitSniper extends Kit {
         defaultsMap.put("kit.icon.color", "BLACK");
         defaultsMap.put("kit.price", 41000);
 
+        defaultsMap.put("inventory.sword.material", "WOOD_SWORD");
+        defaultsMap.put("inventory.sword.enchantments.durability", 5);
         defaultsMap.put("inventory.bow.material", "BOW");
         defaultsMap.put("inventory.bow.enchantments.durability", 5);
         defaultsMap.put("inventory.bow.enchantments.arrow-infinite", 1);
@@ -63,6 +65,10 @@ public class KitSniper extends Kit {
 
     @Override
     public void applyKit(Player p, int level) {
+        p.getInventory().addItem(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability")).build());
+
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.bow.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.bow.enchantments.durability"))

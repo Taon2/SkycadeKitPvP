@@ -85,18 +85,19 @@ public class KitSonic extends Kit {
 				else if (level == 2) 
 					soniceSprint(p, value, Arrays.asList(1, 4, 6, 11, 18));
 				else */
-                soniceSprint(p, value, Arrays.asList(1, 2, 4, 8, 15));
+                sonicSprint(p, value, Arrays.asList(1, 5, 10, 15));
                 sprinting.put(p.getUniqueId(), value);
             }
-
-        } else {
-            if (p.hasPotionEffect(PotionEffectType.SPEED))
-                p.removePotionEffect(PotionEffectType.SPEED);
-            sprinting.remove(p.getUniqueId());
         }
     }
 
-    private void soniceSprint(Player p, int value, List<Integer> values) {
+    public void disableSprint(Player p){
+        if (p.hasPotionEffect(PotionEffectType.SPEED))
+            p.removePotionEffect(PotionEffectType.SPEED);
+        sprinting.remove(p.getUniqueId());
+    }
+
+    private void sonicSprint(Player p, int value, List<Integer> values) {
         if (values.contains(value)) {
             if (p.hasPotionEffect(PotionEffectType.SPEED))
                 p.removePotionEffect(PotionEffectType.SPEED);

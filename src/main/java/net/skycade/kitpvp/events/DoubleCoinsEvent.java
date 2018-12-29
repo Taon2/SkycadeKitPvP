@@ -3,6 +3,8 @@ package net.skycade.kitpvp.events;
 import net.skycade.kitpvp.KitPvP;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class DoubleCoinsEvent extends RandomEvent {
@@ -19,6 +21,9 @@ public class DoubleCoinsEvent extends RandomEvent {
         begin = System.currentTimeMillis();
 
         Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "DOUBLE CREDITS! " + ChatColor.GREEN + "For the next 30 minutes, everybody earns double the amount of coins!");
+        for(Player pl: Bukkit.getOnlinePlayers()){
+            pl.playSound(pl.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
+        }
 
         new BukkitRunnable() {
             @Override

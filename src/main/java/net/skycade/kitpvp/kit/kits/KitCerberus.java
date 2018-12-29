@@ -97,7 +97,7 @@ public class KitCerberus extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Get a strength buff when you're in lava", "§7the duration will be longer if", "§7you have a higher level");
+        return Arrays.asList("§7Get a strength buff when you're in lava.");
     }
 
 }

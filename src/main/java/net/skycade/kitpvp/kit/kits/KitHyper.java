@@ -96,7 +96,7 @@ public class KitHyper extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Use sugar to gain speed and regeneration", "§7the effects are longer if you have a", "§7higher level");
+        return Arrays.asList("§7Use sugar to gain speed and regeneration.");
     }
 
 }

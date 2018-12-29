@@ -137,7 +137,7 @@ public class KitsMenu implements Listener {
             return;
         }
 
-        if (kitManager.getKitPvP().getSpawnRegion().contains(member.getPlayer()) && !Arrays.asList(KitType.TELEPORTER, KitType.FISHERMAN).contains(kitType)) {
+        if (kitManager.getKitPvP().getSpawnRegion().contains(member.getPlayer())) {
             if (kitManager.getSignMap().containsKey(member.getUUID())) {
                 member.message("§7Kit refreshing is on cooldown.");
                 return;

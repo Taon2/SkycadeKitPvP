@@ -136,7 +136,7 @@ public class KitFireArcher extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Collections.singletonList("§7Higher level means a longer fire arrow duration");
+        return Collections.singletonList("§7Your bow fires flaming arrows.");
     }
 
 }

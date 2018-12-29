@@ -150,7 +150,7 @@ public class KitAssassin extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Collections.singletonList("§7Hits from behind deal more damage depending on your level");
+        return Collections.singletonList("§7Hits from behind deal more damage.");
     }
 
     @EventHandler

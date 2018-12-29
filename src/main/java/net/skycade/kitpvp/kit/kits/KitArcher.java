@@ -144,7 +144,7 @@ public class KitArcher extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Arrows have a chance to", "§7give effects to your target", "§7higher level is a higher", "§7chance for good effects");
+        return Arrays.asList("§7Arrows have a chance to", "§7give effects to your target.");
     }
 
     @EventHandler

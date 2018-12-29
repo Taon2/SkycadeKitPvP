@@ -11,6 +11,7 @@ public abstract class RandomEvent {
     public static void init() {
         new DoubleCoinsEvent();
         new TagEvent();
+        new KillTheKingEvent();
 
         new Runnable();
     }
