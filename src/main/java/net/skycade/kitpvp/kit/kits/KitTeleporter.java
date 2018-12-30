@@ -4,17 +4,20 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class KitTeleporter extends Kit {
+
+    private final List<Player> enderpearlCooldown = new ArrayList<>();
 
     public KitTeleporter(KitManager kitManager) {
         super(kitManager, "Teleporter", KitType.TELEPORTER, 32000, "Where did he go?");
@@ -88,9 +91,20 @@ public class KitTeleporter extends Kit {
                 Material.ENDER_PEARL).build(), getConfig().getInt("inventory.ender-pearl.max-amount"), KitType.TELEPORTER);
     }
 
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            if(player.getItemInHand().getType().equals(Material.ENDER_PEARL) && !addCooldown(e.getPlayer(), getName(), 10, true) || enderpearlCooldown.contains(e.getPlayer())) {
+                e.setCancelled(true);
+            }
+            enderpearlCooldown.add(e.getPlayer());
+            Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> enderpearlCooldown.remove(e.getPlayer()), 10);
+        }
+    }
     @Override
     public List<String> getAbilityDesc() {
-        return Collections.singletonList("§7You will regain epearls overtime");
+        return Collections.singletonList("§7You will regain pearls overtime");
     }
 
 }

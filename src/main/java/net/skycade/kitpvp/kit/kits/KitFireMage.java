@@ -113,7 +113,7 @@ public class KitFireMage extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Hold your mouse while holding", "§7the wand to shoot fire", "§7Your spell will be stronger on a higher level.");
+        return Arrays.asList("§7Hold your mouse while holding", "§7the wand to shoot fire.");
     }
 
 }

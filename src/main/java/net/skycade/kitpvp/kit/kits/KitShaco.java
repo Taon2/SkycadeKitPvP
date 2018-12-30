@@ -122,8 +122,11 @@ public class KitShaco extends Kit {
     }
 
     public void onSnowballUse(Player p, ProjectileLaunchEvent e) {
-        if (snowballCooldown.contains(p.getUniqueId())) {
+        if (!addCooldown(p, getName(), 10, true) || snowballCooldown.contains(p.getUniqueId())) {
             e.setCancelled(true);
+            ItemStack ball = (new ItemStack(Material.SNOW_BALL, 1));
+            ball.setItemMeta(p.getItemInHand().getItemMeta());
+            p.getInventory().addItem(ball);
             return;
         }
         snowballCooldown.add(p.getUniqueId());
@@ -164,7 +167,7 @@ public class KitShaco extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Use the snowballs to switch positions", "§7use your sword to become invis, you will get", "§7this ability on level 2", "§7hitting someone with a snowball while invis will", "§7teleport you behind the target");
+        return Arrays.asList("§7Use the snowballs to switch positions", "§7use your sword to become invisible.", "§7Hitting someone with a snowball while invisible", "§7will teleport you behind the target");
     }
 
 }

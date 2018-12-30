@@ -61,6 +61,12 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("spawn-location", new Location(Bukkit.getWorld("world"), 252.5, 73.0, -45.0, -45, 0));
         defaults.put("scoreboard.bottom-link", "play.skycade.net");
         defaults.put("kill-bonus-percentage", 5);
+        defaults.put("soup-price", 300);
+        defaults.put("soup-cooldown", 60);
+        defaults.put("refreshkit-price", 2500);
+        defaults.put("refreshkit-cooldown", 86400);
+        defaults.put("kits-rotation-enabled", "false");
+        //looks in RotationManager for rotation settings in rotation.yml
 
         defaults.put("bounties", new YamlConfiguration());
 

@@ -76,7 +76,7 @@ public class KitMaster extends Kit {
     public void onInteract(Player p, Player target, ItemStack item) {
         if (item.getType() != Material.STICK)
             return;
-        if (!addCooldown(p, getName(), 40, true))
+        if (!addCooldown(p, getName(), 60, true))
             return;
         Kit targetKit = getKitManager().getKitPvP().getStats(target).getActiveKit().getKit();
         if (targetKit == null || targetKit.getKitType() == KitType.KITMASTER)

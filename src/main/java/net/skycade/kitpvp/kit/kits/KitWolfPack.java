@@ -98,7 +98,7 @@ public class KitWolfPack extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Collections.singletonList("§7Use your sword ability to spawn wolfs");
+        return Collections.singletonList("§7Use your sword ability to spawn wolves.");
     }
 
     @EventHandler

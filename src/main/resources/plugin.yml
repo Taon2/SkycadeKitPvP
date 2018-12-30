@@ -1,7 +1,7 @@
 name: KitPvP
 main: net.skycade.kitpvp.KitPvP
 version: 3.4.1-SNAPSHOT
-author: ["WhiteWalker72", "Riccardo Bello (RickyB98)"]
+author: ["WhiteWalker72", "Riccardo Bello (RickyB98)", "Taon2"]
 depend: [SkycadeCore]
 commands:
     givekey:

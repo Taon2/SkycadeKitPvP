@@ -89,7 +89,7 @@ public class KitBladeMaster extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Gain a short speed buff", "§7when you're sneaking", "§7the effect is longer", "§7if your level is higher");
+        return Arrays.asList("§7Gain a short speed buff", "§7when you're sneaking.");
     }
 
 }

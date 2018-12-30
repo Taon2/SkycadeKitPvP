@@ -83,7 +83,7 @@ public class KitKangaroo extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Use your sword to mega jump", "§7you will be able to jumper further with", "§7a higher level");
+        return Arrays.asList("§7Use your sword to mega jump.");
     }
 
 }

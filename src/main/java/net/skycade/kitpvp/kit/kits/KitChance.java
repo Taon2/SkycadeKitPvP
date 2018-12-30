@@ -123,7 +123,7 @@ public class KitChance extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Your sword can give your target", "§7different effects, higher level", "§7results in a higher chance");
+        return Arrays.asList("§7Your sword can give your target", "§7different effects.");
     }
 
 }

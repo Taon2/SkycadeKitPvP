@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.commands;
 
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.kit.KitManager;
@@ -17,7 +18,8 @@ import java.util.UUID;
 
 public class CommandSoup extends Command<KitManager> {
 
-    private final static int COST = 20;
+    private final static int COST = (KitPvP.getInstance().getConfig().getInt("soup-price"));
+    private final static int COOLDOWN = (KitPvP.getInstance().getConfig().getInt("soup-cooldown"));
 
     private Map<UUID, Long> lastSoup = new HashMap<>();
 
@@ -35,8 +37,8 @@ public class CommandSoup extends Command<KitManager> {
         long now = System.currentTimeMillis();
         if (lastSoup.containsKey(member.getUUID())) {
             long diff = (now - lastSoup.get(member.getUUID())) / 1000L;
-            if (diff < 60) {
-                member.message(ChatColor.RED + "You need to wait another " + (60 - diff) + " second" + ((60 - diff) == 1 ? "" : "s") + " before using /soup again!");
+            if (diff < COOLDOWN) {
+                member.message(ChatColor.RED + "You need to wait another " + (COOLDOWN - diff) + " second" + ((COOLDOWN - diff) == 1 ? "" : "s") + " before using /soup again!");
                 return;
             }
         }
@@ -47,10 +49,7 @@ public class CommandSoup extends Command<KitManager> {
             member.message("§7You don't have enough §acoins§7.");
             return;
         }
-        if (!hasSpace(member.getPlayer())) {
-            member.message("§7You don't have enough §aspace §7in your inventory.");
-            return;
-        }
+
         stats.getActiveKit().getKit().giveSoup(member.getPlayer(), 30);
         stats.setCoins(coins - COST);
         lastSoup.put(member.getUUID(), now);

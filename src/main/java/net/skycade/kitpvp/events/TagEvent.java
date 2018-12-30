@@ -4,10 +4,7 @@ import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.scoreboard.ScoreboardHandler;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -38,7 +36,7 @@ public class TagEvent extends RandomEvent implements Listener {
 
     @Override
     public int getFrequencyPerDay() {
-        return 12;
+        return 6;
     }
 
     public TagEvent() {
@@ -64,13 +62,16 @@ public class TagEvent extends RandomEvent implements Listener {
 
         Player infectedPlayer = Bukkit.getPlayer(this.infected);
         Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "INFECTION! " + ChatColor.GREEN + infectedPlayer.getName() + " is infected. Stay away from them for 5 minutes to get a coin bonus!");
+        for(Player pl: Bukkit.getOnlinePlayers()){
+            pl.playSound(pl.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
+        }
 
         inGame = p.stream().map(Entity::getUniqueId).filter(e -> !e.equals(infected)).collect(Collectors.toList());
 
         ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
         ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
         ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS);
-        ItemStack boobs = new ItemStack(Material.LEATHER_BOOTS);
+        ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
 
         LeatherArmorMeta meta = (LeatherArmorMeta) Bukkit.getItemFactory().getItemMeta(Material.LEATHER_HELMET);
         meta.setColor(Color.RED);
@@ -78,7 +79,7 @@ public class TagEvent extends RandomEvent implements Listener {
         helmet.setItemMeta(meta);
         chestplate.setItemMeta(meta);
         leggings.setItemMeta(meta);
-        boobs.setItemMeta(meta);
+        boots.setItemMeta(meta);
 
         for (UUID uuid : inGame) {
             Player player = Bukkit.getPlayer(uuid);
@@ -90,14 +91,14 @@ public class TagEvent extends RandomEvent implements Listener {
             inventory.setHelmet(helmet.clone());
             inventory.setChestplate(chestplate.clone());
             inventory.setLeggings(leggings.clone());
-            inventory.setBoots(boobs.clone());
+            inventory.setBoots(boots.clone());
         }
 
         meta.setColor(Color.GREEN);
         helmet.setItemMeta(meta);
         chestplate.setItemMeta(meta);
         leggings.setItemMeta(meta);
-        boobs.setItemMeta(meta);
+        boots.setItemMeta(meta);
 
         for (PotionEffect potionEffect : infectedPlayer.getActivePotionEffects())
             infectedPlayer.removePotionEffect(potionEffect.getType());
@@ -106,7 +107,7 @@ public class TagEvent extends RandomEvent implements Listener {
         inventory.setHelmet(helmet.clone());
         inventory.setChestplate(chestplate.clone());
         inventory.setLeggings(leggings.clone());
-        inventory.setBoots(boobs.clone());
+        inventory.setBoots(boots.clone());
 
         task = new BukkitRunnable() {
             @Override
@@ -192,6 +193,13 @@ public class TagEvent extends RandomEvent implements Listener {
             player.getInventory().setBoots(null);
 
             stop();
+        }
+    }
+
+    public void commandListener(PlayerCommandPreprocessEvent event) {
+        if (event.getMessage().equals("refreshkit")){
+            event.getPlayer().sendMessage(ChatColor.RED + ("You cannot do refreshkit during Infection!"));
+            event.setCancelled(true);
         }
     }
 

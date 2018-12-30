@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-public class ViewkitMenu {
+public class  ViewkitMenu {
 
     private static final CraftPlayer DUMMY_PLAYER = new CraftPlayer((CraftServer) Bukkit.getServer(), new EntityPlayer(((CraftServer) Bukkit.getServer()).getServer(), ((CraftWorld) Bukkit.getWorlds().get(0)).getHandle(),
             new GameProfile(UUID.randomUUID(), ""), new PlayerInteractManager(((CraftWorld) Bukkit.getWorlds().get(0)).getHandle())));
@@ -59,6 +59,9 @@ public class ViewkitMenu {
     private List<ItemStack> getItems() {
         List<ItemStack> items = new ArrayList<>();
         for (ItemStack item : DUMMY_PLAYER.getInventory())
+            if (item != null && item.getType() != null)
+                items.add(item);
+        for (ItemStack item : DUMMY_PLAYER.getInventory().getArmorContents())
             if (item != null && item.getType() != null)
                 items.add(item);
         /* for (ItemStack piece : DUMMY_PLAYER.getInventory().getArmorContents()) {

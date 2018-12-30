@@ -75,20 +75,14 @@ public class PlayerJoinQuitListener implements Listener {
             return;
 
         sendDelayedMessage(p, 0, "Welcome to §aKitPvP§7!");
-        sendDelayedMessage(p, 3, "Type §a/kits §7to view your kits.");
-        sendDelayedMessage(p, 6, "Every kit can be §aupgraded §7to level 3 with the §a/upgrade §7command.");
-        sendDelayedMessage(p, 9, "Upgrading or buying new kits from the §a/shop §7will cost coins.");
-        sendDelayedMessage(p, 12,
-                "You already start out with some coins, so try to §aupgrade your default kit §7by typing §a/upgrade §7and right clicking the kit.");
-        sendDelayedMessage(p, 15, "You can earn §acoins §7from kills, assists and §avoting §7(/vote).");
-        sendDelayedMessage(p, 18,
-                "Some kits have a §aspecial ability§7, they can be activated by right clicking with your sword or by using a special item.");
-        sendDelayedMessage(p, 21,
-                "New kits can also be unlocked by using the §acrate system (/crate)§7, this will require a §acrate key§7.");
-        sendDelayedMessage(p, 24, "You can get §akeys §7from voting and by completing §aachievements (/ach)§7.");
-        sendDelayedMessage(p, 27, "Type §a/kitpvphelp §7for more kitpvp commands.");
-        sendDelayedMessage(p, 30, "Good luck on the battlefield "
-                + p.getName() + "§7!");
+        sendDelayedMessage(p, 3, "Type §a/kits §7to view your kits. You start off with three unlocked.");
+        sendDelayedMessage(p, 6, "You can purchase more kits through §a/shop §7using §acoins§7.");
+        sendDelayedMessage(p, 9, "You can earn §acoins §7from kills, assists, and events.");
+        sendDelayedMessage(p, 12, "New kits can also be unlocked by using the §acrate system (/crate)§7, this will require a §acrate key§7.");
+        sendDelayedMessage(p, 15, "You can get §akeys §7from §astore.skycade.net");
+        sendDelayedMessage(p, 18, "Some kits have a §aspecial ability§7, they can be activated by right clicking with your sword or by using a special item.");
+        sendDelayedMessage(p, 21, "Type §a/kitpvphelp §7for more kitpvp commands.");
+        sendDelayedMessage(p, 24, "Good luck on the battlefield " + p.getName() + "§7!");
     }
 
     private void sendDelayedMessage(Player p, int secondsDelay, String message) {

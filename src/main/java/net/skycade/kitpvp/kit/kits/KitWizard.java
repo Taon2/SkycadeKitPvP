@@ -19,7 +19,7 @@ import org.bukkit.util.Vector;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class KitWizard extends Kit {
+public class    KitWizard extends Kit {
 
     private final HashMap<UUID, Location> lastWizardLoc = new HashMap<>();
     private final List<UUID> rodUse = new ArrayList<>();

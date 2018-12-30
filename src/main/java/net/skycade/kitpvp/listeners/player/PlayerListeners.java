@@ -114,6 +114,11 @@ public class PlayerListeners implements Listener {
         resetKitAndKS(event.getPlayer());
     }
 
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    public void on(PlayerLoginEvent event) {
+        resetKitAndKS(event.getPlayer());
+    }
+
     public void resetKitAndKS(Player p) {
         KitPvPStats stats = plugin.getStats(p);
         if (stats == null) return;
@@ -139,13 +144,10 @@ public class PlayerListeners implements Listener {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (p.isOnline()) {
                 stats.getActiveKit().getKit().applyKit(p);
+                stats.getActiveKit().getKit().giveSoup(p, 32);
             }
-        }, 1);
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (p.isOnline()) stats.getActiveKit().getKit().giveSoup(p, 32);
         }, 1);
 
         Bukkit.getScheduler().runTaskLater(plugin, p::updateInventory, 10);
     }
-
 }

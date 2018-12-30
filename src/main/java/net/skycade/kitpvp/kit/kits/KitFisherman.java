@@ -116,7 +116,7 @@ public class KitFisherman extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7You can use your rod as a", "§7grappling hook", "§7you can reach further if you", "§7have a higher level");
+        return Arrays.asList("§7You can use your rod as a", "§7grappling hook.");
     }
 
 }

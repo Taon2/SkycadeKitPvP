@@ -7,7 +7,6 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Color;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -68,7 +67,6 @@ public class KitPotionMaster extends Kit {
                         UtilMath.getRandom(0, 255))));
     }
 
-    @Override
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
@@ -76,27 +74,20 @@ public class KitPotionMaster extends Kit {
         if (!addCooldown(p, getName(), 30, true))
             return;
 
-        for (int i = 0; i < 4; i++)
-            p.getWorld().playEffect(p.getLocation(), Effect.POTION_BREAK, 1);
-
-        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 4);
-        if (targetPlayers.contains(p))
-            targetPlayers.remove(p);
-
-        if (targetPlayers.isEmpty()) {
+        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 6);
+        if (targetPlayers.size() <= 1)
             removeCooldowns(p);
-            return;
-        }
 
         targetPlayers.forEach(target -> {
-            target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 180, 2));
-            target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 120, 1));
+            if (target != p) {
+                target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 180, 1));
+                target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 120, 1));
+            }
         });
     }
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Use your sword to throw potions on", "§7the ground, you will get", "§7this ability from level 2");
+        return Arrays.asList("§7Use your sword to throw potions on", "§7the ground.");
     }
-
 }

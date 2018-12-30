@@ -25,6 +25,7 @@ public class RotationManager {
         Map<String, Object> defaults = new HashMap<>();
         defaults.put("last-rotation", System.currentTimeMillis());
         defaults.put("current-rotation", new ArrayList<String>());
+        defaults.put("no-rotation", new ArrayList<String>());
 
         if (!file.exists()) {
             yaml = new YamlConfiguration();
@@ -39,7 +40,10 @@ public class RotationManager {
             }
             save();
         }
-        startRotationUpdater();
+        if (KitPvP.getInstance().getConfig().getString("kits-rotation-enabled").equals("false"))
+            updateNoRotation();
+        else
+            startRotationUpdater();
     }
 
     private long getLastRotation() {
@@ -52,9 +56,16 @@ public class RotationManager {
     }
 
     private List<String> getCurrentKitRotation() {
-        List<String> list = yaml.getStringList("current-rotation");
-        if (list == null || list.isEmpty()) updateRotation();
-        return yaml.getStringList("current-rotation") == null ? new ArrayList<>() : yaml.getStringList("current-rotation");
+        if (KitPvP.getInstance().getConfig().getString("kits-rotation-enabled").equals("false")){
+            List<String> list = yaml.getStringList("no-rotation");
+            if (list == null || list.isEmpty()) updateNoRotation();
+            return yaml.getStringList("no-rotation") == null ? new ArrayList<>() : yaml.getStringList("no-rotation");
+        }
+        else{
+            List<String> list = yaml.getStringList("current-rotation");
+            if (list == null || list.isEmpty()) updateRotation();
+            return yaml.getStringList("current-rotation") == null ? new ArrayList<>() : yaml.getStringList("current-rotation");
+        }
     }
 
     public List<KitType> getCurrentKits() {
@@ -71,9 +82,41 @@ public class RotationManager {
         setRotationKits(rotationKits);
     }
 
+    private void updateNoRotation(){
+        List<String> kits = new ArrayList<>();
+        fillNoRotationList(kits);
+        sort(kits);
+        setNoRotationKits(kits);
+    }
+
     private void setRotationKits(List<String> rotationKits) {
         yaml.set("current-rotation", rotationKits);
         save();
+    }
+
+    private void setNoRotationKits(List<String> kits) {
+        yaml.set("no-rotation", kits);
+        save();
+    }
+
+    private void fillNoRotationList(List<String> kits) {
+        if (kits.size() >= KitPvP.getInstance().getAvailableKits()-4)
+            return;
+        List<KitType> available = new ArrayList<>();
+        for (KitType kitType : KitType.values()) {
+            if (kitType.getKit().isEnabled()) available.add(kitType);
+        }
+
+        KitType kitType = available.get(UtilMath.getRandom(0, available.size() - 1));
+
+        if (kits.contains(kitType.toString()) || !kitType.getKit().isEnabled() || Arrays.asList(KitType.DEFAULT, KitType.KITMASTER, KitType.CHANCE, KitType.ARCHER).contains(kitType)) {
+            fillNoRotationList(kits);
+            return;
+        }
+
+        kits.add(kitType.toString());
+        fillNoRotationList(kits);
+
     }
 
     private void fillRotationList(List<String> rotationKits) {
@@ -86,7 +129,7 @@ public class RotationManager {
 
         KitType kitType = available.get(UtilMath.getRandom(0, available.size() - 1));
 
-        if (rotationKits.contains(kitType.toString()) || !kitType.getKit().isEnabled() || Arrays.asList(KitType.DEFAULT, KitType.KITMASTER).contains(kitType)) {
+        if (rotationKits.contains(kitType.toString()) || !kitType.getKit().isEnabled() || Arrays.asList(KitType.DEFAULT, KitType.KITMASTER, KitType.CHANCE, KitType.ARCHER).contains(kitType)) {
             fillRotationList(rotationKits);
             return;
         }
