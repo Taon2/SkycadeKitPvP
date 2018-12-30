@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.commands;
 
+import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
@@ -41,39 +42,28 @@ public class CommandRefreshKit extends Command<KitManager> {
             }
         }
 
-        if (inDuel(member)) {
-            member.message("You can't use this command when you're in a duel.");
-            return;
-        }
-
         long now = System.currentTimeMillis();
 
         try {
             lastRefresh.put(member.getUUID(), yaml.getLong("current-refreshkit-cooldowns." + member.getUUID()));
-        }
-        catch (Exception e){
-        }
+        } catch (Exception ignored) {}
 
         if (lastRefresh.containsKey(member.getUUID())) {
             long diff = (now - lastRefresh.get(member.getUUID())) / 1000L;
-            int secondsRemaining = (int)(COOLDOWN - diff);
-            int seconds = secondsRemaining % 60;
-            int hours = secondsRemaining / 60;
-            int minutes = hours % 60;
-            hours = hours / 60;
-            save();
+
             if (diff < COOLDOWN) {
-                member.message(ChatColor.RED + "You need to wait another " + (hours) + " hours, " + (minutes) + " minutes, " + (seconds) + " seconds before using /refreshkit again!");
+                member.message(ChatColor.RED + "You need to wait another " + CoreUtil.niceFormat(((Long) diff).intValue()) + " before using /refreshkit again!");
                 return;
             }
         }
 
         KitPvPStats stats = getModule().getKitPvP().getStats(member);
         int coins = stats.getCoins();
-        if (coins - COST < 0) {
+        if (coins < COST) {
             member.message("§7You don't have enough §acoins§7.");
             return;
         }
+
         UtilPlayer.reset(member.getPlayer());
         stats.getActiveKit().getKit().applyKit(member.getPlayer());
         stats.getActiveKit().getKit().giveSoup(member.getPlayer(), 32);
@@ -84,7 +74,7 @@ public class CommandRefreshKit extends Command<KitManager> {
         save();
     }
 
-    private void configManager(){
+    private void configManager() {
         file = new File(plugin.getDataFolder(), "commandcooldowns.yml");
 
         if (!file.exists()) {
@@ -95,6 +85,7 @@ public class CommandRefreshKit extends Command<KitManager> {
             save();
         }
     }
+
     private void save() {
         try {
             yaml.save(file);
@@ -103,7 +94,4 @@ public class CommandRefreshKit extends Command<KitManager> {
         }
     }
 
-    private boolean inDuel(Member mem) {
-        return false;
-    }
 }

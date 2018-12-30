@@ -216,7 +216,7 @@ public class PlayerDamageListener implements Listener {
     }
 
     @EventHandler
-    public void on(ProjectileLaunchEvent e) {
+    public void onProjectileLaunch(ProjectileLaunchEvent e) {
         Projectile proj = e.getEntity();
         if (!(proj.getShooter() instanceof Player))
             return;
