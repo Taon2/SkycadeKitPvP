@@ -50,11 +50,14 @@ public class PlayerJoinQuitListener implements Listener {
 
                 KitPvPStats stats = plugin.getStats(p);
 
-                if (!stats.getActiveKit().getKit().isEnabled())
+                if (!stats.getActiveKit().getKit().isEnabled()) {
                     stats.setActiveKit(KitType.DEFAULT);
+                    stats.getActiveKit().getKit().giveSoup(p, 32);
+                }
 
                 if (plugin.isInSpawnArea(p)) {
                     stats.getActiveKit().getKit().applyKit(p);
+                    stats.getActiveKit().getKit().giveSoup(p, 32);
                 }
 
                 //Unlock KitMaster
