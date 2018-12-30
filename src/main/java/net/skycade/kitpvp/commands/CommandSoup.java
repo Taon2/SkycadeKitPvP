@@ -3,6 +3,7 @@ package net.skycade.kitpvp.commands;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.kitpvp.events.KillTheKingEvent;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.ChatColor;
@@ -29,6 +30,13 @@ public class CommandSoup extends Command<KitManager> {
 
     @Override
     public void execute(Member member, String aliasUsed, String... args) {
+        if (KillTheKingEvent.getInstance().getCurrentKing() != null) {
+            if (member.getUUID().equals(KillTheKingEvent.getInstance().getCurrentKing())) {
+                member.getPlayer().sendMessage(ChatColor.RED + ("You cannot use /soup as the King!"));
+                return;
+            }
+        }
+
         if (inDuel(member)) {
             member.message("You can't use this command when you're in a duel.");
             return;
