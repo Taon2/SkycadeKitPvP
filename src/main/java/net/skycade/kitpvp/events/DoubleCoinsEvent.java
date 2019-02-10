@@ -38,6 +38,11 @@ public class DoubleCoinsEvent extends RandomEvent {
         }.runTaskTimer(KitPvP.getInstance(), 20L, 20L);
     }
 
+    @Override
+    public String getName() {
+        return "doublecoins";
+    }
+
     public static boolean isActive() {
         return RandomEvent.getCurrent() instanceof DoubleCoinsEvent;
     }
