@@ -128,6 +128,11 @@ public class TagEvent extends RandomEvent implements Listener {
     }
 
     @Override
+    public String getName() {
+        return "tag";
+    }
+
+    @Override
     public void end() {
         super.end();
 

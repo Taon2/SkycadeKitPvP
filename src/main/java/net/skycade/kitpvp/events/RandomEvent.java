@@ -13,6 +13,8 @@ public abstract class RandomEvent {
         new TagEvent();
         new KillTheKingEvent();
 
+        new TriggerEventCommand();
+
         new Runnable();
     }
 
@@ -20,11 +22,17 @@ public abstract class RandomEvent {
 
     public abstract void run();
 
+    public abstract String getName();
+
     public void end() {
         if (current == this) current = null;
     }
 
     private static List<RandomEvent> events = new ArrayList<>();
+
+    public static List<RandomEvent> getEvents() {
+        return events;
+    }
 
     public RandomEvent() {
         events.add(this);
@@ -34,6 +42,11 @@ public abstract class RandomEvent {
 
     public static RandomEvent getCurrent() {
         return current;
+    }
+
+    public static void startEvent(RandomEvent event) {
+        current = event;
+        current.run();
     }
 
     private static class Runnable extends BukkitRunnable {

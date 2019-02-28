@@ -116,6 +116,11 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
     }
 
     @Override
+    public String getName() {
+        return "killtheking";
+    }
+
+    @Override
     public void end(){
         super.end();
 
