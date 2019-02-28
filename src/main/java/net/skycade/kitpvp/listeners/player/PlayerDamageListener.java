@@ -37,13 +37,13 @@ public class PlayerDamageListener implements Listener {
     }
 
     @EventHandler
-    public void on(EntityDamageEvent e) {
+    public void onEntityDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player && e.getCause() == EntityDamageEvent.DamageCause.FALL)
             e.setCancelled(true);
     }
 
     @EventHandler
-    public void on(EntityDamageByEntityEvent e) {
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
             if (plugin.getSpawnRegion().contains(e.getEntity().getLocation())) {
                 e.setCancelled(true);
                 return;
@@ -71,7 +71,7 @@ public class PlayerDamageListener implements Listener {
     }
 
     @EventHandler
-    public void on(EntityTargetLivingEntityEvent event) {
+    public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event) {
         if (!(event.getEntity() instanceof Golem)) return;
         if (event.getTarget() == null) return;
         if (event.getEntity().getName().equalsIgnoreCase(event.getTarget().getName() + " golem"))
@@ -79,7 +79,7 @@ public class PlayerDamageListener implements Listener {
     }
 
     @EventHandler
-    public void on(PlayerDeathEvent e) {
+    public void onPlayerDeath(PlayerDeathEvent e) {
         e.getDrops().clear();
         e.setDeathMessage("");
         if (e.getEntity().isOnline()) plugin.respawn(e.getEntity());

@@ -25,7 +25,7 @@ public class CommandSoup extends Command<KitManager> {
     private Map<UUID, Long> lastSoup = new HashMap<>();
 
     public CommandSoup(KitManager module) {
-        super(module, "Buy soup for " + COST + " coins", new Permission("kitpvp.default", PermissionDefault.TRUE), "soup");
+        super(module, "Buy soup for " + COST + " coins.", new Permission("kitpvp.default", PermissionDefault.TRUE), "soup");
     }
 
     @Override

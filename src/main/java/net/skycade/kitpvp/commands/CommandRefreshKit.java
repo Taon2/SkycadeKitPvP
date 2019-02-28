@@ -29,7 +29,7 @@ public class CommandRefreshKit extends Command<KitManager> {
     private Map<UUID, Long> lastRefresh = new HashMap<>();
 
     public CommandRefreshKit(KitManager module) {
-        super(module, "Refresh your kit for " + COST + " coins", new Permission("kitpvp.default", PermissionDefault.TRUE), "refreshkit");
+        super(module, "Refresh your kit for " + COST + " coins.", new Permission("kitpvp.default", PermissionDefault.TRUE), "refreshkit");
         configManager();
     }
 

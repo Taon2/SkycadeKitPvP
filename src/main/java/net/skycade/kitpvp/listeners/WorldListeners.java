@@ -25,7 +25,7 @@ public class WorldListeners implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void on(WeatherChangeEvent e) {
+    public void onWeatherChange(WeatherChangeEvent e) {
         World w = e.getWorld();
         if (!w.hasStorm())
             e.setCancelled(true);
@@ -36,7 +36,7 @@ public class WorldListeners implements Listener {
     }
 
     @EventHandler
-    public void on(EntityExplodeEvent e) {
+    public void onEntityExplode(EntityExplodeEvent e) {
         if (!(e.getEntity() instanceof TNTPrimed))
             return;
         for (Entity en : e.getEntity().getNearbyEntities(4, 4, 4))
@@ -46,7 +46,7 @@ public class WorldListeners implements Listener {
     }
 
     @EventHandler
-    public void on(EntitySpawnEvent e) {
+    public void onEntitySpawn(EntitySpawnEvent e) {
         if (!Arrays.asList(EntityType.ARMOR_STAND, EntityType.WOLF, EntityType.PRIMED_TNT, EntityType.IRON_GOLEM).contains(e.getEntityType()))
             e.setCancelled(true);
     }
