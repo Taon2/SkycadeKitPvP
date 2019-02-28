@@ -12,7 +12,7 @@ import org.bukkit.permissions.PermissionDefault;
 public class CommandResetStats extends Command<KitManager> {
 
     public CommandResetStats(KitManager module) {
-        super(module, "Reset stats for a player", new Permission("kitpvp.admin", PermissionDefault.OP), "resetstats");
+        super(module, "Reset stats for a player.", new Permission("kitpvp.admin", PermissionDefault.OP), "resetstats");
         setUsage("<playername>");
     }
 

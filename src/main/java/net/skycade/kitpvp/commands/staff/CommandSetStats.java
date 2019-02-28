@@ -12,7 +12,7 @@ import org.bukkit.permissions.PermissionDefault;
 public class CommandSetStats extends Command<KitManager> {
 
     public CommandSetStats(KitManager module) {
-        super(module, "Change stats for a player", new Permission("kitpvp.admin", PermissionDefault.OP), "setstats", "setstat");
+        super(module, "Change stats for a player.", new Permission("kitpvp.admin", PermissionDefault.OP), "setstats", "setstat");
         setUsage("<player>", "<stats>", "<amount>");
     }
 

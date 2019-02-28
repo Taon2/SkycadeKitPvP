@@ -93,7 +93,7 @@ public class KitSharingan extends Kit {
 
     @Override
     public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Temporary copy potioneffects when you're getting hit.");
+        return Arrays.asList("§7Temporarily copy potion effects when you're getting hit.");
     }
 
 }

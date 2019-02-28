@@ -17,7 +17,7 @@ import java.util.Map.Entry;
 public class CommandSetLevel extends Command<KitManager> {
 
     public CommandSetLevel(KitManager module) {
-        super(module, "Unlock kits for a player", new Permission("kitpvp.admin", PermissionDefault.OP), "setlevel", "setlvl");
+        super(module, "Unlock kits for a player.", new Permission("kitpvp.admin", PermissionDefault.OP), "setlevel", "setlvl");
         setUsage("<player>", "<kit>", "<level>");
     }
 
