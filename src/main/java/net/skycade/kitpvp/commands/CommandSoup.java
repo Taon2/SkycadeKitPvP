@@ -25,12 +25,12 @@ public class CommandSoup extends Command<KitManager> {
     private Map<UUID, Long> lastSoup = new HashMap<>();
 
     public CommandSoup(KitManager module) {
-        super(module, "Buy soup for " + COST + " coins", new Permission("kitpvp.default", PermissionDefault.TRUE), "soup");
+        super(module, "Buy soup for " + COST + " coins.", new Permission("kitpvp.default", PermissionDefault.TRUE), "soup");
     }
 
     @Override
     public void execute(Member member, String aliasUsed, String... args) {
-        if (KillTheKingEvent.getInstance().getCurrentKing() != null) {
+        if (KillTheKingEvent.getInstance() != null && KillTheKingEvent.getInstance().getCurrentKing() != null) {
             if (member.getUUID().equals(KillTheKingEvent.getInstance().getCurrentKing())) {
                 member.getPlayer().sendMessage(ChatColor.RED + ("You cannot use /soup as the King!"));
                 return;

@@ -61,28 +61,24 @@ public class PlayerInteractListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void on(PlayerInteractEvent e) {
+    public void onPlayerRightClick(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         if (e.getItem() == null)
             return;
         if (e.getItem().getType() == Material.MUSHROOM_SOUP) {
             double maxHealth = p.getMaxHealth();
             if (p.getHealth() < maxHealth) {
+                final int heldItemSlot = e.getPlayer().getInventory().getHeldItemSlot();
+                e.getPlayer().getInventory().clear(heldItemSlot);
+                p.updateInventory();
+                addBowl(p);
+
                 if (p.getHealth() < maxHealth - 7) {
                     p.setHealth(p.getHealth() + 7);
                 } else {
                     p.setHealth(maxHealth);
                 }
                 //e.getPlayer().getInventory().setItem(e.getPlayer().getInventory().getHeldItemSlot(), new ItemStack(Material.AIR, 1));
-                final int heldItemSlot = e.getPlayer().getInventory().getHeldItemSlot();
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        e.getPlayer().getInventory().clear(heldItemSlot);
-                        p.updateInventory();
-                        addBowl(p);
-                    }
-                }.runTaskLater(plugin, 1L);
             }
             return;
         }

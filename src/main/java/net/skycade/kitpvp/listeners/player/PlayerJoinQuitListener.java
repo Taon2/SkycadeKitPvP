@@ -27,7 +27,7 @@ public class PlayerJoinQuitListener implements Listener {
     }
 
     @EventHandler
-    public void on(PlayerQuitEvent e) {
+    public void onPlayerQuit(PlayerQuitEvent e) {
         e.setQuitMessage(null);
         Player p = e.getPlayer();
 
@@ -40,7 +40,7 @@ public class PlayerJoinQuitListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void on(PlayerJoinEvent e) {
+    public void onPlayerJoin(PlayerJoinEvent e) {
         e.setJoinMessage(null);
         Player p = e.getPlayer();
         new BukkitRunnable() {
@@ -50,11 +50,14 @@ public class PlayerJoinQuitListener implements Listener {
 
                 KitPvPStats stats = plugin.getStats(p);
 
-                if (!stats.getActiveKit().getKit().isEnabled())
+                if (!stats.getActiveKit().getKit().isEnabled()) {
                     stats.setActiveKit(KitType.DEFAULT);
+                    stats.getActiveKit().getKit().giveSoup(p, 32);
+                }
 
                 if (plugin.isInSpawnArea(p)) {
                     stats.getActiveKit().getKit().applyKit(p);
+                    stats.getActiveKit().getKit().giveSoup(p, 32);
                 }
 
                 //Unlock KitMaster
@@ -62,6 +65,8 @@ public class PlayerJoinQuitListener implements Listener {
                     p.sendMessage("§7You unlocked §aall §7the kits! You unlocked the §aKitMaster §7kit.");
                     stats.addKit(KitType.KITMASTER);
                 }
+
+                p.teleport(KitPvP.getInstance().getSpawnLocation());
 
                 ScoreboardHandler.updatePlayer(p);
             }

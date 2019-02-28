@@ -413,6 +413,7 @@ public abstract class Kit implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         frozenPlayers.remove(e.getPlayer().getUniqueId());
+
     }
 
     public ConfigurationSection getConfig() {

@@ -195,6 +195,10 @@ public class KitPvP extends SkycadePlugin {
         return ksUpdater;
     }
 
+    public Location getSpawnLocation() {
+        return spawnLocation;
+    }
+
     // Not the best place for this method..
     public void respawn(Player p) {
         Bukkit.getScheduler().runTaskLater(this, () -> UtilPlayer.reset(p), 1);

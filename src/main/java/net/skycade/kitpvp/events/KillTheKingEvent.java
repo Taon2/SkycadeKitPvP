@@ -4,7 +4,6 @@ import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
-import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.*;
@@ -114,6 +113,11 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
             }
         };
         task.runTaskTimer(KitPvP.getInstance(), 20L, 20L);
+    }
+
+    @Override
+    public String getName() {
+        return "killtheking";
     }
 
     @Override

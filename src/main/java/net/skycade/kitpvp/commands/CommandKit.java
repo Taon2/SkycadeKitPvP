@@ -17,7 +17,7 @@ public class CommandKit extends Command<KitManager> {
 
     @Override
     public void execute(Member member, String aliasUsed, String... args) {
-        if (KillTheKingEvent.getInstance().getCurrentKing() != null) {
+        if (KillTheKingEvent.getInstance() != null && KillTheKingEvent.getInstance().getCurrentKing() != null) {
             if (member.getUUID().equals(KillTheKingEvent.getInstance().getCurrentKing())) {
                 member.getPlayer().sendMessage(ChatColor.RED + ("You cannot use /kit as the King!"));
                 return;

@@ -9,6 +9,7 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.runnable.CrateRunnable;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -60,11 +61,4 @@ public class CommandCrate extends Command<KitManager> implements Listener {
         CrateRunnable runnable = new CrateRunnable(randomNum, member.getPlayer(), member, kits, stats);
         runnable.runTaskTimer(getModule().getPlugin(), 0, 7);
     }
-
-    @EventHandler
-    public void on(InventoryClickEvent e) {
-        if (e.getClickedInventory() != null && e.getClickedInventory().getName() != null && e.getClickedInventory().getName().equalsIgnoreCase("§aCrate"))
-            e.setCancelled(true);
-    }
-
 }

@@ -9,8 +9,8 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.KitMedic;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
@@ -21,13 +21,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.Vector;
 
 public class PlayerListeners implements Listener {
 
@@ -38,7 +37,7 @@ public class PlayerListeners implements Listener {
     }
 
     @EventHandler
-    public void on(PlayerPickupItemEvent e) {
+    public void onPlayerPickupItem(PlayerPickupItemEvent e) {
         if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
             e.setCancelled(true);
             e.getItem().remove();
@@ -46,19 +45,19 @@ public class PlayerListeners implements Listener {
     }
 
     @EventHandler
-    public void on(BlockPlaceEvent e) {
+    public void onBlockPlace(BlockPlaceEvent e) {
         if (e.getPlayer().getGameMode() != GameMode.CREATIVE)
             e.setCancelled(true);
     }
 
     @EventHandler
-    public void on(BlockBreakEvent e) {
+    public void onBlockBreak(BlockBreakEvent e) {
         if (e.getPlayer().getGameMode() != GameMode.CREATIVE)
             e.setCancelled(true);
     }
 
     @EventHandler
-    public void on(PlayerDropItemEvent e) {
+    public void onPlayerDropItem(PlayerDropItemEvent e) {
         if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
             if (e.getItemDrop().getItemStack().getType() != Material.LEATHER)
                 e.setCancelled(true);
@@ -76,12 +75,12 @@ public class PlayerListeners implements Listener {
     }
 
     @EventHandler
-    public void on(FoodLevelChangeEvent e) {
+    public void onFoodLevelChange(FoodLevelChangeEvent e) {
         e.setCancelled(true);
     }
 
     @EventHandler
-    public void on(InventoryOpenEvent e) {
+    public void onInventoryOpen(InventoryOpenEvent e) {
         if (e.getInventory().getHolder() instanceof Chest || e.getInventory().getHolder() instanceof DoubleChest
                 || e.getInventory().getType() == InventoryType.ANVIL
                 || e.getInventory().getType() == InventoryType.FURNACE)
@@ -90,7 +89,7 @@ public class PlayerListeners implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    public void on(PlayerTeleportEvent e) {
+    public void onPlayerTeleport(PlayerTeleportEvent e) {
         if (!plugin.getSpawnRegion().contains(e.getTo()) || plugin.getSpawnRegion().contains(e.getFrom())) return;
         new BukkitRunnable() {
             @Override
@@ -101,7 +100,7 @@ public class PlayerListeners implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    public void on(PlayerMoveEvent e) {
+    public void onPlayerMove(PlayerMoveEvent e) {
         if (e.getFrom().getBlock().equals(e.getTo().getBlock())) return;
         if (!plugin.getSpawnRegion().contains(e.getTo()) || plugin.getSpawnRegion().contains(e.getFrom())) return;
         new BukkitRunnable() {
@@ -113,13 +112,19 @@ public class PlayerListeners implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
-    public void on(PlayerRespawnEvent event) {
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
         resetKitAndKS(event.getPlayer());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
-    public void on(PlayerLoginEvent event) {
+    public void onPlayerLogin(PlayerLoginEvent event) {
         resetKitAndKS(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent e) {
+        if (e.getClickedInventory().getName().equalsIgnoreCase("§aCrate"))
+            e.setCancelled(true);
     }
 
     public void resetKitAndKS(Player p) {
