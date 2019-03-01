@@ -36,7 +36,7 @@ public class TagEvent extends RandomEvent implements Listener {
 
     @Override
     public int getFrequencyPerDay() {
-        return 6;
+        return 0;
     }
 
     public TagEvent() {
