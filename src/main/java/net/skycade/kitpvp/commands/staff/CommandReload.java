@@ -9,7 +9,7 @@ import org.bukkit.permissions.PermissionDefault;
 
 public class CommandReload extends Command<KitManager> {
     public CommandReload(KitManager module) {
-        super(module, "Reloads configuration files", new Permission("kitpvp.admin", PermissionDefault.OP), "kitpvpreload");
+        super(module, "Reloads configuration files.", new Permission("kitpvp.admin", PermissionDefault.OP), "kitpvpreload");
     }
 
     @Override

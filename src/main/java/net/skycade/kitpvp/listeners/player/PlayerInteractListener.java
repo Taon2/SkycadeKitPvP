@@ -61,7 +61,7 @@ public class PlayerInteractListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void on(PlayerInteractEvent e) {
+    public void onPlayerRightClick(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         if (e.getItem() == null)
             return;
@@ -83,6 +83,7 @@ public class PlayerInteractListener implements Listener {
                         addBowl(p);
                     }
                 }.runTaskLater(plugin, 1L);
+
             }
             return;
         }

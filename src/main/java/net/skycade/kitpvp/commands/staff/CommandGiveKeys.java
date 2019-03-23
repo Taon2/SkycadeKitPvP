@@ -13,7 +13,7 @@ import org.bukkit.permissions.PermissionDefault;
 public class CommandGiveKeys extends Command<KitManager> {
 
     public CommandGiveKeys(KitManager module) {
-        super(module, "Manage keys", new Permission("kitpvp.admin", PermissionDefault.OP), "keys", "givekey", "givekeys");
+        super(module, "Manage keys.", new Permission("kitpvp.admin", PermissionDefault.OP), "keys", "givekey", "givekeys");
         registerAsBukkitCommand();
         setUsage("<reset/give/take> <player/all> <amount>");
     }

@@ -12,7 +12,7 @@ import org.bukkit.permissions.PermissionDefault;
 public class CommandEco extends Command<KitManager> {
 
     public CommandEco(KitManager module) {
-        super(module, "Manage coins", new Permission("kitpvp.admin", PermissionDefault.OP), "economy", "eco");
+        super(module, "Manage coins.", new Permission("kitpvp.admin", PermissionDefault.OP), "economy", "eco");
         setUsage("<reset/give/take> <player/all> <amount>");
     }
 

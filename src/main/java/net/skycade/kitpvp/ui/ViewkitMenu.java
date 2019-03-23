@@ -51,6 +51,10 @@ public class  ViewkitMenu {
 
     private void reset() {
         DUMMY_PLAYER.getInventory().clear();
+        DUMMY_PLAYER.getInventory().setHelmet(null);
+        DUMMY_PLAYER.getInventory().setChestplate(null);
+        DUMMY_PLAYER.getInventory().setLeggings(null);
+        DUMMY_PLAYER.getInventory().setBoots(null);
         for (PotionEffect effect : DUMMY_PLAYER.getActivePotionEffects()) {
             DUMMY_PLAYER.removePotionEffect(effect.getType());
         }

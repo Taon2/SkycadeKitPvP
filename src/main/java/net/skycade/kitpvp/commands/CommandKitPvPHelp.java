@@ -19,7 +19,7 @@ public class CommandKitPvPHelp extends Command<KitManager> {
     private PageManager pageManager;
 
     public CommandKitPvPHelp(KitManager module) {
-        super(module, "Get an overview of the KitPvP commands", new Permission("kitpvp.default", PermissionDefault.TRUE), "kitpvphelp", "kithelp", "kitpvpcommands", "kitcommands");
+        super(module, "Get an overview of the KitPvP commands.", new Permission("kitpvp.default", PermissionDefault.TRUE), "kitpvphelp", "kithelp", "kitpvpcommands", "kitcommands");
         Bukkit.getScheduler().runTaskLater(getModule().getKitPvP(),
                 () -> this.pageManager = new PageManager("KitPvP commands ", "/kitpvphelp ", getPageElements(), 9, 6)
                 , 100);

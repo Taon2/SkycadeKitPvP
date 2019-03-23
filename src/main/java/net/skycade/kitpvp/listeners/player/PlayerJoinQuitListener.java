@@ -27,7 +27,7 @@ public class PlayerJoinQuitListener implements Listener {
     }
 
     @EventHandler
-    public void on(PlayerQuitEvent e) {
+    public void onPlayerQuit(PlayerQuitEvent e) {
         e.setQuitMessage(null);
         Player p = e.getPlayer();
 
@@ -40,7 +40,7 @@ public class PlayerJoinQuitListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void on(PlayerJoinEvent e) {
+    public void onPlayerJoin(PlayerJoinEvent e) {
         e.setJoinMessage(null);
         Player p = e.getPlayer();
         new BukkitRunnable() {
@@ -67,6 +67,8 @@ public class PlayerJoinQuitListener implements Listener {
                 }
 
                 ScoreboardInfo.getInstance().updatePlayer(p);
+                p.teleport(KitPvP.getInstance().getSpawnLocation());
+
             }
         }.runTaskLater(KitPvP.getInstance(), 1L);
     }

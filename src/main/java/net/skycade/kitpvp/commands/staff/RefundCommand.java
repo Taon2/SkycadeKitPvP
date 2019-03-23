@@ -12,7 +12,7 @@ import org.bukkit.permissions.PermissionDefault;
 public class RefundCommand extends Command<KitManager> {
 
     public RefundCommand(KitManager module) {
-        super(module, "Refund the killstreak for a player", new Permission("kitpvp.admin", PermissionDefault.OP), "refund", "refundks");
+        super(module, "Refund the killstreak for a player.", new Permission("kitpvp.admin", PermissionDefault.OP), "refund", "refundks");
         setUsage("<player>");
     }
 

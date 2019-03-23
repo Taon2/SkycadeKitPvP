@@ -17,7 +17,7 @@ import java.util.Map;
 public class CommandUnlock extends Command<KitManager> {
 
     public CommandUnlock(KitManager module) {
-        super(module, "Unlock kits for a player", new Permission("kitpvp.admin", PermissionDefault.OP), "unlock", "unlockkit", "lock", "lockkit");
+        super(module, "Unlock kits for a player.", new Permission("kitpvp.admin", PermissionDefault.OP), "unlock", "unlockkit", "lock", "lockkit");
         registerAsBukkitCommand();
         setUsage("<player>", "<kit/all>", "<lock/unlock>");
     }
