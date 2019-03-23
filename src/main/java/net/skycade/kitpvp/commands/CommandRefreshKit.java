@@ -52,7 +52,7 @@ public class CommandRefreshKit extends Command<KitManager> {
             long diff = (now - lastRefresh.get(member.getUUID())) / 1000L;
 
             if (diff < COOLDOWN) {
-                member.message(ChatColor.RED + "You need to wait another " + CoreUtil.niceFormat(((Long) diff).intValue()) + " before using /refreshkit again!");
+                member.message(ChatColor.RED + "You need to wait another " + CoreUtil.niceFormat(COOLDOWN - ((Long) diff).intValue()) + " before using /refreshkit again!");
                 return;
             }
         }
