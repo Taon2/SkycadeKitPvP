@@ -7,10 +7,11 @@ import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.events.DoubleCoinsEvent;
+import net.skycade.kitpvp.events.KitPvPCoinsRewardEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.*;
-import net.skycade.kitpvp.scoreboard.ScoreboardHandler;
+import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -109,7 +110,7 @@ public class PlayerDamageListener implements Listener {
         died.getLocation().getWorld().playEffect(died.getLocation(), Effect.SMOKE, 1);
         plugin.getKitManager().getSignMap().remove(died.getUniqueId());
 
-        ScoreboardHandler.updatePlayer(died);
+        ScoreboardInfo.getInstance().updatePlayer(died);
 
         // Try to get the killer
         Player killer = died.getKiller();
@@ -202,7 +203,12 @@ public class PlayerDamageListener implements Listener {
         if (DoubleCoinsEvent.isActive())
             finalReward = finalReward * 2;
 
-        stats.setCoins(stats.getCoins() + finalReward);
+        KitPvPCoinsRewardEvent event = new KitPvPCoinsRewardEvent(killer, finalReward);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if (!event.isCancelled()) {
+            stats.setCoins(stats.getCoins() + event.getNewCoins());
+        }
 
         // Increase kit xp depending on the kit and level of the player who died.
         /*int rewardXp = (diedStats.getActiveKit().getKit().getPrice() / 2000) * diedStats.getKits().get(diedStats.getActiveKit()).getLevel();
@@ -212,7 +218,7 @@ public class PlayerDamageListener implements Listener {
 
         checkAssist(died, killer);
 
-        ScoreboardHandler.updatePlayer(killer);
+        ScoreboardInfo.getInstance().updatePlayer(killer);
     }
 
     @EventHandler
@@ -368,8 +374,8 @@ public class PlayerDamageListener implements Listener {
             }
             killAssist.remove(killed.getUniqueId());
         }
-        ScoreboardHandler.updatePlayer(killer);
-        ScoreboardHandler.updatePlayer(killed);
+        ScoreboardInfo.getInstance().updatePlayer(killer);
+        ScoreboardInfo.getInstance().updatePlayer(killed);
     }
 
     @EventHandler

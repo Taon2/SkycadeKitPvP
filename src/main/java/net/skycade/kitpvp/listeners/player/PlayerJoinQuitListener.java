@@ -4,7 +4,7 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.kit.KitType;
-import net.skycade.kitpvp.scoreboard.ScoreboardHandler;
+import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -66,7 +66,7 @@ public class PlayerJoinQuitListener implements Listener {
                     stats.addKit(KitType.KITMASTER);
                 }
 
-                ScoreboardHandler.updatePlayer(p);
+                ScoreboardInfo.getInstance().updatePlayer(p);
             }
         }.runTaskLater(KitPvP.getInstance(), 1L);
     }

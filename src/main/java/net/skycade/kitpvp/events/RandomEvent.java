@@ -12,6 +12,7 @@ public abstract class RandomEvent {
         new DoubleCoinsEvent();
         new TagEvent();
         new KillTheKingEvent();
+        new TeamFightEvent();
 
         new TriggerEventCommand();
 

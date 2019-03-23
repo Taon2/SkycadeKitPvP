@@ -7,7 +7,7 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
-import net.skycade.kitpvp.scoreboard.ScoreboardHandler;
+import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -68,7 +68,7 @@ public class CrateRunnable extends BukkitRunnable {
                 stats.addKit(KitType.KITMASTER);
             }
 
-            ScoreboardHandler.updatePlayer(member.getPlayer());
+            ScoreboardInfo.getInstance().updatePlayer(member.getPlayer());
         }
     }
 

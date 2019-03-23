@@ -14,7 +14,7 @@ import net.skycade.kitpvp.listeners.WorldListeners;
 import net.skycade.kitpvp.listeners.chat.ChatClick;
 import net.skycade.kitpvp.listeners.player.*;
 import net.skycade.kitpvp.scoreboard.HighestKsUpdater;
-import net.skycade.kitpvp.scoreboard.ScoreboardHandler;
+import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.stat.RotationManager;
@@ -88,10 +88,12 @@ public class KitPvP extends SkycadePlugin {
         this.rotationManager = new RotationManager();
         this.ksUpdater = new HighestKsUpdater(this);
         Bukkit.getPluginManager().registerEvents(chatClick = new ChatClick(), this);
+
         //new KitPvPScoreboard(this);
         //Displays.registerDisplay(new ScoreboardHandler());
-
-        ScoreboardHandler.init();
+        //ScoreboardHandler.init();
+        // third time lucky?
+        ScoreboardInfo.getInstance();
 
         //Change the datapoint locations!
         Location location1 = (Location) getConfig().get("spawn-region.point-1");

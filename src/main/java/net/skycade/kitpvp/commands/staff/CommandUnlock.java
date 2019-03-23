@@ -5,7 +5,7 @@ import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import net.skycade.kitpvp.scoreboard.ScoreboardHandler;
+import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -34,7 +34,7 @@ public class CommandUnlock extends Command<KitManager> {
         if (args[2].equalsIgnoreCase("unlock")) {
             if (args[1].equalsIgnoreCase("all")) {
                 getModule().getKits().keySet().forEach(stats::addKit);
-                ScoreboardHandler.updatePlayer(target);
+                ScoreboardInfo.getInstance().updatePlayer(target);
                 member.message("§a" + target.getName() + " §7now has all kits unlocked.");
                 if (!member.getPlayer().equals(target))
                     target.sendMessage("§aAll §7kits got unlocked.");
@@ -44,7 +44,7 @@ public class CommandUnlock extends Command<KitManager> {
             if (kit == null)
                 return;
             stats.addKit(kit.getKitType());
-            ScoreboardHandler.updatePlayer(member.getPlayer());
+            ScoreboardInfo.getInstance().updatePlayer(member.getPlayer());
 
             if (member != null)
                 member.message("§a" + target.getName() + " §7now has the §a" + kit.getName() + " §7kit unlocked.");

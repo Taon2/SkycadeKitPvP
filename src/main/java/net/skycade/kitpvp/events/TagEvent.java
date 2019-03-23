@@ -2,7 +2,7 @@ package net.skycade.kitpvp.events;
 
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.scoreboard.ScoreboardHandler;
+import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -36,7 +36,7 @@ public class TagEvent extends RandomEvent implements Listener {
 
     @Override
     public int getFrequencyPerDay() {
-        return 6;
+        return 0;
     }
 
     public TagEvent() {
@@ -147,7 +147,7 @@ public class TagEvent extends RandomEvent implements Listener {
             stats.getActiveKit().getKit().applyKit(player);
             stats.getActiveKit().getKit().giveSoup(player, 32);
 
-            ScoreboardHandler.updatePlayer(player);
+            ScoreboardInfo.getInstance().updatePlayer(player);
         }
 
         Player infectedPlayer = Bukkit.getPlayer(this.infected);
@@ -246,7 +246,7 @@ public class TagEvent extends RandomEvent implements Listener {
                 KitPvPStats damagerStats = KitPvP.getInstance().getStats(damager);
                 damagerStats.setCoins(damagerStats.getCoins() + 15);
 
-                ScoreboardHandler.updatePlayer(damager);
+                ScoreboardInfo.getInstance().updatePlayer(damager);
 
             } else if (inGame.contains(damagee.getUniqueId()) || inGame.contains(damager.getUniqueId())) {
                 event.setCancelled(true);
