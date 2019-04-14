@@ -1,9 +1,7 @@
 package net.skycade.kitpvp.ui.eventshopitems.items;
 
-import net.skycade.kitpvp.ui.EventShopMenu;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -32,7 +30,6 @@ public class ItemPotionEffect extends EventShopItem {
         potionEffects = Arrays.asList(
                 PotionEffectType.DAMAGE_RESISTANCE,
                 PotionEffectType.FIRE_RESISTANCE,
-                PotionEffectType.JUMP,
                 PotionEffectType.REGENERATION,
                 PotionEffectType.SPEED
         );
@@ -68,8 +65,8 @@ public class ItemPotionEffect extends EventShopItem {
         return Arrays.asList(
                 ChatColor.WHITE + "Receive a random beneficial",
                 ChatColor.WHITE + "potion effect.",
-                ChatColor.GOLD + "Price: " + ChatColor.WHITE + "50 Tokens.",
-                ChatColor.GOLD + "Duration: " + ChatColor.WHITE + "5 Minutes.", "",
+                ChatColor.GOLD + "Price: " + ChatColor.WHITE + getPrice() + " Tokens.",
+                ChatColor.GOLD + "Duration: " + ChatColor.WHITE + getDuration()/60 + " Minutes.", "",
                 ChatColor.GRAY + "Click to buy this upgrade."
         );
     }

@@ -2,11 +2,12 @@ package net.skycade.kitpvp.ui.eventshopitems;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public abstract class EventShopItem {
+public abstract class EventShopItem implements Listener {
 
     private final EventShopManager eventShopManager;
     private final String name;

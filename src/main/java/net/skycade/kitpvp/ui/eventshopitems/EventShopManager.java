@@ -4,19 +4,17 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.commands.CommandEventShop;
 import net.skycade.kitpvp.commands.staff.CommandEventEco;
 import net.skycade.kitpvp.coreclasses.commands.Module;
-import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.ui.EventShopMenu;
 import net.skycade.kitpvp.ui.eventshopitems.items.ItemCoinBoost;
+import net.skycade.kitpvp.ui.eventshopitems.items.ItemKeepKillstreak;
 import net.skycade.kitpvp.ui.eventshopitems.items.ItemPotionEffect;
 import net.skycade.kitpvp.ui.eventshopitems.items.ItemProtUpgrade;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -45,13 +43,14 @@ public class EventShopManager extends Module {
 
     private void registerEventShopItems(){
         registerEventShopItem(new ItemCoinBoost(this));
+        registerEventShopItem(new ItemKeepKillstreak(this));
         registerEventShopItem(new ItemPotionEffect(this));
         registerEventShopItem(new ItemProtUpgrade(this));
     }
 
     private void registerEventShopItem(EventShopItem item) {
         eventShopItems.put(item.getName(), item);
-        //Bukkit.getPluginManager().registerEvents(item, plugin);
+        Bukkit.getPluginManager().registerEvents(item, plugin);
     }
 
     public Map<String, EventShopItem> getEventShopItems() {

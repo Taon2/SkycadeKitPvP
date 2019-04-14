@@ -87,8 +87,8 @@ public class ItemProtUpgrade extends EventShopItem {
         return Arrays.asList(
                 ChatColor.WHITE + "Upgrade the protections on one",
                 ChatColor.WHITE + "piece of armor by one level.",
-                ChatColor.GOLD + "Price: " + ChatColor.WHITE + "50 Tokens.",
-                ChatColor.GOLD + "Duration: " + ChatColor.WHITE + "5 Minutes.", "",
+                ChatColor.GOLD + "Price: " + ChatColor.WHITE + getPrice() + " Tokens.",
+                ChatColor.GOLD + "Duration: " + ChatColor.WHITE + getDuration()/60 + " Minutes.", "",
                 ChatColor.GRAY + "Click to buy this upgrade."
         );
     }

@@ -13,12 +13,11 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.*;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import net.skycade.kitpvp.ui.EventShopMenu;
-import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -81,7 +80,7 @@ public class PlayerDamageListener implements Listener {
             event.setCancelled(true);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerDeath(PlayerDeathEvent e) {
         e.getDrops().clear();
         e.setDeathMessage("");
@@ -102,15 +101,15 @@ public class PlayerDamageListener implements Listener {
         int diedStreak = diedStats.getStreak();
 
         // Give extra xp for a high ks.
-        if (diedStreak > 5) {
-            int rewardXp = 1;
-            int streak = diedStreak;
-            while (streak > 0) {
-                rewardXp++;
-                streak -= 5;
-            }
-            diedStats.getActiveKit().getKit().increaseXp(died, rewardXp);
-        }
+//        if (diedStreak > 5) {
+//            int rewardXp = 1;
+//            int streak = diedStreak;
+//            while (streak > 0) {
+//                rewardXp++;
+//                streak -= 5;
+//            }
+//            diedStats.getActiveKit().getKit().increaseXp(died, rewardXp);
+//        }
 
         // Increase deaths and reset ks
         diedStats.setDeaths(plugin.getStats(diedMem).getDeaths() + 1);
@@ -211,10 +210,6 @@ public class PlayerDamageListener implements Listener {
 
         if (DoubleCoinsEvent.isActive())
             finalReward = finalReward * 2;
-        EventShopItem doubleCoinsItem = plugin.getEventShopManager().getTypeFromString("§6Double Coins Upgrade");
-        if (plugin.getEventShopManager().getYaml().contains(killer.getUniqueId().toString()) && plugin.getEventShopManager().getYaml().contains(killer.getUniqueId().toString() + "." + doubleCoinsItem.getName()) && (System.currentTimeMillis() - plugin.getEventShopManager().getYaml().getLong(killer.getUniqueId().toString() + "." + doubleCoinsItem.getName())) / 1000L < doubleCoinsItem.getDuration()) {
-            finalReward = finalReward * 2;
-        }
 
         KitPvPCoinsRewardEvent event = new KitPvPCoinsRewardEvent(killer, finalReward);
         Bukkit.getPluginManager().callEvent(event);
