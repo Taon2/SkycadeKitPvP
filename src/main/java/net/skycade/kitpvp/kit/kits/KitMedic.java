@@ -1,6 +1,7 @@
 package net.skycade.kitpvp.kit.kits;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
+import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
@@ -103,8 +104,15 @@ public class KitMedic extends Kit {
             player.setHealth(player.getMaxHealth());
             player.sendMessage("§cHealed");
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 1));
+            p.sendMessage("§cHealed all players within the ring.");
         });
         Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), medpack::remove, 8);
+    }
+
+    public void onMove(Player p) {
+        if (p.getItemInHand().getType().equals(Material.LEATHER)) {
+            particleMoveEffect(p, ParticleEffect.CRIT, 3, 16);
+        }
     }
 
     @Override

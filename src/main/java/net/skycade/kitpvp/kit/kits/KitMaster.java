@@ -22,8 +22,11 @@ import java.util.Map.Entry;
 
 public class KitMaster extends Kit {
 
+    KitManager kitManager;
+
     public KitMaster(KitManager kitManager) {
         super(kitManager, "KitMaster", KitType.KITMASTER, 0, "You are the true master of KitPvP");
+        this.kitManager = kitManager;
         // This kit unlocks once all other kits are unlocked.
 
         Map<String, Object> defaultsMap = new HashMap<>();
@@ -107,15 +110,17 @@ public class KitMaster extends Kit {
 
     private void kitMasterRunnable(Player p, ItemStack[] playerArmor, HashMap<Integer, ItemStack> invItems) {
         Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
-            getKitManager().getKits().get(KitType.KITMASTER).applyKit(p);
-            getKitManager().getKitPvP().getStats(p).setActiveKit(KitType.KITMASTER);
-            clearInventory(p);
+            if (!kitManager.getKitPvP().getSpawnRegion().contains(p)) {
+                getKitManager().getKits().get(KitType.KITMASTER).applyKit(p);
+                getKitManager().getKitPvP().getStats(p).setActiveKit(KitType.KITMASTER);
+                clearInventory(p);
 
-            p.getInventory().setArmorContents(playerArmor);
-            for (Entry<Integer, ItemStack> entry : invItems.entrySet())
-                p.getInventory().setItem(entry.getKey(), entry.getValue());
-            for (PotionEffect effect : p.getActivePotionEffects())
-                p.removePotionEffect(effect.getType());
+                p.getInventory().setArmorContents(playerArmor);
+                for (Entry<Integer, ItemStack> entry : invItems.entrySet())
+                    p.getInventory().setItem(entry.getKey(), entry.getValue());
+                for (PotionEffect effect : p.getActivePotionEffects())
+                    p.removePotionEffect(effect.getType());
+            }
         }, 20 * 20);
     }
 
