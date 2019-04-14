@@ -81,7 +81,7 @@ public class KitSupport extends Kit {
 
         Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 5);
         if (targetPlayers.size() <= 1) {
-            removeCooldowns(p);
+            removeCooldowns(p, getName());
             return;
         }
 

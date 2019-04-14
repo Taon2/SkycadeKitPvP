@@ -23,7 +23,7 @@ import java.util.*;
 public class ShopMenu implements Listener {
 
     private Inventory menu;
-    private Inventory confirmMenu = Bukkit.createInventory(null, MenuSize.THREE_LINE.getSize(), "§aConfirm");
+    private Inventory confirmMenu;
     private final KitManager kitManager;
     private final Map<UUID, KitType> chosenKitMap = new HashMap<>();
 
@@ -35,7 +35,7 @@ public class ShopMenu implements Listener {
         else{
             menu = Bukkit.createInventory(null, getMenuSize(), "§aShop");
         }
-        confirmMenu = Bukkit.createInventory(null, MenuSize.THREE_LINE.getSize(), "§aConfirm");
+        confirmMenu = Bukkit.createInventory(null, MenuSize.THREE_LINE.getSize(), "§aShop Confirm");
     }
 
 
@@ -55,7 +55,7 @@ public class ShopMenu implements Listener {
             if (stats.hasKit(k)) {
                 menu.addItem(new ItemBuilder(Material.BEDROCK).setName("§c" + kit.getName()).build());
             } else
-                menu.addItem(new ItemBuilder(kit.getIcon()).addLore(Arrays.asList("Price: §6" + kit.getPrice(), "", "§7Click to buy this kit")).setName("§a" + kit.getName()).build());
+                menu.addItem(new ItemBuilder(kit.getIcon()).addLore(Arrays.asList("Price: §6" + kit.getPrice(), "", "§7Click to buy this kit.")).setName("§a" + kit.getName()).build());
         }
     }
 
@@ -117,7 +117,7 @@ public class ShopMenu implements Listener {
 
     @EventHandler
     public void onConfirmClick(InventoryClickEvent e) {
-        if (e.getClickedInventory() != null && e.getClickedInventory().getName() != null && e.getClickedInventory().getName().equalsIgnoreCase("§aConfirm"))
+        if (e.getClickedInventory() != null && e.getClickedInventory().getName() != null && e.getClickedInventory().getName().equalsIgnoreCase("§aShop Confirm"))
             e.setCancelled(true);
         else
             return;

@@ -53,7 +53,8 @@ public class ScoreboardInfo {
                 return Arrays.asList(
                         ChatColor.GRAY + "Kit: " + ChatColor.GREEN + stats.getActiveKit().getKit().getName(),
                         ChatColor.GRAY + "Coins: " + ChatColor.GOLD + stats.getCoins(),
-                        ChatColor.GRAY + "Kits unlocked: " + ChatColor.YELLOW + stats.getKits().size() +
+                        ChatColor.GRAY + "Event Tokens: " + ChatColor.GOLD + stats.getEventCoins(),
+                        ChatColor.GRAY + "Kits Unlocked: " + ChatColor.YELLOW + stats.getKits().size() +
                                 ChatColor.GRAY + "/" + ChatColor.GOLD + Arrays.stream(KitType.values()).filter(e -> e.getKit().isEnabled()).count()
                 );
             }

@@ -9,7 +9,6 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.KitMedic;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
@@ -62,10 +61,6 @@ public class PlayerListeners implements Listener {
             if (e.getItemDrop().getItemStack().getType() != Material.LEATHER)
                 e.setCancelled(true);
             else {
-                if (plugin.isInSpawnArea(e.getPlayer())) {
-                    e.setCancelled(true);
-                    return;
-                }
                 Kit playerKit = plugin.getStats(MemberManager.getInstance().getMember(e.getPlayer()))
                         .getActiveKit().getKit();
                 if (playerKit.getKitType() == KitType.MEDIC)
@@ -112,22 +107,17 @@ public class PlayerListeners implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
-    public void onPlayerRespawn(PlayerRespawnEvent event) {
-        resetKitAndKS(event.getPlayer());
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onPlayerLogin(PlayerLoginEvent event) {
         resetKitAndKS(event.getPlayer());
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onInventoryClick(InventoryClickEvent e) {
-        if (e.getClickedInventory().getName().equalsIgnoreCase("§aCrate"))
+        if (e.getClickedInventory() != null && e.getClickedInventory().getName() != null && e.getClickedInventory().getName().equalsIgnoreCase("§aCrate"))
             e.setCancelled(true);
     }
 
-    public void resetKitAndKS(Player p) {
+    private void resetKitAndKS(Player p) {
         KitPvPStats stats = plugin.getStats(p);
         if (stats == null) return;
         stats.applyKitPreference();
@@ -153,6 +143,7 @@ public class PlayerListeners implements Listener {
             if (p.isOnline()) {
                 stats.getActiveKit().getKit().applyKit(p);
                 stats.getActiveKit().getKit().giveSoup(p, 32);
+                plugin.getEventShopManager().reapplyUpgrades(p);
             }
         }, 1);
 

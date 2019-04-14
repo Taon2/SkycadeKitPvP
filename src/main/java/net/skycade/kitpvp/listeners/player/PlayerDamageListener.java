@@ -13,6 +13,8 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.*;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import net.skycade.kitpvp.ui.EventShopMenu;
+import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.entity.*;
@@ -83,6 +85,13 @@ public class PlayerDamageListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent e) {
         e.getDrops().clear();
         e.setDeathMessage("");
+
+        //removes the wolves from the player before respawning, due to player teleporting back to wolves bug
+        Kit playerKit = plugin.getStats(MemberManager.getInstance().getMember(e.getEntity())).getActiveKit().getKit();
+        if (playerKit.getKitType() == KitType.WOLFPACK) {
+            ((KitWolfPack) playerKit).removeWolf(0, e.getEntity());
+        }
+
         if (e.getEntity().isOnline()) plugin.respawn(e.getEntity());
 
         Player died = e.getEntity();
@@ -202,6 +211,10 @@ public class PlayerDamageListener implements Listener {
 
         if (DoubleCoinsEvent.isActive())
             finalReward = finalReward * 2;
+        EventShopItem doubleCoinsItem = plugin.getEventShopManager().getTypeFromString("§6Double Coins Upgrade");
+        if (plugin.getEventShopManager().getYaml().contains(killer.getUniqueId().toString()) && plugin.getEventShopManager().getYaml().contains(killer.getUniqueId().toString() + "." + doubleCoinsItem.getName()) && (System.currentTimeMillis() - plugin.getEventShopManager().getYaml().getLong(killer.getUniqueId().toString() + "." + doubleCoinsItem.getName())) / 1000L < doubleCoinsItem.getDuration()) {
+            finalReward = finalReward * 2;
+        }
 
         KitPvPCoinsRewardEvent event = new KitPvPCoinsRewardEvent(killer, finalReward);
         Bukkit.getPluginManager().callEvent(event);
@@ -295,6 +308,9 @@ public class PlayerDamageListener implements Listener {
     }
 
     private void addAssist(Player damaged, Player damager, double damage) {
+        if (plugin.getSpawnRegion().contains(damager)) {
+            return;
+        }
         if (!killAssist.containsKey(damaged.getUniqueId())) {
             HashMap<UUID, Double> inner = new HashMap<>();
             inner.put(damager.getUniqueId(), damage);

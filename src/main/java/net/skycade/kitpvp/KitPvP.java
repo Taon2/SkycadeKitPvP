@@ -18,6 +18,7 @@ import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.stat.RotationManager;
+import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -31,6 +32,7 @@ public class KitPvP extends SkycadePlugin {
 
     private static KitPvP instance;
     private KitManager kitManager;
+    private EventShopManager eventShopManager;
     private RotationManager rotationManager;
     private HighestKsUpdater ksUpdater;
     private ChatClick chatClick;
@@ -66,6 +68,7 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("refreshkit-price", 2500);
         defaults.put("refreshkit-cooldown", 86400);
         defaults.put("kits-rotation-enabled", "false");
+        defaults.put("event-shop-enabled", "true");
         //looks in RotationManager for rotation settings in rotation.yml
 
         defaults.put("bounties", new YamlConfiguration());
@@ -85,6 +88,7 @@ public class KitPvP extends SkycadePlugin {
         MemberManager.getInstance();
 
         this.kitManager = new KitManager(this);
+        this.eventShopManager = new EventShopManager(this);
         this.rotationManager = new RotationManager();
         this.ksUpdater = new HighestKsUpdater(this);
         Bukkit.getPluginManager().registerEvents(chatClick = new ChatClick(), this);
@@ -143,6 +147,7 @@ public class KitPvP extends SkycadePlugin {
         }
 
         rotationManager.update();
+        eventShopManager.save();
     }
 
     private void registerListeners() {
@@ -189,6 +194,10 @@ public class KitPvP extends SkycadePlugin {
         return kitManager;
     }
 
+    public EventShopManager getEventShopManager() {
+        return eventShopManager;
+    }
+
     public RotationManager getKitPvPDocManager() {
         return rotationManager;
     }
@@ -207,7 +216,8 @@ public class KitPvP extends SkycadePlugin {
         p.setHealth(p.getMaxHealth());
         p.setVelocity(new Vector(0, 0, 0));
         p.setGameMode(GameMode.SURVIVAL);
-        p.teleport(spawnLocation);
+        p.setGameMode(GameMode.SURVIVAL);
+        p.teleport(KitPvP.getInstance().getSpawnLocation());
         Bukkit.getScheduler().runTaskLater(this, p::updateInventory, 10);
         Bukkit.getScheduler().runTaskLater(this, () -> p.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
         KitPvPStats stats = getStats(p);
@@ -217,6 +227,7 @@ public class KitPvP extends SkycadePlugin {
         stats.applyKitPreference();
         Bukkit.getScheduler().runTaskLater(this, () -> {
             stats.getActiveKit().getKit().applyKit(p);
+            eventShopManager.reapplyUpgrades(p);
         }, 3);
     }
 

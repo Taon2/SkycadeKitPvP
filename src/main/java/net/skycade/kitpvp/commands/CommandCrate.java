@@ -9,10 +9,7 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.runnable.CrateRunnable;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 

@@ -51,6 +51,11 @@ public class TeamFightEvent extends RandomEvent implements Listener {
 
     public static final Message STARTING = new Message("teamfight.starting", "&a&lTEAM FIGHT &astarting in &6%time%&a!");
 
+    private int prizeAmount = 5;
+    private int participationAmount = 1;
+
+    private static TeamFightEvent instance;
+
     private List<UUID> lastWinners = new ArrayList<>();
     private Long lastEvent = -1L;
     private BukkitRunnable actionBarTask;
@@ -58,6 +63,7 @@ public class TeamFightEvent extends RandomEvent implements Listener {
 
     public TeamFightEvent() {
         super();
+        instance = this;
         Bukkit.getServer().getPluginManager().registerEvents(this, KitPvP.getInstance());
 
         ProtocolLibrary.getProtocolManager().addPacketListener(new TeamFightPacketListener());
@@ -245,9 +251,9 @@ public class TeamFightEvent extends RandomEvent implements Listener {
             packet.getItemModifier().write(0, helmet == null ? new ItemStack(Material.AIR) : helmet);
         } else {
             if (team1.contains(p.getUniqueId())) {
-                packet.getItemModifier().write(0, BANNER1);
+                packet.getItemModifier().write(0, helmet == null ? BANNER1 : BANNER1);
             } else {
-                packet.getItemModifier().write(0, BANNER2);
+                packet.getItemModifier().write(0, helmet == null ? BANNER2 : BANNER2);
             }
         }
 
@@ -337,9 +343,26 @@ public class TeamFightEvent extends RandomEvent implements Listener {
             DRAW.broadcast();
         } else if (team1Kills > team2Kills) {
             WINNER.broadcast("%team%", ChatColor.translateAlternateColorCodes('&', "&c&lRED"));
+            team1.forEach(uuid -> {
+                KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).getEventCoins() + prizeAmount);
+                Bukkit.getPlayer(uuid).sendMessage(ChatColor.GREEN + "You have received " + prizeAmount + " Event Tokens for winning!");
+
+            });
+            team2.forEach(uuid -> {
+                KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).getEventCoins() + participationAmount);
+                Bukkit.getPlayer(uuid).sendMessage(ChatColor.GREEN + "You have received " + participationAmount + " Event Tokens for participating!");
+            });
             lastWinners.addAll(team1);
         } else {
             WINNER.broadcast("%team%", ChatColor.translateAlternateColorCodes('&', "&9&lBLUE"));
+            team2.forEach(uuid -> {
+                KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).getEventCoins() + prizeAmount);
+                Bukkit.getPlayer(uuid).sendMessage(ChatColor.GREEN + "You have received " + prizeAmount + " Event Tokens for winning!");
+            });
+            team1.forEach(uuid -> {
+                KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).getEventCoins() + participationAmount);
+                Bukkit.getPlayer(uuid).sendMessage(ChatColor.GREEN + "You have received " + participationAmount + " Event Tokens for participating!");
+            });
             lastWinners.addAll(team2);
         }
 
@@ -403,6 +426,10 @@ public class TeamFightEvent extends RandomEvent implements Listener {
 
     private int getOnlineSize(Collection<UUID> c) {
         return c.stream().mapToInt(e -> Bukkit.getPlayer(e) != null ? 1 : 0).sum();
+    }
+
+    public static TeamFightEvent getInstance() {
+        return instance;
     }
 
     @Override
