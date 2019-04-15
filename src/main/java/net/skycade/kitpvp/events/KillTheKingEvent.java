@@ -26,10 +26,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -116,15 +113,20 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                     Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The King took too long to kill.");
 
                     //Dish out event token rewards for participants
-                    participated.forEach(uuid -> {
-                        KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).getEventCoins() + participationAmount);
-                        Bukkit.getPlayer(uuid).sendMessage(ChatColor.GREEN + "You have received " + participationAmount + " Event Tokens for participating!");
+                    participated.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
+                        KitPvPStats stats = KitPvP.getInstance().getStats(player);
+                        if (stats != null) {
+                            stats.setEventCoins(stats.getEventCoins() + participationAmount);
+                            player.sendMessage(ChatColor.GREEN + "You have received " + participationAmount + " Event Tokens for participating!");
+                        }
                     });
 
                     //Dish out event token rewards for the king
-                    KitPvP.getInstance().getStats(Bukkit.getPlayer(king)).setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(king)).getEventCoins() + prizeAmount);
-                    Bukkit.getPlayer(king).sendMessage(ChatColor.GREEN + "You have received " + prizeAmount + " Event Tokens for participating!");
-
+                    KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
+                    if (kingStats != null) {
+                        kingStats.setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(king)).getEventCoins() + prizeAmount);
+                        Bukkit.getPlayer(king).sendMessage(ChatColor.GREEN + "You have received " + prizeAmount + " Event Tokens for participating!");
+                    }
                     end();
                     cancel();
                 }
@@ -179,21 +181,30 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
             try {
                 killer = died.getKiller();
                 //Dish out event token rewards for killer
-                KitPvP.getInstance().getStats(killer).setEventCoins(KitPvP.getInstance().getStats(killer).getEventCoins() + prizeAmount);
-                killer.sendMessage(ChatColor.GREEN + "You have killed the King! You have received " + prizeAmount + " Event Tokens for winning!");
+                KitPvPStats killerStats = KitPvP.getInstance().getStats(killer);
+                if (killerStats != null) {
+                    killerStats.setEventCoins(KitPvP.getInstance().getStats(killer).getEventCoins() + prizeAmount);
+                    killer.sendMessage(ChatColor.GREEN + "You have killed the King! You have received " + prizeAmount + " Event Tokens for winning!");
+                }
 
                 //Dish out event token rewards for participants
                 Player finalKiller = killer;
-                participated.forEach(uuid -> {
-                    if (uuid != finalKiller.getUniqueId()) {
-                        KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).getEventCoins() + participationAmount);
-                        Bukkit.getPlayer(uuid).sendMessage(ChatColor.GREEN + "You have received " + participationAmount + " Event Tokens for participating!");
+                participated.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
+                    if (!(player == finalKiller)) {
+                        KitPvPStats stats = KitPvP.getInstance().getStats(player);
+                        if (stats != null) {
+                            stats.setEventCoins(stats.getEventCoins() + participationAmount);
+                            player.sendMessage(ChatColor.GREEN + "You have received " + participationAmount + " Event Tokens for participating!");
+                        }
                     }
                 });
 
                 //Dish out event token rewards for the king
-                KitPvP.getInstance().getStats(Bukkit.getPlayer(king)).setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(king)).getEventCoins() + prizeAmount);
-                Bukkit.getPlayer(king).sendMessage(ChatColor.GREEN + "You have received " + prizeAmount + " Event Tokens for participating!");
+                KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
+                if (kingStats != null) {
+                    kingStats.setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(king)).getEventCoins() + prizeAmount);
+                    Bukkit.getPlayer(king).sendMessage(ChatColor.GREEN + "You have received " + prizeAmount + " Event Tokens for participating!");
+                }
             }
             catch (Exception ex){}
             if (killer != null)
