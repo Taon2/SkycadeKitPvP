@@ -361,13 +361,19 @@ public class TeamFightEvent extends RandomEvent implements Listener {
             lastWinners.addAll(team1);
         } else {
             WINNER.broadcast("%team%", ChatColor.translateAlternateColorCodes('&', "&9&lBLUE"));
-            team2.forEach(uuid -> {
-                KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).getEventCoins() + prizeAmount);
-                Bukkit.getPlayer(uuid).sendMessage(ChatColor.GREEN + "You have received " + prizeAmount + " Event Tokens for winning!");
+            team2.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
+                KitPvPStats stats = KitPvP.getInstance().getStats(player);
+                if (stats != null) {
+                    stats.setEventCoins(stats.getEventCoins() + prizeAmount);
+                    player.sendMessage(ChatColor.GREEN + "You have received " + prizeAmount + " Event Tokens for winning!");
+                }
             });
-            team1.forEach(uuid -> {
-                KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(uuid)).getEventCoins() + participationAmount);
-                Bukkit.getPlayer(uuid).sendMessage(ChatColor.GREEN + "You have received " + participationAmount + " Event Tokens for participating!");
+            team1.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
+                KitPvPStats stats = KitPvP.getInstance().getStats(player);
+                if (stats != null) {
+                    stats.setEventCoins(stats.getEventCoins() + participationAmount);
+                    player.sendMessage(ChatColor.GREEN + "You have received " + participationAmount + " Event Tokens for participating!");
+                }
             });
             lastWinners.addAll(team2);
         }
