@@ -6,6 +6,7 @@ import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.events.KillTheKingEvent;
+import net.skycade.kitpvp.events.TeamFightEvent;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.ChatColor;
@@ -40,6 +41,11 @@ public class CommandRefreshKit extends Command<KitManager> {
                 member.getPlayer().sendMessage(ChatColor.RED + ("You cannot use /refreshkit as the King!"));
                 return;
             }
+        }
+
+        if (TeamFightEvent.getInstance() != null) {
+            member.getPlayer().sendMessage(ChatColor.RED + ("You cannot use /refreshkit during Team Fight!"));
+            return;
         }
 
         long now = System.currentTimeMillis();

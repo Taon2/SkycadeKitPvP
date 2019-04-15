@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.commands;
 
+import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.kit.KitManager;
@@ -23,8 +24,12 @@ public class CommandKitName extends Command<KitManager> {
         if (!getPlayer(member, args[0]))
             return;
         Player target = Bukkit.getPlayer(args[0]);
+        if (VanishStatus.isVanished(target.getUniqueId())) {
+            member.message("&7Could not find Player '§e" + target.getName() + "&7'.");
+            return;
+        }
         KitPvPStats stats = getModule().getKitPvP().getStats(target);
-        member.message("§a" + target.getName() + "§7 is using the §a" + stats.getActiveKit().getKit().getName() + "§7 kit at level §a" + stats.getActiveKit().getKit().getLevel(target) + "§7.");
+        member.message("§a" + target.getName() + "§7 is using the §a" + stats.getActiveKit().getKit().getName() + "§7 kit.");
     }
 
 }

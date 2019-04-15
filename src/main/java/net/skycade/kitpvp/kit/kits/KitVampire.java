@@ -109,7 +109,7 @@ public class KitVampire extends Kit {
             return;
         Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 4);
         if (targetPlayers.size() <= 1) {
-            removeCooldowns(p);
+            removeCooldowns(p, getName());
             return;
         }
 

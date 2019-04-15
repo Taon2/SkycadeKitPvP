@@ -3,7 +3,9 @@ package net.skycade.kitpvp.stat;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,12 +19,14 @@ public class KitPvPStats {
     private int keys = KitPvP.getInstance().getConfig().getInt("start-keys");
     private int duels = 0;
     private int coins = 0;
+    private int eventCoins = 0;
     private int streak = 0;
     private int highestStreak = 0;
     private int assists = 0;
     private KitType activeKit = KitType.DEFAULT;
     private KitType kitPreference = KitType.DEFAULT;
     private Map<KitType, KitData> kits = new HashMap<>();
+    private ArrayList<EventShopItem> upgrades = new ArrayList<>();
 
 
     public KitPvPStats(Member member) {
@@ -67,6 +71,14 @@ public class KitPvPStats {
 
     public void setCoins(int coins) {
         this.coins = coins;
+    }
+
+    public int getEventCoins() {
+        return eventCoins;
+    }
+
+    public void setEventCoins(int eventCoins) {
+        this.eventCoins = eventCoins;
     }
 
     public int getStreak() {
@@ -115,7 +127,7 @@ public class KitPvPStats {
         this.activeKit = kitType;
     }
 
-    public KitType getKitPreference() {
+    KitType getKitPreference() {
         return kitPreference;
     }
 
@@ -123,15 +135,18 @@ public class KitPvPStats {
         this.kitPreference = kitType;
     }
 
-    public boolean applyKitPreference() {
+    public void applyKitPreference() {
         if (getKitPreference() == null)
-            return false;
+            return;
         setActiveKit(getKitPreference());
-        return true;
     }
 
     public Map<KitType, KitData> getKits() {
         return kits;
+    }
+
+    public ArrayList<EventShopItem> getUpgrades() {
+        return upgrades;
     }
 
     public void resetKits() {

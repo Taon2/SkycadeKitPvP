@@ -123,7 +123,7 @@ public class KitManager extends Module {
         registerKit(new KitLover(this));
         registerKit(new KitMedic(this));
         registerKit(new KitMystic(this));
-        registerKit(new KitNinja(this));
+        registerKit(new KitNinja(this)); //kit is disabled.
         registerKit(new KitPlush(this));
         registerKit(new KitPotionMaster(this));
         registerKit(new KitPrick(this));

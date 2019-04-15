@@ -100,7 +100,7 @@ public class KitGhost extends Kit {
         int range = 4;
         Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), range);
         if (targetPlayers.size() <= 1)
-            removeCooldowns(p);
+            removeCooldowns(p, getName());
 
         targetPlayers.forEach(target -> {
             if (!target.equals(p)) {

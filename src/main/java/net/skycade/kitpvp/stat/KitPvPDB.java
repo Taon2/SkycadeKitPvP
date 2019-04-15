@@ -65,6 +65,7 @@ public class KitPvPDB {
                 }
 
                 stats.setCoins(result.getInt("Coins"));
+                stats.setEventCoins(result.getInt("EventCoins"));
                 stats.setAssists(result.getInt("Assists"));
                 stats.setKitPreference(KitType.valueOf(result.getString("ChosenKit")));
                 stats.setCrateKeys(result.getInt("CrateKeys"));
@@ -124,10 +125,10 @@ public class KitPvPDB {
         }
     }
 
-    public synchronized void executeUpdate(Member member) {
+    private synchronized void executeUpdate(Member member) {
 
         try (Connection connection = CoreSettings.getInstance().getConnection()) {
-            String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, Assists, ChosenKit, CrateKeys) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = GREATEST(Kills, VALUES(Kills)), HighestStreak = GREATEST(HighestStreak, VALUES(HighestStreak)), Deaths = GREATEST(Deaths, VALUES(Deaths)), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), Coins = VALUES(Coins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), CrateKeys = VALUES(CrateKeys)";
+            String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, EventCoins, Assists, ChosenKit, CrateKeys) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?, ?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = GREATEST(Kills, VALUES(Kills)), HighestStreak = GREATEST(HighestStreak, VALUES(HighestStreak)), Deaths = GREATEST(Deaths, VALUES(Deaths)), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), Coins = VALUES(Coins), EventCoins = VALUES(EventCoins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), CrateKeys = VALUES(CrateKeys)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 KitPvPStats stats = KitPvP.getInstance().getStats(member);
                 statement.setString(1, member.getUUID().toString());
@@ -150,9 +151,10 @@ public class KitPvPDB {
                 statement.setString(8, new JSONObject(kitMap).toJSONString());
 
                 statement.setInt(9, stats.getCoins());
-                statement.setInt(10, stats.getAssists());
-                statement.setString(11, stats.getKitPreference().name());
-                statement.setInt(12, stats.getCrateKeys());
+                statement.setInt(10, stats.getEventCoins());
+                statement.setInt(11, stats.getAssists());
+                statement.setString(12, stats.getKitPreference().name());
+                statement.setInt(13, stats.getCrateKeys());
 
                 statement.executeUpdate();
             }

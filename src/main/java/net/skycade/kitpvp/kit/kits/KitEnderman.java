@@ -94,7 +94,7 @@ public class KitEnderman extends Kit {
         Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 10);
         targetPlayers.remove(p);
         if (targetPlayers.isEmpty()) {
-            removeCooldowns(p);
+            removeCooldowns(p, getName());
             return;
         }
 
@@ -111,12 +111,12 @@ public class KitEnderman extends Kit {
         }
 
         if (target == null) {
-            removeCooldowns(p);
+            removeCooldowns(p, getName());
             return;
         }
 
         if (!teleportBehindPlayer(p, target.getLocation())) {
-            removeCooldowns(p);
+            removeCooldowns(p, getName());
             return;
         } else {
             p.getWorld().playEffect(playerLoc, Effect.ENDER_SIGNAL, 1);

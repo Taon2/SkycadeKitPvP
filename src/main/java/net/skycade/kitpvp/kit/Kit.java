@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 public abstract class Kit implements Listener {
 
     private ConfigurationSection config = new YamlConfiguration();
-    private final Map<UUID, Long> cooldownDate = new HashMap<>();
+    private final Map<UUID, List<Long>> cooldownDate = new HashMap<>();
     private final Map<UUID, List<String>> playerCooldown = new HashMap<>();
 
     //For freeze
@@ -80,7 +80,7 @@ public abstract class Kit implements Listener {
         this.price = price;
         this.enabled = enabled;
         this.description = description;
-    }
+}
 
     public void applyKit(Player p) {
         if (p == null || !p.isOnline()) return;
@@ -174,37 +174,37 @@ public abstract class Kit implements Listener {
         return null;
     }
 
-    public boolean onCooldown(Player p, String ability) {
-        if (playerCooldown.containsKey(p.getUniqueId()) && playerCooldown.get(p.getUniqueId()).contains(ability))
-            return true;
-        return false;
+    protected boolean onCooldown(Player p, String ability) {
+        return playerCooldown.containsKey(p.getUniqueId()) && playerCooldown.get(p.getUniqueId()).contains(ability);
     }
 
-    protected void removeCooldowns(Player p) {
-        playerCooldown.remove(p.getUniqueId());
-        cooldownDate.remove(p.getUniqueId());
+    protected void removeCooldowns(Player p, String ability) {
+        cooldownDate.get(p.getUniqueId()).remove(playerCooldown.get(p.getUniqueId()).indexOf(ability));
+        playerCooldown.get(p.getUniqueId()).remove(ability);
     }
 
     public boolean addCooldown(Player p, String ability, int seconds, boolean message) {
         if (onCooldown(p, ability)) {
             if (cooldownDate.containsKey(p.getUniqueId())) {
-                Long remainingSeconds = (cooldownDate.get(p.getUniqueId()) - new Date().getTime()) / 1000;
-                p.sendMessage("§cAbility is on cooldown, wait " + remainingSeconds + " seconds.");
+                long remainingSeconds = (cooldownDate.get(p.getUniqueId()).get(playerCooldown.get(p.getUniqueId()).indexOf(ability)) - new Date().getTime()) / 1000;
+                p.sendMessage("§c" + ability + " is on cooldown, wait " + remainingSeconds + " seconds.");
             } else
-                p.sendMessage("§cAbility is on cooldown.");
+                p.sendMessage("§c" + ability + " is on cooldown.");
             return false;
         }
         List<String> cooldowns = playerCooldown.get(p.getUniqueId()) == null ? new ArrayList<>() : playerCooldown.get(p.getUniqueId());
+        List<Long> cooldownDates = cooldownDate.get(p.getUniqueId()) == null ? new ArrayList<>() : cooldownDate.get(p.getUniqueId());
         cooldowns.add(ability);
+        cooldownDates.add(new Date().getTime() + seconds * 1000);
         playerCooldown.put(p.getUniqueId(), cooldowns);
-        cooldownDate.put(p.getUniqueId(), new Date().getTime() + seconds * 1000);
+        cooldownDate.put(p.getUniqueId(), cooldownDates);
 
         // From cooldown messsage
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            if (playerCooldown.containsKey(p.getUniqueId())) {
+            if (playerCooldown.get(p.getUniqueId()).contains(ability)){
                 if (message)
                     p.sendMessage("§7You can now use §a" + ability + "§7.");
-                removeCooldowns(p);
+                removeCooldowns(p, ability);
             }
         }, seconds * 20);
 
@@ -212,7 +212,7 @@ public abstract class Kit implements Listener {
         p.setLevel(seconds + 1);
         new BukkitRunnable() {
             public void run() {
-                if (playerCooldown.containsKey(p.getUniqueId())) {
+                if (playerCooldown.get(p.getUniqueId()).contains(ability)) {
                     if (p.getLevel() > 0)
                         p.setLevel(p.getLevel() - 1);
                 } else {
@@ -224,7 +224,7 @@ public abstract class Kit implements Listener {
         return true;
     }
 
-    public boolean isValidBlock(Material type) {
+    protected boolean isValidBlock(Material type) {
         return Arrays
                 .asList(Material.WATER, Material.STATIONARY_WATER, Material.LAVA, Material.STATIONARY_LAVA,
                         Material.YELLOW_FLOWER, Material.GRASS, Material.LONG_GRASS, Material.WEB,
@@ -452,24 +452,23 @@ public abstract class Kit implements Listener {
     }
 
     public Color getColor(String paramString) {
-        String temp = paramString;
-        if (temp.equalsIgnoreCase("AQUA")) return Color.AQUA;
-        if (temp.equalsIgnoreCase("BLACK")) return Color.BLACK;
-        if (temp.equalsIgnoreCase("BLUE")) return Color.BLUE;
-        if (temp.equalsIgnoreCase("FUCHSIA")) return Color.FUCHSIA;
-        if (temp.equalsIgnoreCase("GRAY")) return Color.GRAY;
-        if (temp.equalsIgnoreCase("GREEN")) return Color.GREEN;
-        if (temp.equalsIgnoreCase("LIME")) return Color.LIME;
-        if (temp.equalsIgnoreCase("MAROON")) return Color.MAROON;
-        if (temp.equalsIgnoreCase("NAVY")) return Color.NAVY;
-        if (temp.equalsIgnoreCase("OLIVE")) return Color.OLIVE;
-        if (temp.equalsIgnoreCase("ORANGE")) return Color.ORANGE;
-        if (temp.equalsIgnoreCase("PURPLE")) return Color.PURPLE;
-        if (temp.equalsIgnoreCase("RED")) return Color.RED;
-        if (temp.equalsIgnoreCase("SILVER")) return Color.SILVER;
-        if (temp.equalsIgnoreCase("TEAL")) return Color.TEAL;
-        if (temp.equalsIgnoreCase("WHITE")) return Color.WHITE;
-        if (temp.equalsIgnoreCase("YELLOW")) return Color.YELLOW;
+        if (paramString.equalsIgnoreCase("AQUA")) return Color.AQUA;
+        if (paramString.equalsIgnoreCase("BLACK")) return Color.BLACK;
+        if (paramString.equalsIgnoreCase("BLUE")) return Color.BLUE;
+        if (paramString.equalsIgnoreCase("FUCHSIA")) return Color.FUCHSIA;
+        if (paramString.equalsIgnoreCase("GRAY")) return Color.GRAY;
+        if (paramString.equalsIgnoreCase("GREEN")) return Color.GREEN;
+        if (paramString.equalsIgnoreCase("LIME")) return Color.LIME;
+        if (paramString.equalsIgnoreCase("MAROON")) return Color.MAROON;
+        if (paramString.equalsIgnoreCase("NAVY")) return Color.NAVY;
+        if (paramString.equalsIgnoreCase("OLIVE")) return Color.OLIVE;
+        if (paramString.equalsIgnoreCase("ORANGE")) return Color.ORANGE;
+        if (paramString.equalsIgnoreCase("PURPLE")) return Color.PURPLE;
+        if (paramString.equalsIgnoreCase("RED")) return Color.RED;
+        if (paramString.equalsIgnoreCase("SILVER")) return Color.SILVER;
+        if (paramString.equalsIgnoreCase("TEAL")) return Color.TEAL;
+        if (paramString.equalsIgnoreCase("WHITE")) return Color.WHITE;
+        if (paramString.equalsIgnoreCase("YELLOW")) return Color.YELLOW;
         return null;
     }
 

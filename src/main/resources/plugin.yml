@@ -1,6 +1,6 @@
 name: KitPvP
 main: net.skycade.kitpvp.KitPvP
-version: 3.6.1-SNAPSHOT
+version: 3.7.0-SNAPSHOT
 author: ["WhiteWalker72", "Riccardo Bello (RickyB98)", "Taon2"]
 depend: [SkycadeCore]
 commands:

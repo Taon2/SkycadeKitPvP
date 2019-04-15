@@ -17,6 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -79,10 +80,17 @@ public class PlayerDamageListener implements Listener {
             event.setCancelled(true);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerDeath(PlayerDeathEvent e) {
         e.getDrops().clear();
         e.setDeathMessage("");
+
+        //removes the wolves from the player before respawning, due to player teleporting back to wolves bug
+        Kit playerKit = plugin.getStats(MemberManager.getInstance().getMember(e.getEntity())).getActiveKit().getKit();
+        if (playerKit.getKitType() == KitType.WOLFPACK) {
+            ((KitWolfPack) playerKit).removeWolf(0, e.getEntity());
+        }
+
         if (e.getEntity().isOnline()) plugin.respawn(e.getEntity());
 
         Player died = e.getEntity();
@@ -93,15 +101,15 @@ public class PlayerDamageListener implements Listener {
         int diedStreak = diedStats.getStreak();
 
         // Give extra xp for a high ks.
-        if (diedStreak > 5) {
-            int rewardXp = 1;
-            int streak = diedStreak;
-            while (streak > 0) {
-                rewardXp++;
-                streak -= 5;
-            }
-            diedStats.getActiveKit().getKit().increaseXp(died, rewardXp);
-        }
+//        if (diedStreak > 5) {
+//            int rewardXp = 1;
+//            int streak = diedStreak;
+//            while (streak > 0) {
+//                rewardXp++;
+//                streak -= 5;
+//            }
+//            diedStats.getActiveKit().getKit().increaseXp(died, rewardXp);
+//        }
 
         // Increase deaths and reset ks
         diedStats.setDeaths(plugin.getStats(diedMem).getDeaths() + 1);
@@ -295,6 +303,9 @@ public class PlayerDamageListener implements Listener {
     }
 
     private void addAssist(Player damaged, Player damager, double damage) {
+        if (plugin.getSpawnRegion().contains(damager)) {
+            return;
+        }
         if (!killAssist.containsKey(damaged.getUniqueId())) {
             HashMap<UUID, Double> inner = new HashMap<>();
             inner.put(damager.getUniqueId(), damage);

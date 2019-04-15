@@ -104,7 +104,7 @@ public class KitShaco extends Kit {
         if (item.getType() != Material.IRON_SWORD)
             return;
         int level = getLevel(p);
-        if (!addCooldown(p, getName(), 30, true))
+        if (!addCooldown(p, "Invisibility", 30, true))
             return;
         p.sendMessage("§fPoof!");
         p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1));
@@ -122,7 +122,7 @@ public class KitShaco extends Kit {
     }
 
     public void onSnowballUse(Player p, ProjectileLaunchEvent e) {
-        if (!addCooldown(p, getName(), 10, true) || snowballCooldown.contains(p.getUniqueId())) {
+        if (!addCooldown(p, "Switch Locations", 10, true) || snowballCooldown.contains(p.getUniqueId())) {
             e.setCancelled(true);
             ItemStack ball = (new ItemStack(Material.SNOW_BALL, 1));
             ball.setItemMeta(p.getItemInHand().getItemMeta());

@@ -67,6 +67,8 @@ public class KitWolfPack extends Kit {
                 Color.WHITE));
     }
 
+    private List<Wolf> wolfList = new ArrayList<>();
+
     @Override
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
@@ -74,7 +76,6 @@ public class KitWolfPack extends Kit {
         int level = getLevel(p);
         if (!addCooldown(p, getName(), 20, false))
             return;
-        List<Wolf> wolfList = new ArrayList<>();
 
         int wolfAmount = 2;
         for (int i = 0; i < wolfAmount; i++) {
@@ -86,13 +87,22 @@ public class KitWolfPack extends Kit {
             wolf.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 2));
             wolfList.add(wolf);
         }
-        removeWolf(19, wolfList);
+        removeWolf(19);
     }
 
-    private void removeWolf(Integer seconds, List<Wolf> wolfList) {
+    public void removeWolf(Integer seconds) {
         Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
             for (Wolf wolf : wolfList)
                 wolf.remove();
+        }, seconds * 20);
+    }
+
+    public void removeWolf(Integer seconds, Player p) {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
+            for (Wolf wolf : wolfList)
+                if (wolf.getOwner().getUniqueId() == p.getUniqueId()) {
+                    wolf.remove();
+                }
         }, seconds * 20);
     }
 

@@ -19,6 +19,7 @@ public class CommandKitpvpStats extends Command<KitManager> {
         member.message("§7----------§f§l KitPvP stats §7----------");
         member.message("§fKit - §a" + stats.getActiveKit().getKit().getName());
         member.message("§fCoins - §a" + stats.getCoins());
+        member.message("§fEvent Tokens - §a" + stats.getEventCoins());
         member.message("§fCrate keys - §a" + stats.getCrateKeys());
         member.message("§fDeaths - §a" + stats.getDeaths());
         member.message("§fHighest killstreak - §a" + stats.getHighestStreak());

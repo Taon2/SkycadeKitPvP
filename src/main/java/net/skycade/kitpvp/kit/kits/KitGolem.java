@@ -95,7 +95,7 @@ public class KitGolem extends Kit {
         blocks.remove(p.getLocation().subtract(0, 1, 0).getBlock());
         if (blocks.size() < 2) {
             p.sendMessage(ChatColor.RED + "You can't use your ability here");
-            removeCooldowns(p);
+            removeCooldowns(p, getName());
             return;
         }
 
