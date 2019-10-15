@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import static net.skycade.kitpvp.Messages.*;
+
 public class CommandEventEco extends Command<EventShopManager> {
 
     public CommandEventEco(EventShopManager module) {
@@ -25,7 +27,7 @@ public class CommandEventEco extends Command<EventShopManager> {
             if (!checkArgs(member, aliasUsed, args))
                 return;
             if (!parseInt(member, args[2])) {
-                couldNotFind(member, "amount", args[2]);
+                COULDNT_FIND.msg(member.getPlayer(), "%type%", "amount", "%thing%", args[2]);
                 return;
             }
             amount = Integer.parseInt(args[2]);
@@ -46,7 +48,7 @@ public class CommandEventEco extends Command<EventShopManager> {
             }
         }
         if (!getPlayer(member, args[1])) {
-            couldNotFind(member, "player", args[1]);
+            COULDNT_FIND.msg(member.getPlayer(), "%type%", "player", "%thing%", args[1]);
             return;
         }
         Player target = Bukkit.getPlayer(args[1]);
@@ -64,23 +66,23 @@ public class CommandEventEco extends Command<EventShopManager> {
 
     private void resetEventTokens(KitPvPStats targetStats, Member member, Player target) {
         targetStats.setEventCoins(0);
-        target.sendMessage("§7Your event tokens got §Areset§7.");
-        member.message("§7" + target.getName() + "'s event tokens got §Areset§7.");
+        YOUR_CURRENCY_RESET.msg(target, "%currency%", "event tokens");
+        CURRENCY_RESET.msg(member.getPlayer(), "%player%", target.getName(), "%currency%", "event tokens");
     }
 
     private void incEventTokens(KitPvPStats targetStats, Member member, Player target, int amount) {
-        targetStats.setEventCoins(targetStats.getEventCoins() + amount);
-        target.sendMessage("§7You got §a" + amount + "§7 event tokens, your total event token balance is now §a" + targetStats.getEventCoins() + "§7 event tokens.");
-        member.message("§a" + amount + "§7 event tokens given to §a" + target.getName() + "§7.");
+        targetStats.setEventCoins(targetStats.getEventTokens() + amount);
+        YOUR_CURRENCY_ADDED.msg(target, "%amount%", Integer.toString(amount), "%currency%", "event tokens", "%total%", Integer.toString(targetStats.getEventTokens()));
+        CURRENCY_ADDED.msg(member.getPlayer(), "%amount%", Integer.toString(amount), "%currency%", "event tokens", "%player%", target.getName());
     }
 
     private void takeEventTokens(KitPvPStats targetStats, Member member, Player target, int amount) {
-        if (targetStats.getEventCoins() - amount < 0)
+        if (targetStats.getEventTokens() - amount < 0)
             resetEventTokens(targetStats, member, target);
         else {
-            targetStats.setEventCoins(targetStats.getEventCoins() - amount);
-            target.sendMessage("§7Your event token balance got lowered with §a" + amount + "§7 tokens.");
-            member.message("§a" + target.getName() + "'s §7event token balance got lowered with §a" + amount + "§7event tokens to §a" + targetStats.getEventCoins() + "§7.");
+            targetStats.setEventCoins(targetStats.getEventTokens() - amount);
+            YOUR_CURRENCY_REMOVED.msg(target, "%amount%", Integer.toString(amount), "%currency%", "event tokens");
+            CURRENCY_REMOVED.msg(member.getPlayer(), "%player%", target.getName(), "%amount%", Integer.toString(amount), "%currency%", "event tokens", "%total%", Integer.toString(targetStats.getEventTokens()));
         }
     }
 

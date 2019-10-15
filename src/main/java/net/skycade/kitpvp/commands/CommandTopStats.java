@@ -117,14 +117,14 @@ public class CommandTopStats extends Command<KitManager> {
         } else if (args[0].equalsIgnoreCase("kd") || args[0].equalsIgnoreCase("kdr")) {
             kdrPageManager.sendToPlayer(member.getPlayer(), page);
         } else
-            couldNotFind(member, "stats", args[0]);
+            COULDNT_FIND.msg(member.getPlayer(), "%type%", "stats", "%thing%", args[0]);
             */
     }
 
     private List<BaseComponent[]> getPageElements(BTNode<Integer, UUID>[] array) {
         List<BaseComponent[]> elements = new ArrayList<>();
         int counter = 1;
-        int loopSize = array.length < 10 ? array.length : 10;
+        int loopSize = Math.min(array.length, 10);
         for (int i = 0; i < loopSize; i++) {
             BTNode<Integer, UUID> current = array[i];
             String name = Bukkit.getPlayer(current.getValue()) != null ? Bukkit.getPlayer(current.getValue()).getName() : Bukkit.getOfflinePlayer(current.getValue()).getName();
@@ -136,7 +136,7 @@ public class CommandTopStats extends Command<KitManager> {
     private List<BaseComponent[]> getKdrPageElements(BTNode<Double, UUID>[] kdrArray) {
         List<BaseComponent[]> elements = new ArrayList<>();
         int counter = 1;
-        int loopSize = kdrArray.length < 10 ? kdrArray.length : 10;
+        int loopSize = Math.min(kdrArray.length, 10);
         for (int i = 0; i < loopSize; i++) {
             BTNode<Double, UUID> current = kdrArray[i];
             String name = Bukkit.getPlayer(current.getValue()) != null ? Bukkit.getPlayer(current.getValue()).getName() : Bukkit.getOfflinePlayer(current.getValue()).getName();

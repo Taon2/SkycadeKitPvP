@@ -1,12 +1,12 @@
 package net.skycade.kitpvp.commands;
 
+import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.events.KillTheKingEvent;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +16,8 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import static net.skycade.kitpvp.Messages.*;
 
 public class CommandSoup extends Command<KitManager> {
 
@@ -32,21 +34,16 @@ public class CommandSoup extends Command<KitManager> {
     public void execute(Member member, String aliasUsed, String... args) {
         if (KillTheKingEvent.getInstance() != null && KillTheKingEvent.getInstance().getCurrentKing() != null) {
             if (member.getUUID().equals(KillTheKingEvent.getInstance().getCurrentKing())) {
-                member.getPlayer().sendMessage(ChatColor.RED + ("You cannot use /soup as the King!"));
+                CANNOT_USE.msg(member.getPlayer(), "%thing%", "/soup", "%reason%", "as the King");
                 return;
             }
-        }
-
-        if (inDuel(member)) {
-            member.message("You can't use this command when you're in a duel.");
-            return;
         }
 
         long now = System.currentTimeMillis();
         if (lastSoup.containsKey(member.getUUID())) {
             long diff = (now - lastSoup.get(member.getUUID())) / 1000L;
             if (diff < COOLDOWN) {
-                member.message(ChatColor.RED + "You need to wait another " + (COOLDOWN - diff) + " second" + ((COOLDOWN - diff) == 1 ? "" : "s") + " before using /soup again!");
+                ON_COOLDOWN.msg(member.getPlayer(), "%time%", CoreUtil.niceFormat(COOLDOWN - ((Long) diff).intValue()), "%thing%", "/soup");
                 return;
             }
         }
@@ -54,7 +51,7 @@ public class CommandSoup extends Command<KitManager> {
         KitPvPStats stats = getModule().getKitPvP().getStats(member);
         int coins = stats.getCoins();
         if (coins - COST < 0) {
-            member.message("§7You don't have enough §acoins§7.");
+            NOT_ENOUGH.msg(member.getPlayer(), "%thing%", "coins");
             return;
         }
 
@@ -70,9 +67,4 @@ public class CommandSoup extends Command<KitManager> {
                 return true;
         return false;
     }
-
-    private boolean inDuel(Member mem) {
-        return false;
-    }
-
 }

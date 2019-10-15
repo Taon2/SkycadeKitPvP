@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import static net.skycade.kitpvp.Messages.*;
+
 public class CommandSetStats extends Command<KitManager> {
 
     public CommandSetStats(KitManager module) {
@@ -23,7 +25,7 @@ public class CommandSetStats extends Command<KitManager> {
         if (!getPlayer(member, args[0]))
             return;
         if (!parseInt(member, args[2])) {
-            couldNotFind(member, "amount", args[2]);
+            COULDNT_FIND.msg(member.getPlayer(), "%type%", "amount", "%thing%", args[2]);
             return;
         }
         int amount = Integer.parseInt(args[2]);
@@ -45,16 +47,13 @@ public class CommandSetStats extends Command<KitManager> {
         } else if (args[1].equalsIgnoreCase("assist") || args[0].equalsIgnoreCase("assists")) {
             stats.setAssists(amount);
             sendMsg("assist", stats, member, target, amount);
-        } else if (args[1].equalsIgnoreCase("duel") || args[1].equalsIgnoreCase("duels")) {
-            stats.setDuels(amount);
-            sendMsg("duels", stats, member, target, amount);
-        } else
-            couldNotFind(member, "stats", args[1]);
+        }else
+            COULDNT_FIND.msg(member.getPlayer(), "%type%", "stats", "%thing%", args[1]);
     }
 
     private void sendMsg(String stat, KitPvPStats stats, Member member, Player target, int amount) {
-        target.sendMessage("§7Your " + stat + " has been set to " + amount + ".");
-        member.message(target.getName() + " " + stat + "  has been set to " + amount + ".");
+        YOUR_STAT_SET.msg(member.getPlayer(), "%stat%", stat, "%amount%", Integer.toString(amount));
+        STAT_SET.msg(member.getPlayer(), "%player%", target.getName(), "%stat%", stat, "%amount%", Integer.toString(amount));
     }
 
 }

@@ -4,8 +4,6 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.connorlinfoot.actionbarapi.ActionBarAPI;
-import net.skycade.SkycadeCore.Localization;
-import net.skycade.SkycadeCore.Localization.Message;
 import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.SkycadeCore.utility.scoreboard.ScoreboardManager;
 import net.skycade.kitpvp.KitPvP;
@@ -34,23 +32,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static net.skycade.kitpvp.Messages.*;
+
 public class TeamFightEvent extends RandomEvent implements Listener {
 
     private BukkitRunnable task;
-
-    private final Message TEAM1 = new Message("teamfight.team1", "&a&lYou have been assigned to team &c&lRED&a!\n" +
-            "&aFight against the other team. The team with the most kills gets &6&l2x coins &aat the end for 30 minutes!");
-    private final Message TEAM2 = new Message("teamfight.team2", "&a&lYou have been assigned to team &9&lBLUE&a!\n" +
-            "&bFight against the other team. The team with the most kills gets &6&l2x coins &bat the end for 30 minutes!");
-
-    private final Message FINAL_STATS = new Message("teamfight.final-stats", "&a&lThe team fight event is over! &aHere are the results:\n" +
-            "&bTeam &c&lRED&b: &6%kills1% kill%s1%\n" +
-            "&bTeam &9&lBLUE&b: &6%kills2% kill%s2%");
-
-    private final Message DRAW = new Message("teamfight.draw", "&aThe event ended with a &e&lDRAW&a! Thanks to everyone for participating!");
-    private final Message WINNER = new Message("teamfight.winner", "&aTeam %team% &awins, and gets &6&l2x coins &afor the next &630 minutes&a. &lCongratulations!");
-
-    public static final Message STARTING = new Message("teamfight.starting", "&a&lTEAM FIGHT &astarting in &6%time%&a!");
 
     private int prizeAmount = 5;
     private int participationAmount = 1;
@@ -68,15 +54,6 @@ public class TeamFightEvent extends RandomEvent implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(this, KitPvP.getInstance());
 
         ProtocolLibrary.getProtocolManager().addPacketListener(new TeamFightPacketListener());
-
-        Localization.getInstance().registerMessages("skycade.kitpvp",
-                TEAM1,
-                TEAM2,
-                FINAL_STATS,
-                DRAW,
-                WINNER,
-                STARTING
-        );
     }
 
     private Set<UUID> team1 = new HashSet<>();
@@ -170,11 +147,13 @@ public class TeamFightEvent extends RandomEvent implements Listener {
     public void start() {
         lastWinners.clear();
 
+        TEAMFIGHT_START.broadcast();
+
         Bukkit.getOnlinePlayers().forEach(e -> {
             if (team1.contains(e.getUniqueId())) {
-                TEAM1.msg(e);
+                TEAMFIGHT_TEAM1.msg(e);
             } else {
-                TEAM2.msg(e);
+                TEAMFIGHT_TEAM2.msg(e);
             }
         });
 
@@ -312,9 +291,9 @@ public class TeamFightEvent extends RandomEvent implements Listener {
         if (begin <= System.currentTimeMillis()) {
             refreshArmor(event.getPlayer());
             if (team1.contains(uuid)) {
-                TEAM1.msg(event.getPlayer());
+                TEAMFIGHT_TEAM1.msg(event.getPlayer());
             } else {
-                TEAM2.msg(event.getPlayer());
+                TEAMFIGHT_TEAM2.msg(event.getPlayer());
             }
         }
     }
@@ -331,7 +310,7 @@ public class TeamFightEvent extends RandomEvent implements Listener {
             }
         }.runTask(KitPvP.getInstance());
 
-        FINAL_STATS.broadcast(
+        TEAMFIGHT_FINAL_STATS.broadcast(
                 "%kills1%", team1Kills + "",
                 "%s1%", team1Kills != 1 ? "s" : "",
                 "%s2%", team2Kills != 1 ? "s" : "",
@@ -341,38 +320,38 @@ public class TeamFightEvent extends RandomEvent implements Listener {
         lastWinners.clear();
         lastEvent = System.currentTimeMillis();
         if (team1Kills == team2Kills) {
-            DRAW.broadcast();
+            TEAMFIGHT_DRAW.broadcast();
         } else if (team1Kills > team2Kills) {
-            WINNER.broadcast("%team%", ChatColor.translateAlternateColorCodes('&', "&c&lRED"));
+            TEAMFIGHT_WINNER.broadcast("%team%", ChatColor.translateAlternateColorCodes('&', "&c&lRED"));
             team1.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
                 if (stats != null) {
-                    stats.setEventCoins(stats.getEventCoins() + prizeAmount);
-                    player.sendMessage(ChatColor.GREEN + "You have received " + prizeAmount + " Event Tokens for winning!");
+                    stats.setEventCoins(stats.getEventTokens() + prizeAmount);
+                    TEAMFIGHT_WON.msg(player, "%amount%", Integer.toString(prizeAmount));
                 }
             });
             team2.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
                 if (stats != null) {
-                    stats.setEventCoins(stats.getEventCoins() + participationAmount);
-                    player.sendMessage(ChatColor.GREEN + "You have received " + participationAmount + " Event Tokens for participating!");
+                    stats.setEventCoins(stats.getEventTokens() + participationAmount);
+                    TEAMFIGHT_PARTICIPATE.msg(player, "%amount%", Integer.toString(participationAmount));
                 }
             });
             lastWinners.addAll(team1);
         } else {
-            WINNER.broadcast("%team%", ChatColor.translateAlternateColorCodes('&', "&9&lBLUE"));
+            TEAMFIGHT_WINNER.broadcast("%team%", ChatColor.translateAlternateColorCodes('&', "&9&lBLUE"));
             team2.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
                 if (stats != null) {
-                    stats.setEventCoins(stats.getEventCoins() + prizeAmount);
-                    player.sendMessage(ChatColor.GREEN + "You have received " + prizeAmount + " Event Tokens for winning!");
+                    stats.setEventCoins(stats.getEventTokens() + prizeAmount);
+                    TEAMFIGHT_WON.msg(player, "%amount%", Integer.toString(prizeAmount));
                 }
             });
             team1.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
                 if (stats != null) {
-                    stats.setEventCoins(stats.getEventCoins() + participationAmount);
-                    player.sendMessage(ChatColor.GREEN + "You have received " + participationAmount + " Event Tokens for participating!");
+                    stats.setEventCoins(stats.getEventTokens() + participationAmount);
+                    TEAMFIGHT_PARTICIPATE.msg(player, "%amount%", Integer.toString(participationAmount));
                 }
             });
             lastWinners.addAll(team2);

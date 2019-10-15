@@ -18,6 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.*;
 
 import static java.lang.Integer.parseInt;
+import static net.skycade.kitpvp.Messages.CURRENT_COMBO;
 
 public class KitStrafe extends Kit {
 
@@ -99,14 +100,14 @@ public class KitStrafe extends Kit {
         int combo = comboMap.get(damager.getUniqueId()) + 1;
         damager.setLevel(combo);
         if (combo > 0 && (combo % 3 == 0))
-            damager.sendMessage("§7Current combo is §a" + combo + "§7.");
+            CURRENT_COMBO.msg(damager, "%combo%", Integer.toString(combo));
 
         double dmgInc = 1.0;
         while (combo >= 3) {
             dmgInc += 0.1;
             combo -= 3;
         }
-        e.setDamage(e.getDamage() * (dmgInc >= 1.5 ? 1.5 : dmgInc));
+        e.setDamage(e.getDamage() * (Math.min(dmgInc, 1.5)));
     }
 
     @Override

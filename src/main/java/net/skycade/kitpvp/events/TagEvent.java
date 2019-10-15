@@ -13,7 +13,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -26,10 +25,14 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import static net.skycade.kitpvp.Messages.TAG_ENDED;
+import static net.skycade.kitpvp.Messages.TAG_START;
+
 public class TagEvent extends RandomEvent implements Listener {
 
     private UUID infected = null;
 
+    private static TagEvent instance;
     private Long begin = null;
     private List<UUID> inGame = null;
     private BukkitRunnable task;
@@ -41,6 +44,7 @@ public class TagEvent extends RandomEvent implements Listener {
 
     public TagEvent() {
         super();
+        instance = this;
         Bukkit.getServer().getPluginManager().registerEvents(this, KitPvP.getInstance());
     }
 
@@ -61,7 +65,7 @@ public class TagEvent extends RandomEvent implements Listener {
         begin = System.currentTimeMillis();
 
         Player infectedPlayer = Bukkit.getPlayer(this.infected);
-        Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "INFECTION! " + ChatColor.GREEN + infectedPlayer.getName() + " is infected. Stay away from them for 5 minutes to get a coin bonus!");
+        TAG_START.broadcast("%player%", infectedPlayer.getName());
         for(Player pl: Bukkit.getOnlinePlayers()){
             pl.playSound(pl.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
         }
@@ -156,7 +160,8 @@ public class TagEvent extends RandomEvent implements Listener {
         inGame = null;
         infected = null;
 
-        Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "INFECTION ENDED!");
+        TAG_ENDED.broadcast();
+
         if (infectedPlayer == null) return;
 
         infectedPlayer.getInventory().clear();
@@ -198,13 +203,6 @@ public class TagEvent extends RandomEvent implements Listener {
             player.getInventory().setBoots(null);
 
             stop();
-        }
-    }
-
-    public void commandListener(PlayerCommandPreprocessEvent event) {
-        if (event.getMessage().equals("refreshkit")){
-            event.getPlayer().sendMessage(ChatColor.RED + ("You cannot do refreshkit during Infection!"));
-            event.setCancelled(true);
         }
     }
 
@@ -273,7 +271,14 @@ public class TagEvent extends RandomEvent implements Listener {
         if (task != null) task.cancel();
         super.end();
 
-        Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "INFECTION ENDED!");
+        TAG_ENDED.broadcast();
+    }
 
+    public static TagEvent getInstance() {
+        return instance;
+    }
+
+    public Long getBegin() {
+        return begin;
     }
 }

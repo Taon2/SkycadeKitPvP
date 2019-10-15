@@ -21,6 +21,8 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.*;
 
 import static java.lang.Integer.parseInt;
+import static net.skycade.kitpvp.Messages.BLEED_ACTIVATED;
+import static net.skycade.kitpvp.Messages.BLEED_DEACTIVATED;
 
 public class KitHuntsman extends Kit implements Listener {
 
@@ -86,15 +88,13 @@ public class KitHuntsman extends Kit implements Listener {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD && item.getType() != Material.STONE_SWORD)
             return;
-        /* if (getLevel(p) < 2)
-			return; */
         if (!addCooldown(p, getName(), 20, true))
             return;
-        p.sendMessage("§aBleed §7activated.");
+        BLEED_ACTIVATED.msg(p);
         huntsmanActiveBleed.add(p.getUniqueId());
         Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
             huntsmanActiveBleed.remove(p.getUniqueId());
-            p.sendMessage("§7Bleed deactivated.");
+            BLEED_DEACTIVATED.msg(p);
         }, 7 * 20);
     }
 

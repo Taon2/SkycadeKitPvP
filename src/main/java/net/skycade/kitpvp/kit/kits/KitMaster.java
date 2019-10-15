@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import static net.skycade.kitpvp.Messages.COPIED_KIT;
+import static net.skycade.kitpvp.Messages.COPIED_YOUR_KIT;
+
 public class KitMaster extends Kit {
 
     KitManager kitManager;
@@ -98,8 +101,8 @@ public class KitMaster extends Kit {
         targetKit.applyKit(p, 3);
         getKitManager().getKitPvP().getStats(p).setActiveKit(targetKit.getKitType());
         targetKit.giveSoup(p, soupAmount);
-        p.sendMessage("§bYou copied the " + targetKit.getName() + " kit, you will return to the KitMaster kit in 20 seconds");
-        target.sendMessage("§b" + p.getName() + "§f copied your kit!");
+        COPIED_KIT.msg(p, "%kit%", targetKit.getName());
+        COPIED_YOUR_KIT.msg(target, "%player%", p.getName());
         kitMasterRunnable(p, armor, invItems);
     }
 

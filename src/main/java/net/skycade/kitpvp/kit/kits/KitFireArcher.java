@@ -16,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+import static net.skycade.kitpvp.Messages.FIRE_REMOVED;
+
 public class KitFireArcher extends Kit {
 
     private final List<UUID> bowCooldown = new ArrayList<>();
@@ -106,7 +108,7 @@ public class KitFireArcher extends Kit {
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> p.getInventory().forEach((itemStack) -> {
             if (itemStack != null && itemStack.getType() == Material.BOW) {
                 if (itemStack.containsEnchantment(Enchantment.ARROW_FIRE)) {
-                    p.sendMessage(ChatColor.RED + "Fire removed.");
+                    FIRE_REMOVED.msg(p);
                     itemStack.removeEnchantment(Enchantment.ARROW_FIRE);
                 }
             }

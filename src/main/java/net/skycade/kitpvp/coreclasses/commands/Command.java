@@ -16,6 +16,8 @@ import org.bukkit.permissions.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.skycade.kitpvp.Messages.COULDNT_FIND;
+
 public abstract class Command<M extends Module> {
 
     private final M module;
@@ -111,7 +113,7 @@ public abstract class Command<M extends Module> {
         boolean online = Bukkit.getPlayer(name) != null;
 
         if (!online) {
-            couldNotFind(member, "Player", name);
+            COULDNT_FIND.msg(member.getPlayer(), "%type%", "player", "%thing%", name);
         }
 
         return online;
@@ -120,7 +122,7 @@ public abstract class Command<M extends Module> {
     public Member getOfflineMember(Member member, String name) {
         Member subject = MemberManager.getInstance().getMember(name);
         if (subject == null)
-            couldNotFind(member, "Offline Player", name);
+            COULDNT_FIND.msg(member.getPlayer(), "%type%", "offline player", "%thing%", name);
         return subject;
     }
 
@@ -128,7 +130,7 @@ public abstract class Command<M extends Module> {
         try {
             Integer.parseInt(s);
         } catch (NumberFormatException exception) {
-            if (member != null) couldNotFind(member, "number", s);
+            if (member != null) COULDNT_FIND.msg(member.getPlayer(), "%type%", "number", "%thing%", s);
             return false;
         }
         return true;
@@ -138,7 +140,7 @@ public abstract class Command<M extends Module> {
         try {
             Double.parseDouble(s);
         } catch (NumberFormatException exception) {
-            couldNotFind(member, "decimal", s);
+            COULDNT_FIND.msg(member.getPlayer(), "%type%", "decimal", "%thing%", s);
             return false;
         }
         return true;

@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static net.skycade.kitpvp.Messages.*;
+
 public class PlayerDamageListener implements Listener {
 
     private final KitPvP plugin;
@@ -100,17 +102,6 @@ public class PlayerDamageListener implements Listener {
         // Increase highest killstreak
         int diedStreak = diedStats.getStreak();
 
-        // Give extra xp for a high ks.
-//        if (diedStreak > 5) {
-//            int rewardXp = 1;
-//            int streak = diedStreak;
-//            while (streak > 0) {
-//                rewardXp++;
-//                streak -= 5;
-//            }
-//            diedStats.getActiveKit().getKit().increaseXp(died, rewardXp);
-//        }
-
         // Increase deaths and reset ks
         diedStats.setDeaths(plugin.getStats(diedMem).getDeaths() + 1);
         diedStats.setStreak(0);
@@ -138,18 +129,12 @@ public class PlayerDamageListener implements Listener {
         diedMem.setLastKiller(killer.getUniqueId());
 
         killer.playSound(killer.getLocation(), "minecraft:entity.experience_orb.pickup", 1, 1);
-        diedMem.message("You got killed by " + killerMem.getName() + "§7.");
-        killerMem.message("You killed " + diedMem.getName() + "§7.");
+        KILLED_BY.msg(diedMem.getPlayer(), "%player%", killerMem.getName());
+        YOU_KILLED.msg(killerMem.getPlayer(), "%player%", diedMem.getName());
 
         // The same player got killed multiple times
         if (noKillRewards(killer, died))
             return;
-        // On the same ip (anti alt boosting)
-//        if (killer.getAddress().getAddress().getHostAddress()
-//                .equals(diedMem.getPlayer().getAddress().getAddress().getHostAddress())) {
-//            killerMem.message("§7The player you killed is on the §asame ip address§7, you got no rewards.");
-//            return;
-//        }
 
         // Bounties!
         int bounty = 0;
@@ -161,14 +146,13 @@ public class PlayerDamageListener implements Listener {
             if (bounty != 0) break;
         }
 
-        if (bounty != 0) {
-            killerMem.message("§aYou got " + bounty + " extra coins as a reward for breaking " + diedMem.getName() + "'s killstreak!");
-        }
+        if (bounty != 0)
+            COLLECTED_BOUNTY.msg(killerMem.getPlayer(), "%amount%", Integer.toString(bounty), "%player%", diedMem.getName());
 
         //Extra coins when a high ks gets broken
         int killstreakCoins = diedStats.getStreak() >= 10 ? diedStats.getStreak() : 0;
         if (diedStats.getStreak() >= 10)
-            killerMem.message("Killstreak broken, you got §a" + diedStats.getStreak() + " extra coins§7.");
+            BROKE_KILLSTREAK.msg(killerMem.getPlayer(), "%amount%", Integer.toString(diedStats.getStreak()), "%player%", diedMem.getName());
 
         KitPvPStats stats = plugin.getStats(killerMem);
 
@@ -217,12 +201,6 @@ public class PlayerDamageListener implements Listener {
         if (!event.isCancelled()) {
             stats.setCoins(stats.getCoins() + event.getNewCoins());
         }
-
-        // Increase kit xp depending on the kit and level of the player who died.
-        /*int rewardXp = (diedStats.getActiveKit().getKit().getPrice() / 2000) * diedStats.getKits().get(diedStats.getActiveKit()).getLevel();
-        if (rewardXp < 1)
-            rewardXp = 1;
-        stats.getActiveKit().getKit().increaseXp(killer, rewardXp);*/ // we're not using XP...
 
         checkAssist(died, killer);
 
@@ -339,7 +317,7 @@ public class PlayerDamageListener implements Listener {
             playerKilledMap.put(killed.getUniqueId(), amount);
             samePlayerKill.put(killer.getUniqueId(), playerKilledMap);
             if (amount > 3) {
-                killer.sendMessage("§7You killed the same player more than 3 times, §cno rewards §7rewarded.");
+                NO_REWARDS.msg(killer);
                 return true;
             }
         } else {
@@ -368,14 +346,7 @@ public class PlayerDamageListener implements Listener {
                     if (keyPlayer != killed && keyPlayer != killer) {
                         int assist = (int) (coins * percentage);
                         if (assist > 0) {
-                            keyPlayer.sendMessage("§7You got §6" + assist +
-                                    " §7coins for assisting to kill " + killed.getName() + "§7!");
-
-                            // Give xp reward
-                            KitPvPStats diedStats = plugin.getStats(killed);
-                            int rewardXp = ((diedStats.getActiveKit().getKit().getPrice() / 15000) * diedStats.getKits().get(diedStats.getActiveKit()).getLevel()) * (int) percentage;
-                            if (rewardXp > 0)
-                                plugin.getStats(keyPlayer).getActiveKit().getKit().increaseXp(keyPlayer, rewardXp);
+                            ASSIST_REWARD.msg(keyPlayer, "%amount%", Integer.toString(assist), "%player%", killed.getName());
                         }
 
                         plugin.getStats(keyPlayer).setCoins(plugin.getStats(keyPlayer).getCoins() + assist);
@@ -399,7 +370,7 @@ public class PlayerDamageListener implements Listener {
         lastDamagerMap.remove(uuid);
         killAssist.remove(uuid);
         samePlayerKill.remove(uuid);
-        //plugin.getStats().remove(uuid); // todo: remove
+        //plugin.getStats().remove(uuid);
     }
 
 }

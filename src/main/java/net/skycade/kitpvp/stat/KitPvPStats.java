@@ -17,9 +17,8 @@ public class KitPvPStats {
     private int kills = 0;
     private int deaths = 0;
     private int keys = KitPvP.getInstance().getConfig().getInt("start-keys");
-    private int duels = 0;
     private int coins = 0;
-    private int eventCoins = 0;
+    private int eventTokens = 0;
     private int streak = 0;
     private int highestStreak = 0;
     private int assists = 0;
@@ -57,14 +56,6 @@ public class KitPvPStats {
         this.deaths = deaths;
     }
 
-    public int getDuels() {
-        return duels;
-    }
-
-    public void setDuels(int duels) {
-        this.duels = duels;
-    }
-
     public int getCoins() {
         return coins;
     }
@@ -73,12 +64,12 @@ public class KitPvPStats {
         this.coins = coins;
     }
 
-    public int getEventCoins() {
-        return eventCoins;
+    public int getEventTokens() {
+        return eventTokens;
     }
 
     public void setEventCoins(int eventCoins) {
-        this.eventCoins = eventCoins;
+        this.eventTokens = eventCoins;
     }
 
     public int getStreak() {

@@ -20,6 +20,8 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
+import static net.skycade.kitpvp.Messages.*;
+
 public class KitShaco extends Kit {
 
     private final Map<UUID, ItemStack[]> shacoArmor = new HashMap<>();
@@ -93,7 +95,7 @@ public class KitShaco extends Kit {
 
         if (diffX > 0 && diffX < 1 || diffX < 0 && diffX > -1) {
             if (diffZ > 0 && diffZ < 1 || diffZ < 0 && diffZ > -1) {
-                damagee.sendMessage("§7You got backstabbed");
+                BACKSTABBED.msg(damagee);
                 e.setDamage(e.getDamage() * getConfig().getDouble("damage.backstab-multiplier"));
             }
         }
@@ -103,10 +105,9 @@ public class KitShaco extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        int level = getLevel(p);
         if (!addCooldown(p, "Invisibility", 30, true))
             return;
-        p.sendMessage("§fPoof!");
+        POOF.msg(p);
         p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1));
 
         shacoArmor.put(p.getUniqueId(), p.getInventory().getArmorContents());
@@ -130,15 +131,6 @@ public class KitShaco extends Kit {
             return;
         }
         snowballCooldown.add(p.getUniqueId());
-        /* ItemStack mainHand = p.getInventory().getItemInMainHand();
-		ItemStack offHand = p.getInventory().getItemInOffHand();
-		if (mainHand.getType().equals(Material.SNOW_BALL))
-			p.getInventory().getItemInMainHand().setAmount(p.getInventory().getItemInMainHand().getAmount() + 1);
-		else if (offHand.getType().equals(Material.SNOW_BALL))
-			p.getInventory().getItemInOffHand().setAmount(p.getInventory().getItemInOffHand().getAmount() + 1);
-		else
-			p.getInventory().addItem(new ItemStack(Material.SNOW_BALL, 1));
-		p.updateInventory(); */
         Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> snowballCooldown.remove(p.getUniqueId()), 10);
         e.getEntity().setVelocity(e.getEntity().getVelocity().multiply(2.5D));
     }
@@ -151,8 +143,8 @@ public class KitShaco extends Kit {
             Location damageeLoc = damagee.getLocation();
             damagee.teleport(shooterLoc);
             shooter.teleport(damageeLoc);
-            shooter.sendMessage("§9Positions switched!");
-            damagee.sendMessage("§9Positions switched!");
+            POSITIONS_SWITCHED.msg(shooter);
+            POSITIONS_SWITCHED.msg(damagee);
         }
         damagee.damage(8, shooter);
         shacoHit.add(damagee.getUniqueId());

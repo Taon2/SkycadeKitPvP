@@ -5,7 +5,6 @@ import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -19,6 +18,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static net.skycade.kitpvp.Messages.*;
 
 public class KitChance extends Kit {
 
@@ -96,29 +97,24 @@ public class KitChance extends Kit {
 
         if (random <= healthPer) {
             damager.setHealth(damager.getMaxHealth());
-            damager.sendMessage(ChatColor.RED + "Health boost!");
+            HEALTH_BOOST.msg(damager);
         } else if (random <= healthPer + doublePer) {
             e.setDamage(e.getDamage() * 2);
-            damager.sendMessage(ChatColor.YELLOW + "Double damage!");
+            DOUBLE_DAMAGE.msg(damager);
         } else if (random <= healthPer + doublePer + soupPer) {
             giveSoup(damager, 5);
-            damager.sendMessage(ChatColor.AQUA + "Soup refill!");
+            SOUP_REFILL.msg(damager);
         } else if (random <= healthPer + doublePer + soupPer + swingDownPer) {
             damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 200, 1));
-            damager.sendMessage(ChatColor.WHITE + "Swing speed down!");
+            SWING_SPEED_DOWN.msg(damager);
         } else if (random <= healthPer + doublePer + soupPer + swingDownPer + swingUpPer) {
             damager.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 200, 1));
-            damager.sendMessage(ChatColor.WHITE + "Swing speed up!");
+            SWING_SPEED_UP.msg(damager);
         } else if (random <= healthPer + doublePer + soupPer + swingDownPer + swingUpPer + backPer) {
             damager.damage(e.getDamage());
-            damager.sendMessage(ChatColor.DARK_RED + "Backfire!");
+            BACKFIRE.msg(damager);
             e.setCancelled(true);
-        }/* else if (random <= healthPer + doublePer + soupPer + swingDownPer + swingUpPer + backPer + triplePer) {
-			e.setDamage(e.getDamage() * 3);
-			damager.sendMessage(ChatColor.YELLOW + "Triple damage!");
-			damagee.sendMessage(ChatColor.RED + damager.getName() + " got triple damage!");
-			ParticleEffect.EXPLOSION_NORMAL.display(0, 0, 0, 0, 1, damagee.getLocation(), 20);
-		}*/
+        }
     }
 
     @Override

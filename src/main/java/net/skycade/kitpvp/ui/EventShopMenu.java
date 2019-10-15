@@ -112,7 +112,7 @@ public class EventShopMenu implements Listener {
             }
         }
 
-        if (stats.getEventCoins() - clickedItem.getPrice() < 0) {
+        if (stats.getEventTokens() - clickedItem.getPrice() < 0) {
             member.message("§7You don't have enough §aevent tokens §7to buy this upgrade.");
             return;
         }
@@ -141,12 +141,12 @@ public class EventShopMenu implements Listener {
             EventShopItem chosenItem = chosenUpgradeMap.get(member.getUUID());
             if (chosenItem == null)
                 return;
-            if (stats.getEventCoins() - chosenItem.getPrice() < 0)
+            if (stats.getEventTokens() - chosenItem.getPrice() < 0)
                 return;
 
             member.message("§7You bought §a" + chosenItem.getName() + "§7 for §a" + chosenItem.getPrice() + "§7 event tokens.");
             chosenItem.giveReward(((Player) e.getWhoClicked()).getPlayer());
-            stats.setEventCoins(stats.getEventCoins() - chosenItem.getPrice());
+            stats.setEventCoins(stats.getEventTokens() - chosenItem.getPrice());
 
             ScoreboardInfo.getInstance().updatePlayer(member.getPlayer());
             MemberManager.getInstance().update(member);

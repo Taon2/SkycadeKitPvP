@@ -20,6 +20,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.*;
 
 import static java.lang.Integer.parseInt;
+import static net.skycade.kitpvp.Messages.*;
 
 public class KitArcher extends Kit {
 
@@ -103,13 +104,6 @@ public class KitArcher extends Kit {
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
-        int level = getLevel(shooter);
-
-		/* if (level == 1)
-			archerChanceEffects(shooter, damagee, e, 30, 30, 20, 20, 10, 5);
-		else if (level == 2) 
-			archerChanceEffects(shooter, damagee, e, 40, 40, 30, 20, 10, 7);
-		else */
         archerChanceEffects(shooter, damagee, e, 60, 50, 30, 30, 20);
     }
 
@@ -117,29 +111,20 @@ public class KitArcher extends Kit {
         int randomNumber = UtilMath.getRandom(0, 1000);
         if (randomNumber <= regainHealth) {
             archer.setHealth(archer.getMaxHealth());
-            archer.sendMessage("§cHealth boost!");
+            HEALTH_BOOST.msg(archer);
         } else if (randomNumber <= regainHealth + doubleDamage) {
-            archer.sendMessage("§eDouble damage!");
+            DOUBLE_DAMAGE.msg(archer);
             e.setDamage(e.getDamage() * 2);
-            target.sendMessage("§e" + archer.getName() + " got double damage on you");
+            DOUBLE_DAMAGE_YOU.msg(target, "%player%", archer.getName());
         } else if (randomNumber <= regainHealth + doubleDamage + slowEffect) {
-            archer.sendMessage("§0Target is slowed");
+            TARGET_SLOWED.msg(archer);
             target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 5, 0));
-            target.sendMessage("§0" + archer.getName() + " slowed you");
-        } else if (randomNumber <= regainHealth + doubleDamage + slowEffect + miningEffect) {
-            archer.sendMessage("§7Target attack speed lowered");
-            target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 10, 1));
-            target.sendMessage("§7" + archer.getName() + " lowered your attack speed");
+            YOURE_SLOWED.msg(target, "%player%", archer.getName());
         } else if (randomNumber <= regainHealth + doubleDamage + slowEffect + miningEffect + blindEffect) {
-            archer.sendMessage("§5Target blinded");
+            TARGET_BLINDED.msg(archer);
             target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 6 * 20, 0));
-            target.sendMessage("§5You got blinded by " + archer.getName());
-        } /* else if (randomNumber <= regainHealth + doubleDamage + slowEffect + miningEffect + blindEffect + instaChance) {
-			archer.sendMessage("§4Triple damage!");
-			target.sendMessage("§7" + archer.getName() + " got triple damage on you");
-			e.setDamage(e.getDamage() * 3);
-			ParticleEffect.EXPLOSION_NORMAL.display(0, 0, 0, 0, 1, target.getLocation(), 20);
-		}*/
+            YOURE_BLINDED.msg(target, "%player%", archer.getName());
+        }
     }
 
     @Override

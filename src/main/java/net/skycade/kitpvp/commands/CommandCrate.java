@@ -15,6 +15,8 @@ import org.bukkit.permissions.PermissionDefault;
 
 import java.util.*;
 
+import static net.skycade.kitpvp.Messages.*;
+
 public class CommandCrate extends Command<KitManager> implements Listener {
 
     private final Map<UUID, Integer> crateCooldown = new HashMap<>();
@@ -29,12 +31,12 @@ public class CommandCrate extends Command<KitManager> implements Listener {
         KitPvPStats stats = getModule().getKitPvP().getStats(member);
         if (crateCooldown.containsKey(member.getUUID())) {
             if (!Recharge.recharge(member, "KitPvP Crate", crateCooldown.get(member.getUUID()))) {
-                member.message("§7You can't use the crate yet.");
+                //CANT_USE_YET.msg(member.getPlayer());
                 return;
             }
         }
         if (stats.getCrateKeys() <= 0) {
-            member.message("§7Not enough §akeys§7.");
+            NOT_ENOUGH.msg(member.getPlayer(), "%thing%", "keys");
             return;
         }
         List<KitType> kits = new ArrayList<>();
@@ -48,7 +50,7 @@ public class CommandCrate extends Command<KitManager> implements Listener {
         }
 
         if (kits.isEmpty()) {
-            member.message("§7All kits are §aunlocked§7.");
+            ALL_KITS_UNLOCKED.msg(member.getPlayer());
             return;
         }
 

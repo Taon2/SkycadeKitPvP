@@ -14,8 +14,6 @@ public abstract class RandomEvent {
         new KillTheKingEvent();
         new TeamFightEvent();
 
-        new TriggerEventCommand();
-
         new Runnable();
     }
 

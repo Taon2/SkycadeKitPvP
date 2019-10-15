@@ -93,10 +93,6 @@ public class KitPvP extends SkycadePlugin {
         this.ksUpdater = new HighestKsUpdater(this);
         Bukkit.getPluginManager().registerEvents(chatClick = new ChatClick(), this);
 
-        //new KitPvPScoreboard(this);
-        //Displays.registerDisplay(new ScoreboardHandler());
-        //ScoreboardHandler.init();
-        // third time lucky?
         ScoreboardInfo.getInstance();
 
         //Change the datapoint locations!
@@ -137,11 +133,11 @@ public class KitPvP extends SkycadePlugin {
         });
 
         RandomEvent.init();
+        Messages.init();
     }
 
     @Override
     public void onDisable() {
-        //Bukkit.getOnlinePlayers().forEach(p -> p.teleport(getSpawnpoint()));
         for (Member member : MemberManager.getInstance().getMembers().values()) {
             KitPvPDB.getInstance().setMemberDataSync(member);
         }

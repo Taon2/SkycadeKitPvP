@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import static net.skycade.kitpvp.Messages.COULDNT_FIND;
+
 public class CommandGiveKeys extends Command<KitManager> {
 
     public CommandGiveKeys(KitManager module) {
@@ -27,7 +29,7 @@ public class CommandGiveKeys extends Command<KitManager> {
             if (!checkArgs(member, aliasUsed, args))
                 return;
             if (!parseInt(member, args[2])) {
-                couldNotFind(member, "amount", args[2]);
+                COULDNT_FIND.msg(member.getPlayer(), "%type%", "amount", "%thing%", args[2]);
                 return;
             }
             amount = Integer.parseInt(args[2]);
@@ -47,7 +49,7 @@ public class CommandGiveKeys extends Command<KitManager> {
             }
         }
         if (!getPlayer(member, args[1])) {
-            couldNotFind(member, "player", args[1]);
+            COULDNT_FIND.msg(member.getPlayer(), "%type%", "player", "%thing%", args[1]);
             return;
         }
         Player target = Bukkit.getPlayer(args[1]);

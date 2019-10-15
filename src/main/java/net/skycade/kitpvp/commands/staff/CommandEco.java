@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import static net.skycade.kitpvp.Messages.*;
+
 public class CommandEco extends Command<KitManager> {
 
     public CommandEco(KitManager module) {
@@ -25,7 +27,7 @@ public class CommandEco extends Command<KitManager> {
             if (!checkArgs(member, aliasUsed, args))
                 return;
             if (!parseInt(member, args[2])) {
-                couldNotFind(member, "amount", args[2]);
+                COULDNT_FIND.msg(member.getPlayer(), "%type%", "amount", "%thing%", args[2]);
                 return;
             }
             amount = Integer.parseInt(args[2]);
@@ -46,7 +48,7 @@ public class CommandEco extends Command<KitManager> {
             }
         }
         if (!getPlayer(member, args[1])) {
-            couldNotFind(member, "player", args[1]);
+            COULDNT_FIND.msg(member.getPlayer(), "%type%", "player", "%thing%", args[1]);
             return;
         }
         Player target = Bukkit.getPlayer(args[1]);
@@ -64,14 +66,14 @@ public class CommandEco extends Command<KitManager> {
 
     private void resetCoins(KitPvPStats targetStats, Member member, Player target) {
         targetStats.setCoins(0);
-        target.sendMessage("§7Your coins got §Areset§7.");
-        member.message("§7" + target.getName() + "'s coins got §Areset§7.");
+        YOUR_CURRENCY_RESET.msg(member.getPlayer(), "%currency%", "coins");
+        CURRENCY_RESET.msg(member.getPlayer(), "%player%", target.getName(), "%currency%", "coins");
     }
 
     private void incCoins(KitPvPStats targetStats, Member member, Player target, int amount) {
         targetStats.setCoins(targetStats.getCoins() + amount);
-        target.sendMessage("§7You got §a" + amount + "§7 coins, your total balance is now §a" + targetStats.getCoins() + "§7 coins.");
-        member.message("§a" + amount + "§7 coins given to §a" + target.getName() + "§7.");
+        YOUR_CURRENCY_ADDED.msg(target, "%amount%", Integer.toString(amount), "%currency%", "coins", "%total%", Integer.toString(targetStats.getEventTokens()));
+        CURRENCY_ADDED.msg(member.getPlayer(), "%amount%", Integer.toString(amount), "%currency%", "coins", "%player%", target.getName());
     }
 
     private void takeCoins(KitPvPStats targetStats, Member member, Player target, int amount) {
@@ -79,8 +81,8 @@ public class CommandEco extends Command<KitManager> {
             resetCoins(targetStats, member, target);
         else {
             targetStats.setCoins(targetStats.getCoins() - amount);
-            target.sendMessage("§7Your balance got lowered with §a" + amount + "§7 coins.");
-            member.message("§a" + target.getName() + "'s §7balance got lowered with §a" + amount + "§7coins to §a" + targetStats.getCoins() + "§7.");
+            YOUR_CURRENCY_REMOVED.msg(target, "%amount%", Integer.toString(amount), "%currency%", "coins");
+            CURRENCY_REMOVED.msg(member.getPlayer(), "%player%", target.getName(), "%amount%", Integer.toString(amount), "%currency%", "coins", "%total%", Integer.toString(targetStats.getCoins()));
         }
     }
 

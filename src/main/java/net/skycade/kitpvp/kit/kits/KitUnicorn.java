@@ -20,6 +20,9 @@ import org.bukkit.util.Vector;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static net.skycade.kitpvp.Messages.DEFENCE_UP;
+import static net.skycade.kitpvp.Messages.SWING_SPEED_UP;
+
 public class KitUnicorn extends Kit {
 
     private final Color[] rainbowColors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.AQUA, Color.BLUE, Color.PURPLE, Color.FUCHSIA};
@@ -102,7 +105,7 @@ public class KitUnicorn extends Kit {
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
         if (UtilMath.getRandom(0, 100) <= 3) {
             damager.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 160, 3));
-            damager.sendMessage("§fSwing speed up!");
+            SWING_SPEED_UP.msg(damager);
         }
     }
 
@@ -110,14 +113,13 @@ public class KitUnicorn extends Kit {
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
         if (UtilMath.getRandom(0, 100) <= 3) {
             damagee.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 160, 2));
-            damagee.sendMessage("§fDefence up!");
+            DEFENCE_UP.msg(damager);
             shootParticlesFromLoc(damagee, ParticleEffect.WATER_WAKE, 500, 0.3F);
         }
     }
 
     @Override
     public void onItemUse(Player p, ItemStack item) {
-        int level = getLevel(p);
         if (item.getType() == Material.STICK) {
             if (rodUse.contains(p.getUniqueId()))
                 return;

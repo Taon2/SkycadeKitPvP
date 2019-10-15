@@ -7,6 +7,8 @@ import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import static net.skycade.kitpvp.Messages.STATS;
+
 public class CommandKitpvpStats extends Command<KitManager> {
 
     public CommandKitpvpStats(KitManager module) {
@@ -16,16 +18,16 @@ public class CommandKitpvpStats extends Command<KitManager> {
     @Override
     public void execute(Member member, String aliasUsed, String... args) {
         KitPvPStats stats = getModule().getKitPvP().getStats(member);
-        member.message("§7----------§f§l KitPvP stats §7----------");
-        member.message("§fKit - §a" + stats.getActiveKit().getKit().getName());
-        member.message("§fCoins - §a" + stats.getCoins());
-        member.message("§fEvent Tokens - §a" + stats.getEventCoins());
-        member.message("§fCrate keys - §a" + stats.getCrateKeys());
-        member.message("§fDeaths - §a" + stats.getDeaths());
-        member.message("§fHighest killstreak - §a" + stats.getHighestStreak());
-        member.message("§fKills - §a" + stats.getKills());
-        member.message("§fKillstreak - §a" + stats.getStreak());
-        member.message("§fAssists - §a" + stats.getAssists());
-    }
+        STATS.msg(member.getPlayer(),
+                "%player%", member.getName(),
+                "%kits%", Integer.toString(stats.getKits().size()),
+                "%coins%", Integer.toString(stats.getCoins()),
+                "%eventtokens%", Integer.toString(stats.getEventTokens()),
+                "%deaths%", Integer.toString(stats.getDeaths()),
+                "%kills%", Integer.toString(stats.getKills()),
+                "%assists%", Integer.toString(stats.getAssists()),
+                "%killstreak", Integer.toString(stats.getHighestStreak())
+        );
 
+    }
 }

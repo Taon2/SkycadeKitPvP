@@ -61,7 +61,6 @@ public class CrateRunnable extends BukkitRunnable {
             stats.addKit(prize.getKitType());
             MemberManager.getInstance().update(member);
             p.sendMessage("§7You won the §a" + prize.getName() + "§7 kit.");
-            donatorCratePerk(MemberManager.getInstance().getMember(p), prize);
 
             if (KitPvP.getInstance().getAvailableKits() - 1 == stats.getKits().size()) {
                 p.sendMessage("§7You unlocked §aall §7the kits! You unlocked the §aKitMaster §7kit.");
@@ -71,31 +70,4 @@ public class CrateRunnable extends BukkitRunnable {
             ScoreboardInfo.getInstance().updatePlayer(member.getPlayer());
         }
     }
-
-    private void donatorCratePerk(Member member, Kit prize) {
-        int random = UtilMath.getRandom(0, 100);
-        /* if (member.hasPermission(Permission.RANK_FIVE)) { */
-        if (checkUnlock(member, random, 40, 2, prize))
-            return;
-        if (checkUnlock(member, random, 50, 3, prize))
-            return;
-		/* } else if (member.hasPermission(Permission.RANK_THREE)) {
-			if (checkUnlock(member, random, 30, 2, prize))
-				return;
-		} else if (member.hasPermission(Permission.RANK_ONE)) {
-			if (checkUnlock(member, random, 15, 2, prize))
-				return;
-		} */
-    }
-
-    private boolean checkUnlock(Member member, int random, int required, int level, Kit prize) {
-        return false; // no more levels after 1
-		/* if (random <= required) {
-			member.message("You're lucky, " + prize.getName() + " upgraded to level " + level + " because of your donator perk.");
-			stats.getKits().get(prize.getKitType()).setLevel(level);
-			return true;
-		}
-		return false; */
-    }
-
 }

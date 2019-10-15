@@ -11,7 +11,6 @@ import net.skycade.kitpvp.listeners.SignListeners;
 import net.skycade.kitpvp.ui.KitsMenu;
 import net.skycade.kitpvp.ui.ShopMenu;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 
 import java.util.*;
 
@@ -19,18 +18,10 @@ public class KitManager extends Module {
 
     private final KitPvP plugin;
 
-    private final List<UUID> spawnList = new ArrayList<>();
     private final List<Command> commands = new ArrayList<>();
 
     private final Map<KitType, Kit> kits = new LinkedHashMap<>();
     private final Map<UUID, Integer> signRefreshCooldown = new HashMap<>();
-    private final Map<UUID, UUID> playerDuel = new HashMap<>();
-    private final Map<UUID, Kit> duelKit = new HashMap<>();
-    private final Map<UUID, UUID> lastPlayerFought = new HashMap<>();
-
-    //To check if moving
-
-    private final World world = getKitPvP().getWorld();
 
     private final KitsMenu kitsMenu;
     private final ShopMenu shopMenu;
@@ -47,7 +38,6 @@ public class KitManager extends Module {
         CommandViewKit commandViewKit = new CommandViewKit(this);
 
         registerCommand(commandViewKit);
-        //registerCommand(new CommandAchievements(this));
         registerCommand(commandCrate);
         registerCommand(new CommandEco(this));
         registerCommand(new CommandKit(this));
@@ -58,22 +48,17 @@ public class KitManager extends Module {
         registerCommand(new CommandShop(this));
         registerCommand(new CommandSoup(this));
         registerCommand(new CommandRefreshKit(this));
-        registerCommand(new CommandTeam(this));
-        //registerCommand(new CommandUpgrade(this));
         registerCommand(new CommandViewKit(this));
         registerCommand(new CommandUnlock(this));
-        registerCommand(new CommandSetLevel(this));
-        //registerCommand(new CommandSpawn(this));
         registerCommand(new CommandSetStats(this));
         registerCommand(new CommandTopStats(this));
         registerCommand(new CommandUnlock(this));
         registerCommand(new CommandGiveKeys(this));
         registerCommand(new CommandViewStats(this));
         registerCommand(new CommandKitsUnlocked(this));
-        //registerCommand(new CommandTp(this));
-        //registerCommand(new CommandDuel(this));
         registerCommand(new RefundCommand(this));
         registerCommand(new CommandReload(this));
+        registerCommand(new TriggerEventCommand(this));
 
         registerListener(shopMenu);
         registerListener(kitsMenu);
@@ -109,8 +94,6 @@ public class KitManager extends Module {
         registerKit(new KitFisherman(this));
         registerKit(new KitFrosty(this));
         registerKit(new KitGank(this));
-        registerKit(new KitGhost(this));
-        registerKit(new KitGolem(this)); //kit is disabled.
         registerKit(new KitHades(this));
         registerKit(new KitHuntsman(this));
         registerKit(new KitHydra(this));
@@ -123,7 +106,6 @@ public class KitManager extends Module {
         registerKit(new KitLover(this));
         registerKit(new KitMedic(this));
         registerKit(new KitMystic(this));
-        registerKit(new KitNinja(this)); //kit is disabled.
         registerKit(new KitPlush(this));
         registerKit(new KitPotionMaster(this));
         registerKit(new KitPrick(this));
@@ -145,6 +127,12 @@ public class KitManager extends Module {
         registerKit(new KitWolfPack(this));
         registerKit(new KitZeus(this));
         registerKit(new KitMaster(this));
+
+        //Disabled kits, disabled because they were lame and new ones replaced them
+        registerKit(new KitNinja(this));
+        registerKit(new KitGolem(this));
+        registerKit(new KitGhost(this));
+
     }
 
     private void registerKit(Kit kit) {
@@ -155,9 +143,8 @@ public class KitManager extends Module {
     private void startSignMapUpdate() {
         Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             List<UUID> removeFromEntry = new ArrayList<>();
-            signRefreshCooldown.entrySet().forEach(entry -> {
-                UUID key = entry.getKey();
-                int cd = entry.getValue();
+            signRefreshCooldown.forEach((key, value) -> {
+                int cd = value;
                 cd--;
                 if (cd <= 0) {
                     removeFromEntry.add(key);
@@ -166,10 +153,6 @@ public class KitManager extends Module {
             });
             removeFromEntry.forEach(signRefreshCooldown::remove);
         }, 20, 20);
-    }
-
-    public List<UUID> getSpawnList() {
-        return spawnList;
     }
 
     public List<Command> getCommands() {
@@ -182,18 +165,6 @@ public class KitManager extends Module {
 
     public Map<UUID, Integer> getSignMap() {
         return signRefreshCooldown;
-    }
-
-    public Map<UUID, UUID> getPlayerDuel() {
-        return playerDuel;
-    }
-
-    public Map<UUID, Kit> getDuelKit() {
-        return duelKit;
-    }
-
-    public Map<UUID, UUID> getLastPlayerFought() {
-        return lastPlayerFought;
     }
 
     public KitsMenu getMenu() {

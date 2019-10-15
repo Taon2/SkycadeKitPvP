@@ -6,7 +6,6 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -21,6 +20,8 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static net.skycade.kitpvp.Messages.CANT_USE_HERE;
 
 //This kit is broken and got disabled.
 public class KitGolem extends Kit {
@@ -80,7 +81,7 @@ public class KitGolem extends Kit {
         if (p.getLocation().add(0, 4, 0).getBlock().getType() != Material.AIR)
             return;
         if (tntIsNearby(p) || fallingBlockIsNearby(p)) {
-            p.sendMessage(ChatColor.RED + "You can't use your ability here");
+            CANT_USE_HERE.msg(p);
             return;
         }
         int level = getLevel(p);
@@ -94,7 +95,7 @@ public class KitGolem extends Kit {
 
         blocks.remove(p.getLocation().subtract(0, 1, 0).getBlock());
         if (blocks.size() < 2) {
-            p.sendMessage(ChatColor.RED + "You can't use your ability here");
+            CANT_USE_HERE.msg(p);
             removeCooldowns(p, getName());
             return;
         }
@@ -107,8 +108,7 @@ public class KitGolem extends Kit {
                 Vector v = entity.getLocation().toVector().subtract(p.getLocation().toVector());
                 entity.setVelocity(v);
                 entity.teleport(entity.getLocation().add(0, 2, 0));
-                if (entity != p)
-                    ((Player) entity).damage(15, p);
+                ((Player) entity).damage(15, p);
             }
         });
 

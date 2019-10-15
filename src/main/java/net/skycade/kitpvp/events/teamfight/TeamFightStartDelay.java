@@ -9,7 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.skycade.kitpvp.events.TeamFightEvent.STARTING;
+import static net.skycade.kitpvp.Messages.TEAMFIGHT_STARTING;
 
 public class TeamFightStartDelay extends BukkitRunnable {
 
@@ -38,7 +38,7 @@ public class TeamFightStartDelay extends BukkitRunnable {
 
             for (int i : announce) {
                 if (diff <= i && !announced.contains(i)) {
-                    STARTING.broadcast("%time%", CoreUtil.niceFormat(i));
+                    TEAMFIGHT_STARTING.broadcast("%time%", CoreUtil.niceFormat(i));
                     announced.add(i);
                     break;
                 }

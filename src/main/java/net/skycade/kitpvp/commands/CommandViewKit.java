@@ -15,6 +15,8 @@ import org.bukkit.permissions.PermissionDefault;
 
 import java.util.Map;
 
+import static net.skycade.kitpvp.Messages.COULDNT_FIND;
+
 public class CommandViewKit extends Command<KitManager> implements Listener {
 
     public CommandViewKit(KitManager module) {
@@ -31,7 +33,7 @@ public class CommandViewKit extends Command<KitManager> implements Listener {
             if (entry.getValue().getName().equalsIgnoreCase(args[0]))
                 kit = entry.getValue();
         if (kit == null) {
-            couldNotFind(member, "kitname", args[0]);
+            COULDNT_FIND.msg(member.getPlayer(), "%type%", "kit name", "%thing%", args[0]);
             return;
         }
         if (!kit.isEnabled()) {

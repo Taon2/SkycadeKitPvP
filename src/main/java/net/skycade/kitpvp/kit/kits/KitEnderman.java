@@ -18,6 +18,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+import static net.skycade.kitpvp.Messages.WOOSH;
+
 public class KitEnderman extends Kit {
 
     public KitEnderman(KitManager kitManager) {
@@ -77,7 +79,7 @@ public class KitEnderman extends Kit {
             else {
                 damagee.getWorld().playEffect(loc, Effect.ENDER_SIGNAL, 1);
                 damagee.teleport(newLoc);
-                damagee.sendMessage("§5Woosh!");
+                WOOSH.msg(damagee);
                 break;
             }
         }
@@ -87,7 +89,6 @@ public class KitEnderman extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        int level = getLevel(p);
         if (onCooldown(p, getName()) || !addCooldown(p, getName(), 16, true))
             return;
 
@@ -120,7 +121,7 @@ public class KitEnderman extends Kit {
             return;
         } else {
             p.getWorld().playEffect(playerLoc, Effect.ENDER_SIGNAL, 1);
-            p.sendMessage("§5Woosh!");
+            WOOSH.msg(p);
         }
     }
 

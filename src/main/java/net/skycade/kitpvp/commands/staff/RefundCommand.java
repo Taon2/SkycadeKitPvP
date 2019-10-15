@@ -9,6 +9,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import static net.skycade.kitpvp.Messages.*;
+
 public class RefundCommand extends Command<KitManager> {
 
     public RefundCommand(KitManager module) {
@@ -25,15 +27,15 @@ public class RefundCommand extends Command<KitManager> {
         Member target = MemberManager.getInstance().getMember(Bukkit.getPlayer(args[0]));
         KitPvPStats stats = getModule().getKitPvP().getStats(target);
         if (stats.getLastStreak() == null || stats.getLastStreak() < 0) {
-            member.message("Last killstreak can't be found for " + target.getName() + "§7.");
+            NO_LAST_KILLSTREAK.msg(member.getPlayer(), "%player%", target.getName());
             return;
         }
         if (stats.getStreak() > stats.getLastStreak()) {
-            member.message("Current killstreak is higher than last killstreak.");
+            CURRENT_KILlSTREAK_HIGHER.msg(member.getPlayer());
             return;
         }
         stats.setStreak(stats.getLastStreak());
-        target.message("Your killstreak got refunded.");
+        KILLSTREAK_REFUNDED.msg(target.getPlayer());
     }
 
 }

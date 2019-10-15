@@ -18,6 +18,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
+import static net.skycade.kitpvp.Messages.HEALED;
+import static net.skycade.kitpvp.Messages.PLAYER_HEALED;
+
 public class KitMedic extends Kit {
 
     public KitMedic(KitManager kitManager) {
@@ -95,16 +98,14 @@ public class KitMedic extends Kit {
     }
 
     public void onMedpackUse(Player p, Item medpack) {
-        int level = getLevel(p);
-
         Set<Player> players = UtilPlayer.getNearbyPlayers(p.getLocation(), 3);
         players.remove(p);
 
         players.forEach((player) -> {
             player.setHealth(player.getMaxHealth());
-            player.sendMessage("§cHealed");
+            HEALED.msg(player);
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 1));
-            p.sendMessage("§cHealed all players within the ring.");
+            PLAYER_HEALED.msg(p, "%player%", player.getName());
         });
         Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), medpack::remove, 8);
     }
@@ -119,12 +120,11 @@ public class KitMedic extends Kit {
     public void onInteract(Player p, Player target, ItemStack item) {
         if (item.getType() != Material.SHEARS)
             return;
-        int level = getLevel(p);
         if (!addCooldown(p, "Shears", 4, false))
             return;
         target.setHealth(target.getMaxHealth());
-        p.sendMessage("§c" + target.getName() + " got healed.");
-        target.sendMessage("§cHealed!");
+        PLAYER_HEALED.msg(p, "%player%", target.getName());
+        HEALED.msg(target);
     }
 
     @Override

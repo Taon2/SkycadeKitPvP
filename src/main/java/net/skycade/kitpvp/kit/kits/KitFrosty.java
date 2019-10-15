@@ -13,6 +13,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+import static net.skycade.kitpvp.Messages.YOURE_FROZEN;
+
 public class KitFrosty extends Kit {
 
     private final List<Player> snowballCooldown = new ArrayList<>();
@@ -107,7 +109,7 @@ public class KitFrosty extends Kit {
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
-        damagee.sendMessage("§bYou got frozen.");
+        YOURE_FROZEN.msg(damagee);
         freezePlayer(damagee, 5);
     }
 

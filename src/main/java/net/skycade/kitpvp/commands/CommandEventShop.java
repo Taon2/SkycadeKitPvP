@@ -5,9 +5,10 @@ import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.events.DoubleCoinsEvent;
 import net.skycade.kitpvp.events.RandomEvent;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
-import org.bukkit.ChatColor;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+
+import static net.skycade.kitpvp.Messages.CANNOT_USE;
 
 public class CommandEventShop extends Command<EventShopManager> {
 
@@ -20,7 +21,7 @@ public class CommandEventShop extends Command<EventShopManager> {
         if (RandomEvent.getCurrent() == null || DoubleCoinsEvent.isActive()) {
             getModule().getEventShopMenu().open(member);
         } else {
-            member.getPlayer().sendMessage(ChatColor.RED + ("You cannot use /eventshop during events!"));
+            CANNOT_USE.msg(member.getPlayer(), "%thing%", "/eventshop", "%reason%", "during events");
         }
     }
 }

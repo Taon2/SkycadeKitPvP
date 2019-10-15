@@ -3,6 +3,7 @@ package net.skycade.kitpvp.kit;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.PlayerInteractManager;
+import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
@@ -34,6 +35,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+
+import static net.skycade.kitpvp.Messages.*;
 
 public abstract class Kit implements Listener {
 
@@ -187,9 +190,10 @@ public abstract class Kit implements Listener {
         if (onCooldown(p, ability)) {
             if (cooldownDate.containsKey(p.getUniqueId())) {
                 long remainingSeconds = (cooldownDate.get(p.getUniqueId()).get(playerCooldown.get(p.getUniqueId()).indexOf(ability)) - new Date().getTime()) / 1000;
-                p.sendMessage("§c" + ability + " is on cooldown, wait " + remainingSeconds + " seconds.");
+
+                ON_COOLDOWN.msg(p, "%time%", CoreUtil.niceFormat((int) remainingSeconds), "%thing%", ability);
             } else
-                p.sendMessage("§c" + ability + " is on cooldown.");
+                ON_COOLDOWN_NO_TIME.msg(p, "%thing%", ability);
             return false;
         }
         List<String> cooldowns = playerCooldown.get(p.getUniqueId()) == null ? new ArrayList<>() : playerCooldown.get(p.getUniqueId());
@@ -203,7 +207,7 @@ public abstract class Kit implements Listener {
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
             if (playerCooldown.get(p.getUniqueId()).contains(ability)){
                 if (message)
-                    p.sendMessage("§7You can now use §a" + ability + "§7.");
+                    OFF_COOLDOWN.msg(p, "%thing%", ability);
                 removeCooldowns(p, ability);
             }
         }, seconds * 20);
@@ -246,7 +250,7 @@ public abstract class Kit implements Listener {
         return armour.toArray(new ItemStack[armour.size()]);
     }
 
-    public void clearArmor(Player player){
+    private void clearArmor(Player player){
         player.getInventory().setHelmet(null);
         player.getInventory().setChestplate(null);
         player.getInventory().setLeggings(null);
@@ -307,7 +311,7 @@ public abstract class Kit implements Listener {
         lastLocation.put(p.getUniqueId(), p.getLocation());
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
             frozenPlayers.remove(p.getUniqueId());
-            p.sendMessage("§bYou are now unfrozen.");
+            YOURE_UNFROZEN.msg(p);
             lastLocation.remove(p);
         }, sec * 20);
     }
@@ -375,34 +379,6 @@ public abstract class Kit implements Listener {
 
     protected List<Player> getAllMovingPlayers() {
         return Bukkit.getOnlinePlayers().stream().filter(UtilPlayer::isMoving).collect(Collectors.toList());
-    }
-
-    public int getLevelUpXp(Player p) {
-        return (getPrice() * getLevel(p) / 20) * KitPvP.getInstance().getConfig().getInt("required-xp-multiplier");
-    }
-
-    public void increaseXp(Player p, int xp) {
-        /*
-        KitPvPStats stats = kitManager.getKitPvP().getStats(p);
-
-        // KitMaster can't level up
-        if (stats.getActiveKit() == KitType.KITMASTER)
-            return;
-
-        KitData data = stats.getKits().get(stats.getActiveKit());
-        if (data == null || data.getLevel() >= 3)
-            return;
-        data.setXp(data.getXp() + xp);
-
-        // Level up
-        if (data.getXp() >= getLevelUpXp(p)) {
-            int difference = data.getXp() - getLevelUpXp(p) ;
-            data.setLevel(data.getLevel() + 1);
-            data.setXp(difference);
-            p.sendMessage("§7Your kit §alevel increased §7to " + data.getLevel() + "!");
-            applyKit(p);
-            stats.getActiveKit().getKit().giveSoup(p, 30);
-        } */ // no leveling up
     }
 
     @EventHandler

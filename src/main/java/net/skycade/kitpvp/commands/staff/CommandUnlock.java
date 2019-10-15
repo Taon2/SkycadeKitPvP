@@ -14,6 +14,8 @@ import org.bukkit.permissions.PermissionDefault;
 
 import java.util.Map;
 
+import static net.skycade.kitpvp.Messages.*;
+
 public class CommandUnlock extends Command<KitManager> {
 
     public CommandUnlock(KitManager module) {
@@ -35,9 +37,9 @@ public class CommandUnlock extends Command<KitManager> {
             if (args[1].equalsIgnoreCase("all")) {
                 getModule().getKits().keySet().forEach(stats::addKit);
                 ScoreboardInfo.getInstance().updatePlayer(target);
-                member.message("§a" + target.getName() + " §7now has all kits unlocked.");
+                KIT_UNLOCKED.msg(member.getPlayer(), "%player%", target.getName(), "%kit%", "every");
                 if (!member.getPlayer().equals(target))
-                    target.sendMessage("§aAll §7kits got unlocked.");
+                    YOUR_KIT_UNLOCKED.msg(target, "%kit%", "every");
                 return;
             }
             Kit kit = getKit(stats, args, member);
@@ -46,16 +48,15 @@ public class CommandUnlock extends Command<KitManager> {
             stats.addKit(kit.getKitType());
             ScoreboardInfo.getInstance().updatePlayer(member.getPlayer());
 
-            if (member != null)
-                member.message("§a" + target.getName() + " §7now has the §a" + kit.getName() + " §7kit unlocked.");
-            if (member != null && !member.getPlayer().equals(target))
-                target.sendMessage("§a" + kit.getName() + " §7got unlocked.");
+            KIT_UNLOCKED.msg(member.getPlayer(), "%player%", target.getName(), "%kit%", kit.getName());
+            if (!member.getPlayer().equals(target))
+                YOUR_KIT_UNLOCKED.msg(target, "%kit%", kit.getName());
             return;
 
         } else if (args[2].equalsIgnoreCase("lock")) {
             if (args[1].equalsIgnoreCase("all")) {
                 stats.resetKits();
-                member.message("§a" + target.getName() + " §7now has all kits locked.");
+                KIT_LOCKED.msg(target, "%kit%", "every");
                 return;
             }
             Kit kit = getKit(stats, args, member);
@@ -63,9 +64,9 @@ public class CommandUnlock extends Command<KitManager> {
                 return;
             stats.removeKit(kit.getKitType());
 
-            member.message("§a" + target.getName() + " §7now has the §a" + kit.getName() + " §7kit locked.");
+            KIT_LOCKED.msg(target, "%kit%", kit.getName());
             if (!member.getPlayer().equals(target))
-                target.sendMessage("§a" + kit.getName() + " §7got locked.");
+                YOUR_KIT_LOCKED.msg(target, "%kit%", kit.getName());
             return;
         }
         member.message(getUsageToString());
@@ -77,7 +78,7 @@ public class CommandUnlock extends Command<KitManager> {
             if (entry.getValue().getName().equalsIgnoreCase(args[1]))
                 kit = entry.getValue();
         if (kit == null) {
-            couldNotFind(member, "kit", args[1]);
+            COULDNT_FIND.msg(member.getPlayer(), "%type%", "kit", "%thing%", args[1]);
             return null;
         }
         return kit;

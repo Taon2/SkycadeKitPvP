@@ -17,9 +17,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
-public class KitMystic extends Kit {
+import static net.skycade.kitpvp.Messages.CAT;
 
-    final private String catLable = ChatColor.DARK_PURPLE + "[Cat]: ";
+public class KitMystic extends Kit {
 
     public KitMystic(KitManager kitManager) {
         super(kitManager, "Mystic", KitType.MYSTIC, 31000, "Cats can be good creatures");
@@ -91,17 +91,8 @@ public class KitMystic extends Kit {
 
         Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
             Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(cat.getLocation(), 4);
-            if (targetPlayers.contains(p))
-                targetPlayers.remove(p);
+            targetPlayers.remove(p);
 
-            targetPlayers.forEach(target -> {
-                /* if (level == 1)
-					mysticEffects(target, p, 20, 10, 20, 20, 15, 8, 7);
-				else if (level == 2)
-					mysticEffects(target, p, 12, 10, 20, 20, 20, 8, 7);
-				else */
-                mysticEffects(target, p, 7, 7, 22, 22, 22, 12, 14);
-            });
             cat.getLocation().getWorld().createExplosion(cat.getLocation(), 0);
             cat.remove();
         }, 15);
@@ -110,34 +101,28 @@ public class KitMystic extends Kit {
     private void mysticEffects(Player target, Player p, int speedPer, int regPer, int slowPer, int weakPer, int poisPer, int blindPer, int freezePer) {
         int percentage = UtilMath.getRandom(0, 100);
         if (percentage <= speedPer) {
-            onCatHit(target, p, "§fSPEED UP!", PotionEffectType.SPEED, 160, 1);
+            onCatHit(target, p, "&fSPEED UP!", PotionEffectType.SPEED, 160, 1);
         } else if (percentage <= speedPer + regPer) {
-            onCatHit(target, p, "§cREGENERATION!", PotionEffectType.REGENERATION, 100, 1);
+            onCatHit(target, p, "&cREGENERATION!", PotionEffectType.REGENERATION, 100, 1);
         } else if (percentage <= speedPer + regPer + slowPer) {
-            onCatHit(target, p, "§7SLOWNESS!", PotionEffectType.SLOW, 160, 0);
+            onCatHit(target, p, "&7SLOWNESS!", PotionEffectType.SLOW, 160, 0);
         } else if (percentage <= speedPer + regPer + slowPer + weakPer) {
-            onCatHit(target, p, "§cWEAKNESS!", PotionEffectType.WEAKNESS, 200, 0);
+            onCatHit(target, p, "&cWEAKNESS!", PotionEffectType.WEAKNESS, 200, 0);
         } else if (percentage <= speedPer + regPer + slowPer + weakPer + poisPer) {
-            onCatHit(target, p, "§2POISON", PotionEffectType.POISON, 140, 0);
+            onCatHit(target, p, "&2POISON", PotionEffectType.POISON, 140, 0);
         } else if (percentage <= speedPer + regPer + slowPer + weakPer + poisPer + blindPer) {
-            onCatHit(target, p, "§0BLINDNESS", PotionEffectType.BLINDNESS, 140, 0);
-        } else /* if (percentage <= speedPer + regPer + slowPer + weakPer + poisPer + blindPer + freezePer) */ {
+            onCatHit(target, p, "&0BLINDNESS", PotionEffectType.BLINDNESS, 140, 0);
+        } else  {
             freezePlayer(target, 5);
-            target.sendMessage(catLable + "§bFROZEN!");
-            p.sendMessage(catLable + "§bFREEZE!");
-        }/* else {
-			if (target.getHealth() - 16 > 0) 
-				target.setHealth(target.getHealth() - 16);
-			else 
-				target.setHealth(1);
-			target.sendMessage(catLable + ChatColor.DARK_RED + "8HIT!.");
-			p.sendMessage(ChatColor.DARK_RED + "Player got 8 hearts damage.");
-		} */
+            CAT.msg(target, "%effect%", "&bFROZEN!");
+            CAT.msg(p, "%effect%", "&bFREEZE!");
+        }
     }
 
     private void onCatHit(Player target, Player p, String playerMsg, PotionEffectType effect, int duration, int amplifier) {
-        target.sendMessage(catLable + playerMsg);
-        p.sendMessage(catLable + playerMsg);
+        CAT.msg(target, "%effect%", playerMsg);
+        CAT.msg(p, "%effect%", playerMsg);
+
         target.addPotionEffect(new PotionEffect(effect, duration, amplifier));
     }
 

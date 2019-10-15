@@ -7,6 +7,8 @@ import net.skycade.kitpvp.kit.KitManager;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import static net.skycade.kitpvp.Messages.RELOADED;
+
 public class CommandReload extends Command<KitManager> {
     public CommandReload(KitManager module) {
         super(module, "Reloads configuration files.", new Permission("kitpvp.admin", PermissionDefault.OP), "kitpvpreload");
@@ -17,6 +19,6 @@ public class CommandReload extends Command<KitManager> {
         for (Kit kit : getModule().getKits().values()) {
             if (kit.isEnabled()) kit.reloadConfig();
         }
-        member.getPlayer().sendMessage("Reloaded!");
+        RELOADED.msg(member.getPlayer());
     }
 }

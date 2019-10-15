@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static net.skycade.kitpvp.Messages.LOVE_U;
+
 public class KitLover extends Kit {
 
     public KitLover(KitManager kitManager) {
@@ -73,7 +75,6 @@ public class KitLover extends Kit {
     public void onInteract(Player p, Player target, ItemStack item) {
         if (item.getType() != Material.RED_ROSE)
             return;
-        int level = getLevel(p);
         if (!addCooldown(p, getName(), 15, true))
             return;
         target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 3));
@@ -81,7 +82,7 @@ public class KitLover extends Kit {
         target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 0));
 
         ParticleEffect.HEART.display(0.5F, 0.5F, 0.5F, 1, 10, target.getLocation().add(0, 2, 0), 100);
-        target.sendMessage("§cI LOVE YOU <3!");
+        LOVE_U.msg(p);
     }
 
     @Override

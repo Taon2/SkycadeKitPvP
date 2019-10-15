@@ -20,6 +20,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
+import static net.skycade.kitpvp.Messages.BIT_BY;
+import static net.skycade.kitpvp.Messages.HEALED;
+
 public class KitVampire extends Kit {
 
     public KitVampire(KitManager kitManager) {
@@ -81,7 +84,6 @@ public class KitVampire extends Kit {
     @Override
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
         int random = UtilMath.getRandom(0, 100);
-        int level = getLevel(damager);
         int chance = 7;
 
         if (random < chance) {
@@ -92,11 +94,11 @@ public class KitVampire extends Kit {
                 damager.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 60, 0));
             else
                 damager.setHealth(damager.getMaxHealth());
-            damager.sendMessage("§cHealed!");
+            HEALED.msg(damager);
 
         } else if (random < chance * 2) {
             damagee.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 80 + 20 * 3 - 1, 0));
-            damagee.sendMessage("§cYou are bit by §f" + damager.getName() + "§c.");
+            BIT_BY.msg(damagee, "%player%", damager.getName());
         }
     }
 
@@ -104,7 +106,6 @@ public class KitVampire extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        int level = getLevel(p);
         if (!addCooldown(p, getName(), 30, true))
             return;
         Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 4);
@@ -128,7 +129,7 @@ public class KitVampire extends Kit {
                     p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, (int) (20 * Math.floor(healAmount)), 0));
             } else
                 p.setHealth(p.getHealth() + healAmount);
-            p.sendMessage("§7You got §7Healed!");
+            HEALED.msg(p);
         }
     }
 

@@ -11,7 +11,6 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -20,6 +19,7 @@ import org.bukkit.util.Vector;
 import java.util.*;
 
 import static java.lang.Integer.parseInt;
+import static net.skycade.kitpvp.Messages.GET_SPOOKED;
 
 public class KitGhost extends Kit {
 
@@ -78,22 +78,9 @@ public class KitGhost extends Kit {
     }
 
     @Override
-    public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        /* if (getLevel(damagee) <= 2) {
-			damagee.removePotionEffect(PotionEffectType.INVISIBILITY);
-			
-			Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
-				if (getKitManager().getKitPvP().getStats(damagee).getActiveKit() == KitType.GHOST) 
-					damagee.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0));
-			}, 40);
-		} */
-    }
-
-    @Override
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.DIAMOND_SWORD)
             return;
-        int level = getLevel(p);
         if (!addCooldown(p, getName(), 10, true))
             return;
 
@@ -104,7 +91,7 @@ public class KitGhost extends Kit {
 
         targetPlayers.forEach(target -> {
             if (!target.equals(p)) {
-                target.sendMessage("Get spooked!");
+                GET_SPOOKED.msg(p);
                 levitateInAir(target, 40);
             }
         });

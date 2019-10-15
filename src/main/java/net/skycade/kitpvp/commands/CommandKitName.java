@@ -10,6 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import static net.skycade.kitpvp.Messages.COULDNT_FIND;
+import static net.skycade.kitpvp.Messages.USING_KIT;
+
 public class CommandKitName extends Command<KitManager> {
 
     public CommandKitName(KitManager module) {
@@ -25,11 +28,11 @@ public class CommandKitName extends Command<KitManager> {
             return;
         Player target = Bukkit.getPlayer(args[0]);
         if (VanishStatus.isVanished(target.getUniqueId())) {
-            member.message("&7Could not find Player '§e" + target.getName() + "&7'.");
+            COULDNT_FIND.msg(member.getPlayer(), "%type%", "player", "%thing%", args[0]);
             return;
         }
         KitPvPStats stats = getModule().getKitPvP().getStats(target);
-        member.message("§a" + target.getName() + "§7 is using the §a" + stats.getActiveKit().getKit().getName() + "§7 kit.");
+        USING_KIT.msg(member.getPlayer(), "%player%", target.getName(), "%kitname%", stats.getActiveKit().getKit().getName());
     }
 
 }

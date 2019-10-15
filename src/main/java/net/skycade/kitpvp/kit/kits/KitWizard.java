@@ -19,6 +19,8 @@ import org.bukkit.util.Vector;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static net.skycade.kitpvp.Messages.WOOSH;
+
 public class    KitWizard extends Kit {
 
     private final HashMap<UUID, Location> lastWizardLoc = new HashMap<>();
@@ -73,8 +75,6 @@ public class    KitWizard extends Kit {
 
     @Override
     public void onItemUse(Player p, ItemStack item) {
-        int level = getLevel(p);
-
         if (item.getType() == Material.BOOK) {
             if (!lastWizardLoc.containsKey(p.getUniqueId()))
                 return;
@@ -88,7 +88,7 @@ public class    KitWizard extends Kit {
 
             p.teleport(newLoc);
             p.getLocation().setDirection(dir);
-            p.sendMessage(ChatColor.DARK_PURPLE + "Woosh!");
+            WOOSH.msg(p);
             p.getWorld().playEffect(p.getLocation(), Effect.ENDER_SIGNAL, 1);
             p.getWorld().playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1, 1);
 

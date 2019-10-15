@@ -151,7 +151,7 @@ public class KitPvPDB {
                 statement.setString(8, new JSONObject(kitMap).toJSONString());
 
                 statement.setInt(9, stats.getCoins());
-                statement.setInt(10, stats.getEventCoins());
+                statement.setInt(10, stats.getEventTokens());
                 statement.setInt(11, stats.getAssists());
                 statement.setString(12, stats.getKitPreference().name());
                 statement.setInt(13, stats.getCrateKeys());

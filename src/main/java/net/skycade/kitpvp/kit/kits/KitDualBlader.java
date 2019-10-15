@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static net.skycade.kitpvp.Messages.YOURE_FROZEN;
+
 public class KitDualBlader extends Kit {
 
     public KitDualBlader(KitManager kitManager) {
@@ -76,16 +78,10 @@ public class KitDualBlader extends Kit {
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
         if (!Arrays.asList(Material.DIAMOND_SWORD, Material.IRON_SWORD).contains(damager.getItemInHand().getType()))
             return;
-        int level = getLevel(damager);
 
         if (damager.getItemInHand().getItemMeta().getDisplayName().contains("fire")) {
             fireFreezeCalc(damagee, 25, 7, 0);
         } else if (damager.getItemInHand().getItemMeta().getDisplayName().contains("ice")) {
-            /* if (level == 1)
-				fireFreezeCalc(damagee, 0, 0, 4);
-			else if (level == 2)
-				fireFreezeCalc(damagee, 0, 0, 7);
-			else */
             fireFreezeCalc(damagee, 0, 0, 10);
         }
     }
@@ -96,7 +92,7 @@ public class KitDualBlader extends Kit {
         if (random <= firechance)
             damagee.setFireTicks(firedur * 20);
         else if (random <= firechance + freezechance) {
-            damagee.sendMessage("§bYou got frozen.");
+            YOURE_FROZEN.msg(damagee);
             freezePlayer(damagee, 5);
         }
     }

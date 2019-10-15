@@ -13,7 +13,8 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.ArrayList;
 import java.util.List;
 
-// Not well coded, improve if you have the time to.
+import static net.skycade.kitpvp.Messages.COULDNT_FIND;
+
 public class CommandKitPvPHelp extends Command<KitManager> {
 
     private PageManager pageManager;
@@ -28,7 +29,7 @@ public class CommandKitPvPHelp extends Command<KitManager> {
     @Override
     public void execute(Member member, String aliasUsed, String... args) {
         if (pageManager == null) {
-            member.message("Something went wrong.");
+            COULDNT_FIND.msg(member.getPlayer(), "%type%", "page manager", "%thing%", "KitPvP Help");
             return;
         }
 

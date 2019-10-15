@@ -122,6 +122,7 @@ public class PlayerListeners implements Listener {
         if (stats == null) return;
         stats.applyKitPreference();
         p.getInventory().clear();
+        p.setItemOnCursor(null);
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
         int streak = stats.getStreak();
         if (streak > stats.getHighestStreak())

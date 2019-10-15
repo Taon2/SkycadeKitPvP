@@ -6,10 +6,10 @@ import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.events.KillTheKingEvent;
+import net.skycade.kitpvp.events.TagEvent;
 import net.skycade.kitpvp.events.TeamFightEvent;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
+
+import static net.skycade.kitpvp.Messages.*;
 
 public class CommandRefreshKit extends Command<KitManager> {
     private File file;
@@ -38,13 +40,18 @@ public class CommandRefreshKit extends Command<KitManager> {
     public void execute(Member member, String aliasUsed, String... args) {
         if (KillTheKingEvent.getInstance() != null && KillTheKingEvent.getInstance().getCurrentKing() != null) {
             if (member.getUUID().equals(KillTheKingEvent.getInstance().getCurrentKing())) {
-                member.getPlayer().sendMessage(ChatColor.RED + ("You cannot use /refreshkit as the King!"));
+                CANNOT_USE.msg(member.getPlayer(), "%thing%", "/refreshkit", "%reason%", "as the King");
                 return;
             }
         }
 
-        if (TeamFightEvent.getInstance() != null) {
-            member.getPlayer().sendMessage(ChatColor.RED + ("You cannot use /refreshkit during Team Fight!"));
+        if (TeamFightEvent.getInstance().getBegin() != null) {
+            CANNOT_USE.msg(member.getPlayer(), "%thing%", "/refreshkit", "%reason%", "during Team Fight");
+            return;
+        }
+
+        if (TagEvent.getInstance().getBegin() != null) {
+            CANNOT_USE.msg(member.getPlayer(), "%thing%", "/refreshkit", "%reason%", "during Infection");
             return;
         }
 
@@ -58,7 +65,7 @@ public class CommandRefreshKit extends Command<KitManager> {
             long diff = (now - lastRefresh.get(member.getUUID())) / 1000L;
 
             if (diff < COOLDOWN) {
-                member.message(ChatColor.RED + "You need to wait another " + CoreUtil.niceFormat(COOLDOWN - ((Long) diff).intValue()) + " before using /refreshkit again!");
+                ON_COOLDOWN.msg(member.getPlayer(), "%time%", CoreUtil.niceFormat(COOLDOWN - ((Long) diff).intValue()), "%thing%", "/refreshkit");
                 return;
             }
         }
@@ -66,7 +73,7 @@ public class CommandRefreshKit extends Command<KitManager> {
         KitPvPStats stats = getModule().getKitPvP().getStats(member);
         int coins = stats.getCoins();
         if (coins < COST) {
-            member.message("§7You don't have enough §acoins§7.");
+            NOT_ENOUGH.msg(member.getPlayer(), "%thing%", "coins");
             return;
         }
 
