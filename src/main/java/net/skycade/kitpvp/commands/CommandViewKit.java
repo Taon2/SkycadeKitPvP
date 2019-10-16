@@ -16,6 +16,7 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.Map;
 
 import static net.skycade.kitpvp.Messages.COULDNT_FIND;
+import static net.skycade.kitpvp.Messages.KIT_DISABLED;
 
 public class CommandViewKit extends Command<KitManager> implements Listener {
 
@@ -37,10 +38,10 @@ public class CommandViewKit extends Command<KitManager> implements Listener {
             return;
         }
         if (!kit.isEnabled()) {
-            member.message("This kit is §adisabled§7.");
+            KIT_DISABLED.msg(member.getPlayer());
             return;
         }
-        new ViewkitMenu(getModule(), kit).open(member);
+        new ViewkitMenu(kit).open(member);
     }
 
     @EventHandler

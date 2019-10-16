@@ -35,10 +35,10 @@ public class CommandCrate extends Command<KitManager> implements Listener {
                 return;
             }
         }
-        if (stats.getCrateKeys() <= 0) {
-            NOT_ENOUGH.msg(member.getPlayer(), "%thing%", "keys");
-            return;
-        }
+//        if (stats.getCrateKeys() <= 0) {
+//            NOT_ENOUGH.msg(member.getPlayer(), "%thing%", "keys");
+//            return;
+//        }
         List<KitType> kits = new ArrayList<>();
         int counter = 1;
         for (KitType kit : KitType.values()) {
@@ -54,7 +54,7 @@ public class CommandCrate extends Command<KitManager> implements Listener {
             return;
         }
 
-        stats.setCrateKeys(stats.getCrateKeys() - 1);
+        //stats.setCrateKeys(stats.getCrateKeys() - 1);
         int randomNum = UtilMath.getRandom(0, kits.size() - 1);
         crateCooldown.put(member.getUUID(), randomNum / 3);
         CrateRunnable runnable = new CrateRunnable(randomNum, member.getPlayer(), member, kits, stats);

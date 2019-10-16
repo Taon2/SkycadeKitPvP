@@ -24,7 +24,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -44,15 +46,10 @@ public abstract class Kit implements Listener {
     private final Map<UUID, List<Long>> cooldownDate = new HashMap<>();
     private final Map<UUID, List<String>> playerCooldown = new HashMap<>();
 
-    //For freeze
-    protected final Map<UUID, Location> lastLocation = new HashMap<>();
-
     protected final Map<UUID, ItemRunnable> playerItemRunnable = new HashMap<>();
 
     protected final List<UUID> frozenPlayers = new ArrayList<>();
     protected final List<UUID> shacoHit = new ArrayList<>();
-
-    boolean freezeRunning = false;
 
     private static final CraftPlayer DUMMY_PLAYER = new CraftPlayer((CraftServer) Bukkit.getServer(),
             new EntityPlayer(((CraftServer) Bukkit.getServer()).getServer(),
@@ -85,17 +82,15 @@ public abstract class Kit implements Listener {
         this.description = description;
 }
 
-    public void applyKit(Player p) {
+    public void beginApplyKit(Player p) {
         if (p == null || !p.isOnline()) return;
         clearArmor(p);
         p.getInventory().clear();
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
-        applyKit(p, getLevel(p));
+        applyKit(p);
     }
 
-
-
-    public abstract void applyKit(Player p, int level);
+    protected abstract void applyKit(Player p);
 
     public KitManager getKitManager() {
         return kitManager;
@@ -142,16 +137,6 @@ public abstract class Kit implements Listener {
 
     public void setIcon(Material icon) {
         this.icon = new ItemStack(icon);
-    }
-
-    public int getLevel(Player p) {
-        if (p.equals(DUMMY_PLAYER))
-            return 1;
-        try {
-            return KitPvP.getInstance().getStats(p).getKits().get(getKitType()).getLevel();
-        } catch (Exception e) {
-            return 1;
-        }
     }
 
     public boolean isActive(Player p) {
@@ -299,21 +284,65 @@ public abstract class Kit implements Listener {
         playerItemRunnable.put(p.getUniqueId(), runnable);
     }
 
-    protected void freezePlayer(Player p, int sec) {
-        if (!freezeRunning) {
-            onFreezeMove();
-        }
+    protected void reimburseItem(Player p, ItemStack item, int maxAmount, KitType kitType) {
+        Inventory inv = p.getInventory();
+        int amount = 0;
 
+        Integer finalSlot = null;
+        for (Integer i = 0; i < inv.getSize(); i++)
+            if (inv.getItem(i) != null)
+                if (inv.getItem(i).getType() == item.getType()) {
+                    amount += inv.getItem(i).getAmount();
+                    if (amount <= inv.getMaxStackSize())
+                        finalSlot = i;
+                }
+        if (finalSlot != null && amount > 0 && KitPvP.getInstance().getStats(p).getActiveKit() == kitType) {
+            ItemStack invItem = inv.getItem(finalSlot);
+            if (amount < maxAmount)
+                inv.setItem(finalSlot, new ItemStack(invItem.getType(), invItem.getAmount() + 1));
+        } else
+            p.getInventory().addItem(item);
+    }
+
+    protected void freezePlayer(Player p, int sec) {
         frozenPlayers.remove(p.getUniqueId());
-        lastLocation.remove(p.getUniqueId());
 
         frozenPlayers.add(p.getUniqueId());
-        lastLocation.put(p.getUniqueId(), p.getLocation());
+
+        if (!p.isOnGround()) {
+            double y = Math.floor(p.getLocation().getY());
+            while (!p.isOnGround()) {
+                Location loc = p.getLocation();
+                loc.setY(y);
+                if (loc.getBlock().getType().equals(Material.AIR)) {
+                    y--;
+                } else {
+                    p.teleport(new Location(loc.getWorld(), Math.floor(loc.getX()) + .5, y+1, Math.floor(loc.getZ()) + .5, loc.getYaw(), loc.getPitch()));
+                    break;
+                }
+            }
+        }
+
+        Location loc = p.getLocation();
+        Material initialType = loc.getBlock().getType();
+        loc.getBlock().setType(Material.ICE);
+
+        p.teleport(new Location(loc.getWorld(), Math.floor(loc.getX()) + .5, loc.getY(), Math.floor(loc.getZ()) + .5, loc.getYaw(), loc.getPitch()));
+
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            loc.getBlock().setType(initialType);
             frozenPlayers.remove(p.getUniqueId());
             YOURE_UNFROZEN.msg(p);
-            lastLocation.remove(p);
         }, sec * 20);
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (frozenPlayers.contains(event.getPlayer().getUniqueId())) {
+            event.getTo().setX(event.getFrom().getX());
+            event.getTo().setY(event.getFrom().getY());
+            event.getTo().setZ(event.getFrom().getZ());
+        }
     }
 
     protected void particleMoveEffect(Player p, ParticleEffect effect, float radius, int particleAmount) {
@@ -354,27 +383,6 @@ public abstract class Kit implements Listener {
     protected void shootParticlesFromLoc(Player p, ParticleEffect effect, int particleAmount, float radius) {
         for (int i = 0; i < particleAmount; i++)
             effect.display(radius, radius, radius, i / 1000 < 0.2 ? 0.2F : i / particleAmount, 1, p.getLocation(), 40);
-    }
-
-    private void onFreezeMove() {
-        freezeRunning = true;
-        Bukkit.getScheduler().runTaskTimer(KitPvP.getInstance(), () -> frozenPlayers.forEach(uuid -> {
-            Player p = Bukkit.getPlayer(uuid);
-            if (p != null) {
-                if (!lastLocation.containsKey(p.getUniqueId())) {
-                    if (p.getLocation().getBlock().getType() != Material.AIR)
-                        lastLocation.put(p.getUniqueId(), p.getLocation());
-                } else {
-                    if (lastLocation.get(p.getUniqueId()).distance(p.getLocation()) > 0.2) {
-                        final Vector dir = p.getLocation().getDirection();
-                        Location newLoc = lastLocation.get(p.getUniqueId());
-                        newLoc.setDirection(dir);
-                        p.teleport(newLoc);
-                    }
-
-                }
-            }
-        }), 10, 10);
     }
 
     protected List<Player> getAllMovingPlayers() {

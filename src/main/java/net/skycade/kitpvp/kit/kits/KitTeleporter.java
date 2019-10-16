@@ -63,7 +63,7 @@ public class KitTeleporter extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))

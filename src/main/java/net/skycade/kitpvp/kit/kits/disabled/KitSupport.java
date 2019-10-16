@@ -1,39 +1,37 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
+import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static net.skycade.kitpvp.Messages.LOVE_U;
+public class KitSupport extends Kit {
 
-public class KitLover extends Kit {
-
-    public KitLover(KitManager kitManager) {
-        super(kitManager, "Lover", KitType.LOVER, 19000, "Love is a weird thing");
+    public KitSupport(KitManager kitManager) {
+        super(kitManager, "Support", KitType.SUPPORT, 17000, false, "A real team player");
 
         Map<String, Object> defaultsMap = new HashMap<>();
 
-        defaultsMap.put("kit.icon.material", "RED_ROSE");
+        defaultsMap.put("kit.icon.material", "BEACON");
         defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 19000);
+        defaultsMap.put("kit.price", 17000);
 
-        defaultsMap.put("inventory.sword.material", "WOOD_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 10);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
+        defaultsMap.put("inventory.sword.material", "STONE_SWORD");
+        defaultsMap.put("inventory.sword.enchantments.durability", 5);
+        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
 
         defaultsMap.put("armor.material", "LEATHER");
         defaultsMap.put("armor.enchantments.durability", 12);
@@ -55,39 +53,47 @@ public class KitLover extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
-
-        p.getInventory().addItem(new ItemBuilder(
-                Material.RED_ROSE).build());
+                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.protection")).build());
 
         p.getInventory().setArmorContents(getArmour(
                 Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
                 getConfig().getInt("armor.enchantments.durability"),
                 getConfig().getInt("armor.enchantments.protection"),
-                Color.RED));
+                Color.fromBGR(153, 255, 153)));
     }
 
     @Override
-    public void onInteract(Player p, Player target, ItemStack item) {
-        if (item.getType() != Material.RED_ROSE)
-            return;
-        if (!addCooldown(p, getName(), 15, true))
-            return;
-        target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 3));
-        target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 200, 1));
-        target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 0));
+    public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+        damagee.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 0));
+    }
 
-        ParticleEffect.HEART.display(0.5F, 0.5F, 0.5F, 1, 10, target.getLocation().add(0, 2, 0), 100);
-        LOVE_U.msg(p);
+    @Override
+    public void onItemUse(Player p, ItemStack item) {
+        if (item.getType() != Material.STONE_SWORD)
+            return;
+        if (!addCooldown(p, getName(), 30, true))
+            return;
+
+        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 5);
+        if (targetPlayers.size() <= 1) {
+            removeCooldowns(p, getName());
+            return;
+        }
+
+        targetPlayers.forEach(target -> {
+            target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1));
+            target.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1));
+        });
+        p.getWorld().playSound(p.getLocation(), Sound.WOLF_HOWL, 1.0F, 1.0F);
+        shootParticlesFromLoc(p, ParticleEffect.PORTAL, 500, 1);
     }
 
     @Override
     public List<String> getAbilityDesc() {
-        return Collections.singletonList("§7Use the flower to love someone");
+        return Arrays.asList("§7Use your sword ability to give players", "§7around you a speed and resistance effect");
     }
-
 }

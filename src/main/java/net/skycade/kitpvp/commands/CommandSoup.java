@@ -58,7 +58,7 @@ public class CommandSoup extends Command<KitManager> {
         stats.getActiveKit().getKit().giveSoup(member.getPlayer(), 30);
         stats.setCoins(coins - COST);
         lastSoup.put(member.getUUID(), now);
-        member.message("§7You bought soup for §a" + COST + " coins§7.");
+        YOU_PURCHASED.msg(member.getPlayer(), "%thing%", "soup", "%amount%", Integer.toString(COST), "%currency%", "coins");
     }
 
     private boolean hasSpace(Player p) {

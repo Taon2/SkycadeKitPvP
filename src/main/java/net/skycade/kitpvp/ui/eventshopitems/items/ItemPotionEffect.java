@@ -20,7 +20,7 @@ public class ItemPotionEffect extends EventShopItem {
     private EventShopManager eventShopManager;
 
     public ItemPotionEffect(EventShopManager eventShopManager) {
-        super(eventShopManager, "§5Random Potion Upgrade", new ItemStack(Material.GLASS_BOTTLE), 50, 300);
+        super(eventShopManager, "§5Random Potion Upgrade", new ItemStack(Material.GLASS_BOTTLE), 10, 300);
         this.eventShopManager = eventShopManager;
     }
 

@@ -68,7 +68,7 @@ public class KitJumper extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all"))

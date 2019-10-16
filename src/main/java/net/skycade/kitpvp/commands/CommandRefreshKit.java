@@ -78,11 +78,11 @@ public class CommandRefreshKit extends Command<KitManager> {
         }
 
         UtilPlayer.reset(member.getPlayer());
-        stats.getActiveKit().getKit().applyKit(member.getPlayer());
+        stats.getActiveKit().getKit().beginApplyKit(member.getPlayer());
         stats.getActiveKit().getKit().giveSoup(member.getPlayer(), 32);
         stats.setCoins(coins - COST);
         lastRefresh.put(member.getUUID(), now);
-        member.message("§7You refreshed your kit for §a" + COST + " coins§7.");
+        YOU_PURCHASED.msg(member.getPlayer(), "%thing%", "kit refresh", "%amount%", Integer.toString(COST), "%currency%", "coins");
         yaml.set(("current-refreshkit-cooldowns." + member.getUUID()), now);
         save();
     }

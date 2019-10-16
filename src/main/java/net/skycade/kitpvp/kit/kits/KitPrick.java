@@ -54,7 +54,7 @@ public class KitPrick extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
@@ -78,7 +78,6 @@ public class KitPrick extends Kit {
     public void onInteract(Player p, Player target, ItemStack item) {
         if (item.getType() != Material.CACTUS)
             return;
-        int level = getLevel(p);
         if (!addCooldown(p, getName(), 11, true))
             return;
 

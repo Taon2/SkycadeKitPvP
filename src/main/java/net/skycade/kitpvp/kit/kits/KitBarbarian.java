@@ -34,6 +34,7 @@ public class KitBarbarian extends Kit {
 
         defaultsMap.put("inventory.axe.material", "IRON_AXE");
         defaultsMap.put("inventory.axe.enchantments.durability", 5);
+
         defaultsMap.put("inventory.armour.type", "IRON");
         defaultsMap.put("inventory.armour.durability", 0);
         defaultsMap.put("inventory.armour.protection", 0);
@@ -54,7 +55,7 @@ public class KitBarbarian extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.axe.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.axe.enchantments.durability")).build());
@@ -69,10 +70,7 @@ public class KitBarbarian extends Kit {
 
     @Override
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        if (getLevel(damagee) == 1)
-            return;
-        int chance = getLevel(damagee) * 2;
-        if (UtilMath.getRandom(0, 100) <= chance) {
+        if (UtilMath.getRandom(0, 100) <= 2) {
             if (damagee.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE))
                 damagee.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
             damagee.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 0));

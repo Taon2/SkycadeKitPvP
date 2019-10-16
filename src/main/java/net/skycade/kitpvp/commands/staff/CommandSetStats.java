@@ -3,6 +3,7 @@ package net.skycade.kitpvp.commands.staff;
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.kit.KitManager;
+import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -34,24 +35,26 @@ public class CommandSetStats extends Command<KitManager> {
 
         if (args[1].equalsIgnoreCase("kills") || args[1].equalsIgnoreCase("kill")) {
             stats.setKills(amount);
-            sendMsg("kills", stats, member, target, amount);
+            sendMsg("kills", member, target, amount);
         } else if (args[1].equalsIgnoreCase("deaths")) {
             stats.setDeaths(amount);
-            sendMsg("deaths", stats, member, target, amount);
+            sendMsg("deaths", member, target, amount);
         } else if (args[1].equalsIgnoreCase("killstreak") || args[1].equalsIgnoreCase("ks")) {
             stats.setStreak(amount);
-            sendMsg("killstreak", stats, member, target, amount);
+            sendMsg("killstreak", member, target, amount);
         } else if (args[1].equalsIgnoreCase("highestkillstreak") || args[1].equalsIgnoreCase("highks") || args[1].equalsIgnoreCase("highkillstreak") || args[1].equalsIgnoreCase("highestks")) {
             stats.setHighestStreak(amount);
-            sendMsg("highestks", stats, member, target, amount);
+            sendMsg("highestks", member, target, amount);
         } else if (args[1].equalsIgnoreCase("assist") || args[0].equalsIgnoreCase("assists")) {
             stats.setAssists(amount);
-            sendMsg("assist", stats, member, target, amount);
+            sendMsg("assist", member, target, amount);
         }else
             COULDNT_FIND.msg(member.getPlayer(), "%type%", "stats", "%thing%", args[1]);
+
+        ScoreboardInfo.getInstance().updatePlayer(target);
     }
 
-    private void sendMsg(String stat, KitPvPStats stats, Member member, Player target, int amount) {
+    private void sendMsg(String stat, Member member, Player target, int amount) {
         YOUR_STAT_SET.msg(member.getPlayer(), "%stat%", stat, "%amount%", Integer.toString(amount));
         STAT_SET.msg(member.getPlayer(), "%player%", target.getName(), "%stat%", stat, "%amount%", Integer.toString(amount));
     }

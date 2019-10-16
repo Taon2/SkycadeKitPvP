@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
@@ -26,7 +26,7 @@ import static net.skycade.kitpvp.Messages.HEALED;
 public class KitVampire extends Kit {
 
     public KitVampire(KitManager kitManager) {
-        super(kitManager, "Vampire", KitType.VAMPIRE, 25000, "Loves the taste of blood");
+        super(kitManager, "Vampire", KitType.VAMPIRE, 25000, false, "Loves the taste of blood");
 
         Map<String, Object> defaultsMap = new HashMap<>();
 
@@ -62,7 +62,7 @@ public class KitVampire extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))

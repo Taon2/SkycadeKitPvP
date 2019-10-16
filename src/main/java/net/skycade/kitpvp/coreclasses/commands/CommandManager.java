@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static net.skycade.kitpvp.Messages.NOT_LOADED;
+
 public class CommandManager extends Module implements CommandExecutor {
 
     private static CommandManager instance;
@@ -54,7 +56,7 @@ public class CommandManager extends Module implements CommandExecutor {
         }
         Member member = MemberManager.getInstance().getMember(p);
         if (member == null) {
-            member.message("Your data didn't load yet.");
+            NOT_LOADED.msg(p);
             e.setCancelled(true);
             return;
         }

@@ -32,7 +32,7 @@ public class KitPotionMaster extends Kit {
         defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
 
         defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 6);
+        defaultsMap.put("armor.enchantments.durability", 9);
         defaultsMap.put("armor.enchantments.protection", 10);
 
         setConfigDefaults(defaultsMap);
@@ -51,7 +51,7 @@ public class KitPotionMaster extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
@@ -70,7 +70,6 @@ public class KitPotionMaster extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        int level = getLevel(p);
         if (!addCooldown(p, getName(), 30, true))
             return;
 

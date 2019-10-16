@@ -6,7 +6,9 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -14,12 +16,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
+import static net.skycade.kitpvp.Messages.CANNOT_USE;
 
 public class KitZeus extends Kit {
 
@@ -56,7 +56,7 @@ public class KitZeus extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.BLAZE_ROD)
                 .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.blaze-rod.enchantments.damage-all")).build());
@@ -74,13 +74,47 @@ public class KitZeus extends Kit {
                 parseInt(pot1[1])));
     }
 
+    private static List<Material> allowedTypes;
+
+    static {
+        allowedTypes = Arrays.asList(
+                Material.AIR,
+                Material.BARRIER,
+                Material.LEAVES,
+                Material.LEAVES_2
+        );
+    }
+
     @Override
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        if (UtilMath.getRandom(0, 100) <= 23) {
+        if (UtilMath.getRandom(0, 100) <= 07) {
+            HashMap<Player, List<Block>> playerBlockList = getBlocks(damagee);
+            for(Block b : playerBlockList.get(damagee)){
+                if (!allowedTypes.contains(b.getType())) {
+                    CANNOT_USE.msg(damager, "%thing%", "lightning", "%reason%", "while under a block!");
+                    return;
+                }
+            }
+
             damagee.getWorld().strikeLightning(damagee.getLocation());
             e.setDamage(e.getDamage() * 1.4);
             damagee.setFireTicks(60);
         }
+    }
+
+    private static HashMap<Player, List<Block>> getBlocks(Player player){
+        Block block = player.getLocation().getBlock();
+        HashMap<Player, List<Block>> playerBlockList = new HashMap<>();
+        playerBlockList.put(player, new ArrayList<>());
+        Location location = block.getLocation();
+
+        for(int y = 0; y < 256; y++){
+            location.setY(block.getY() + 1);
+            block = location.getBlock();
+            playerBlockList.get(player).add(block);
+        }
+
+        return playerBlockList;
     }
 
     @Override

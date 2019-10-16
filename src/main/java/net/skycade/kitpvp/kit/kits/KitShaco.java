@@ -66,7 +66,7 @@ public class KitShaco extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
@@ -105,7 +105,7 @@ public class KitShaco extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, "Invisibility", 30, true))
+        if (!addCooldown(p, "Invisibility", 20, true))
             return;
         POOF.msg(p);
         p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1));
@@ -122,20 +122,17 @@ public class KitShaco extends Kit {
         }, 200);
     }
 
-    public void onSnowballUse(Player p, ProjectileLaunchEvent e) {
-        if (!addCooldown(p, "Switch Locations", 10, true) || snowballCooldown.contains(p.getUniqueId())) {
-            e.setCancelled(true);
-            ItemStack ball = (new ItemStack(Material.SNOW_BALL, 1));
-            ball.setItemMeta(p.getItemInHand().getItemMeta());
-            p.getInventory().addItem(ball);
-            return;
-        }
-        snowballCooldown.add(p.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> snowballCooldown.remove(p.getUniqueId()), 10);
+    public void onSnowballUse(ProjectileLaunchEvent e) {
         e.getEntity().setVelocity(e.getEntity().getVelocity().multiply(2.5D));
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
+        if (!addCooldown(shooter, "Switch Locations", 5, true)) {
+            reimburseItem(shooter, new ItemBuilder(Material.SNOW_BALL).build(),
+                    getConfig().getInt("inventory.snowball.max-amount"), KitType.SHACO);
+            return;
+        }
+
         if (shooter.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
             teleportBehindPlayer(shooter, damagee.getLocation());
         } else {

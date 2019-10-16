@@ -40,8 +40,8 @@ public class CommandKitsUnlocked extends Command<KitManager> implements Listener
                 if (!stats.hasKit(k))
                     kits.addItem(new ItemBuilder(Material.BEDROCK).setName("§c" + kit.getName()).build());
                 else
-                    kits.addItem(new ItemBuilder(getModule().getKits().get(k).getIcon()).setName("§a" + kit.getName()).addLore("").addLore(kit.getDescription()).addLore("")
-                            .addLore("§7Level: §f" + stats.getKits().get(k).getLevel()).setGlow(stats.getActiveKit() == k).build());
+                    kits.addItem(new ItemBuilder(getModule().getKits().get(k).getIcon()).setName("§a" + kit.getName()).addLore("").addLore(kit.getDescription())
+                            .setGlow(stats.getActiveKit() == k).build());
             }
         });
         member.getPlayer().openInventory(kits);

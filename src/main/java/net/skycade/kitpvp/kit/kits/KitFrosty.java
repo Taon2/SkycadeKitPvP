@@ -4,7 +4,6 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -65,7 +64,7 @@ public class KitFrosty extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
@@ -95,20 +94,16 @@ public class KitFrosty extends Kit {
         startItemRunnable(p, 20, new ItemBuilder(Material.SNOW_BALL).build(), getConfig().getInt("inventory.snowball.max-amount"), KitType.FROSTY);
     }
 
-    public void onSnowballUse(Player shooter, ProjectileLaunchEvent e) {
-        if (!addCooldown(shooter, getName(), 10, true) || snowballCooldown.contains(shooter)) {
-            e.setCancelled(true);
-            ItemStack ball = (new ItemStack(Material.SNOW_BALL, 1));
-            ball.setItemMeta(shooter.getItemInHand().getItemMeta());
-            shooter.getInventory().addItem(ball);
-            return;
-        }
-        snowballCooldown.add(shooter);
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> snowballCooldown.remove(shooter), 10);
+    public void onSnowballUse(ProjectileLaunchEvent e) {
         e.getEntity().setVelocity(e.getEntity().getVelocity().multiply(2));
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
+        if (!addCooldown(shooter, getName(), 5, true)) {
+            reimburseItem(shooter, new ItemBuilder(Material.SNOW_BALL).build(),
+                    getConfig().getInt("inventory.snowball.max-amount"), KitType.SHACO);
+            return;
+        }
         YOURE_FROZEN.msg(damagee);
         freezePlayer(damagee, 5);
     }

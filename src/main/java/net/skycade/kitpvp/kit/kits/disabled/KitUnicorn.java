@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
@@ -29,7 +29,7 @@ public class KitUnicorn extends Kit {
     private final List<UUID> rodUse = new ArrayList<>();
 
     public KitUnicorn(KitManager kitManager) {
-        super(kitManager, "Unicorn", KitType.UNICORN, 40000, "Be a mythical creature");
+        super(kitManager, "Unicorn", KitType.UNICORN, 40000, false, "Be a mythical creature");
 
         Map<String, Object> defaultsMap = new HashMap<>();
 
@@ -71,7 +71,7 @@ public class KitUnicorn extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().setHelmet(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.helmet.enchantments.protection"))

@@ -49,15 +49,12 @@ public class KitPvPDB {
                 stats.setHighestStreak(result.getInt("HighestStreak"));
                 stats.setDeaths(result.getInt("Deaths"));
                 String currentKit = result.getString("CurrentKit");
-                stats.setActiveKit(currentKit == null ? KitType.DEFAULT : KitType.valueOf(currentKit));
+                stats.setActiveKit(currentKit == null ? KitType.CHANCE : KitType.valueOf(currentKit));
                 try {
                     JSONObject kitsJson = (JSONObject) new JSONParser().parse(result.getString("Kits"));
                     for (Object o : kitsJson.keySet()) {
                         KitType type = KitType.valueOf((String) o);
-                        JSONObject obj = (JSONObject) kitsJson.get(o);
-                        Long level = (Long) obj.get("level");
                         KitData kitData = new KitData(type);
-                        kitData.setLevel(level.intValue());
                         stats.getKits().put(type, kitData);
                     }
                 } catch (ParseException e) {
@@ -68,7 +65,6 @@ public class KitPvPDB {
                 stats.setEventCoins(result.getInt("EventCoins"));
                 stats.setAssists(result.getInt("Assists"));
                 stats.setKitPreference(KitType.valueOf(result.getString("ChosenKit")));
-                stats.setCrateKeys(result.getInt("CrateKeys"));
             }
 
             MemberManager.getInstance().getMembers().put(uuid, member);
@@ -128,7 +124,7 @@ public class KitPvPDB {
     private synchronized void executeUpdate(Member member) {
 
         try (Connection connection = CoreSettings.getInstance().getConnection()) {
-            String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, EventCoins, Assists, ChosenKit, CrateKeys) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?, ?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = GREATEST(Kills, VALUES(Kills)), HighestStreak = GREATEST(HighestStreak, VALUES(HighestStreak)), Deaths = GREATEST(Deaths, VALUES(Deaths)), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), Coins = VALUES(Coins), EventCoins = VALUES(EventCoins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), CrateKeys = VALUES(CrateKeys)";
+            String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, EventCoins, Assists, ChosenKit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), Coins = VALUES(Coins), EventCoins = VALUES(EventCoins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 KitPvPStats stats = KitPvP.getInstance().getStats(member);
                 statement.setString(1, member.getUUID().toString());
@@ -144,7 +140,7 @@ public class KitPvPDB {
                 Map<String, Map<String, Integer>> kitMap = new HashMap<>();
                 for (Map.Entry<KitType, KitData> entry : stats.getKits().entrySet()) {
                     Map<String, Integer> map = new HashMap<>();
-                    map.put("level", entry.getValue().getLevel());
+                    map.put("level", 1);
                     kitMap.put(entry.getKey().name(), map);
                 }
 
@@ -154,7 +150,6 @@ public class KitPvPDB {
                 statement.setInt(10, stats.getEventTokens());
                 statement.setInt(11, stats.getAssists());
                 statement.setString(12, stats.getKitPreference().name());
-                statement.setInt(13, stats.getCrateKeys());
 
                 statement.executeUpdate();
             }

@@ -62,7 +62,7 @@ public class KitMaster extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.spade.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.spade.enchantments.durability"))
@@ -98,7 +98,7 @@ public class KitMaster extends Kit {
         final int soupAmount = getSoupAmount(inv);
         clearInventory(p);
 
-        targetKit.applyKit(p, 3);
+        targetKit.beginApplyKit(p);
         getKitManager().getKitPvP().getStats(p).setActiveKit(targetKit.getKitType());
         targetKit.giveSoup(p, soupAmount);
         COPIED_KIT.msg(p, "%kit%", targetKit.getName());
@@ -114,7 +114,7 @@ public class KitMaster extends Kit {
     private void kitMasterRunnable(Player p, ItemStack[] playerArmor, HashMap<Integer, ItemStack> invItems) {
         Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
             if (!kitManager.getKitPvP().getSpawnRegion().contains(p)) {
-                getKitManager().getKits().get(KitType.KITMASTER).applyKit(p);
+                getKitManager().getKits().get(KitType.KITMASTER).beginApplyKit(p);
                 getKitManager().getKitPvP().getStats(p).setActiveKit(KitType.KITMASTER);
                 clearInventory(p);
 

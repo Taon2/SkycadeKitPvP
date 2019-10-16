@@ -54,7 +54,7 @@ public class KitKangaroo extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
@@ -73,12 +73,8 @@ public class KitKangaroo extends Kit {
             return;
         if (!addCooldown(p, getName(), 6, true))
             return;
-        /* if (getLevel(p) == 1)
-			p.setVelocity(new Vector(p.getLocation().getDirection().getX(), 0.15, p.getLocation().getDirection().getZ()).multiply(4));
-		else { */
         p.setVelocity(new Vector(p.getLocation().getDirection().getX(), getConfig().getDouble("ability.leap-y-velocity"), p.getLocation().getDirection().getZ()).multiply(4));
         Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> p.setVelocity(new Vector(p.getLocation().getDirection().getX(), 0.15, p.getLocation().getDirection().getZ()).multiply(3)), 3);
-        // }
     }
 
     @Override

@@ -30,11 +30,12 @@ public class KitBladeMaster extends Kit {
         defaultsMap.put("inventory.sword.material", "GOLD_SWORD");
         defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
         defaultsMap.put("inventory.sword.enchantments.durability", 10);
-        defaultsMap.put("inventory.sword.name", "Sword of damage");
+        defaultsMap.put("inventory.sword.name", "Sword of Damage");
         defaultsMap.put("inventory.sword2.material", "GOLD_SWORD");
         defaultsMap.put("inventory.sword2.enchantments.durability", 10);
         defaultsMap.put("inventory.sword2.enchantments.knockback", 2);
-        defaultsMap.put("inventory.sword2.name", "Sword of knockback");
+        defaultsMap.put("inventory.sword2.name", "Sword of Knockback");
+
         defaultsMap.put("armor.boots.material", "IRON");
         defaultsMap.put("armor.leggings.material", "IRON");
         defaultsMap.put("armor.chestplate.material", "IRON");
@@ -57,7 +58,7 @@ public class KitBladeMaster extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all"))
@@ -83,7 +84,7 @@ public class KitBladeMaster extends Kit {
         if (p.isSneaking()) {
             if (p.hasPotionEffect(PotionEffectType.SPEED))
                 p.removePotionEffect(PotionEffectType.SPEED);
-            p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, getLevel(p) * 75, 0));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 75, 0));
         }
     }
 

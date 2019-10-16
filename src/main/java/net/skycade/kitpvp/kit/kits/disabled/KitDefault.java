@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
@@ -15,7 +15,7 @@ import java.util.Map;
 public class KitDefault extends Kit {
 
     public KitDefault(KitManager kitManager) {
-        super(kitManager, "Default", KitType.DEFAULT, 5000, "Default kit");
+        super(kitManager, "Default", KitType.DEFAULT, 5000, false, "Default kit");
 
         Map<String, Object> defaultsMap = new HashMap<>();
 
@@ -53,7 +53,7 @@ public class KitDefault extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))

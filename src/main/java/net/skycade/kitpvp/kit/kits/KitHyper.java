@@ -35,7 +35,7 @@ public class KitHyper extends Kit {
         defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
 
         defaultsMap.put("armor.helmet.material", "LEATHER");
-        defaultsMap.put("armor.helmet.enchantments.durability", 3);
+        defaultsMap.put("armor.helmet.enchantments.durability", 4);
 
         defaultsMap.put("armor.chestplate.material", "IRON");
 
@@ -59,7 +59,7 @@ public class KitHyper extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))

@@ -11,6 +11,7 @@ import net.skycade.kitpvp.events.KitPvPCoinsRewardEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.*;
+import net.skycade.kitpvp.kit.kits.disabled.KitFireArcher;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
@@ -132,31 +133,9 @@ public class PlayerDamageListener implements Listener {
         KILLED_BY.msg(diedMem.getPlayer(), "%player%", killerMem.getName());
         YOU_KILLED.msg(killerMem.getPlayer(), "%player%", diedMem.getName());
 
-        // The same player got killed multiple times
-        if (noKillRewards(killer, died))
-            return;
-
-        // Bounties!
-        int bounty = 0;
-
-        int bountyLevel;
-        for (bountyLevel = diedStreak; bountyLevel > 0; --bountyLevel) {
-            bounty = KitPvP.getInstance().getConfig().getInt("bounties." + bountyLevel, 0);
-
-            if (bounty != 0) break;
-        }
-
-        if (bounty != 0)
-            COLLECTED_BOUNTY.msg(killerMem.getPlayer(), "%amount%", Integer.toString(bounty), "%player%", diedMem.getName());
-
-        //Extra coins when a high ks gets broken
-        int killstreakCoins = diedStats.getStreak() >= 10 ? diedStats.getStreak() : 0;
-        if (diedStats.getStreak() >= 10)
-            BROKE_KILLSTREAK.msg(killerMem.getPlayer(), "%amount%", Integer.toString(diedStats.getStreak()), "%player%", diedMem.getName());
-
+        //Update kills
         KitPvPStats stats = plugin.getStats(killerMem);
 
-        // Give rewards to the killer
         final int kills = stats.getKills() + 1;
         stats.setKills(kills);
 
@@ -186,6 +165,32 @@ public class PlayerDamageListener implements Listener {
             }
         });
 
+        // The same player got killed multiple times
+        if (noKillRewards(killer, died)) {
+            ScoreboardInfo.getInstance().updatePlayer(killer);
+            return;
+        }
+
+        //Give rewards to the killer
+        // Bounties!
+        int bounty = 0;
+
+        int bountyLevel;
+        for (bountyLevel = diedStreak; bountyLevel > 0; --bountyLevel) {
+            bounty = KitPvP.getInstance().getConfig().getInt("bounties." + bountyLevel, 0);
+
+            if (bounty != 0) break;
+        }
+
+        if (bounty != 0)
+            COLLECTED_BOUNTY.msg(killerMem.getPlayer(), "%amount%", Integer.toString(bounty), "%player%", diedMem.getName());
+
+        //Extra coins when a high ks gets broken
+        int killstreakCoins = diedStats.getStreak() >= 10 ? diedStats.getStreak() : 0;
+        if (diedStats.getStreak() >= 10)
+            BROKE_KILLSTREAK.msg(killerMem.getPlayer(), "%amount%", Integer.toString(diedStats.getStreak()), "%player%", diedMem.getName());
+
+        //Normal kill coins
         int base = KitPvP.getInstance().getConfig().getInt("kill-coins");
         int extra = (int) Math.ceil(base * Math.pow((100 + KitPvP.getInstance().getConfig().getInt("kill-bonus-percentage")) / ((double) 100), stats.getStreak() - 1)) + bounty;
 
@@ -226,9 +231,9 @@ public class PlayerDamageListener implements Listener {
                 ((KitFisherman) kit).onRodUse(shooter, e);
         } else if (proj.getType() == EntityType.SNOWBALL) {
             if (kit.getKitType() == KitType.SHACO)
-                ((KitShaco) kit).onSnowballUse(shooter, e);
+                ((KitShaco) kit).onSnowballUse(e);
             else if (kit.getKitType() == KitType.FROSTY)
-                ((KitFrosty) kit).onSnowballUse(shooter, e);
+                ((KitFrosty) kit).onSnowballUse(e);
         } else if (proj.getType() == EntityType.ARROW) {
             if (kit.getKitType() == KitType.ARCHER)
                 ((KitArcher) kit).onArrowLaunch(shooter, e);

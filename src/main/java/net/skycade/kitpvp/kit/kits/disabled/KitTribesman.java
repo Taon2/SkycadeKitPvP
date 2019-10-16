@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
@@ -23,7 +23,7 @@ public class KitTribesman extends Kit {
     private final List<UUID> tribesCd = new ArrayList<>();
 
     public KitTribesman(KitManager kitManager) {
-        super(kitManager, "Tribesman", KitType.TRIBESMAN, 37000, "Tribesman is good with herbs");
+        super(kitManager, "Tribesman", KitType.TRIBESMAN, 37000, false, "Tribesman is good with herbs");
 
         Map<String, Object> defaultsMap = new HashMap<>();
 
@@ -66,7 +66,7 @@ public class KitTribesman extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
@@ -110,7 +110,6 @@ public class KitTribesman extends Kit {
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
         if (tribesCd.contains(damagee.getUniqueId()))
             return;
-        int level = getLevel(damagee);
 
         if (e.getFinalDamage() >= 4) {
             tribesEffect(damagee, 6 + 2 * 3);

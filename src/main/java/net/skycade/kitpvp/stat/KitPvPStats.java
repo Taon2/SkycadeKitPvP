@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.stat;
 
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
 
@@ -11,30 +10,23 @@ import java.util.Map;
 
 public class KitPvPStats {
 
-    private final Member member;
     private Integer lastStreak;
 
     private int kills = 0;
     private int deaths = 0;
-    private int keys = KitPvP.getInstance().getConfig().getInt("start-keys");
     private int coins = 0;
     private int eventTokens = 0;
     private int streak = 0;
     private int highestStreak = 0;
     private int assists = 0;
-    private KitType activeKit = KitType.DEFAULT;
-    private KitType kitPreference = KitType.DEFAULT;
+    private KitType activeKit = KitType.ARCHER;
+    private KitType kitPreference = KitType.ARCHER;
     private Map<KitType, KitData> kits = new HashMap<>();
     private ArrayList<EventShopItem> upgrades = new ArrayList<>();
 
 
-    public KitPvPStats(Member member) {
-        this.member = member;
-
+    public KitPvPStats() {
         //Unlocked from the start:
-        KitType def = KitType.DEFAULT;
-        kits.put(def, new KitData(def));
-
         for (String kitType : KitPvP.getInstance().getConfig().getStringList("start-kits")) {
             kits.put(KitType.byAlias(kitType), new KitData(KitType.byAlias(kitType)));
         }
@@ -94,14 +86,6 @@ public class KitPvPStats {
         this.highestStreak = highestStreak;
     }
 
-    public int getCrateKeys() {
-        return keys;
-    }
-
-    public void setCrateKeys(int keys) {
-        this.keys = keys;
-    }
-
     public int getAssists() {
         return assists;
     }
@@ -141,9 +125,11 @@ public class KitPvPStats {
     }
 
     public void resetKits() {
-        KitType kit = KitType.DEFAULT;
+        KitType kit1 = KitType.ARCHER;
+        KitType kit2 = KitType.CHANCE;
         Map<KitType, KitData> map = new HashMap<>();
-        map.put(kit, new KitData(kit));
+        map.put(kit1, new KitData(kit1));
+        map.put(kit2, new KitData(kit2));
         kits = map;
     }
 

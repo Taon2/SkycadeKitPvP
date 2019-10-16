@@ -39,7 +39,7 @@ public class KitFisherman extends Kit {
         defaultsMap.put("inventory.fishing-rod.enchantments.durability", 10);
 
         defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 4);
+        defaultsMap.put("armor.enchantments.durability", 6);
         defaultsMap.put("armor.enchantments.protection", 4);
 
         setConfigDefaults(defaultsMap);
@@ -58,7 +58,7 @@ public class KitFisherman extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
@@ -78,7 +78,6 @@ public class KitFisherman extends Kit {
     public void onRodUse(Player p, ProjectileLaunchEvent e) {
         if (rodCd.contains(p.getUniqueId()))
             return;
-        int level = getLevel(p);
         Location target = getTarget(p, 30);
         if (target == null)
             return;

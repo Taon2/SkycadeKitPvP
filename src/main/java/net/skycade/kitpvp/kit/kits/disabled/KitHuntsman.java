@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
@@ -30,7 +30,7 @@ public class KitHuntsman extends Kit implements Listener {
     private final List<UUID> bleeding = new ArrayList<>();
 
     public KitHuntsman(KitManager kitManager) {
-        super(kitManager, "Huntsman", KitType.HUNTSMAN, 40000, "Hunt them down!");
+        super(kitManager, "Huntsman", KitType.HUNTSMAN, 40000, false, "Hunt them down!");
 
         Map<String, Object> defaultsMap = new HashMap<>();
 
@@ -65,7 +65,7 @@ public class KitHuntsman extends Kit implements Listener {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))

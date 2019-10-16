@@ -6,7 +6,7 @@ import net.skycade.kitpvp.events.RandomEvent;
 import net.skycade.kitpvp.events.TagEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
-import net.skycade.kitpvp.kit.kits.KitMedic;
+import net.skycade.kitpvp.kit.kits.disabled.KitMedic;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -113,7 +113,7 @@ public class PlayerListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onInventoryClick(InventoryClickEvent e) {
-        if (e.getClickedInventory() != null && e.getClickedInventory().getName() != null && e.getClickedInventory().getName().equalsIgnoreCase("§aCrate"))
+        if (e.getClickedInventory() != null && e.getClickedInventory().getName() != null && e.getInventory().getType() != InventoryType.CRAFTING)
             e.setCancelled(true);
     }
 
@@ -122,7 +122,9 @@ public class PlayerListeners implements Listener {
         if (stats == null) return;
         stats.applyKitPreference();
         p.getInventory().clear();
-        p.setItemOnCursor(null);
+        if (p.getItemOnCursor().getType() != Material.AIR)
+            p.setItemOnCursor(null);
+        p.updateInventory();
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
         int streak = stats.getStreak();
         if (streak > stats.getHighestStreak())
@@ -142,7 +144,7 @@ public class PlayerListeners implements Listener {
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (p.isOnline()) {
-                stats.getActiveKit().getKit().applyKit(p);
+                stats.getActiveKit().getKit().beginApplyKit(p);
                 stats.getActiveKit().getKit().giveSoup(p, 32);
                 plugin.getEventShopManager().reapplyUpgrades(p);
             }

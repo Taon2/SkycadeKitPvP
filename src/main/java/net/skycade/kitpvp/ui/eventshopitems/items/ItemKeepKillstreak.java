@@ -22,7 +22,7 @@ public class ItemKeepKillstreak extends EventShopItem {
     private EventShopManager eventShopManager;
 
     public ItemKeepKillstreak(EventShopManager eventShopManager) {
-        super(eventShopManager, "§cKeep Kill Streak", new ItemStack(Material.DIAMOND_SWORD), 175, 60);
+        super(eventShopManager, "§cKeep Kill Streak", new ItemStack(Material.DIAMOND_SWORD), 100, 60);
         this.eventShopManager = eventShopManager;
     }
 

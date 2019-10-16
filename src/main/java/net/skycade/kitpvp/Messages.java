@@ -6,13 +6,22 @@ public class Messages {
 
     //KitPvP General Messages
     public static final Localization.Message RELOADED = new Localization.Message("reloaded", "&aReloaded!");
+    public static final Localization.Message NOT_LOADED = new Localization.Message("not-loaded", "&cYour data has not loaded yet, please wait...");
     public static final Localization.Message ALL_KITS_UNLOCKED = new Localization.Message("all-kits-unlocked", "&7You unlocked &aall &7the kits! You unlocked the &aKitMaster &7kit.");
-    public static final Localization.Message COULDNT_FIND = new Localization.Message("couldnt-find", "&7Could not find %type% '&e%thing%&7'.");
-    public static final Localization.Message ON_COOLDOWN = new Localization.Message("on-cooldown",  "&cYou need to wait another %time% before using %thing% again!");
-    public static final Localization.Message ON_COOLDOWN_NO_TIME = new Localization.Message("on-cooldown-no-time", "§c%thing% is on cooldown!");
-    public static final Localization.Message OFF_COOLDOWN = new Localization.Message("off-cooldown", "§7You can now use &a%ability%&7.");
-    public static final Localization.Message NOT_ENOUGH = new Localization.Message("not-enough", "&7You don't have enough &a%thing%&7.");
-    public static final Localization.Message CANNOT_USE = new Localization.Message("cannot-use", "&cYou cannot use %thing% %reason%!");
+    public static final Localization.Message COULDNT_FIND = new Localization.Message("couldnt-find", "&cCould not find &b%type% &c'&b%thing%&c'.");
+    public static final Localization.Message ON_COOLDOWN = new Localization.Message("on-cooldown",  "&cYou need to wait another &b%time% &cbefore using &b%thing% &cagain!");
+    public static final Localization.Message ON_COOLDOWN_NO_TIME = new Localization.Message("on-cooldown-no-time", "&b%thing% &cis on cooldown!");
+    public static final Localization.Message OFF_COOLDOWN = new Localization.Message("off-cooldown", "&7You can now use &a%thing%&7.");
+    public static final Localization.Message NOT_ENOUGH = new Localization.Message("not-enough", "&cYou don't have enough &b%thing%&7.");
+    public static final Localization.Message CANNOT_USE = new Localization.Message("cannot-use", "&cYou cannot use &b%thing% %reason%&c!");
+    public static final Localization.Message ALREADY_USING = new Localization.Message("already-using", "&cYou are already using kit &b%kit%&c.");
+    public static final Localization.Message KIT_EQUIPPED = new Localization.Message("kit-equipped", "&7Equipped kit &a%kit%&7.");
+    public static final Localization.Message KIT_EQUIPPED_RESPAWN = new Localization.Message("kit-equipped", "&7Equipped kit &a%kit%&7. It will be active after you respawn.");
+    public static final Localization.Message YOU_PURCHASED = new Localization.Message("you-purchased", "&7You bought &a%thing% &7for &a%amount% &7%currency%.");
+    public static final Localization.Message DIDNT_CHOOSE = new Localization.Message("didnt-choose", "&cYou didn't choose &b%thing%&c.");
+    public static final Localization.Message NOT_ENOUGH_CURRENCY = new Localization.Message("not-enough-currency", "&cYou don't have enough &b%currency% &cto purchase this &b%thing%&c.");
+    public static final Localization.Message KIT_DISABLED = new Localization.Message("kit-disabled", "&cThat kit is disabled.");
+    public static final Localization.Message ALREADY_UNLOCKED = new Localization.Message("already-unlocked", "&cYou already have this &b%kit% &cunlocked.");
 
     //KitPvP Command Messages
     public static final Localization.Message USING_KIT = new Localization.Message("using-kit", "&a%player%&7 is using the &a%kitname%&7 kit.");
@@ -35,14 +44,14 @@ public class Messages {
 
     //KitPvP Stats
     public static final Localization.Message STATS = new Localization.Message("command.your-stat-set",
-            "&7---------- &f&l%player%'s KitPvP Stats &7----------" +
-                    "&fKits - &a%kits%" +
-                    "&fCoins - &a%coins%" +
-                    "&fEvent Tokens - &a%eventtokens%" +
-                    "&fDeaths - &a%deaths%" +
-                    "&fKills - &a%kills%" +
-                    "&fAssists - &a%assists" +
-                    "&fHighest Killstreak - &a%killstreak%"
+            "&7---------- &f&l%player%'s KitPvP Stats &7----------\n" +
+                    "&fKits - &a%kits%\n" +
+                    "&fCoins - &a%coins%\n" +
+                    "&fEvent Tokens - &a%eventtokens%\n" +
+                    "&fDeaths - &a%deaths%\n" +
+                    "&fKills - &a%kills%\n" +
+                    "&fAssists - &a%assists%\n" +
+                    "&fHighest Killstreak - &a%killstreak%\n"
             );
 
     //KitPvP Event Messages
@@ -85,43 +94,43 @@ public class Messages {
     //KitPvP Kill Messages
     public static final Localization.Message NO_REWARDS = new Localization.Message("kill.no-rewards", "&7You killed the same player more than 3 times, &cno rewards &7rewarded.");
     public static final Localization.Message ASSIST_REWARD = new Localization.Message("kill.assist-rewards", "&7You got &6%amount% &7coins for assisting to kill %player%&7!");
-    public static final Localization.Message KILLED_BY = new Localization.Message("kill.killed-by", "You were killed by %player%&7.");
-    public static final Localization.Message YOU_KILLED = new Localization.Message("kill.you-killed", "You killed %player%&7.");
+    public static final Localization.Message KILLED_BY = new Localization.Message("kill.killed-by", "&7You were killed by &a%player%&7.");
+    public static final Localization.Message YOU_KILLED = new Localization.Message("kill.you-killed", "&7You killed &a%player%&7.");
     public static final Localization.Message COLLECTED_BOUNTY = new Localization.Message("kill.collected-bounty", "&aYou got &a%amount% &7extra coins for collecting %player%'s bounty!");
     public static final Localization.Message BROKE_KILLSTREAK = new Localization.Message("kill.broke-killstreak", "&aYou got &a%amount% &7extra coins for breaking %player%'s killstreak!");
 
     //Kit Messages
     public static final Localization.Message CANT_USE_HERE = new Localization.Message("kit.cant-use-here", "&cYou can't use that ability here.");
-    public static final Localization.Message YOURE_UNFROZEN = new Localization.Message("kit.unfrozen", "§aThawed out!");
+    public static final Localization.Message YOURE_UNFROZEN = new Localization.Message("kit.unfrozen", "&aThawed out!");
     public static final Localization.Message LOVE_U = new Localization.Message("kit.lover.love-u", "&cI LOVE YOU <3!");
-    public static final Localization.Message HEALTH_BOOST = new Localization.Message("kit.archer.health-boost", "§cHealth boost!");
-    public static final Localization.Message DOUBLE_DAMAGE = new Localization.Message("kit.archer.double-damage", "§eDouble damage!");
-    public static final Localization.Message DOUBLE_DAMAGE_YOU = new Localization.Message("kit.archer.double-damage-you", "§e%player% got double damage on you!");
-    public static final Localization.Message TARGET_SLOWED = new Localization.Message("kit.archer.target-slowed", "§0Target is slowed.");
-    public static final Localization.Message YOURE_SLOWED = new Localization.Message("kit.archer.youre-slowed", "§0%player% slowed you!");
-    public static final Localization.Message TARGET_BLINDED = new Localization.Message("kit.archer.target-blinded", "§5Target blinded.");
-    public static final Localization.Message YOURE_BLINDED = new Localization.Message("kit.lover.youre-blinded", "§5You got blinded by %player%!");
-    public static final Localization.Message CURRENT_COMBO = new Localization.Message("kit.strafe.current-combo", "§7Current combo is §a&combo&§7.");
-    public static final Localization.Message GET_SPOOKED = new Localization.Message("kit.ghost.get-spooked", "§fGet spooked!");
-    public static final Localization.Message COPIED_KIT = new Localization.Message("kit.kitmaster.copied-kit", "§bYou copied the%kit% kit! You will return to the KitMaster kit in 20 seconds.");
-    public static final Localization.Message COPIED_YOUR_KIT = new Localization.Message("kit.kitmaster.copied-your-kit", "§b%player% §fcopied your kit!");
-    public static final Localization.Message SOUP_REFILL = new Localization.Message("kit.chance.soup-refill", "§bSoup refill!");
-    public static final Localization.Message SWING_SPEED_UP = new Localization.Message("kit.chance.swing-speed-up", "§fSwing speed up!");
-    public static final Localization.Message SWING_SPEED_DOWN = new Localization.Message("kit.chance.swing-speed-down", "§fSwing speed down!");
-    public static final Localization.Message BACKFIRE = new Localization.Message("kit.chance.backfire", "§4Backfire!");
-    public static final Localization.Message DEFENCE_UP = new Localization.Message("kit.unicorn.defence-up", "§fDefence up!");
-    public static final Localization.Message CAT = new Localization.Message("kit.mystic.cat", "§[Cat]: %effect%!");
-    public static final Localization.Message WOOSH = new Localization.Message("kit.enderman.woosh", "§5Woosh!");
-    public static final Localization.Message BLEED_ACTIVATED = new Localization.Message("kit.huntsman.bleed-activated", "§cBleed activated!");
-    public static final Localization.Message BLEED_DEACTIVATED = new Localization.Message("kit.huntsman.bleed-deactivated", "§7Bleed deactivated!");
-    public static final Localization.Message BACKSTABBED = new Localization.Message("kit.shaco.backstabbed", "§cYou got backstabbed!");
-    public static final Localization.Message POOF = new Localization.Message("kit.shaco.poof", "§7Poof!");
-    public static final Localization.Message POSITIONS_SWITCHED = new Localization.Message("kit.shaco.positions-switched", "§9Positions switched!");
-    public static final Localization.Message HEALED = new Localization.Message("kit.vampire.healed", "§cHealed!");
-    public static final Localization.Message BIT_BY = new Localization.Message("kit.vampire.bit-by", "§cYou are bit by §f%player%§c.");
-    public static final Localization.Message YOURE_FROZEN = new Localization.Message("kit.dualblader.frozen", "§aYou were frozen in place!");
-    public static final Localization.Message PLAYER_HEALED = new Localization.Message("kit.medic.player-healed", "§c%player% was healed!");
-    public static final Localization.Message FIRE_REMOVED = new Localization.Message("kit.firearcher.fire-removed", "§cFire removed.!");
+    public static final Localization.Message HEALTH_BOOST = new Localization.Message("kit.archer.health-boost", "&cHealth boost!");
+    public static final Localization.Message DOUBLE_DAMAGE = new Localization.Message("kit.archer.double-damage", "&eDouble damage!");
+    public static final Localization.Message DOUBLE_DAMAGE_YOU = new Localization.Message("kit.archer.double-damage-you", "&e%player% got double damage on you!");
+    public static final Localization.Message TARGET_SLOWED = new Localization.Message("kit.archer.target-slowed", "&0Target is slowed.");
+    public static final Localization.Message YOURE_SLOWED = new Localization.Message("kit.archer.youre-slowed", "&0%player% slowed you!");
+    public static final Localization.Message TARGET_BLINDED = new Localization.Message("kit.archer.target-blinded", "&5Target blinded.");
+    public static final Localization.Message YOURE_BLINDED = new Localization.Message("kit.lover.youre-blinded", "&5You got blinded by %player%!");
+    public static final Localization.Message CURRENT_COMBO = new Localization.Message("kit.strafe.current-combo", "&7Current combo is &a&combo&&7.");
+    public static final Localization.Message GET_SPOOKED = new Localization.Message("kit.ghost.get-spooked", "&fGet spooked!");
+    public static final Localization.Message COPIED_KIT = new Localization.Message("kit.kitmaster.copied-kit", "&bYou copied the%kit% kit! You will return to the KitMaster kit in 20 seconds.");
+    public static final Localization.Message COPIED_YOUR_KIT = new Localization.Message("kit.kitmaster.copied-your-kit", "&b%player% &fcopied your kit!");
+    public static final Localization.Message SOUP_REFILL = new Localization.Message("kit.chance.soup-refill", "&bSoup refill!");
+    public static final Localization.Message SWING_SPEED_UP = new Localization.Message("kit.chance.swing-speed-up", "&fSwing speed up!");
+    public static final Localization.Message SWING_SPEED_DOWN = new Localization.Message("kit.chance.swing-speed-down", "&fSwing speed down!");
+    public static final Localization.Message BACKFIRE = new Localization.Message("kit.chance.backfire", "&4Backfire!");
+    public static final Localization.Message DEFENCE_UP = new Localization.Message("kit.unicorn.defence-up", "&fDefence up!");
+    public static final Localization.Message CAT = new Localization.Message("kit.mystic.cat", "&[Cat]: %effect%!");
+    public static final Localization.Message WOOSH = new Localization.Message("kit.enderman.woosh", "&5Woosh!");
+    public static final Localization.Message BLEED_ACTIVATED = new Localization.Message("kit.huntsman.bleed-activated", "&cBleed activated!");
+    public static final Localization.Message BLEED_DEACTIVATED = new Localization.Message("kit.huntsman.bleed-deactivated", "&7Bleed deactivated!");
+    public static final Localization.Message BACKSTABBED = new Localization.Message("kit.shaco.backstabbed", "&cYou got backstabbed!");
+    public static final Localization.Message POOF = new Localization.Message("kit.shaco.poof", "&7Poof!");
+    public static final Localization.Message POSITIONS_SWITCHED = new Localization.Message("kit.shaco.positions-switched", "&9Positions switched!");
+    public static final Localization.Message HEALED = new Localization.Message("kit.vampire.healed", "&cHealed!");
+    public static final Localization.Message BIT_BY = new Localization.Message("kit.vampire.bit-by", "&cYou are bit by &f%player%&c.");
+    public static final Localization.Message YOURE_FROZEN = new Localization.Message("kit.dualblader.frozen", "&aYou were frozen in place!");
+    public static final Localization.Message PLAYER_HEALED = new Localization.Message("kit.medic.player-healed", "&c%player% was healed!");
+    public static final Localization.Message FIRE_REMOVED = new Localization.Message("kit.firearcher.fire-removed", "&cFire removed.!");
 
 
 
@@ -210,7 +219,16 @@ public class Messages {
                 PLAYER_HEALED,
                 FIRE_REMOVED,
                 ON_COOLDOWN_NO_TIME,
-                OFF_COOLDOWN
+                OFF_COOLDOWN,
+                NOT_LOADED,
+                ALREADY_USING,
+                KIT_EQUIPPED,
+                KIT_EQUIPPED_RESPAWN,
+                YOU_PURCHASED,
+                DIDNT_CHOOSE,
+                NOT_ENOUGH_CURRENCY,
+                KIT_DISABLED,
+                ALREADY_UNLOCKED
         );
     }
 }

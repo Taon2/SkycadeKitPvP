@@ -19,6 +19,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+import static net.skycade.kitpvp.Messages.*;
+
 public class KitsMenu implements Listener {
 
     private final KitManager kitManager;
@@ -59,11 +61,6 @@ public class KitsMenu implements Listener {
             if (!stats.hasKit(k)) {
                 menu.addItem(new ItemBuilder(Material.BEDROCK).setName("§c" + kit.getName()).build());
             } else {
-                /*
-                KitData data = stats.getKits().get(k);
-                menu.addItem(new ItemBuilder(kit.getIcon()).setName("§a" + kit.getName()).addLore("").addLore(kit.getDescription()).addLore("")
-                        .addLore("§7Level: §f" + data.getLevel(), data.getLevel() < 3 ? "§7Experience: §f" + data.getXp() + "/" + kit.getLevelUpXp(member.getPlayer()) : "").setGlow(stats.getActiveKit() == k).build()); */
-
                 menu.addItem(new ItemBuilder(kit.getIcon()).setName("§a" + kit.getName()).addLore("")
                         .addLore(kit.getDescription())
                         .setGlow(stats.getActiveKit() == k)
@@ -112,7 +109,7 @@ public class KitsMenu implements Listener {
             // Go to the prev kits menu
             else if (itemName.equalsIgnoreCase("§aPrev page")) {
                 UUID uuid = member.getUUID();
-                int prevPage = pageMap.containsKey(uuid) ? pageMap.get(uuid) - 1 < 0 ? 0 : pageMap.get(uuid) - 1 : 0;
+                int prevPage = pageMap.containsKey(uuid) ? Math.max(pageMap.get(uuid) - 1, 0) : 0;
                 pageMap.put(uuid, prevPage);
 
                 //Shouldn't be possible
@@ -133,25 +130,24 @@ public class KitsMenu implements Listener {
 
         Kit kit = kitType.getKit();
         if (stats.getActiveKit() == kitType) {
-            member.message("§7You are already using kit §a" + kit.getName() + "§7.");
+            ALREADY_USING.msg(member.getPlayer(), "%kit%", kitType.getKit().getName());
             return;
         }
 
         if (kitManager.getKitPvP().getSpawnRegion().contains(member.getPlayer())) {
             if (kitManager.getSignMap().containsKey(member.getUUID())) {
-                member.message("§7Kit refreshing is on cooldown.");
+                ON_COOLDOWN_NO_TIME.msg(member.getPlayer(), "%thing%", "Kit refreshing");
                 return;
             }
             UtilPlayer.reset(member.getPlayer());
             kitManager.getKitPvP().getStats(member).setActiveKit(kitType);
             kitManager.getKitPvP().getStats(member).setKitPreference(kitType);
-            kit.applyKit(member.getPlayer());
+            kit.beginApplyKit(member.getPlayer());
             kit.giveSoup(member.getPlayer(), 32);
-            member.message("Equipped kit §a" + kit.getName() + "§7.");
-
+            KIT_EQUIPPED.msg(member.getPlayer(), "%kit%", kit.getName());
         } else {
             kitManager.getKitPvP().getStats(member).setKitPreference(kitType);
-            member.message("Equipped kit §a" + kit.getName() + "§7. It will be active after you respawn.");
+            KIT_EQUIPPED_RESPAWN.msg(member.getPlayer(), "%kit%", kit.getName());
         }
 
         Bukkit.getScheduler().runTaskLater(kitManager.getKitPvP(), () -> member.getPlayer().closeInventory(), 1);

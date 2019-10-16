@@ -54,7 +54,7 @@ public class KitWarrior extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
@@ -73,21 +73,11 @@ public class KitWarrior extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.chestplate.enchantments.durability"));
 
         p.getInventory().setHelmet(new ItemBuilder(p.getInventory().getArmorContents()[3])
-                .addLore(getConfig().getString("armor.helmet.lore") + " " + getDamageMultiplier(level)).build());
+                .addLore(getConfig().getString("armor.helmet.lore") + " " + 1.4).build());
     }
 
     @Override
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        e.setDamage(e.getDamage() * getDamageMultiplier(3));
+        e.setDamage(e.getDamage() * 1.4);
     }
-
-    private double getDamageMultiplier(int level) {
-        /* if (level == 1)
-			return 2;
-		else if (level == 2)
-			return 1.7;
-		else */
-        return 1.4;
-    }
-
 }

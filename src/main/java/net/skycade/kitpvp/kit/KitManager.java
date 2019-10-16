@@ -7,7 +7,7 @@ import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.commands.CommandManager;
 import net.skycade.kitpvp.coreclasses.commands.Module;
 import net.skycade.kitpvp.kit.kits.*;
-import net.skycade.kitpvp.listeners.SignListeners;
+import net.skycade.kitpvp.kit.kits.disabled.*;
 import net.skycade.kitpvp.ui.KitsMenu;
 import net.skycade.kitpvp.ui.ShopMenu;
 import org.bukkit.Bukkit;
@@ -53,7 +53,6 @@ public class KitManager extends Module {
         registerCommand(new CommandSetStats(this));
         registerCommand(new CommandTopStats(this));
         registerCommand(new CommandUnlock(this));
-        registerCommand(new CommandGiveKeys(this));
         registerCommand(new CommandViewStats(this));
         registerCommand(new CommandKitsUnlocked(this));
         registerCommand(new RefundCommand(this));
@@ -64,7 +63,6 @@ public class KitManager extends Module {
         registerListener(kitsMenu);
         registerListener(commandViewKit);
         registerListener(commandCrate);
-        registerListener(new SignListeners(this));
     }
 
     @Override
@@ -83,19 +81,15 @@ public class KitManager extends Module {
         registerKit(new KitCaveMan(this));
         registerKit(new KitCerberus(this));
         registerKit(new KitChance(this));
-        registerKit(new KitChronos(this));
         registerKit(new KitCobra(this));
         registerKit(new KitDualBlader(this));
         registerKit(new KitDubstep(this));
         registerKit(new KitElite(this));
         registerKit(new KitEnderman(this));
-        registerKit(new KitFireArcher(this));
-        registerKit(new KitFireMage(this));
         registerKit(new KitFisherman(this));
         registerKit(new KitFrosty(this));
         registerKit(new KitGank(this));
         registerKit(new KitHades(this));
-        registerKit(new KitHuntsman(this));
         registerKit(new KitHydra(this));
         registerKit(new KitHyper(this));
         registerKit(new KitJesus(this));
@@ -103,8 +97,6 @@ public class KitManager extends Module {
         registerKit(new KitKangaroo(this));
         registerKit(new KitKing(this));
         registerKit(new KitKnight(this));
-        registerKit(new KitLover(this));
-        registerKit(new KitMedic(this));
         registerKit(new KitMystic(this));
         registerKit(new KitPlush(this));
         registerKit(new KitPotionMaster(this));
@@ -114,25 +106,31 @@ public class KitManager extends Module {
         registerKit(new KitSniper(this));
         registerKit(new KitSonic(this));
         registerKit(new KitSoulMaster(this));
-        registerKit(new KitStrafe(this));
-        registerKit(new KitSupport(this));
         registerKit(new KitTank(this));
         registerKit(new KitTeleporter(this));
-        registerKit(new KitTribesman(this));
-        registerKit(new KitUnicorn(this));
-        registerKit(new KitVampire(this));
         registerKit(new KitWarrior(this));
         registerKit(new KitWither(this));
-        registerKit(new KitWizard(this));
         registerKit(new KitWolfPack(this));
         registerKit(new KitZeus(this));
         registerKit(new KitMaster(this));
 
         //Disabled kits, disabled because they were lame and new ones replaced them
-        registerKit(new KitNinja(this));
+        registerKit(new KitChronos(this));
+        registerKit(new KitDefault(this));
+        registerKit(new KitFireArcher(this));
+        registerKit(new KitFireMage(this));
         registerKit(new KitGolem(this));
         registerKit(new KitGhost(this));
-
+        registerKit(new KitHuntsman(this));
+        registerKit(new KitLover(this));
+        registerKit(new KitMedic(this));
+        registerKit(new KitNinja(this));
+        registerKit(new KitStrafe(this));
+        registerKit(new KitSupport(this));
+        registerKit(new KitTribesman(this));
+        registerKit(new KitUnicorn(this));
+        registerKit(new KitVampire(this));
+        registerKit(new KitWizard(this));
     }
 
     private void registerKit(Kit kit) {

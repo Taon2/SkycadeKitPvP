@@ -165,10 +165,6 @@ public abstract class Command<M extends Module> {
             KitPvP.getInstance().getCommand(alias).setExecutor(CommandManager.getInstance());
     }
 
-    public static void couldNotFind(Member member, String thing, String attempt) {
-        if (member != null) member.message("Could not find " + thing + "§7 '§e" + attempt + "§7'.");
-    }
-
     public void usage(Member member, String aliasUsed) {
         if (member.isConsole()) {
             String usage = aliasUsed;

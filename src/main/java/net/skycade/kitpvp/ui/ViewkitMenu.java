@@ -5,7 +5,6 @@ import net.minecraft.server.v1_8_R3.*;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
-import net.skycade.kitpvp.kit.KitManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
@@ -22,7 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-public class  ViewkitMenu {
+public class ViewkitMenu {
 
     private static final CraftPlayer DUMMY_PLAYER = new CraftPlayer((CraftServer) Bukkit.getServer(), new EntityPlayer(((CraftServer) Bukkit.getServer()).getServer(), ((CraftWorld) Bukkit.getWorlds().get(0)).getHandle(),
             new GameProfile(UUID.randomUUID(), ""), new PlayerInteractManager(((CraftWorld) Bukkit.getWorlds().get(0)).getHandle())));
@@ -33,17 +32,11 @@ public class  ViewkitMenu {
 
     private final Inventory menu;
 
-    public ViewkitMenu(KitManager kitManager, Kit kit) {
+    public ViewkitMenu(Kit kit) {
         menu = Bukkit.createInventory(null, MenuSize.TWO_LINE.getSize(), "§aView " + kit.getName());
-        kit.applyKit(DUMMY_PLAYER, 1);
-        addItems(0, getItems(), getPotionEffects(DUMMY_PLAYER.getActivePotionEffects()), 1);
+        kit.beginApplyKit(DUMMY_PLAYER);
+        addItems(0, getItems(), getPotionEffects(DUMMY_PLAYER.getActivePotionEffects()));
         reset();
-        /* kit.applyKit(DUMMY_PLAYER, 2);
-        addItems(9, getItems(), getPotionEffects(DUMMY_PLAYER.getActivePotionEffects()), 2);
-        reset();
-        kit.applyKit(DUMMY_PLAYER, 3);
-        addItems(18, getItems(), getPotionEffects(DUMMY_PLAYER.getActivePotionEffects()), 3);
-        reset(); */
         if (kit.getAbilityDesc() != null) {
             menu.setItem(13, new ItemBuilder(Material.PAPER).addLore(kit.getAbilityDesc()).build());
         }
@@ -68,17 +61,10 @@ public class  ViewkitMenu {
         for (ItemStack item : DUMMY_PLAYER.getInventory().getArmorContents())
             if (item != null && item.getType() != null)
                 items.add(item);
-        /* for (ItemStack piece : DUMMY_PLAYER.getInventory().getArmorContents()) {
-            if (piece != null && piece.getType() != Material.AIR)
-                items.add(piece);
-        } */
         return items;
     }
 
-    private void addItems(int index, List<ItemStack> items, List<PotionEffect> effects, int level) {
-        /*menu.setItem(index, new ItemBuilder(Material.EXP_BOTTLE).setName("§5Level " + level).build());
-        index++; */
-
+    private void addItems(int index, List<ItemStack> items, List<PotionEffect> effects) {
         for (ItemStack item : items) {
             menu.setItem(index, item);
             index++;
@@ -97,21 +83,12 @@ public class  ViewkitMenu {
         effects.forEach(effect -> {
             lore.add("§7Type: " + effect.getType().getName().toLowerCase());
             lore.add(effect.getDuration() != Integer.MAX_VALUE ? "§7Duration: " + effect.getDuration() : "§7Duration: perm");
-            /* lore.add("§7Level: " + getPotionLevel(Integer.toString(effect.getAmplifier()).substring(0, 1))); */
         });
         return lore;
     }
 
-    private int getPotionLevel(String amplifier) {
-        int level = Integer.parseInt(amplifier);
-        level++;
-        return level;
-    }
-
     private List<PotionEffect> getPotionEffects(Collection<PotionEffect> effects) {
-        List<PotionEffect> potEffects = new ArrayList<>();
-        potEffects.addAll(effects);
-        return potEffects;
+        return new ArrayList<>(effects);
     }
 
     public void open(Member member) {

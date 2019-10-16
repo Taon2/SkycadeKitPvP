@@ -41,19 +41,19 @@ public class KitCaveMan extends Kit {
         defaultsMap.put("inventory.spade.enchantments.durability", 7);
         defaultsMap.put("inventory.spade.enchantments.damage-all", 5);
 
-        defaultsMap.put("potions.pot1", "DAMAGE_RESISTANCE:0");
+        defaultsMap.put("armor.chestplate.material", "LEATHER");
+        defaultsMap.put("armor.chestplate.enchantments.durability", 12);
+        defaultsMap.put("armor.chestplate.enchantments.protection", 2);
 
         defaultsMap.put("armor.leggings.material", "LEATHER");
         defaultsMap.put("armor.leggings.enchantments.durability", 12);
         defaultsMap.put("armor.leggings.enchantments.protection", 3);
 
-        defaultsMap.put("armor.chestplate.material", "LEATHER");
-        defaultsMap.put("armor.chestplate.enchantments.durability", 12);
-        defaultsMap.put("armor.chestplate.enchantments.protection", 2);
-
         defaultsMap.put("armor.boots.material", "IRON");
         defaultsMap.put("armor.boots.enchantments.durability", 0);
         defaultsMap.put("armor.boots.enchantments.protection", 1);
+
+        defaultsMap.put("potions.pot1", "DAMAGE_RESISTANCE:0");
 
         setConfigDefaults(defaultsMap);
 
@@ -71,7 +71,7 @@ public class KitCaveMan extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.spade.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.spade.enchantments.durability"))
@@ -83,15 +83,15 @@ public class KitCaveMan extends Kit {
                 Integer.MAX_VALUE,
                 parseInt(pot1[1])));
 
-        p.getInventory().setLeggings(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.leggings.material").toUpperCase() + "_LEGGINGS"))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.leggings.enchantments.durability"))
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.leggings.enchantments.protection")).build());
-
         p.getInventory().setChestplate(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("armor.chestplate.material").toUpperCase() + "_CHESTPLATE"))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.chestplate.enchantments.durability"))
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.chestplate.enchantments.protection")).build());
+
+        p.getInventory().setLeggings(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("armor.leggings.material").toUpperCase() + "_LEGGINGS"))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.leggings.enchantments.durability"))
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.leggings.enchantments.protection")).build());
 
         p.getInventory().setBoots(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS"))
@@ -104,7 +104,6 @@ public class KitCaveMan extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.WOOD_SPADE)
             return;
-        int level = getLevel(p);
         if (abilityCooldown.contains(p.getUniqueId()))
             return;
         abilityCooldown.add(p.getUniqueId());
@@ -134,7 +133,7 @@ public class KitCaveMan extends Kit {
                 UtilPlayer.getNearbyPlayers(b.getLocation(), 2).forEach(player -> {
                     if (player != p)
                         if (Arrays.asList(GameMode.SURVIVAL, GameMode.ADVENTURE).contains(player.getGameMode()))
-                            player.damage(8 + (level * 3), p);
+                            player.damage(8 + 3, p);
                 });
             }
         }.runTaskTimer(getKitManager().getPlugin(), 0, 2);

@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
@@ -27,7 +27,7 @@ public class    KitWizard extends Kit {
     private final List<UUID> rodUse = new ArrayList<>();
 
     public KitWizard(KitManager kitManager) {
-        super(kitManager, "Wizard", KitType.WIZARD, 34000, "You're a wizard Harry!");
+        super(kitManager, "Wizard", KitType.WIZARD, 34000, false, "You're a wizard Harry!");
         onMove();
 
         Map<String, Object> defaultsMap = new HashMap<>();
@@ -58,7 +58,7 @@ public class    KitWizard extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.STICK)
                 .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.stick.enchantments.damage-all")).build());

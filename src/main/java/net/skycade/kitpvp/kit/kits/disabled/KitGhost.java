@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
@@ -25,7 +25,7 @@ public class KitGhost extends Kit {
 
     public KitGhost(KitManager kitManager) {
         super(kitManager, "Ghost", KitType.GHOST, 22000, false, "Very spooky");
-        //setIcon(new ItemBuilder(new ItemStack(Material.POTION, 1, (short) 8270)).build());
+        setIcon(new ItemBuilder(new ItemStack(Material.POTION, 1, (short) 8270)).build());
 
         Map<String, Object> defaultsMap = new HashMap<>();
 
@@ -57,7 +57,7 @@ public class KitGhost extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))

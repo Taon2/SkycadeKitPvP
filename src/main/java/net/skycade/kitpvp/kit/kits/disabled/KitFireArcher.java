@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
@@ -24,7 +24,7 @@ public class KitFireArcher extends Kit {
     private final List<UUID> flameCooldown = new ArrayList<>();
 
     public KitFireArcher(KitManager kitManager) {
-        super(kitManager, "FireArcher", KitType.FIREARCHER, 24000, "Some of his arrows are", "Enchanted with fire");
+        super(kitManager, "FireArcher", KitType.FIREARCHER, 24000, false, "Some of his arrows are", "Enchanted with fire");
 
         Map<String, Object> defaultsMap = new HashMap<>();
 
@@ -64,7 +64,7 @@ public class KitFireArcher extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
@@ -97,7 +97,6 @@ public class KitFireArcher extends Kit {
             return;
         if (flameCooldown.contains(p.getUniqueId()))
             return;
-        int level = getLevel(p);
         int flameSeconds = 20;
         flameCooldown.add(p.getUniqueId());
         Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> flameCooldown.remove(p.getUniqueId()), 60 - flameSeconds);
@@ -126,7 +125,7 @@ public class KitFireArcher extends Kit {
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
-        if (UtilMath.getRandom(0, 100) <= getLevel(shooter) * 3)
+        if (UtilMath.getRandom(0, 100) <= 3)
             damagee.setFireTicks(100);
     }
 

@@ -65,7 +65,7 @@ public class KitPlush extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
@@ -94,7 +94,6 @@ public class KitPlush extends Kit {
             return;
         if (!addCooldown(p, getName(), 5, true))
             return;
-        int level = getLevel(p);
 
         Location loc = p.getEyeLocation();
         LivingEntity cat = (LivingEntity) p.getWorld().spawnEntity(loc.add(loc.getDirection()), EntityType.OCELOT);

@@ -41,11 +41,11 @@ public class KitSniper extends Kit {
         defaultsMap.put("inventory.bow.material", "BOW");
         defaultsMap.put("inventory.bow.enchantments.durability", 5);
         defaultsMap.put("inventory.bow.enchantments.arrow-infinite", 1);
-        defaultsMap.put("inventory.bow.enchantments.knockback", 1);
+        defaultsMap.put("inventory.bow.enchantments.arrow-knockback", 1);
         defaultsMap.put("inventory.bow.enchantments.arrow-damage", 3);
 
         defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 5);
+        defaultsMap.put("armor.enchantments.durability", 7);
         defaultsMap.put("armor.enchantments.protection", 2);
 
         setConfigDefaults(defaultsMap);
@@ -64,7 +64,7 @@ public class KitSniper extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability")).build());
@@ -73,7 +73,7 @@ public class KitSniper extends Kit {
                 Material.getMaterial(getConfig().getString("inventory.bow.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.bow.enchantments.durability"))
                 .addEnchantment(Enchantment.ARROW_INFINITE, getConfig().getInt("inventory.bow.enchantments.arrow-infinite"))
-                .addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.bow.enchantments.knockback"))
+                .addEnchantment(Enchantment.ARROW_KNOCKBACK, getConfig().getInt("inventory.bow.enchantments.arrow-knockback"))
                 .addEnchantment(Enchantment.ARROW_DAMAGE, getConfig().getInt("inventory.bow.enchantments.arrow-damage")).build());
 
         p.getInventory().addItem(new ItemBuilder(
@@ -96,9 +96,8 @@ public class KitSniper extends Kit {
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
-        int level = getLevel(shooter);
-        if (UtilMath.getRandom(0, 100) < level * 3)
-            damagee.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, level == 3 ? 120 : 90, 0));
+        if (UtilMath.getRandom(0, 100) < 3)
+            damagee.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 90, 0));
 
         if (!sniperPlayerHit.containsKey(shooter.getUniqueId()))
             sniperPlayerHit.put(shooter.getUniqueId(), damagee.getUniqueId());

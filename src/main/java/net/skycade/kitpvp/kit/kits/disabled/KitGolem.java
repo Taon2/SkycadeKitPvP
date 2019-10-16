@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
@@ -59,7 +59,7 @@ public class KitGolem extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
@@ -84,8 +84,7 @@ public class KitGolem extends Kit {
             CANT_USE_HERE.msg(p);
             return;
         }
-        int level = getLevel(p);
-        if (!addCooldown(p, getName(), 30 - (level * 5), true))
+        if (!addCooldown(p, getName(), 30 - 5, true))
             return;
 
         List<Block> blocks = golemBlocks(p);

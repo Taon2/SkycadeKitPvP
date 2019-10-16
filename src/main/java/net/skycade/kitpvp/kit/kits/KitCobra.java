@@ -54,7 +54,7 @@ public class KitCobra extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
@@ -69,8 +69,7 @@ public class KitCobra extends Kit {
 
     @Override
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        int level = getLevel(damager);
-        if (UtilMath.getRandom(0, 100) < 5 + level * 3)
+        if (UtilMath.getRandom(0, 100) < 5 + 3)
             damagee.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 60 + 20 * 2, 1));
     }
 

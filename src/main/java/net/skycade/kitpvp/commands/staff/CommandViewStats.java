@@ -34,8 +34,7 @@ public class CommandViewStats extends Command<KitManager> {
                 "%deaths%", Integer.toString(stats.getDeaths()),
                 "%kills%", Integer.toString(stats.getKills()),
                 "%assists%", Integer.toString(stats.getAssists()),
-                "%killstreak", Integer.toString(stats.getHighestStreak())
+                "%killstreak%", Integer.toString(stats.getHighestStreak())
                 );
     }
-
 }

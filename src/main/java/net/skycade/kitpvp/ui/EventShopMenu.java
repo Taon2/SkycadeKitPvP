@@ -10,7 +10,6 @@ import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -22,6 +21,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
+
+import static net.skycade.kitpvp.Messages.*;
 
 public class EventShopMenu implements Listener {
 
@@ -73,7 +74,7 @@ public class EventShopMenu implements Listener {
 
     private void openConfirmMenu(Member member) {
         if (!chosenUpgradeMap.containsKey(member.getUUID())) {
-            member.message("You didn't choose an upgrade.");
+            DIDNT_CHOOSE.msg(member.getPlayer(), "%thing%", "an upgrade");
             return;
         }
         EventShopItem chosenItem = chosenUpgradeMap.get(member.getUUID());
@@ -107,13 +108,13 @@ public class EventShopMenu implements Listener {
             long diff = (now - purchasedUpgrades.get(clickedItem.getName())) / 1000L;
 
             if (diff < clickedItem.getDuration()) {
-                member.message(ChatColor.RED + "You need to wait another " + CoreUtil.niceFormat(clickedItem.getDuration() - ((Long) diff).intValue()) + " before purchasing this upgrade again!");
+                ON_COOLDOWN.msg(member.getPlayer(), "%time%", CoreUtil.niceFormat(clickedItem.getDuration() - ((Long) diff).intValue()), "%thing%", clickedItem.getName());
                 return;
             }
         }
 
         if (stats.getEventTokens() - clickedItem.getPrice() < 0) {
-            member.message("§7You don't have enough §aevent tokens §7to buy this upgrade.");
+            NOT_ENOUGH_CURRENCY.msg(member.getPlayer(), "%currency%", "event tokens", "%thing%", "upgrade");
             return;
         }
 
@@ -144,7 +145,7 @@ public class EventShopMenu implements Listener {
             if (stats.getEventTokens() - chosenItem.getPrice() < 0)
                 return;
 
-            member.message("§7You bought §a" + chosenItem.getName() + "§7 for §a" + chosenItem.getPrice() + "§7 event tokens.");
+            YOU_PURCHASED.msg(member.getPlayer(), "%thing%", chosenItem.getName(), "%amount%", Integer.toString(chosenItem.getPrice()), "%currency%", "event tokens");
             chosenItem.giveReward(((Player) e.getWhoClicked()).getPlayer());
             stats.setEventCoins(stats.getEventTokens() - chosenItem.getPrice());
 

@@ -162,7 +162,7 @@ public class KitPvP extends SkycadePlugin {
     public KitPvPStats getStats(Member member) {
         if (member == null) return null;
         if (!stats.containsKey(member.getUUID()))
-            stats.put(member.getUUID(), new KitPvPStats(member));
+            stats.put(member.getUUID(), new KitPvPStats());
         return stats.get(member.getUUID());
     }
 
@@ -222,7 +222,7 @@ public class KitPvP extends SkycadePlugin {
         }, 5);
         stats.applyKitPreference();
         Bukkit.getScheduler().runTaskLater(this, () -> {
-            stats.getActiveKit().getKit().applyKit(p);
+            stats.getActiveKit().getKit().beginApplyKit(p);
             eventShopManager.reapplyUpgrades(p);
         }, 3);
     }

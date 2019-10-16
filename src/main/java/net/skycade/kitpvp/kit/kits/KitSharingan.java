@@ -32,7 +32,7 @@ public class KitSharingan extends Kit {
         defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
 
         defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 7);
+        defaultsMap.put("armor.enchantments.durability", 9);
         defaultsMap.put("armor.enchantments.protection", 3);
 
         defaultsMap.put("armor.boots.enchantments.protection", 4);
@@ -54,7 +54,7 @@ public class KitSharingan extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
@@ -74,7 +74,6 @@ public class KitSharingan extends Kit {
 
     @Override
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        int level = getLevel(damagee);
         Collection<PotionEffect> effects = damager.getActivePotionEffects();
 
         effects.forEach((eff) -> {

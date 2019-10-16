@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
@@ -24,7 +24,7 @@ import static net.skycade.kitpvp.Messages.PLAYER_HEALED;
 public class KitMedic extends Kit {
 
     public KitMedic(KitManager kitManager) {
-        super(kitManager, "Medic", KitType.MEDIC, 16000, "Helpful in battle");
+        super(kitManager, "Medic", KitType.MEDIC, 16000, false, "Helpful in battle");
 
         Map<String, Object> defaultsMap = new HashMap<>();
 
@@ -65,7 +65,7 @@ public class KitMedic extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.hoe.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.hoe.enchantments.durability"))

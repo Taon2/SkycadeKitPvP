@@ -31,7 +31,7 @@ public class MemberJoinQuit implements Listener {
     }
 
     @EventHandler
-    public void on(AsyncPlayerPreLoginEvent e) {
+    public void onPreLogin(AsyncPlayerPreLoginEvent e) {
         if (System.currentTimeMillis() - startup < 2000) {
             e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Server starting up...");
             return;
@@ -50,10 +50,6 @@ public class MemberJoinQuit implements Listener {
                 member = new Member(e.getUniqueId(), e.getName());
             } else {
                 member.setName(e.getName());
-            /* List<String> previousNames = member.getPreviousNames();
-            if (!previousNames.contains(e.getName())) {
-                member.addPreviousName(e.getName());
-            } setName already handles this no? */
             }
             memberManager.getMembers().put(member.getUUID(), member);
         } catch (Exception a) {
@@ -65,7 +61,7 @@ public class MemberJoinQuit implements Listener {
     }
 
     @EventHandler
-    public void on(PlayerJoinEvent e) {
+    public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         Member member = memberManager.getMember(p, true);
 
@@ -80,16 +76,13 @@ public class MemberJoinQuit implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void on(PlayerQuitEvent e) {
+    public void onPlayerQuit(PlayerQuitEvent e) {
         Member member = memberManager.getMember(e.getPlayer());
 
         UtilPlayer.removeAttachment(e.getPlayer());
 
         if (member != null) {
             MemberManager.getInstance().update(member, true);
-            /* Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () ->
-                memberManager.getMembers().remove(member.getUUID())
-            ); */
         } else
             e.setQuitMessage(null);
     }

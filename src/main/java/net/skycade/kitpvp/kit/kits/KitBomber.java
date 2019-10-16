@@ -37,8 +37,10 @@ public class KitBomber extends Kit {
         defaultsMap.put("inventory.sword.material", "IRON_SWORD");
         defaultsMap.put("inventory.sword.enchantments.durability", 5);
         defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
+
         defaultsMap.put("inventory.tnt.amount", 10);
         defaultsMap.put("inventory.tnt.regen-amount", 1);
+
         defaultsMap.put("armor.material", "LEATHER");
         defaultsMap.put("armor.helmet.level", 1);
         defaultsMap.put("armor.helmet.enchantments.durability", 12);
@@ -65,15 +67,14 @@ public class KitBomber extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
                 .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
 
-        p.getInventory().addItem(getTnt(p,
-                getConfig().getInt("inventory.tnt.amount"),
-                getConfig().getInt("inventory.tnt.regen-amount")));
+        p.getInventory().addItem(getTnt(
+                getConfig().getInt("inventory.tnt.amount")));
 
         ItemStack[] armor = getArmour(
                 Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
@@ -98,11 +99,11 @@ public class KitBomber extends Kit {
                 Integer.MAX_VALUE,
                 parseInt(pot1[1])));
 
-        startItemRunnable(p, 20 - (level * 5), getTnt(p, 1, level), 10, KitType.BOMBER);
+        startItemRunnable(p, 20 - 5, getTnt(1), 10, KitType.BOMBER);
     }
 
-    private ItemStack getTnt(Player p, int amount, int level) {
-        return new ItemBuilder(Material.TNT, amount).setName("§bTNT").addLore("§F" + "Regain 1 tnt every " + (20 - (level * 5)) + " seconds").build();
+    private ItemStack getTnt(int amount) {
+        return new ItemBuilder(Material.TNT, amount).setName("§bTNT").addLore("§F" + "Regain 1 tnt every " + (20 - 5) + " seconds").build();
     }
 
     @Override
@@ -118,7 +119,7 @@ public class KitBomber extends Kit {
 
         p.getWorld().playEffect(p.getLocation(), Effect.CLICK1, 1);
         if (p.getInventory().getItemInHand().getAmount() - 1 >= 1)
-            p.getInventory().setItemInHand(getTnt(p, p.getInventory().getItemInHand().getAmount() - 1, getLevel(p)));
+            p.getInventory().setItemInHand(getTnt(p.getInventory().getItemInHand().getAmount() - 1));
         else
             p.getInventory().remove(p.getItemInHand());
     }

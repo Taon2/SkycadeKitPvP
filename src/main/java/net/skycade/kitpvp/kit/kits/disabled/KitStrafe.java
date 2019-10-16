@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
@@ -25,7 +25,7 @@ public class KitStrafe extends Kit {
     private final Map<UUID, Integer> comboMap = new HashMap<>();
 
     public KitStrafe(KitManager kitManager) {
-        super(kitManager, "Strafe", KitType.STRAFE, 41000, "Do you like to strafe?");
+        super(kitManager, "Strafe", KitType.STRAFE, 41000, false, "Do you like to strafe?");
 
         Map<String, Object> defaultsMap = new HashMap<>();
 
@@ -61,7 +61,7 @@ public class KitStrafe extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))

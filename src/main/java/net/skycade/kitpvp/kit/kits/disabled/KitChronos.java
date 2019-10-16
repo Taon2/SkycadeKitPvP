@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class KitChronos extends Kit {
 
     public KitChronos(KitManager kitManager) {
-        super(kitManager, "Chronos", KitType.CHRONOS, 44000, "Time around him slows down");
+        super(kitManager, "Chronos", KitType.CHRONOS, 44000, false, "Time around him slows down");
 
         Map<String, Object> defaultsMap = new HashMap<>();
 
@@ -66,7 +66,7 @@ public class KitChronos extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all"))

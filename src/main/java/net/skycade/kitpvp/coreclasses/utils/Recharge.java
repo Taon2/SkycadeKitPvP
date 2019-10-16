@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static net.skycade.kitpvp.Messages.OFF_COOLDOWN;
+import static net.skycade.kitpvp.Messages.ON_COOLDOWN;
+
 public class Recharge {
 
     private static final Map<UUID, Map<String, Long>> lastUse = new HashMap<>();
@@ -37,9 +40,9 @@ public class Recharge {
             return true;
         }
         if (time > 1)
-            member.message("§7You must wait §b" + new DecimalFormat("0.0").format((sessions.get(item) + time * 1000 - System.currentTimeMillis()) / 1000) + "§7 seconds to use §e" + item + "§7.");
+            ON_COOLDOWN.msg(member.getPlayer(), "%time%", new DecimalFormat("0.0").format((sessions.get(item) + time * 1000 - System.currentTimeMillis()) / 1000), "%thing%", item);
         if (notifyOnRecharge)
-            Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> member.message("§7You can now use §e" + item + "§7."), 20);
+            Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> OFF_COOLDOWN.msg(member.getPlayer(), "%ability%", item), 20);
         return false;
     }
 

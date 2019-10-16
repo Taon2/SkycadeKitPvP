@@ -35,14 +35,17 @@ public class CommandUnlock extends Command<KitManager> {
 
         if (args[2].equalsIgnoreCase("unlock")) {
             if (args[1].equalsIgnoreCase("all")) {
-                getModule().getKits().keySet().forEach(stats::addKit);
+                getModule().getKits().forEach((kitType, kit) -> {
+                    if (kit.isEnabled())
+                        stats.addKit(kitType);
+                });
                 ScoreboardInfo.getInstance().updatePlayer(target);
                 KIT_UNLOCKED.msg(member.getPlayer(), "%player%", target.getName(), "%kit%", "every");
                 if (!member.getPlayer().equals(target))
                     YOUR_KIT_UNLOCKED.msg(target, "%kit%", "every");
                 return;
             }
-            Kit kit = getKit(stats, args, member);
+            Kit kit = getKit(args, member);
             if (kit == null)
                 return;
             stats.addKit(kit.getKitType());
@@ -59,7 +62,7 @@ public class CommandUnlock extends Command<KitManager> {
                 KIT_LOCKED.msg(target, "%kit%", "every");
                 return;
             }
-            Kit kit = getKit(stats, args, member);
+            Kit kit = getKit(args, member);
             if (kit == null)
                 return;
             stats.removeKit(kit.getKitType());
@@ -72,7 +75,7 @@ public class CommandUnlock extends Command<KitManager> {
         member.message(getUsageToString());
     }
 
-    private Kit getKit(KitPvPStats stats, String[] args, Member member) {
+    private Kit getKit(String[] args, Member member) {
         Kit kit = null;
         for (Map.Entry<KitType, Kit> entry : getModule().getKits().entrySet())
             if (entry.getValue().getName().equalsIgnoreCase(args[1]))

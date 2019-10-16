@@ -35,7 +35,7 @@ public class KitWither extends Kit {
         defaultsMap.put("inventory.sword.enchantments.durability", 5);
 
         defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 10);
+        defaultsMap.put("armor.enchantments.durability", 11);
         defaultsMap.put("armor.enchantments.protection", 4);
 
         setConfigDefaults(defaultsMap);
@@ -54,7 +54,7 @@ public class KitWither extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all"))

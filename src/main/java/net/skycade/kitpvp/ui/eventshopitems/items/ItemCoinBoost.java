@@ -20,7 +20,7 @@ public class ItemCoinBoost extends EventShopItem {
     private EventShopManager eventShopManager;
 
     public ItemCoinBoost(EventShopManager eventShopManager) {
-        super(eventShopManager, "§6Double Coins Upgrade", new ItemStack(Material.DOUBLE_PLANT, 1, (short) 0), 75, 600);
+        super(eventShopManager, "§6Double Coins Upgrade", new ItemStack(Material.DOUBLE_PLANT, 1, (short) 0), 50, 600);
         this.eventShopManager = eventShopManager;
     }
 

@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
@@ -21,7 +21,7 @@ public class KitFireMage extends Kit {
     private List<UUID> fireCooldown = new ArrayList<>();
 
     public KitFireMage(KitManager kitManager) {
-        super(kitManager, "FireMage", KitType.FIREMAGE, 34000, "Use fire magic!");
+        super(kitManager, "FireMage", KitType.FIREMAGE, 34000, false, "Use fire magic!");
 
         Map<String, Object> defaultsMap = new HashMap<>();
 
@@ -56,7 +56,7 @@ public class KitFireMage extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.STICK)
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.stick.enchantments.durability"))
@@ -100,11 +100,11 @@ public class KitFireMage extends Kit {
                 ParticleEffect.FLAME.display(0, 0, 0, 0.03F, 3, loc, 30);
 
                 for (Player target : UtilPlayer.getNearbyPlayers(loc, 1.5).stream().filter(player -> !player.equals(p) && player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList())) {
-                    target.damage((getLevel(p) * 2) + 3, p);
+                    target.damage(2+ 3, p);
                     target.setFireTicks(20);
                 }
 
-                if (t > 0.4 + (0.1 * getLevel(p)))
+                if (t > 0.4 + 0.1)
                     this.cancel();
             }
         }.runTaskTimer(getKitManager().getPlugin(), 0, 1);

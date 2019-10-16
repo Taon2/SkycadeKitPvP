@@ -20,6 +20,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+import static net.skycade.kitpvp.Messages.*;
+
 public class ShopMenu implements Listener {
 
     private Inventory menu;
@@ -62,7 +64,7 @@ public class ShopMenu implements Listener {
 
     private void openConfirmMenu(Member member) {
         if (!chosenKitMap.containsKey(member.getUUID())) {
-            member.message("You didn't choose a kit.");
+            DIDNT_CHOOSE.msg(member.getPlayer(), "%thing%", "a kit");
             return;
         }
         KitType chosenKit = chosenKitMap.get(member.getUUID());
@@ -101,13 +103,13 @@ public class ShopMenu implements Listener {
         Member member = MemberManager.getInstance().getMember((Player) e.getWhoClicked());
         KitPvPStats stats = kitManager.getKitPvP().getStats(member);
         if (stats.hasKit(kitType)) {
-            member.message("§7You §aalready §7have this kit §aunlocked§7.");
+            ALREADY_UNLOCKED.msg(member.getPlayer(), "%kit%", kitType.getKit().getName());
             return;
         }
 
         Kit kit = kitType.getKit();
         if (stats.getCoins() - kit.getPrice() < 0) {
-            member.message("§7You don't have enough §amoney §7to buy this kit.");
+            NOT_ENOUGH_CURRENCY.msg(member.getPlayer(), "%currency%", "coins", "%thing%", "kit");
             return;
         }
 
@@ -139,7 +141,7 @@ public class ShopMenu implements Listener {
             if (stats.getCoins() - kit.getPrice() < 0)
                 return;
 
-            member.message("§7You bought §a" + kit.getName() + "§7 for §a" + kit.getPrice() + "§7 coins.");
+            YOU_PURCHASED.msg(member.getPlayer(), "%thing%", kit.getName(), "%amount%", Integer.toString(kit.getPrice()), "%currency%", "coins");
             stats.addKit(kitType);
             stats.setCoins(stats.getCoins() - kit.getPrice());
 

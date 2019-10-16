@@ -59,7 +59,7 @@ public class KitHydra extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
@@ -86,7 +86,7 @@ public class KitHydra extends Kit {
         if (p.getLocation().getBlock().getType() == Material.WATER || p.getLocation().getBlock().getType() == Material.STATIONARY_WATER) {
             p.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
             p.removePotionEffect(PotionEffectType.SLOW);
-            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40 * 3, 1));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40 * 3, 0));
             p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40 * 3, 2));
         }
     }

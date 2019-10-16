@@ -167,7 +167,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
         KitPvPStats stats = KitPvP.getInstance().getStats(kingPlayer);
 
         stats.setActiveKit(initialKit);
-        stats.getActiveKit().getKit().applyKit(kingPlayer);
+        stats.getActiveKit().getKit().beginApplyKit(kingPlayer);
         stats.getActiveKit().getKit().giveSoup(kingPlayer, 32);
 
     }
@@ -176,7 +176,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
     public void onPlayerDeath(PlayerDeathEvent e){
         if (begin == null) return;
 
-        Player died = (Player) e.getEntity();
+        Player died = e.getEntity();
         if (this.king.equals(died.getUniqueId())){
             Player killer = null;
             //try to get the killer

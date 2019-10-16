@@ -38,6 +38,7 @@ public class KitAssassin extends Kit {
 
         defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
         defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
+
         defaultsMap.put("inventory.armour.type", "LEATHER");
         defaultsMap.put("inventory.armour.durability", 12);
         defaultsMap.put("inventory.armour.protection", 2);
@@ -63,7 +64,7 @@ public class KitAssassin extends Kit {
     }
 
     @Override
-    public void applyKit(Player p, int level) {
+    public void applyKit(Player p) {
         p.getInventory().addItem(new ItemBuilder(
                 Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
                 .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
@@ -98,7 +99,7 @@ public class KitAssassin extends Kit {
     @Override
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
         if (isBackStab(damager, damagee))
-            e.setDamage(e.getDamage() * (1.0 + (0.1 * getLevel(damager))));
+            e.setDamage(e.getDamage() * (1.0 + (0.1)));
         if (!comboMap.containsKey(damager.getUniqueId())) {
             comboMap.put(damager.getUniqueId(), 1);
             damager.setLevel(1);
