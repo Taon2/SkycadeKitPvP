@@ -1,9 +1,11 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -90,6 +92,11 @@ public class KitHyper extends Kit {
             return;
         if (!addCooldown(p, getName(), 3 * 10, true))
             return;
+
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
         p.addPotionEffects(Arrays.asList(new PotionEffect(PotionEffectType.SPEED, 50 + 3 * 100, 2), new PotionEffect(PotionEffectType.REGENERATION, 50 + 3 * 100, 1)));
         p.getWorld().playEffect(p.getLocation(), Effect.ENDER_SIGNAL, 0);
     }

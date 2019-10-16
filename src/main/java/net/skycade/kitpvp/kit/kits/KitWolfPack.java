@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
@@ -76,10 +77,13 @@ public class KitWolfPack extends Kit {
         if (!addCooldown(p, getName(), 20, false))
             return;
 
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
         int wolfAmount = 2;
         for (int i = 0; i < wolfAmount; i++) {
             Wolf wolf = (Wolf) p.getWorld().spawnEntity(p.getLocation(), EntityType.WOLF);
-            // wolf.setAI(true); // <- 1.11
             wolf.setAngry(true);
             wolf.setCustomName(p.getName() + "'s" + " wolf");
             wolf.setOwner(p);

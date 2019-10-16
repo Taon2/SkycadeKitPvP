@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
@@ -81,6 +82,10 @@ public class KitFisherman extends Kit {
         Location target = getTarget(p, 30);
         if (target == null)
             return;
+
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         rodCd.add(p.getUniqueId());
         Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> rodCd.remove(p.getUniqueId()), 80);

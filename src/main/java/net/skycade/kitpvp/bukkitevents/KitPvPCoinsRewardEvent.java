@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.events;
+package net.skycade.kitpvp.bukkitevents;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

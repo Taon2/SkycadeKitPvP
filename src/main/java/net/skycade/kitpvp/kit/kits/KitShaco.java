@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
@@ -107,6 +108,11 @@ public class KitShaco extends Kit {
             return;
         if (!addCooldown(p, "Invisibility", 20, true))
             return;
+
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
         POOF.msg(p);
         p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1));
 
@@ -132,6 +138,10 @@ public class KitShaco extends Kit {
                     getConfig().getInt("inventory.snowball.max-amount"), KitType.SHACO);
             return;
         }
+
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(shooter, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         if (shooter.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
             teleportBehindPlayer(shooter, damagee.getLocation());

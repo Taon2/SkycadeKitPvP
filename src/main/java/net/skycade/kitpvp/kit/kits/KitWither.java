@@ -1,10 +1,12 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -74,8 +76,13 @@ public class KitWither extends Kit {
 
     private void witherEffect(Player p, int chance, int duration) {
         int random = UtilMath.getRandom(0, 100);
-        if (random <= chance)
+        if (random <= chance) {
+            //For missions
+            KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
+            Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
             p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, duration * 20, 1));
+        }
     }
 
     @Override

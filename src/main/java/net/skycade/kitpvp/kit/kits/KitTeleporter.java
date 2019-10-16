@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
@@ -98,6 +99,11 @@ public class KitTeleporter extends Kit {
             if(player.getItemInHand().getType().equals(Material.ENDER_PEARL) && !addCooldown(e.getPlayer(), getName(), 10, true) || enderpearlCooldown.contains(e.getPlayer())) {
                 e.setCancelled(true);
             }
+
+            //For missions
+            KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(player, this.getKitType());
+            Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
             enderpearlCooldown.add(e.getPlayer());
             Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> enderpearlCooldown.remove(e.getPlayer()), 10);
         }

@@ -1,6 +1,6 @@
 package net.skycade.kitpvp.ui.eventshopitems.items;
 
-import net.skycade.kitpvp.events.KitPvPCoinsRewardEvent;
+import net.skycade.kitpvp.bukkitevents.KitPvPCoinsRewardEvent;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import org.bukkit.ChatColor;

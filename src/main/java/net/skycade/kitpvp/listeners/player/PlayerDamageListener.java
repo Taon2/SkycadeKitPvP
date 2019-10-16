@@ -3,11 +3,12 @@ package net.skycade.kitpvp.listeners.player;
 import net.skycade.SkycadeCore.leveling.achievements.Achievement;
 import net.skycade.SkycadeCore.leveling.achievements.CoreAchievementEvent;
 import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.bukkitevents.KitPvPCoinsRewardEvent;
+import net.skycade.kitpvp.bukkitevents.KitPvPKillPlayerEvent;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.events.DoubleCoinsEvent;
-import net.skycade.kitpvp.events.KitPvPCoinsRewardEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.*;
@@ -135,6 +136,10 @@ public class PlayerDamageListener implements Listener {
 
         //Update kills
         KitPvPStats stats = plugin.getStats(killerMem);
+
+        //For missions
+        KitPvPKillPlayerEvent killEvent = new KitPvPKillPlayerEvent(killer, stats.getActiveKit());
+        Bukkit.getServer().getPluginManager().callEvent(killEvent);
 
         final int kills = stats.getKills() + 1;
         stats.setKills(kills);

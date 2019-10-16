@@ -1,9 +1,11 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -104,6 +106,11 @@ public class KitFrosty extends Kit {
                     getConfig().getInt("inventory.snowball.max-amount"), KitType.SHACO);
             return;
         }
+
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(shooter, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
         YOURE_FROZEN.msg(damagee);
         freezePlayer(damagee, 5);
     }

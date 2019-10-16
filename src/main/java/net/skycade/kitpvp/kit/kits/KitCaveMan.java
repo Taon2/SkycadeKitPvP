@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
@@ -106,6 +107,11 @@ public class KitCaveMan extends Kit {
             return;
         if (abilityCooldown.contains(p.getUniqueId()))
             return;
+
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
         abilityCooldown.add(p.getUniqueId());
         Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> abilityCooldown.remove(p.getUniqueId()), 2 * 20);
 

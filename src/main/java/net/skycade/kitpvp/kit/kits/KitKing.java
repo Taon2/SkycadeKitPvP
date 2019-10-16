@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
@@ -84,11 +85,12 @@ public class KitKing extends Kit {
         if (!addCooldown(p, getName(), 4 * 10, true))
             return;
 
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
         IronGolem golem = (IronGolem) p.getWorld().spawnEntity(p.getLocation(), EntityType.IRON_GOLEM);
         golem.setCustomName(p.getName() + " golem");
-
-		/* if (level < 3)
-            golem.setHealth(level == 1 ? golem.getMaxHealth() * 0.5 : golem.getMaxHealth() * 0.7); */
 
         Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 5);
         if (nearbyPlayers.contains(p))

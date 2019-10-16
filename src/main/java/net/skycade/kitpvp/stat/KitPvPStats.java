@@ -74,7 +74,6 @@ public class KitPvPStats {
         this.streak = streak;
         if (streak > highestStreak) {
             highestStreak = streak;
-            //member.update();
         }
     }
 

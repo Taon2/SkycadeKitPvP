@@ -1,10 +1,12 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -87,7 +89,7 @@ public class KitZeus extends Kit {
 
     @Override
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        if (UtilMath.getRandom(0, 100) <= 07) {
+        if (UtilMath.getRandom(0, 100) <= 7) {
             HashMap<Player, List<Block>> playerBlockList = getBlocks(damagee);
             for(Block b : playerBlockList.get(damagee)){
                 if (!allowedTypes.contains(b.getType())) {
@@ -95,6 +97,10 @@ public class KitZeus extends Kit {
                     return;
                 }
             }
+
+            //For missions
+            KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(damager, this.getKitType());
+            Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
             damagee.getWorld().strikeLightning(damagee.getLocation());
             e.setDamage(e.getDamage() * 1.4);

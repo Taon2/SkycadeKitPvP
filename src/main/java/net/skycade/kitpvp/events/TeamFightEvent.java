@@ -7,6 +7,7 @@ import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.SkycadeCore.utility.scoreboard.ScoreboardManager;
 import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.bukkitevents.KitPvPCoinsRewardEvent;
 import net.skycade.kitpvp.events.teamfight.TeamFightPacketListener;
 import net.skycade.kitpvp.events.teamfight.TeamFightStartDelay;
 import net.skycade.kitpvp.stat.KitPvPStats;
