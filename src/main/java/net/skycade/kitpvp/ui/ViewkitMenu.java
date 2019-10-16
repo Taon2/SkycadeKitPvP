@@ -34,7 +34,7 @@ public class ViewkitMenu {
 
     public ViewkitMenu(Kit kit) {
         menu = Bukkit.createInventory(null, MenuSize.TWO_LINE.getSize(), "§aView " + kit.getName());
-        kit.beginApplyKit(DUMMY_PLAYER);
+        kit.applyKit(DUMMY_PLAYER);
         addItems(0, getItems(), getPotionEffects(DUMMY_PLAYER.getActivePotionEffects()));
         reset();
         if (kit.getAbilityDesc() != null) {

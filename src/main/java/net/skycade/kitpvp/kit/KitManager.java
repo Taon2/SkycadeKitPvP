@@ -43,7 +43,6 @@ public class KitManager extends Module {
         registerCommand(new CommandKit(this));
         registerCommand(new CommandKitName(this));
         registerCommand(new CommandKitPvPHelp(this));
-        registerCommand(new CommandKitpvpStats(this));
         registerCommand(new CommandResetStats(this));
         registerCommand(new CommandShop(this));
         registerCommand(new CommandSoup(this));

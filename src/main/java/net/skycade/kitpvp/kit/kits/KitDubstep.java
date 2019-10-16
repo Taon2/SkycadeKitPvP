@@ -42,11 +42,11 @@ public class KitDubstep extends Kit {
         defaultsMap.put("armor.chestplate.enchantments.protection", 0);
 
         defaultsMap.put("armor.leggings.material", "GOLD");
-        defaultsMap.put("armor.leggings.enchantments.durability", 4);
+        defaultsMap.put("armor.leggings.enchantments.durability", 7);
         defaultsMap.put("armor.leggings.enchantments.protection", 0);
 
         defaultsMap.put("armor.boots.material", "GOLD");
-        defaultsMap.put("armor.boots.enchantments.durability", 4);
+        defaultsMap.put("armor.boots.enchantments.durability", 7);
         defaultsMap.put("armor.boots.enchantments.protection", 0);
 
         defaultsMap.put("potions.pot1", "SLOW_DIGGING:3");

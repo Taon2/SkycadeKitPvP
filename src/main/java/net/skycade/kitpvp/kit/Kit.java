@@ -90,7 +90,7 @@ public abstract class Kit implements Listener {
         applyKit(p);
     }
 
-    protected abstract void applyKit(Player p);
+    public abstract void applyKit(Player p);
 
     public KitManager getKitManager() {
         return kitManager;

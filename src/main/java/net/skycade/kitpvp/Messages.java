@@ -45,13 +45,16 @@ public class Messages {
     //KitPvP Stats
     public static final Localization.Message STATS = new Localization.Message("command.your-stat-set",
             "&7---------- &f&l%player%'s KitPvP Stats &7----------\n" +
-                    "&fKits - &a%kits%\n" +
-                    "&fCoins - &a%coins%\n" +
-                    "&fEvent Tokens - &a%eventtokens%\n" +
                     "&fDeaths - &a%deaths%\n" +
                     "&fKills - &a%kills%\n" +
+                    "&fK/D - &a%kdr%\n" +
                     "&fAssists - &a%assists%\n" +
-                    "&fHighest Killstreak - &a%killstreak%\n"
+                    "&fCurrent Killstreak - &a%currentkillstreak%\n" +
+                    "&fHighest Killstreak - &a%highestkillstreak%\n" +
+                    "&fKits - &a%kits%\n" +
+                    "&fCurrent Kit - &a%currentkit%\n" +
+                    "&fCoins - &a%coins%\n" +
+                    "&fEvent Tokens - &a%eventtokens%\n"
             );
 
     //KitPvP Event Messages
