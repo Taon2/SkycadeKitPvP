@@ -124,7 +124,7 @@ public class KitUnicorn extends Kit {
             if (rodUse.contains(p.getUniqueId()))
                 return;
             rodUse.add(p.getUniqueId());
-            Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> rodUse.remove(p.getUniqueId()), 70);
+            Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> rodUse.remove(p.getUniqueId()), 70);
 
             new BukkitRunnable() {
                 Location loc = p.getEyeLocation().subtract(0, 0.2, 0);
@@ -151,7 +151,7 @@ public class KitUnicorn extends Kit {
                     if (t > 1.7)
                         this.cancel();
                 }
-            }.runTaskTimer(getKitManager().getPlugin(), 0, 1);
+            }.runTaskTimer(getKitManager().getKitPvP(), 0, 1);
         }
     }
 

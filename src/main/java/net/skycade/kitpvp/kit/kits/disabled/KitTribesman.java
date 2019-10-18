@@ -114,7 +114,7 @@ public class KitTribesman extends Kit {
         if (e.getFinalDamage() >= 4) {
             tribesEffect(damagee, 6 + 2 * 3);
             tribesCd.add(damagee.getUniqueId());
-            Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> tribesCd.remove(damagee.getUniqueId()), 220 - (3 * 20));
+            Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> tribesCd.remove(damagee.getUniqueId()), 220 - (3 * 20));
         }
     }
 

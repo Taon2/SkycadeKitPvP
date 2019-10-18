@@ -1,9 +1,6 @@
 package net.skycade.kitpvp.ui.eventshopitems;
 
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.commands.CommandEventShop;
-import net.skycade.kitpvp.commands.staff.CommandEventEco;
-import net.skycade.kitpvp.coreclasses.commands.Module;
 import net.skycade.kitpvp.ui.eventshopitems.items.ItemCoinBoost;
 import net.skycade.kitpvp.ui.eventshopitems.items.ItemKeepKillstreak;
 import net.skycade.kitpvp.ui.eventshopitems.items.ItemPotionEffect;
@@ -18,7 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class EventShopManager extends Module {
+public class EventShopManager {
 
     private File file;
     private YamlConfiguration yaml;
@@ -31,9 +28,6 @@ public class EventShopManager extends Module {
         configManager();
 
         registerEventShopItems();
-
-        registerCommand(new CommandEventShop(this));
-        registerCommand(new CommandEventEco(this));
     }
 
     private void registerEventShopItems(){

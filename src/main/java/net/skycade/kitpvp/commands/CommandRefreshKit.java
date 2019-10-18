@@ -1,18 +1,18 @@
 package net.skycade.kitpvp.commands;
 
 import net.skycade.SkycadeCore.utility.CoreUtil;
+import net.skycade.SkycadeCore.utility.command.SkycadeCommand;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.events.KillTheKingEvent;
 import net.skycade.kitpvp.events.TagEvent;
 import net.skycade.kitpvp.events.TeamFightEvent;
-import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.util.logging.Level;
 
 import static net.skycade.kitpvp.Messages.*;
 
-public class CommandRefreshKit extends Command<KitManager> {
+public class CommandRefreshKit extends SkycadeCommand {
     private File file;
     private YamlConfiguration yaml;
     private final static int COST = (KitPvP.getInstance().getConfig().getInt("refreshkit-price"));
@@ -31,13 +31,15 @@ public class CommandRefreshKit extends Command<KitManager> {
 
     private Map<UUID, Long> lastRefresh = new HashMap<>();
 
-    public CommandRefreshKit(KitManager module) {
-        super(module, "Refresh your kit for " + COST + " coins.", new Permission("kitpvp.default", PermissionDefault.TRUE), "refreshkit");
+    public CommandRefreshKit() {
+        super("refreshkit");
         configManager();
     }
 
     @Override
-    public void execute(Member member, String aliasUsed, String... args) {
+    public void onCommand(CommandSender commandSender, String[] strings) {
+        Member member = MemberManager.getInstance().getMember((Player) commandSender);
+
         if (KillTheKingEvent.getInstance() != null && KillTheKingEvent.getInstance().getCurrentKing() != null) {
             if (member.getUUID().equals(KillTheKingEvent.getInstance().getCurrentKing())) {
                 CANNOT_USE.msg(member.getPlayer(), "%thing%", "/refreshkit", "%reason%", "as the King");
@@ -70,7 +72,7 @@ public class CommandRefreshKit extends Command<KitManager> {
             }
         }
 
-        KitPvPStats stats = getModule().getKitPvP().getStats(member);
+        KitPvPStats stats = KitPvP.getInstance().getStats(member);
         int coins = stats.getCoins();
         if (coins < COST) {
             NOT_ENOUGH.msg(member.getPlayer(), "%thing%", "coins");
@@ -88,7 +90,7 @@ public class CommandRefreshKit extends Command<KitManager> {
     }
 
     private void configManager() {
-        file = new File(plugin.getDataFolder(), "commandcooldowns.yml");
+        file = new File(KitPvP.getInstance().getDataFolder(), "commandcooldowns.yml");
 
         if (!file.exists()) {
             yaml = new YamlConfiguration();
@@ -103,8 +105,7 @@ public class CommandRefreshKit extends Command<KitManager> {
         try {
             yaml.save(file);
         } catch (IOException e) {
-            plugin.getLogger().log(Level.SEVERE, "Couldn't save commandcooldowns yaml file.", e);
+            KitPvP.getInstance().getLogger().log(Level.SEVERE, "Couldn't save commandcooldowns yaml file.", e);
         }
     }
-
 }

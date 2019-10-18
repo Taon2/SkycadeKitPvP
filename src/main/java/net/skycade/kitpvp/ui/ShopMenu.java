@@ -10,6 +10,7 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static net.skycade.kitpvp.Messages.ALREADY_UNLOCKED;
+import static net.skycade.kitpvp.Messages.NOT_ENOUGH_CURRENCY;
 
 public class ShopMenu extends DynamicGui {
 
@@ -50,7 +52,14 @@ public class ShopMenu extends DynamicGui {
                 },
                 (p, ev) -> {
                     if (stats.hasKit(kitType)) {
-                        ALREADY_UNLOCKED.msg(member.getPlayer(), "%thing%", kitType.getKit().getName());
+                        ALREADY_UNLOCKED.msg(member.getPlayer(), "%thing%", "kit " + kitType.getKit().getName());
+                        p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
+                        return;
+                    }
+
+                    if (stats.getCoins() - kitType.getKit().getPrice() < 0) {
+                        NOT_ENOUGH_CURRENCY.msg(p, "%currency%", "coins", "%thing%", "kit " + kitType.getKit().getName());
+                        p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                         return;
                     }
 

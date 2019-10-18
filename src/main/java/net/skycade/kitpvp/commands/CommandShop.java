@@ -1,20 +1,22 @@
 package net.skycade.kitpvp.commands;
 
-import net.skycade.kitpvp.coreclasses.commands.Command;
+import net.skycade.SkycadeCore.utility.command.SkycadeCommand;
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.kit.KitManager;
+import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.ui.ShopMenu;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-public class CommandShop extends Command<KitManager> {
-
-    public CommandShop(KitManager module) {
-        super(module, "Opens the shop GUI.", new Permission("kitpvp.default", PermissionDefault.TRUE), "shop");
+public class CommandShop extends SkycadeCommand {
+    public CommandShop() {
+        super("shop");
     }
 
     @Override
-    public void execute(Member member, String aliasUsed, String... args) {
-        new ShopMenu(getModule().getKitPvP().getKitManager(), member).open(member.getPlayer());
+    public void onCommand(CommandSender commandSender, String[] strings) {
+        Member member = MemberManager.getInstance().getMember((Player) commandSender);
+
+        new ShopMenu(KitPvP.getInstance().getKitManager(), member).open(member.getPlayer());
     }
 }

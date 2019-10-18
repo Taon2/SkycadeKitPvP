@@ -110,7 +110,7 @@ public class KitJumper extends Kit {
         if (p.getLocation().subtract(0, 1, 0).getBlock().getType() != Material.AIR)
             return;
         for (int y = 0; y < 10; y++) {
-            Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
+            Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
                 for (int i = 0; i < 5; i++)
                     ParticleEffect.SPELL_MOB.display(new ParticleEffect.OrdinaryColor(Color.RED), p.getLocation().add(0, 0.1F, 0), 1F);
             }, y);

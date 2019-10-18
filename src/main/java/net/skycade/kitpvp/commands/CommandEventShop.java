@@ -1,26 +1,28 @@
 package net.skycade.kitpvp.commands;
 
-import net.skycade.kitpvp.coreclasses.commands.Command;
+import net.skycade.SkycadeCore.utility.command.SkycadeCommand;
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.events.DoubleCoinsEvent;
 import net.skycade.kitpvp.events.RandomEvent;
 import net.skycade.kitpvp.ui.EventShopMenu;
-import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import static net.skycade.kitpvp.Messages.CANNOT_USE;
 
-public class CommandEventShop extends Command<EventShopManager> {
-
-    public CommandEventShop(EventShopManager eventShopManager) {
-        super(eventShopManager, "Opens the event shop GUI.", new Permission("kitpvp.default", PermissionDefault.TRUE), "eventshop");
+public class CommandEventShop extends SkycadeCommand {
+    public CommandEventShop() {
+        super("eventshop");
     }
 
     @Override
-    public void execute(Member member, String aliasUsed, String... args) {
+    public void onCommand(CommandSender commandSender, String[] strings) {
+        Member member = MemberManager.getInstance().getMember((Player) commandSender);
+
         if (RandomEvent.getCurrent() == null || DoubleCoinsEvent.isActive()) {
-            new EventShopMenu(getModule().getKitPvP().getEventShopManager(), member).open(member.getPlayer());
+            new EventShopMenu(KitPvP.getInstance().getEventShopManager(), member).open(member.getPlayer());
         } else {
             CANNOT_USE.msg(member.getPlayer(), "%thing%", "/eventshop", "%reason%", "during events");
         }

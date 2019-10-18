@@ -99,7 +99,7 @@ public class KitFireArcher extends Kit {
             return;
         int flameSeconds = 20;
         flameCooldown.add(p.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> flameCooldown.remove(p.getUniqueId()), 60 - flameSeconds);
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> flameCooldown.remove(p.getUniqueId()), 60 - flameSeconds);
 
         item.addEnchantment(Enchantment.ARROW_FIRE, 1);
         p.getWorld().playSound(p.getLocation(), Sound.FIRE_IGNITE, 1.0F, 1.0F);
@@ -121,7 +121,7 @@ public class KitFireArcher extends Kit {
             return;
         }
         bowCooldown.add(shooter.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> bowCooldown.remove(shooter.getUniqueId()), 18);
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> bowCooldown.remove(shooter.getUniqueId()), 18);
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {

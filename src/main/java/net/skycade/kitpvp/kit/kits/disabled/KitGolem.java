@@ -126,7 +126,7 @@ public class KitGolem extends Kit {
         });
         Location playerLoc = p.getLocation();
         p.teleport(playerLoc.add(0, 1.5, 0));
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> p.teleport(playerLoc.add(0, 1.5, 0)), 3);
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> p.teleport(playerLoc.add(0, 1.5, 0)), 3);
         shootParticlesFromLoc(p, ParticleEffect.FIREWORKS_SPARK, 200, 1);
     }
 

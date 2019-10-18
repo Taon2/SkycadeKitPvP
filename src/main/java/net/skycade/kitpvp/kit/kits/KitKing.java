@@ -99,7 +99,7 @@ public class KitKing extends Kit {
         if (!(nearbyPlayers.isEmpty()))
             golem.setTarget(getClosestTarget(nearbyPlayers, p));
 
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
             if (!(golem.isDead()))
                 golem.remove();
         }, 20 * 30);

@@ -81,7 +81,7 @@ public class KitNinja extends Kit {
         if (ninjaCooldown.contains(p.getUniqueId()))
             return;
         ninjaCooldown.add(p.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> ninjaCooldown.remove(p.getUniqueId()), 60);
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> ninjaCooldown.remove(p.getUniqueId()), 60);
         p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 60, 0));
         tpDash(p, 6);
     }

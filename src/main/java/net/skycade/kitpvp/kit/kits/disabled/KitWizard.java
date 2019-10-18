@@ -96,7 +96,7 @@ public class    KitWizard extends Kit {
             if (rodUse.contains(p.getUniqueId()))
                 return;
             rodUse.add(p.getUniqueId());
-            Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> rodUse.remove(p.getUniqueId()), 15 * 20);
+            Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> rodUse.remove(p.getUniqueId()), 15 * 20);
 
             new BukkitRunnable() {
                 Location loc = p.getLocation();
@@ -119,7 +119,7 @@ public class    KitWizard extends Kit {
                     if (t > 1.6)
                         this.cancel();
                 }
-            }.runTaskTimerAsynchronously(getKitManager().getPlugin(), 0, 1);
+            }.runTaskTimerAsynchronously(getKitManager().getKitPvP(), 0, 1);
         }
     }
 

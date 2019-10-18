@@ -1,91 +1,167 @@
 package net.skycade.kitpvp.commands.staff;
 
-import net.skycade.kitpvp.coreclasses.commands.Command;
-import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.SkycadeCore.utility.command.SkycadeCommand;
+import net.skycade.SkycadeCore.utility.command.addons.Permissible;
+import net.skycade.SkycadeCore.utility.command.addons.SubCommand;
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
+
+import java.util.Collections;
 
 import static net.skycade.kitpvp.Messages.*;
 
-public class CommandEventEco extends Command<EventShopManager> {
+@Permissible("kitpvp.admin")
+public class CommandEventEco extends SkycadeCommand {
+    public CommandEventEco() {
+        super("eventeco", Collections.singletonList("eventeconomy"));
 
-    public CommandEventEco(EventShopManager module) {
-        super(module, "Manage event tokens.", new Permission("kitpvp.admin", PermissionDefault.OP), "eventeconomy", "eventeco");
-        setUsage("<reset/give/take> <player/all> <amount>");
+        addSubCommands(
+                new Give(),
+                new Take(),
+                new Set()
+        );
     }
 
     @Override
-    public void execute(Member member, String aliasUsed, String... args) {
-        if (!checkArgs(member, aliasUsed, args, 2))
-            return;
-        int amount = 0;
-        if (!args[0].equalsIgnoreCase("reset")) {
-            if (!checkArgs(member, aliasUsed, args))
-                return;
-            if (!parseInt(member, args[2])) {
-                COULDNT_FIND.msg(member.getPlayer(), "%type%", "amount", "%thing%", args[2]);
-                return;
-            }
-            amount = Integer.parseInt(args[2]);
-        }
-
-        if (args[1].equalsIgnoreCase("all")) {
-            if (args[0].equalsIgnoreCase("reset")) {
-                Bukkit.getOnlinePlayers().forEach(p -> resetEventTokens(getModule().getKitPvP().getStats(p), member, p));
-                return;
-            }
-            if (args[0].equalsIgnoreCase("give")) {
-                Bukkit.getOnlinePlayers().forEach(p -> incEventTokens(getModule().getKitPvP().getStats(p), member, p, Integer.parseInt(args[2])));
-                return;
-            }
-            if (args[0].equalsIgnoreCase("take")) {
-                Bukkit.getOnlinePlayers().forEach(p -> takeEventTokens(getModule().getKitPvP().getStats(p), member, p, Integer.parseInt(args[2])));
-                return;
-            }
-        }
-        if (!getPlayer(member, args[1])) {
-            COULDNT_FIND.msg(member.getPlayer(), "%type%", "player", "%thing%", args[1]);
-            return;
-        }
-        Player target = Bukkit.getPlayer(args[1]);
-        KitPvPStats targetStats = getModule().getKitPvP().getStats(target);
-
-        if (args[0].equalsIgnoreCase("reset"))
-            resetEventTokens(targetStats, member, target);
-        if (args[0].equalsIgnoreCase("give"))
-            incEventTokens(targetStats, member, target, amount);
-        else if (args[0].equalsIgnoreCase("take"))
-            takeEventTokens(targetStats, member, target, amount);
-
-        ScoreboardInfo.getInstance().updatePlayer(target);
-
+    public void onCommand(CommandSender commandSender, String[] strings) {
+        //todo usage
     }
 
-    private void resetEventTokens(KitPvPStats targetStats, Member member, Player target) {
+    @SubCommand
+    private class Give extends SkycadeCommand {
+        Give() {
+            super("give");
+        }
+
+        @Override
+        public void onCommand(CommandSender commandSender, String[] strings) {
+            if (strings.length < 2) {
+                //todo usage
+                return;
+            }
+
+            int amount;
+            try {
+                amount = Integer.parseInt(strings[1]);
+            } catch (NumberFormatException exception) {
+                COULDNT_FIND.msg(commandSender, "%type%", "number", "%thing%", strings[1]);
+                return;
+            }
+
+            if (strings[0].equalsIgnoreCase("all")) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    incEventTokens(KitPvP.getInstance().getStats(p), commandSender, p, amount);
+                }
+            } else {
+                if (Bukkit.getPlayer(strings[0]) == null) {
+                    COULDNT_FIND.msg(commandSender, "%type%", "player", "%thing%", strings[0]);
+                    return;
+                }
+                Player target = Bukkit.getPlayer(strings[0]);
+                KitPvPStats targetStats = KitPvP.getInstance().getStats(target);
+
+                incEventTokens(targetStats, commandSender, target, amount);
+
+                ScoreboardInfo.getInstance().updatePlayer(target);
+            }
+        }
+    }
+
+    @SubCommand
+    private class Take extends SkycadeCommand {
+        Take() {
+            super("take");
+        }
+
+        @Override
+        public void onCommand(CommandSender commandSender, String[] strings) {
+            if (strings.length < 2) {
+                //todo usage
+                return;
+            }
+
+            int amount;
+            try {
+                amount = Integer.parseInt(strings[1]);
+            } catch (NumberFormatException exception) {
+                COULDNT_FIND.msg(commandSender, "%type%", "number", "%thing%", strings[1]);
+                return;
+            }
+
+            if (strings[0].equalsIgnoreCase("all")) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    takeEventTokens(KitPvP.getInstance().getStats(p), commandSender, p, amount);
+                }
+            } else {
+                if (Bukkit.getPlayer(strings[0]) == null) {
+                    COULDNT_FIND.msg(commandSender, "%type%", "player", "%thing%", strings[0]);
+                    return;
+                }
+                Player target = Bukkit.getPlayer(strings[0]);
+                KitPvPStats targetStats = KitPvP.getInstance().getStats(target);
+
+                takeEventTokens(targetStats, commandSender, target, amount);
+
+                ScoreboardInfo.getInstance().updatePlayer(target);
+            }
+        }
+    }
+
+    @SubCommand
+    private class Set extends SkycadeCommand {
+        Set() {
+            super("reset");
+        }
+
+        @Override
+        public void onCommand(CommandSender commandSender, String[] strings) {
+            if (strings.length < 1) {
+                //todo usage
+                return;
+            }
+
+            if (strings[0].equalsIgnoreCase("all")) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    resetEventTokens(KitPvP.getInstance().getStats(p), commandSender, p);
+                }
+            } else {
+                if (Bukkit.getPlayer(strings[0]) == null) {
+                    COULDNT_FIND.msg(commandSender, "%type%", "player", "%thing%", strings[0]);
+                    return;
+                }
+                Player target = Bukkit.getPlayer(strings[0]);
+                KitPvPStats targetStats = KitPvP.getInstance().getStats(target);
+
+                resetEventTokens(targetStats, commandSender, target);
+
+                ScoreboardInfo.getInstance().updatePlayer(target);
+            }
+        }
+    }
+
+    private void resetEventTokens(KitPvPStats targetStats, CommandSender commandSender, Player target) {
         targetStats.setEventCoins(0);
         YOUR_CURRENCY_RESET.msg(target, "%currency%", "event tokens");
-        CURRENCY_RESET.msg(member.getPlayer(), "%player%", target.getName(), "%currency%", "event tokens");
+        CURRENCY_RESET.msg(commandSender, "%player%", target.getName(), "%currency%", "event tokens");
     }
 
-    private void incEventTokens(KitPvPStats targetStats, Member member, Player target, int amount) {
+    private void incEventTokens(KitPvPStats targetStats, CommandSender commandSender, Player target, int amount) {
         targetStats.setEventCoins(targetStats.getEventTokens() + amount);
         YOUR_CURRENCY_ADDED.msg(target, "%amount%", Integer.toString(amount), "%currency%", "event tokens", "%total%", Integer.toString(targetStats.getEventTokens()));
-        CURRENCY_ADDED.msg(member.getPlayer(), "%amount%", Integer.toString(amount), "%currency%", "event tokens", "%player%", target.getName());
+        CURRENCY_ADDED.msg(commandSender, "%amount%", Integer.toString(amount), "%currency%", "event tokens", "%player%", target.getName());
     }
 
-    private void takeEventTokens(KitPvPStats targetStats, Member member, Player target, int amount) {
+    private void takeEventTokens(KitPvPStats targetStats, CommandSender commandSender, Player target, int amount) {
         if (targetStats.getEventTokens() - amount < 0)
-            resetEventTokens(targetStats, member, target);
+            resetEventTokens(targetStats, commandSender, target);
         else {
             targetStats.setEventCoins(targetStats.getEventTokens() - amount);
             YOUR_CURRENCY_REMOVED.msg(target, "%amount%", Integer.toString(amount), "%currency%", "event tokens");
-            CURRENCY_REMOVED.msg(member.getPlayer(), "%player%", target.getName(), "%amount%", Integer.toString(amount), "%currency%", "event tokens", "%total%", Integer.toString(targetStats.getEventTokens()));
+            CURRENCY_REMOVED.msg(commandSender, "%player%", target.getName(), "%amount%", Integer.toString(amount), "%currency%", "event tokens", "%total%", Integer.toString(targetStats.getEventTokens()));
         }
     }
-
 }

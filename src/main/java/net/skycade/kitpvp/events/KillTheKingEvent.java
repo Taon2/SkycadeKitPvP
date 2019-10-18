@@ -143,7 +143,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
     }
 
     @Override
-    public void end(){
+    public void end() {
         super.end();
 
         Player kingPlayer = Bukkit.getPlayer(this.king);
@@ -173,11 +173,13 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerDeath(PlayerDeathEvent e){
+    public void onPlayerDeath(PlayerDeathEvent e) {
         if (begin == null) return;
 
         Player died = e.getEntity();
-        if (this.king.equals(died.getUniqueId())){
+        if (this.king.equals(died.getUniqueId())) {
+            stop();
+
             Player killer = null;
             //try to get the killer
             try {
@@ -201,7 +203,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                     }
                 });
             }
-            catch (Exception ignored){}
+            catch (Exception ignored) {}
 
             //Dish out event token rewards for the king
             KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
@@ -214,8 +216,6 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                 KILLTHEKING_KILLED_BY.broadcast("%player%", killer.getName());
             else
                 KILLTHEKING_KILLED.broadcast();
-
-            stop();
         }
 
     }

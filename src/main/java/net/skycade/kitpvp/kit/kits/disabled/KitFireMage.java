@@ -107,7 +107,7 @@ public class KitFireMage extends Kit {
                 if (t > 0.4 + 0.1)
                     this.cancel();
             }
-        }.runTaskTimer(getKitManager().getPlugin(), 0, 1);
+        }.runTaskTimer(getKitManager().getKitPvP(), 0, 1);
 
     }
 

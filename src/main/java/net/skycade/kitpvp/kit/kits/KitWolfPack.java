@@ -94,14 +94,14 @@ public class KitWolfPack extends Kit {
     }
 
     public void removeWolf(Integer seconds) {
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
             for (Wolf wolf : wolfList)
                 wolf.remove();
         }, seconds * 20);
     }
 
     public void removeWolf(Integer seconds, Player p) {
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
             for (Wolf wolf : wolfList)
                 if (wolf.getOwner().getUniqueId() == p.getUniqueId()) {
                     wolf.remove();

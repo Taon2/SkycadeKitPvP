@@ -143,7 +143,7 @@ public class KitVampire extends Kit {
         ParticleEffect.REDSTONE.display(0.3F, 0.3F, 0.3F, 0, 5, p.getEyeLocation(), 40);
 
         if (seconds > 0)
-            Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
+            Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
                 if (getKitManager().getKitPvP().getSpawnRegion().contains(p))
                     return;
                 p.setLastDamageCause(new EntityDamageByEntityEvent(vampire, p, DamageCause.ENTITY_ATTACK, 6));

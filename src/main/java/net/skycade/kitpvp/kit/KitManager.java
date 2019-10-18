@@ -3,20 +3,15 @@ package net.skycade.kitpvp.kit;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.commands.*;
 import net.skycade.kitpvp.commands.staff.*;
-import net.skycade.kitpvp.coreclasses.commands.Command;
-import net.skycade.kitpvp.coreclasses.commands.CommandManager;
-import net.skycade.kitpvp.coreclasses.commands.Module;
 import net.skycade.kitpvp.kit.kits.*;
 import net.skycade.kitpvp.kit.kits.disabled.*;
 import org.bukkit.Bukkit;
 
 import java.util.*;
 
-public class KitManager extends Module {
+public class KitManager {
 
     private final KitPvP plugin;
-
-    private final List<Command> commands = new ArrayList<>();
 
     private final Map<KitType, Kit> kits = new LinkedHashMap<>();
     private final Map<UUID, Integer> signRefreshCooldown = new HashMap<>();
@@ -27,39 +22,26 @@ public class KitManager extends Module {
         registerKits();
         startSignMapUpdate();
 
-        CommandCrate commandCrate = new CommandCrate(this);
-        CommandViewKit commandViewKit = new CommandViewKit(this);
+        new CommandEventShop();
+        new CommandKit();
+        new CommandKitName();
+        new CommandKitPvPHelp();
+        new CommandPrestige();
+        new CommandRefreshKit();
+        new CommandShop();
+        new CommandSoup();
+        new CommandViewKit();
+        new CommandViewStats();
 
-        registerCommand(commandViewKit);
-        registerCommand(commandCrate);
-        registerCommand(new CommandEco(this));
-        registerCommand(new CommandKit(this));
-        registerCommand(new CommandKitName(this));
-        registerCommand(new CommandKitPvPHelp(this));
-        registerCommand(new CommandResetStats(this));
-        registerCommand(new CommandShop(this));
-        registerCommand(new CommandPrestige(this));
-        registerCommand(new CommandSoup(this));
-        registerCommand(new CommandRefreshKit(this));
-        registerCommand(new CommandViewKit(this));
-        registerCommand(new CommandUnlock(this));
-        registerCommand(new CommandSetStats(this));
-        registerCommand(new CommandTopStats(this));
-        registerCommand(new CommandUnlock(this));
-        registerCommand(new CommandViewStats(this));
-        registerCommand(new CommandKitsUnlocked(this));
-        registerCommand(new RefundCommand(this));
-        registerCommand(new CommandReload(this));
-        registerCommand(new TriggerEventCommand(this));
-
-        registerListener(commandViewKit);
-        registerListener(commandCrate);
-    }
-
-    @Override
-    public void registerCommand(Command<? extends Module> command) {
-        commands.add(command);
-        CommandManager.getInstance().registerCommand(command);
+        //Staff commands
+        new CommandEco();
+        new CommandEventEco();
+        new CommandKitsUnlocked();
+        new CommandRefund();
+        new CommandReload();
+        new CommandResetStats();
+        new CommandSetStats();
+        new CommandTriggerEvent();
     }
 
     private void registerKits() {
@@ -142,10 +124,6 @@ public class KitManager extends Module {
             });
             removeFromEntry.forEach(signRefreshCooldown::remove);
         }, 20, 20);
-    }
-
-    public List<Command> getCommands() {
-        return commands;
     }
 
     public Map<KitType, Kit> getKits() {

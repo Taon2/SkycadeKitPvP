@@ -18,12 +18,12 @@ public class Messages {
     public static final Localization.Message KIT_EQUIPPED = new Localization.Message("kit-equipped", "&7Equipped kit &a%kit%&7.");
     public static final Localization.Message KIT_EQUIPPED_RESPAWN = new Localization.Message("kit-equipped", "&7Equipped kit &a%kit%&7. It will be active after you respawn.");
     public static final Localization.Message YOU_PURCHASED = new Localization.Message("you-purchased", "&7You bought &a%thing% &7for &a%amount% &7%currency%.");
-    public static final Localization.Message DIDNT_CHOOSE = new Localization.Message("didnt-choose", "&cYou didn't choose &b%thing%&c.");
-    public static final Localization.Message NOT_ENOUGH_CURRENCY = new Localization.Message("not-enough-currency", "&cYou don't have enough &b%currency% &cto purchase this &b%thing%&c.");
+    public static final Localization.Message NOT_ENOUGH_CURRENCY = new Localization.Message("not-enough-currency", "&cYou don't have enough &b%currency% &cto purchase &b%thing%&c.");
     public static final Localization.Message KIT_DISABLED = new Localization.Message("kit-disabled", "&cThat kit is disabled.");
-    public static final Localization.Message ALREADY_UNLOCKED = new Localization.Message("already-unlocked", "&cYou already have this &b%thing% &cunlocked.");
+    public static final Localization.Message ALREADY_UNLOCKED = new Localization.Message("already-unlocked", "&cYou already have &b%thing% &cunlocked.");
     public static final Localization.Message KITS_ROTATED = new Localization.Message("kits-rotated", "&7Kits in the shop have &arotated&7!");
     public static final Localization.Message DONT_OWN = new Localization.Message("dont-own", "&cYou don't own &b%kit%&c, /shop to purchase!");
+    public static final Localization.Message SOMETHING_WRONG = new Localization.Message("something-wrong", "&cSomething went wrong.");
 
     //KitPvP Command Messages
     public static final Localization.Message USING_KIT = new Localization.Message("command.using-kit", "&a%player%&7 is using the &a%kitname%&7 kit.");
@@ -45,6 +45,7 @@ public class Messages {
     public static final Localization.Message YOUR_STAT_SET = new Localization.Message("command.your-stat-set", "&7Your %stat% has been set to %amount%.");
     public static final Localization.Message MAX_PRESTIGE = new Localization.Message("command.max-prestige", "&cYou are already the maximum prestige level!.");
     public static final Localization.Message NOT_THAT_PRESTIGE = new Localization.Message("command.not-that-prestige", "&cYou cannot rank up to that prestige yet.");
+    public static final Localization.Message STATS_UPDATING = new Localization.Message("stats-updating", "&cStats are currently updating, please try again soon.");
 
     //KitPvP Stats
     public static final Localization.Message STATS = new Localization.Message("command.your-stat-set",
@@ -229,13 +230,14 @@ public class Messages {
                 KIT_EQUIPPED,
                 KIT_EQUIPPED_RESPAWN,
                 YOU_PURCHASED,
-                DIDNT_CHOOSE,
                 NOT_ENOUGH_CURRENCY,
                 KIT_DISABLED,
                 ALREADY_UNLOCKED,
                 MAX_PRESTIGE,
                 NOT_THAT_PRESTIGE,
-                DONT_OWN
+                DONT_OWN,
+                STATS_UPDATING,
+                SOMETHING_WRONG
         );
     }
 }

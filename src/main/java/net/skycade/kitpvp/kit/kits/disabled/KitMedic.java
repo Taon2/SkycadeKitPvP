@@ -107,7 +107,7 @@ public class KitMedic extends Kit {
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 1));
             PLAYER_HEALED.msg(p, "%player%", player.getName());
         });
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), medpack::remove, 8);
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), medpack::remove, 8);
     }
 
     public void onMove(Player p) {

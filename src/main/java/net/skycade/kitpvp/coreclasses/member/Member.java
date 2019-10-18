@@ -13,6 +13,10 @@ public class Member {
     private String name;
     private UUID lastKiller = null;
 
+    public Member(String name) {
+        this.name = name;
+    }
+
     public Member(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
@@ -32,13 +36,6 @@ public class Member {
 
     public Player getPlayer() {
         return Bukkit.getPlayer(getUUID());
-    }
-
-    public void message(String message) {
-        Player p = getPlayer();
-        if (p != null) {
-            p.sendMessage("§7" + message);
-        }
     }
 
     public void update() {

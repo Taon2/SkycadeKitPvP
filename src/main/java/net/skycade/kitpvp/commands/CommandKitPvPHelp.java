@@ -1,53 +1,22 @@
 package net.skycade.kitpvp.commands;
 
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.skycade.kitpvp.coreclasses.commands.Command;
+import com.google.common.collect.ImmutableList;
+import net.skycade.SkycadeCore.utility.command.SkycadeCommand;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.kit.KitManager;
-import net.skycade.kitpvp.managers.PageManager;
-import org.bukkit.Bukkit;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
+import net.skycade.kitpvp.coreclasses.member.MemberManager;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+public class CommandKitPvPHelp extends SkycadeCommand {
 
-import static net.skycade.kitpvp.Messages.COULDNT_FIND;
-
-public class CommandKitPvPHelp extends Command<KitManager> {
-
-    private PageManager pageManager;
-
-    public CommandKitPvPHelp(KitManager module) {
-        super(module, "Get an overview of the KitPvP commands.", new Permission("kitpvp.default", PermissionDefault.TRUE), "kitpvphelp", "kithelp", "kitpvpcommands", "kitcommands");
-        Bukkit.getScheduler().runTaskLater(getModule().getKitPvP(),
-                () -> this.pageManager = new PageManager("KitPvP commands ", "/kitpvphelp ", getPageElements(), 9, 6)
-                , 100);
+    public CommandKitPvPHelp() {
+        super("kitpvphelp", ImmutableList.of("kithelp", "kitpvpcommands", "kitcommands"));
     }
 
     @Override
-    public void execute(Member member, String aliasUsed, String... args) {
-        if (pageManager == null) {
-            COULDNT_FIND.msg(member.getPlayer(), "%type%", "page manager", "%thing%", "KitPvP Help");
-            return;
-        }
+    public void onCommand(CommandSender commandSender, String[] strings) {
+        Member member = MemberManager.getInstance().getMember((Player) commandSender);
 
-        int page = 1;
-        if (args.length > 0) {
-            if (!parseInt(member, args[0]))
-                return;
-            page = Integer.parseInt(args[0]);
-        }
-        pageManager.sendToPlayer(member.getPlayer(), page);
+        //todo send usages
     }
-
-
-    private List<BaseComponent[]> getPageElements() {
-        List<BaseComponent[]> elements = new ArrayList<>();
-        for (Command command : getModule().getCommands())
-            elements.add(TextComponent.fromLegacyText("§a/" + command.getAliases()[0] + " " + command.getUsageToString() + "- §7" + command.getDescription().toLowerCase()));
-        return elements;
-    }
-
 }

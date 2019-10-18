@@ -14,6 +14,7 @@ import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -40,11 +41,13 @@ class ConfirmMenu extends DynamicGui {
                     Kit kit = kitType.getKit();
                     if (stats.getCoins() - kit.getPrice() < 0) {
                         NOT_ENOUGH_CURRENCY.msg(p, "%currency%", "coins", "%thing%", "kit " + kit.getName());
+                        p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                         new ShopMenu(kitManager, member).open(p);
                         return;
                     }
 
                     YOU_PURCHASED.msg(p, "%thing%", kit.getName(), "%amount%", Integer.toString(kit.getPrice()), "%currency%", "coins");
+                    p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
                     stats.addKit(kitType);
                     stats.setCoins(stats.getCoins() - kit.getPrice());
 
@@ -65,18 +68,21 @@ class ConfirmMenu extends DynamicGui {
         setItemInteraction(11, new ItemBuilder(CONFIRM).build(),
                 (p, ev) -> {
                     KitPvPStats stats = eventShopManager.getKitPvP().getStats(member);
-                    if (eventShopItem == null)
+                    if (stats.getEventTokens() - eventShopItem.getPrice() < 0) {
+                        NOT_ENOUGH_CURRENCY.msg(member.getPlayer(), "%currency%", "event tokens", "%thing%", ChatColor.stripColor(eventShopItem.getName()));
+                        p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
+                        new EventShopMenu(eventShopManager, member).open(p);
                         return;
-                    if (stats.getEventTokens() - eventShopItem.getPrice() < 0)
-                        return;
+                    }
 
                     YOU_PURCHASED.msg(member.getPlayer(), "%thing%", eventShopItem.getName(), "%amount%", Integer.toString(eventShopItem.getPrice()), "%currency%", "event tokens");
+                    p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
                     eventShopItem.giveReward(((Player) ev.getWhoClicked()).getPlayer());
                     stats.setEventCoins(stats.getEventTokens() - eventShopItem.getPrice());
 
                     ScoreboardInfo.getInstance().updatePlayer(member.getPlayer());
                     MemberManager.getInstance().update(member);
-                    Bukkit.getScheduler().runTaskLater(eventShopManager.getPlugin(), () -> member.getPlayer().closeInventory(), 1);
+                    Bukkit.getScheduler().runTaskLater(eventShopManager.getKitPvP(), () -> member.getPlayer().closeInventory(), 1);
 
                     new EventShopMenu(eventShopManager, member).open(p);
                 });

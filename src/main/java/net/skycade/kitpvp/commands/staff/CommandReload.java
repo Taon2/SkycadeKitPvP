@@ -1,24 +1,24 @@
 package net.skycade.kitpvp.commands.staff;
 
-import net.skycade.kitpvp.coreclasses.commands.Command;
-import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.SkycadeCore.utility.command.SkycadeCommand;
+import net.skycade.SkycadeCore.utility.command.addons.Permissible;
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.kit.Kit;
-import net.skycade.kitpvp.kit.KitManager;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.command.CommandSender;
 
 import static net.skycade.kitpvp.Messages.RELOADED;
 
-public class CommandReload extends Command<KitManager> {
-    public CommandReload(KitManager module) {
-        super(module, "Reloads configuration files.", new Permission("kitpvp.admin", PermissionDefault.OP), "kitpvpreload");
+@Permissible("kitpvp.admin")
+public class CommandReload extends SkycadeCommand {
+    public CommandReload() {
+        super("kitpvpreload");
     }
 
     @Override
-    public void execute(Member member, String aliasUsed, String... args) {
-        for (Kit kit : getModule().getKits().values()) {
+    public void onCommand(CommandSender commandSender, String[] strings) {
+        for (Kit kit : KitPvP.getInstance().getKitManager().getKits().values()) {
             if (kit.isEnabled()) kit.reloadConfig();
         }
-        RELOADED.msg(member.getPlayer());
+        RELOADED.msg(commandSender);
     }
 }

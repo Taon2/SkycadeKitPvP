@@ -113,7 +113,7 @@ public class KitPlush extends Kit {
         cat.setCustomName("Plush cat");
         p.playSound(loc, Sound.CAT_MEOW, 0, 0);
 
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
             Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(cat.getLocation(), 3.5);
             targetPlayers.forEach(target -> {
                 /* if (level == 1) {

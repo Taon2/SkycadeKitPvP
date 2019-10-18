@@ -11,6 +11,7 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -27,7 +28,7 @@ import static net.skycade.kitpvp.Messages.KIT_EQUIPPED_RESPAWN;
 public class KitMenu extends DynamicGui {
 
     public KitMenu(KitManager kitManager, Member member) {
-        super(ChatColor.GOLD + "" + ChatColor.BOLD + "Kits", 6);
+        super(ChatColor.GOLD + "" + ChatColor.BOLD + member.getName() + "'s Kits", 6);
 
         KitPvPStats stats = kitManager.getKitPvP().getStats(member);
         Map<KitType, Kit> kits = KitPvP.getInstance().getKitManager().getKits();
@@ -73,17 +74,20 @@ public class KitMenu extends DynamicGui {
                 (p, ev) -> {
                     if (!stats.hasKit(kit.getKitType())) {
                         DONT_OWN.msg(member.getPlayer(), "%kit%", "kit " + kit.getName());
+                        p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                         return;
                     }
 
                     if (stats.getActiveKit() == kit.getKitType()) {
                         ALREADY_USING.msg(member.getPlayer(), "%kit%", kit.getKitType().getKit().getName());
+                        p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                         return;
                     }
 
                     if (kitManager.getKitPvP().getSpawnRegion().contains(member.getPlayer())) {
                         if (kitManager.getSignMap().containsKey(member.getUUID())) {
                             ON_COOLDOWN_NO_TIME.msg(member.getPlayer(), "%thing%", "Kit refreshing");
+                            p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                             return;
                         }
                         UtilPlayer.reset(member.getPlayer());
@@ -92,9 +96,11 @@ public class KitMenu extends DynamicGui {
                         kit.beginApplyKit(member.getPlayer());
                         kit.giveSoup(member.getPlayer(), 32);
                         KIT_EQUIPPED.msg(member.getPlayer(), "%kit%", kit.getName());
+                        p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
                     } else {
                         kitManager.getKitPvP().getStats(member).setKitPreference(kit.getKitType());
                         KIT_EQUIPPED_RESPAWN.msg(member.getPlayer(), "%kit%", kit.getName());
+                        p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
                     }
 
                     p.getOpenInventory().close();

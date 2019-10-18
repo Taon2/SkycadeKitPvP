@@ -1,6 +1,7 @@
 package net.skycade.kitpvp.listeners.player;
 
 import net.skycade.kitpvp.KitPvP;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,7 +36,7 @@ public class LastMoveListener implements Listener {
     public static LastMoveListener getInstance() {
         if (instance == null) {
             instance = new LastMoveListener();
-            KitPvP.getInstance().getKitManager().registerListener(instance);
+            Bukkit.getPluginManager().registerEvents(instance, KitPvP.getInstance());
         }
         return instance;
     }

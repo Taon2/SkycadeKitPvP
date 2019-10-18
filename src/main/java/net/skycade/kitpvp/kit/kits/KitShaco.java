@@ -120,7 +120,7 @@ public class KitShaco extends Kit {
         p.getInventory().setArmorContents(null);
         p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 200, 0));
 
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
             if (shacoArmor.containsKey(p.getUniqueId())) {
                 p.getInventory().setArmorContents(shacoArmor.get(p.getUniqueId()));
                 shacoArmor.remove(p.getUniqueId());
@@ -155,7 +155,7 @@ public class KitShaco extends Kit {
         }
         damagee.damage(8, shooter);
         shacoHit.add(damagee.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> shacoHit.remove(damagee.getUniqueId()), 5 * 20);
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> shacoHit.remove(damagee.getUniqueId()), 5 * 20);
     }
 
     @EventHandler

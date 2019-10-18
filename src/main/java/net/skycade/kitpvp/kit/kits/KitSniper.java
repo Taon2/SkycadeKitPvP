@@ -92,7 +92,7 @@ public class KitSniper extends Kit {
             return;
         }
         bowCooldown.add(shooter.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> bowCooldown.remove(shooter.getUniqueId()), 20);
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> bowCooldown.remove(shooter.getUniqueId()), 20);
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {

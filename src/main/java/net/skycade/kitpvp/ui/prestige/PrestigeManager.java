@@ -2,7 +2,6 @@ package net.skycade.kitpvp.ui.prestige;
 
 import net.skycade.SkycadeCore.CoreSettings;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.coreclasses.commands.Module;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
@@ -15,7 +14,7 @@ import java.util.*;
 
 import static net.skycade.kitpvp.Messages.*;
 
-public class PrestigeManager extends Module  {
+public class PrestigeManager {
 
     private final KitPvP plugin;
     private final String prestigeRewardsTable;
@@ -64,7 +63,7 @@ public class PrestigeManager extends Module  {
         }
 
         if (currentLevel >= nextLevel.getLevel()) {
-            ALREADY_UNLOCKED.msg(member.getPlayer(), "%thing%", "prestige rank");
+            ALREADY_UNLOCKED.msg(member.getPlayer(), "%thing%", "prestige rank " + nextLevel.getLevel());
             return false;
         }
 
@@ -74,7 +73,7 @@ public class PrestigeManager extends Module  {
         }
 
         if (stats.getCoins() < nextLevel.getCost()) {
-            NOT_ENOUGH_CURRENCY.msg(member.getPlayer(), "%currency%", "coins", "%thing%", "prestige rank");
+            NOT_ENOUGH_CURRENCY.msg(member.getPlayer(), "%currency%", "coins", "%thing%", "prestige rank " + nextLevel.getLevel());
             return false;
         }
 

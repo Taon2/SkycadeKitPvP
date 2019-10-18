@@ -8,6 +8,7 @@ import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -69,13 +70,15 @@ public class EventShopMenu extends DynamicGui {
 
                         if (diff < clickedItem.getDuration()) {
                             ON_COOLDOWN.msg(member.getPlayer(), "%time%", CoreUtil.niceFormat(clickedItem.getDuration() - ((Long) diff).intValue()), "%thing%", clickedItem.getName());
+                            p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                             return;
                         }
-                    }
 
-                    if (stats.getEventTokens() - clickedItem.getPrice() < 0) {
-                        NOT_ENOUGH_CURRENCY.msg(member.getPlayer(), "%currency%", "event tokens", "%thing%", "upgrade");
-                        return;
+                        if (stats.getEventTokens() - clickedItem.getPrice() < 0) {
+                            NOT_ENOUGH_CURRENCY.msg(member.getPlayer(), "%currency%", "event tokens", "%thing%", ChatColor.stripColor(clickedItem.getName()));
+                            p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
+                            return;
+                        }
                     }
 
                     new ConfirmMenu(eventShopManager, member, clickedItem).open(p);

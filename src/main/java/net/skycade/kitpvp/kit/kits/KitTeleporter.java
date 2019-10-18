@@ -105,7 +105,7 @@ public class KitTeleporter extends Kit {
             Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
             enderpearlCooldown.add(e.getPlayer());
-            Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> enderpearlCooldown.remove(e.getPlayer()), 10);
+            Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> enderpearlCooldown.remove(e.getPlayer()), 10);
         }
     }
     @Override

@@ -88,13 +88,13 @@ public class KitFisherman extends Kit {
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         rodCd.add(p.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> rodCd.remove(p.getUniqueId()), 80);
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> rodCd.remove(p.getUniqueId()), 80);
 
         p.teleport(p.getLocation().add(0, 0.5, 0));
         Vector v = getVectorForPoints(p.getLocation(), target);
         e.getEntity().setVelocity(v);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(getKitManager().getPlugin(), () -> p.setVelocity(v), 5);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(getKitManager().getKitPvP(), () -> p.setVelocity(v), 5);
     }
 
     private Location getTarget(Player hookshooter, Integer amount) {

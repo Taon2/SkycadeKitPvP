@@ -100,7 +100,7 @@ public class KitGhost extends Kit {
     private void levitateInAir(Player target, Integer ticks) {
         if (ticks > 0) {
             int remainingTicks = ticks - 1;
-            Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
+            Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
                 particleEffect(target);
                 target.setVelocity(new Vector(0, 0.1, 0));
                 levitateInAir(target, remainingTicks);

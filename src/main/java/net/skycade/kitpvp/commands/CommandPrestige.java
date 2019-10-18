@@ -1,21 +1,21 @@
 package net.skycade.kitpvp.commands;
 
-import net.skycade.kitpvp.coreclasses.commands.Command;
+import net.skycade.SkycadeCore.utility.command.SkycadeCommand;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.kit.KitManager;
+import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.ui.PrestigeMenu;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-public class CommandPrestige extends Command<KitManager> {
-
-    public CommandPrestige(KitManager module) {
-        super(module, "Opens the prestige GUI.", new Permission("kitpvp.default", PermissionDefault.TRUE), "prestige", "rankup", "levelup", "prestigegui");
+public class CommandPrestige extends SkycadeCommand {
+    public CommandPrestige() {
+        super("prestige");
     }
 
     @Override
-    public void execute(Member member, String aliasUsed, String... args) {
+    public void onCommand(CommandSender commandSender, String[] strings) {
+        Member member = MemberManager.getInstance().getMember((Player) commandSender);
+
         new PrestigeMenu(member, 1).open(member.getPlayer());
     }
-
 }

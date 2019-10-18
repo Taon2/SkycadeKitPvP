@@ -80,7 +80,7 @@ public class KitKangaroo extends Kit {
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         p.setVelocity(new Vector(p.getLocation().getDirection().getX(), getConfig().getDouble("ability.leap-y-velocity"), p.getLocation().getDirection().getZ()).multiply(4));
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> p.setVelocity(new Vector(p.getLocation().getDirection().getX(), 0.15, p.getLocation().getDirection().getZ()).multiply(3)), 3);
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> p.setVelocity(new Vector(p.getLocation().getDirection().getX(), 0.15, p.getLocation().getDirection().getZ()).multiply(3)), 3);
     }
 
     @Override

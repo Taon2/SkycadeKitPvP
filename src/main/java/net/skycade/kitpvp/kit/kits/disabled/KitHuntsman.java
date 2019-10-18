@@ -92,7 +92,7 @@ public class KitHuntsman extends Kit implements Listener {
             return;
         BLEED_ACTIVATED.msg(p);
         huntsmanActiveBleed.add(p.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
             huntsmanActiveBleed.remove(p.getUniqueId());
             BLEED_DEACTIVATED.msg(p);
         }, 7 * 20);
@@ -112,7 +112,7 @@ public class KitHuntsman extends Kit implements Listener {
     private void startBleed(Player huntsman, Player p, int seconds) {
         ParticleEffect.REDSTONE.display(0.3F, 0.3F, 0.3F, 0, 5, p.getEyeLocation(), 40);
         if (seconds > 0)
-            Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
+            Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
                 if (getKitManager().getKitPvP().getSpawnRegion().contains(p))
                     return;
                 p.setLastDamageCause(new EntityDamageByEntityEvent(huntsman, p, DamageCause.ENTITY_ATTACK, 4));

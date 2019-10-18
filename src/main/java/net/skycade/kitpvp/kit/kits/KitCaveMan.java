@@ -113,7 +113,7 @@ public class KitCaveMan extends Kit {
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         abilityCooldown.add(p.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> abilityCooldown.remove(p.getUniqueId()), 2 * 20);
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> abilityCooldown.remove(p.getUniqueId()), 2 * 20);
 
         Block currentBlock = p.getLocation().subtract(0, 1, 0).getBlock();
         if (currentBlock.getType() == Material.AIR)
@@ -142,7 +142,7 @@ public class KitCaveMan extends Kit {
                             player.damage(8 + 3, p);
                 });
             }
-        }.runTaskTimer(getKitManager().getPlugin(), 0, 2);
+        }.runTaskTimer(getKitManager().getKitPvP(), 0, 2);
     }
 
     @EventHandler
