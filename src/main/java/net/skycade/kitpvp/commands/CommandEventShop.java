@@ -4,6 +4,7 @@ import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.events.DoubleCoinsEvent;
 import net.skycade.kitpvp.events.RandomEvent;
+import net.skycade.kitpvp.ui.EventShopMenu;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -19,7 +20,7 @@ public class CommandEventShop extends Command<EventShopManager> {
     @Override
     public void execute(Member member, String aliasUsed, String... args) {
         if (RandomEvent.getCurrent() == null || DoubleCoinsEvent.isActive()) {
-            getModule().getEventShopMenu().open(member);
+            new EventShopMenu(getModule().getKitPvP().getEventShopManager(), member).open(member.getPlayer());
         } else {
             CANNOT_USE.msg(member.getPlayer(), "%thing%", "/eventshop", "%reason%", "during events");
         }

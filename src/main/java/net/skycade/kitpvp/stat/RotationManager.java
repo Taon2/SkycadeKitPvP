@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 
+import static net.skycade.kitpvp.Messages.KITS_ROTATED;
+
 public class RotationManager {
 
     private final JavaPlugin plugin;
@@ -148,7 +150,7 @@ public class RotationManager {
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
             updateRotation();
             startRotationUpdater();
-            Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage("§7Kits in the shop have §arotated§7!"));
+            Bukkit.getOnlinePlayers().forEach(p -> KITS_ROTATED.msg(p));
         }, 20 * nextUpdateSecs);
     }
 

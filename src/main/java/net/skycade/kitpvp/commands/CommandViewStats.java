@@ -28,7 +28,7 @@ public class CommandViewStats extends Command<KitManager> {
         Member target = MemberManager.getInstance().getMember(Bukkit.getPlayer(args[0]));
         KitPvPStats stats = getModule().getKitPvP().getStats(target);
         STATS.msg(member.getPlayer(),
-                "%player%", target.getName(),
+                "%player%", stats.getPrestigeLevel() + target.getName(),
                 "%deaths%", Integer.toString(stats.getDeaths()),
                 "%kills%", Integer.toString(stats.getKills()),
                 "%kdr%", Double.toString(UtilMath.getKDR(member.getKills(), member.getDeaths())),

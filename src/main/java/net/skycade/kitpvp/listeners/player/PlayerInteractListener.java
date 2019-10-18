@@ -32,32 +32,12 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEntityEvent e) {
-        // (if (e.getHand().equals(EquipmentSlot.OFF_HAND)) return;
         if (!(e.getRightClicked() instanceof Player))
             return;
         if (plugin.isInSpawnArea(e.getPlayer()))
             return;
         plugin.getStats(e.getPlayer()).getActiveKit().getKit().onInteract(e.getPlayer(), (Player) e.getRightClicked(),
                 e.getPlayer().getInventory().getItemInHand());
-    }
-
-    @EventHandler
-    public void onNpcInteract(PlayerInteractEntityEvent e) {
-        if (e.getRightClicked().getCustomName() == null)
-            return;
-        String name = e.getRightClicked().getCustomName();
-        Player p = e.getPlayer();
-
-        if (name.equalsIgnoreCase("§5§lCrate"))
-            p.chat("/crate");
-        else if (name.equalsIgnoreCase("§b§lKits"))
-            p.chat("/kits");
-        else if (name.equalsIgnoreCase("§6§lShop"))
-            p.chat("/shop");
-        else if (name.equalsIgnoreCase("§a§lHelp"))
-            p.chat("/kitpvphelp");
-        else if (name.equalsIgnoreCase("§1§lAchievements"))
-            p.chat("/ach");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -73,7 +53,6 @@ public class PlayerInteractListener implements Listener {
                 } else {
                     p.setHealth(maxHealth);
                 }
-                //e.getPlayer().getInventory().setItem(e.getPlayer().getInventory().getHeldItemSlot(), new ItemStack(Material.AIR, 1));
                 final int heldItemSlot = e.getPlayer().getInventory().getHeldItemSlot();
                 new BukkitRunnable() {
                     @Override

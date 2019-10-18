@@ -48,7 +48,7 @@ public class CommandSetStats extends Command<KitManager> {
         } else if (args[1].equalsIgnoreCase("assist") || args[0].equalsIgnoreCase("assists")) {
             stats.setAssists(amount);
             sendMsg("assist", member, target, amount);
-        }else
+        } else
             COULDNT_FIND.msg(member.getPlayer(), "%type%", "stats", "%thing%", args[1]);
 
         ScoreboardInfo.getInstance().updatePlayer(target);

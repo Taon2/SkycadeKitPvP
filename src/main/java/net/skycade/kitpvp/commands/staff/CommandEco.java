@@ -3,6 +3,7 @@ package net.skycade.kitpvp.commands.staff;
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.kit.KitManager;
+import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -54,14 +55,14 @@ public class CommandEco extends Command<KitManager> {
         Player target = Bukkit.getPlayer(args[1]);
         KitPvPStats targetStats = getModule().getKitPvP().getStats(target);
 
-        if (args[0].equalsIgnoreCase("reset")) {
+        if (args[0].equalsIgnoreCase("reset"))
             resetCoins(targetStats, member, target);
-            return;
-        }
-        if (args[0].equalsIgnoreCase("give"))
+        else if (args[0].equalsIgnoreCase("give"))
             incCoins(targetStats, member, target, amount);
         else if (args[0].equalsIgnoreCase("take"))
             takeCoins(targetStats, member, target, amount);
+
+        ScoreboardInfo.getInstance().updatePlayer(target);
     }
 
     private void resetCoins(KitPvPStats targetStats, Member member, Player target) {
@@ -72,7 +73,7 @@ public class CommandEco extends Command<KitManager> {
 
     private void incCoins(KitPvPStats targetStats, Member member, Player target, int amount) {
         targetStats.setCoins(targetStats.getCoins() + amount);
-        YOUR_CURRENCY_ADDED.msg(target, "%amount%", Integer.toString(amount), "%currency%", "coins", "%total%", Integer.toString(targetStats.getEventTokens()));
+        YOUR_CURRENCY_ADDED.msg(target, "%amount%", Integer.toString(amount), "%currency%", "coins", "%total%", Integer.toString(targetStats.getCoins()));
         CURRENCY_ADDED.msg(member.getPlayer(), "%amount%", Integer.toString(amount), "%currency%", "coins", "%player%", target.getName());
     }
 

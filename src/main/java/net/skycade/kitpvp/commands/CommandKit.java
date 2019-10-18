@@ -5,6 +5,7 @@ import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.events.KillTheKingEvent;
 import net.skycade.kitpvp.kit.KitManager;
+import net.skycade.kitpvp.ui.KitMenu;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -25,7 +26,7 @@ public class CommandKit extends Command<KitManager> {
             }
         }
 
-        getModule().getMenu().open(member);
+        new KitMenu(getModule().getKitPvP().getKitManager(), member).open(member.getPlayer());
     }
 
 }	

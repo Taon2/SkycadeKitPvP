@@ -10,6 +10,7 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.disabled.KitMedic;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
@@ -118,14 +119,21 @@ public class PlayerListeners implements Listener {
             e.setCancelled(true);
     }
 
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onPlayerChat(AsyncPlayerChatEvent e) {
+        KitPvPStats stats = plugin.getStats(e.getPlayer());
+
+        String prestige = ChatColor.GRAY + "[" + ChatColor.WHITE + stats.getPrestigeLevel() + "★" + ChatColor.GRAY + "]";
+        e.setFormat(prestige + " " + ChatColor.RESET + e.getFormat());
+    }
+
     private void resetKitAndKS(Player p) {
         KitPvPStats stats = plugin.getStats(p);
         if (stats == null) return;
         stats.applyKitPreference();
         p.getInventory().clear();
-        if (p.getItemOnCursor().getType() != Material.AIR)
+        if (p.getItemOnCursor().getType() != null && p.getItemOnCursor().getType() != Material.AIR)
             p.setItemOnCursor(null);
-        p.updateInventory();
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
         int streak = stats.getStreak();
 

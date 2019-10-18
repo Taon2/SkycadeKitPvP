@@ -21,17 +21,19 @@ public class Messages {
     public static final Localization.Message DIDNT_CHOOSE = new Localization.Message("didnt-choose", "&cYou didn't choose &b%thing%&c.");
     public static final Localization.Message NOT_ENOUGH_CURRENCY = new Localization.Message("not-enough-currency", "&cYou don't have enough &b%currency% &cto purchase this &b%thing%&c.");
     public static final Localization.Message KIT_DISABLED = new Localization.Message("kit-disabled", "&cThat kit is disabled.");
-    public static final Localization.Message ALREADY_UNLOCKED = new Localization.Message("already-unlocked", "&cYou already have this &b%kit% &cunlocked.");
+    public static final Localization.Message ALREADY_UNLOCKED = new Localization.Message("already-unlocked", "&cYou already have this &b%thing% &cunlocked.");
+    public static final Localization.Message KITS_ROTATED = new Localization.Message("kits-rotated", "&7Kits in the shop have &arotated&7!");
+    public static final Localization.Message DONT_OWN = new Localization.Message("dont-own", "&cYou don't own &b%kit%&c, /shop to purchase!");
 
     //KitPvP Command Messages
-    public static final Localization.Message USING_KIT = new Localization.Message("using-kit", "&a%player%&7 is using the &a%kitname%&7 kit.");
+    public static final Localization.Message USING_KIT = new Localization.Message("command.using-kit", "&a%player%&7 is using the &a%kitname%&7 kit.");
     public static final Localization.Message NO_LAST_KILLSTREAK = new Localization.Message("command.no-last-killstreak", "&cLast killstreak can't be found for %player%.");
     public static final Localization.Message CURRENT_KILlSTREAK_HIGHER = new Localization.Message("command.current-killstreak-higher", "&cCurrent killstreak is higher than last killstreak.");
     public static final Localization.Message KILLSTREAK_REFUNDED = new Localization.Message("command.killstreak-refunded", "&aYour killstreak was refunded.");
-    public static final Localization.Message KIT_UNLOCKED = new Localization.Message("command.kit-unlocked", "&a&l%player% now has %kit% unlocked.");
+    public static final Localization.Message KIT_UNLOCKED = new Localization.Message("command.kit-unlocked", "&a%player% now has %kit% unlocked.");
     public static final Localization.Message YOUR_KIT_UNLOCKED = new Localization.Message("command.your-kit-unlocked", "&a%kit% &7was unlocked.");
-    public static final Localization.Message KIT_LOCKED = new Localization.Message("command.kit-locked", "&a&l%player% now has %kit% locked.");
-    public static final Localization.Message YOUR_KIT_LOCKED = new Localization.Message("command.your-kit-locked", "&a%kit% &7was unlocked.");
+    public static final Localization.Message KIT_LOCKED = new Localization.Message("command.kit-locked", "&a%player% now has %kit% locked.");
+    public static final Localization.Message YOUR_KIT_LOCKED = new Localization.Message("command.your-kit-locked", "&a%kit% &7was locked.");
     public static final Localization.Message CURRENCY_RESET = new Localization.Message("command.currency-reset", "&7%player%'s %currency% were &creset&7.");
     public static final Localization.Message YOUR_CURRENCY_RESET = new Localization.Message("command.your-currency-reset", "&7Your %currency% were &creset&7.");
     public static final Localization.Message CURRENCY_ADDED = new Localization.Message("command.currency-added", "&a%amount% &7%currency% given to &a%player%&7.");
@@ -39,8 +41,10 @@ public class Messages {
     public static final Localization.Message CURRENCY_REMOVED = new Localization.Message("command.currency-removed", "&a%player%'s &7balance was lowered by &a%amount% &7%currency% to &a%total%&7.");
     public static final Localization.Message YOUR_CURRENCY_REMOVED = new Localization.Message("command.your-currency-removed", "&7Your balance was lowered by &a%amount% &7%currency%.");
     public static final Localization.Message STATS_RESET = new Localization.Message("command.stats-reset", "&a%player%'s &7stats are reset.");
-    public static final Localization.Message STAT_SET = new Localization.Message("command.stat-set", "%player%'s %stat% has been set to %amount%.");
+    public static final Localization.Message STAT_SET = new Localization.Message("command.stat-set", "&a%player%'s %stat% has been set to %amount%.");
     public static final Localization.Message YOUR_STAT_SET = new Localization.Message("command.your-stat-set", "&7Your %stat% has been set to %amount%.");
+    public static final Localization.Message MAX_PRESTIGE = new Localization.Message("command.max-prestige", "&cYou are already the maximum prestige level!.");
+    public static final Localization.Message NOT_THAT_PRESTIGE = new Localization.Message("command.not-that-prestige", "&cYou cannot rank up to that prestige yet.");
 
     //KitPvP Stats
     public static final Localization.Message STATS = new Localization.Message("command.your-stat-set",
@@ -135,9 +139,6 @@ public class Messages {
     public static final Localization.Message PLAYER_HEALED = new Localization.Message("kit.medic.player-healed", "&c%player% was healed!");
     public static final Localization.Message FIRE_REMOVED = new Localization.Message("kit.firearcher.fire-removed", "&cFire removed.!");
 
-
-
-
     static void init() {
         Localization.getInstance().registerMessages("skycade.kitpvp",
                 COULDNT_FIND,
@@ -231,7 +232,10 @@ public class Messages {
                 DIDNT_CHOOSE,
                 NOT_ENOUGH_CURRENCY,
                 KIT_DISABLED,
-                ALREADY_UNLOCKED
+                ALREADY_UNLOCKED,
+                MAX_PRESTIGE,
+                NOT_THAT_PRESTIGE,
+                DONT_OWN
         );
     }
 }

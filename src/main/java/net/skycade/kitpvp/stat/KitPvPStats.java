@@ -12,6 +12,7 @@ public class KitPvPStats {
 
     private Integer lastStreak;
 
+    private int prestigeLevel = 0;
     private int kills = 0;
     private int deaths = 0;
     private int coins = 0;
@@ -19,14 +20,14 @@ public class KitPvPStats {
     private int streak = 0;
     private int highestStreak = 0;
     private int assists = 0;
-    private KitType activeKit = KitType.ARCHER;
-    private KitType kitPreference = KitType.ARCHER;
+    private KitType activeKit = KitType.CHANCE;
+    private KitType kitPreference = KitType.CHANCE;
     private Map<KitType, KitData> kits = new HashMap<>();
     private ArrayList<EventShopItem> upgrades = new ArrayList<>();
 
 
     public KitPvPStats() {
-        //Unlocked from the start:
+        //Unlocked from the start
         for (String kitType : KitPvP.getInstance().getConfig().getStringList("start-kits")) {
             kits.put(KitType.byAlias(kitType), new KitData(KitType.byAlias(kitType)));
         }
@@ -124,12 +125,12 @@ public class KitPvPStats {
     }
 
     public void resetKits() {
-        KitType kit1 = KitType.ARCHER;
-        KitType kit2 = KitType.CHANCE;
-        Map<KitType, KitData> map = new HashMap<>();
-        map.put(kit1, new KitData(kit1));
-        map.put(kit2, new KitData(kit2));
-        kits = map;
+        kits.clear();
+
+        //Keep starting kits
+        for (String kitType : KitPvP.getInstance().getConfig().getStringList("start-kits")) {
+            kits.put(KitType.byAlias(kitType), new KitData(KitType.byAlias(kitType)));
+        }
     }
 
     public void removeKit(KitType type) {
@@ -150,4 +151,11 @@ public class KitPvPStats {
         return lastStreak;
     }
 
+    public int getPrestigeLevel() {
+        return prestigeLevel;
+    }
+
+    public void setPrestigeLevel(int prestigeLevel) {
+        this.prestigeLevel = prestigeLevel;
+    }
 }

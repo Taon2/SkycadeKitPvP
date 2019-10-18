@@ -2,6 +2,7 @@ package net.skycade.kitpvp.commands.staff;
 
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import org.bukkit.Bukkit;
@@ -54,14 +55,15 @@ public class CommandEventEco extends Command<EventShopManager> {
         Player target = Bukkit.getPlayer(args[1]);
         KitPvPStats targetStats = getModule().getKitPvP().getStats(target);
 
-        if (args[0].equalsIgnoreCase("reset")) {
+        if (args[0].equalsIgnoreCase("reset"))
             resetEventTokens(targetStats, member, target);
-            return;
-        }
         if (args[0].equalsIgnoreCase("give"))
             incEventTokens(targetStats, member, target, amount);
         else if (args[0].equalsIgnoreCase("take"))
             takeEventTokens(targetStats, member, target, amount);
+
+        ScoreboardInfo.getInstance().updatePlayer(target);
+
     }
 
     private void resetEventTokens(KitPvPStats targetStats, Member member, Player target) {

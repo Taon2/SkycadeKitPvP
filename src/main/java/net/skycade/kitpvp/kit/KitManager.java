@@ -8,8 +8,6 @@ import net.skycade.kitpvp.coreclasses.commands.CommandManager;
 import net.skycade.kitpvp.coreclasses.commands.Module;
 import net.skycade.kitpvp.kit.kits.*;
 import net.skycade.kitpvp.kit.kits.disabled.*;
-import net.skycade.kitpvp.ui.KitsMenu;
-import net.skycade.kitpvp.ui.ShopMenu;
 import org.bukkit.Bukkit;
 
 import java.util.*;
@@ -23,17 +21,12 @@ public class KitManager extends Module {
     private final Map<KitType, Kit> kits = new LinkedHashMap<>();
     private final Map<UUID, Integer> signRefreshCooldown = new HashMap<>();
 
-    private final KitsMenu kitsMenu;
-    private final ShopMenu shopMenu;
-
     public KitManager(KitPvP plugin) {
         this.plugin = plugin;
 
         registerKits();
         startSignMapUpdate();
 
-        kitsMenu = new KitsMenu(this);
-        shopMenu = new ShopMenu(this);
         CommandCrate commandCrate = new CommandCrate(this);
         CommandViewKit commandViewKit = new CommandViewKit(this);
 
@@ -45,6 +38,7 @@ public class KitManager extends Module {
         registerCommand(new CommandKitPvPHelp(this));
         registerCommand(new CommandResetStats(this));
         registerCommand(new CommandShop(this));
+        registerCommand(new CommandPrestige(this));
         registerCommand(new CommandSoup(this));
         registerCommand(new CommandRefreshKit(this));
         registerCommand(new CommandViewKit(this));
@@ -58,8 +52,6 @@ public class KitManager extends Module {
         registerCommand(new CommandReload(this));
         registerCommand(new TriggerEventCommand(this));
 
-        registerListener(shopMenu);
-        registerListener(kitsMenu);
         registerListener(commandViewKit);
         registerListener(commandCrate);
     }
@@ -162,14 +154,6 @@ public class KitManager extends Module {
 
     public Map<UUID, Integer> getSignMap() {
         return signRefreshCooldown;
-    }
-
-    public KitsMenu getMenu() {
-        return kitsMenu;
-    }
-
-    public ShopMenu getShopMenu() {
-        return shopMenu;
     }
 
     public KitPvP getKitPvP() {

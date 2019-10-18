@@ -13,6 +13,7 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.listeners.WorldListeners;
 import net.skycade.kitpvp.listeners.chat.ChatClick;
 import net.skycade.kitpvp.listeners.player.*;
+import net.skycade.kitpvp.ui.prestige.PrestigeManager;
 import net.skycade.kitpvp.scoreboard.HighestKsUpdater;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPDB;
@@ -32,6 +33,7 @@ public class KitPvP extends SkycadePlugin {
 
     private static KitPvP instance;
     private KitManager kitManager;
+    private PrestigeManager prestigeManager;
     private EventShopManager eventShopManager;
     private RotationManager rotationManager;
     private HighestKsUpdater ksUpdater;
@@ -73,7 +75,8 @@ public class KitPvP extends SkycadePlugin {
 
         defaults.put("bounties", new YamlConfiguration());
 
-        defaults.put("database.kitpvp-table", "skycade_KitPvPMembers");
+        defaults.put("database.kitpvp-table", "skycade_kitpvp_members");
+        defaults.put("database.kitpvp-prestige-levels", "skycade_kitpvp_prestige_levels");
 
         setConfigDefaults(defaults);
         loadDefaultConfig();
@@ -88,6 +91,7 @@ public class KitPvP extends SkycadePlugin {
         MemberManager.getInstance();
 
         this.kitManager = new KitManager(this);
+        this.prestigeManager = new PrestigeManager(this);
         this.eventShopManager = new EventShopManager(this);
         this.rotationManager = new RotationManager();
         this.ksUpdater = new HighestKsUpdater(this);
@@ -188,6 +192,10 @@ public class KitPvP extends SkycadePlugin {
 
     public KitManager getKitManager() {
         return kitManager;
+    }
+
+    public PrestigeManager getPrestigeManager() {
+        return prestigeManager;
     }
 
     public EventShopManager getEventShopManager() {

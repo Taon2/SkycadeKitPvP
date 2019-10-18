@@ -4,6 +4,7 @@ import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.kit.KitManager;
+import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
@@ -36,6 +37,8 @@ public class RefundCommand extends Command<KitManager> {
         }
         stats.setStreak(stats.getLastStreak());
         KILLSTREAK_REFUNDED.msg(target.getPlayer());
+
+        ScoreboardInfo.getInstance().updatePlayer(target.getPlayer());
     }
 
 }

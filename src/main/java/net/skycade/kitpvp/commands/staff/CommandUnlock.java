@@ -59,7 +59,7 @@ public class CommandUnlock extends Command<KitManager> {
         } else if (args[2].equalsIgnoreCase("lock")) {
             if (args[1].equalsIgnoreCase("all")) {
                 stats.resetKits();
-                KIT_LOCKED.msg(target, "%kit%", "every");
+                KIT_LOCKED.msg(target, "%player%", member.getName(), "%kit%", "every kit");
                 return;
             }
             Kit kit = getKit(args, member);
@@ -67,12 +67,14 @@ public class CommandUnlock extends Command<KitManager> {
                 return;
             stats.removeKit(kit.getKitType());
 
-            KIT_LOCKED.msg(target, "%kit%", kit.getName());
+            KIT_LOCKED.msg(target, "%player%", member.getName(), "%kit%", kit.getName());
             if (!member.getPlayer().equals(target))
                 YOUR_KIT_LOCKED.msg(target, "%kit%", kit.getName());
             return;
         }
         member.message(getUsageToString());
+
+        ScoreboardInfo.getInstance().updatePlayer(target);
     }
 
     private Kit getKit(String[] args, Member member) {

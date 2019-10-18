@@ -4,7 +4,6 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.commands.CommandEventShop;
 import net.skycade.kitpvp.commands.staff.CommandEventEco;
 import net.skycade.kitpvp.coreclasses.commands.Module;
-import net.skycade.kitpvp.ui.EventShopMenu;
 import net.skycade.kitpvp.ui.eventshopitems.items.ItemCoinBoost;
 import net.skycade.kitpvp.ui.eventshopitems.items.ItemKeepKillstreak;
 import net.skycade.kitpvp.ui.eventshopitems.items.ItemPotionEffect;
@@ -25,20 +24,16 @@ public class EventShopManager extends Module {
     private YamlConfiguration yaml;
     private final KitPvP plugin;
     private final Map<String, EventShopItem> eventShopItems = new LinkedHashMap<>();
-    private final EventShopMenu eventShopMenu;
 
     public EventShopManager (KitPvP plugin) {
         this.plugin = plugin;
 
         configManager();
 
-        eventShopMenu = new EventShopMenu(this);
         registerEventShopItems();
 
         registerCommand(new CommandEventShop(this));
         registerCommand(new CommandEventEco(this));
-
-        registerListener(eventShopMenu);
     }
 
     private void registerEventShopItems(){
@@ -55,10 +50,6 @@ public class EventShopManager extends Module {
 
     public Map<String, EventShopItem> getEventShopItems() {
         return eventShopItems;
-    }
-
-    public EventShopMenu getEventShopMenu() {
-        return eventShopMenu;
     }
 
     public KitPvP getKitPvP() {

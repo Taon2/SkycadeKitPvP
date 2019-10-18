@@ -3,18 +3,19 @@ package net.skycade.kitpvp.commands;
 import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.kit.KitManager;
-import net.skycade.kitpvp.ui.ShopMenu;
+import net.skycade.kitpvp.ui.PrestigeMenu;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-public class CommandShop extends Command<KitManager> {
+public class CommandPrestige extends Command<KitManager> {
 
-    public CommandShop(KitManager module) {
-        super(module, "Opens the shop GUI.", new Permission("kitpvp.default", PermissionDefault.TRUE), "shop");
+    public CommandPrestige(KitManager module) {
+        super(module, "Opens the prestige GUI.", new Permission("kitpvp.default", PermissionDefault.TRUE), "prestige", "rankup", "levelup", "prestigegui");
     }
 
     @Override
     public void execute(Member member, String aliasUsed, String... args) {
-        new ShopMenu(getModule().getKitPvP().getKitManager(), member).open(member.getPlayer());
+        new PrestigeMenu(member, 1).open(member.getPlayer());
     }
+
 }
