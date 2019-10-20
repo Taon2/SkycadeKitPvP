@@ -2,11 +2,15 @@ package net.skycade.kitpvp.events;
 
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.bukkitevents.KitPvPEventStartEvent;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -77,6 +81,10 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
         begin = System.currentTimeMillis();
 
         Player kingPlayer = Bukkit.getPlayer(this.king);
+
+        KitPvPEventStartEvent eventStartEvent = new KitPvPEventStartEvent(kingPlayer);
+        Bukkit.getServer().getPluginManager().callEvent(eventStartEvent);
+
         KILLTHEKING_START.broadcast("%player%", kingPlayer.getName());
         for(Player pl: Bukkit.getOnlinePlayers()){
             pl.playSound(pl.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);

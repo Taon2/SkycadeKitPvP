@@ -2,6 +2,7 @@ package net.skycade.kitpvp.events;
 
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.bukkitevents.KitPvPEventStartEvent;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.*;
@@ -65,6 +66,10 @@ public class TagEvent extends RandomEvent implements Listener {
         begin = System.currentTimeMillis();
 
         Player infectedPlayer = Bukkit.getPlayer(this.infected);
+
+        KitPvPEventStartEvent eventStartEvent = new KitPvPEventStartEvent(infectedPlayer);
+        Bukkit.getServer().getPluginManager().callEvent(eventStartEvent);
+
         TAG_START.broadcast("%player%", infectedPlayer.getName());
         for(Player pl: Bukkit.getOnlinePlayers()){
             pl.playSound(pl.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);

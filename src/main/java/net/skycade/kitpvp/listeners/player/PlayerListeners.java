@@ -101,6 +101,10 @@ public class PlayerListeners implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerMove(PlayerMoveEvent e) {
         if (e.getFrom().getBlock().equals(e.getTo().getBlock())) return;
+
+        KitPvPStats stats = KitPvP.getInstance().getStats(e.getPlayer());
+        stats.getActiveKit().getKit().onMove(e.getPlayer());
+
         if (!plugin.getSpawnRegion().contains(e.getTo()) || plugin.getSpawnRegion().contains(e.getFrom())) return;
         new BukkitRunnable() {
             @Override
@@ -174,7 +178,6 @@ public class PlayerListeners implements Listener {
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> UtilPlayer.reset(p), 1);
         p.setHealth(p.getMaxHealth());
         p.setVelocity(new Vector(0, 0, 0));
-        p.setGameMode(GameMode.SURVIVAL);
         p.setGameMode(GameMode.SURVIVAL);
         p.teleport(KitPvP.getInstance().getSpawnLocation());
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), p::updateInventory, 10);

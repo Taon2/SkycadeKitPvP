@@ -2,7 +2,7 @@ name: KitPvP
 main: net.skycade.kitpvp.KitPvP
 version: 4.0.0-SNAPSHOT
 author: ["WhiteWalker72", "Riccardo Bello (RickyB98)", "Taon2"]
-depend: [SkycadeCore]
+depend: [SkycadeCore, GuardianBeamAPI]
 commands:
     givekey:
     keys:

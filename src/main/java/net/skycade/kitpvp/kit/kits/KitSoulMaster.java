@@ -86,7 +86,6 @@ public class KitSoulMaster extends Kit {
                         new PotionEffect(PotionEffectType.SLOW, 200, 1));
         });
         p.getWorld().playEffect(p.getLocation(), Effect.ENDER_SIGNAL, 1);
-        p.getWorld().playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
         shootParticlesFromLoc(p, ParticleEffect.SMOKE_LARGE, 500, 0.5F);
     }
 

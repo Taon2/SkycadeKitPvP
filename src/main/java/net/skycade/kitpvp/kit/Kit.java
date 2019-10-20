@@ -5,7 +5,6 @@ import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.PlayerInteractManager;
 import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.runnable.ItemRunnable;
@@ -16,7 +15,6 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -151,6 +149,7 @@ public abstract class Kit implements Listener {
 
     public void onMove(Player p) {
     }
+
     public void removeSummon(int seconds, Player p) {
     }
 
@@ -211,20 +210,6 @@ public abstract class Kit implements Listener {
                         Material.YELLOW_FLOWER, Material.GRASS, Material.LONG_GRASS, Material.WEB,
                         Material.ACTIVATOR_RAIL, Material.POWERED_RAIL, Material.RAILS, Material.DETECTOR_RAIL)
                 .contains(type);
-    }
-
-    public ItemStack[] getArmour(Material mat, int durability, int protection) {
-        return getArmour(mat, durability, protection, null);
-    }
-
-    public ItemStack[] getArmour(Material mat, int durability, int protection, Color colour) {
-        String material = mat.toString().split("_")[0];
-        List<ItemStack> armour = new ArrayList<>();
-        for (String type : Arrays.asList("BOOTS", "LEGGINGS", "CHESTPLATE", "HELMET"))
-            armour.add(new ItemBuilder(Material.getMaterial(material + "_" + type)).setColour(colour)
-                    .addEnchantment(Enchantment.DURABILITY, durability)
-                    .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, protection).build());
-        return armour.toArray(new ItemStack[armour.size()]);
     }
 
     private void clearArmor(Player player){

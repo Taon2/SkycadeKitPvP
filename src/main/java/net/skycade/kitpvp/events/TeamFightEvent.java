@@ -8,6 +8,7 @@ import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.SkycadeCore.utility.scoreboard.ScoreboardManager;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPCoinsRewardEvent;
+import net.skycade.kitpvp.bukkitevents.KitPvPEventStartEvent;
 import net.skycade.kitpvp.events.teamfight.TeamFightPacketListener;
 import net.skycade.kitpvp.events.teamfight.TeamFightStartDelay;
 import net.skycade.kitpvp.stat.KitPvPStats;
@@ -150,11 +151,14 @@ public class TeamFightEvent extends RandomEvent implements Listener {
 
         TEAMFIGHT_START.broadcast();
 
-        Bukkit.getOnlinePlayers().forEach(e -> {
-            if (team1.contains(e.getUniqueId())) {
-                TEAMFIGHT_TEAM1.msg(e);
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            KitPvPEventStartEvent eventStartEvent = new KitPvPEventStartEvent(player);
+            Bukkit.getServer().getPluginManager().callEvent(eventStartEvent);
+
+            if (team1.contains(player.getUniqueId())) {
+                TEAMFIGHT_TEAM1.msg(player);
             } else {
-                TEAMFIGHT_TEAM2.msg(e);
+                TEAMFIGHT_TEAM2.msg(player);
             }
         });
 

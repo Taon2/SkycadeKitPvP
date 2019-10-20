@@ -83,5 +83,13 @@
             <scope>system</scope>
             <systemPath>${basedir}/jars/ActionBarAPI-1.5.4.jar</systemPath>
         </dependency>
+        <!--ActionBarAPI-->
+        <dependency>
+            <groupId>net.jaxonbrown</groupId>
+            <artifactId>guardianbeam</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/jars/GuardianBeamAPI-0.4.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>
