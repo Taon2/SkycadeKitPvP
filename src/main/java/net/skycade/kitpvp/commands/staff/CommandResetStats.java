@@ -12,8 +12,7 @@ import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-import static net.skycade.kitpvp.Messages.COULDNT_FIND;
-import static net.skycade.kitpvp.Messages.STATS_RESET;
+import static net.skycade.kitpvp.Messages.*;
 
 @Permissible("kitpvp.admin")
 public class CommandResetStats extends SkycadeCommand {
@@ -23,8 +22,10 @@ public class CommandResetStats extends SkycadeCommand {
 
     @Override
     public void onCommand(CommandSender commandSender, String[] strings) {
-        if (strings.length < 1)
+        if (strings.length < 1) {
+            RESETSTATS_USAGE.msg(commandSender);
             return;
+        }
         if (Bukkit.getPlayer(strings[0]) == null) {
             COULDNT_FIND.msg(commandSender, "%type%", "player", "%thing%", strings[0]);
             return;

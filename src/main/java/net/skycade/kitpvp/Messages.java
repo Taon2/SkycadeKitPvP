@@ -5,8 +5,6 @@ import net.skycade.SkycadeCore.Localization;
 public class Messages {
 
     //KitPvP General Messages
-    public static final Localization.Message RELOADED = new Localization.Message("reloaded", "&aReloaded!");
-    public static final Localization.Message NOT_LOADED = new Localization.Message("not-loaded", "&cYour data has not loaded yet, please wait...");
     public static final Localization.Message ALL_KITS_UNLOCKED = new Localization.Message("all-kits-unlocked", "&7You unlocked &aall &7the kits! You unlocked the &aKitMaster &7kit.");
     public static final Localization.Message COULDNT_FIND = new Localization.Message("couldnt-find", "&cCould not find &b%type% &c'&b%thing%&c'.");
     public static final Localization.Message ON_COOLDOWN = new Localization.Message("on-cooldown",  "&cYou need to wait another &b%time% &cbefore using &b%thing% &cagain!");
@@ -23,7 +21,6 @@ public class Messages {
     public static final Localization.Message ALREADY_UNLOCKED = new Localization.Message("already-unlocked", "&cYou already have &b%thing% &cunlocked.");
     public static final Localization.Message KITS_ROTATED = new Localization.Message("kits-rotated", "&7Kits in the shop have &arotated&7!");
     public static final Localization.Message DONT_OWN = new Localization.Message("dont-own", "&cYou don't own &b%kit%&c, /shop to purchase!");
-    public static final Localization.Message SOMETHING_WRONG = new Localization.Message("something-wrong", "&cSomething went wrong.");
 
     //KitPvP Command Messages
     public static final Localization.Message USING_KIT = new Localization.Message("command.using-kit", "&a%player%&7 is using the &a%kitname%&7 kit.");
@@ -45,7 +42,42 @@ public class Messages {
     public static final Localization.Message YOUR_STAT_SET = new Localization.Message("command.your-stat-set", "&7Your %stat% has been set to %amount%.");
     public static final Localization.Message MAX_PRESTIGE = new Localization.Message("command.max-prestige", "&cYou are already the maximum prestige level!.");
     public static final Localization.Message NOT_THAT_PRESTIGE = new Localization.Message("command.not-that-prestige", "&cYou cannot rank up to that prestige yet.");
-    public static final Localization.Message STATS_UPDATING = new Localization.Message("stats-updating", "&cStats are currently updating, please try again soon.");
+
+    //KitPvP Command Usages
+    public static final Localization.Message SOUP_USAGE = new Localization.Message("usage.soup", "&7/soup");
+    public static final Localization.Message REFRESHKIT_USAGE = new Localization.Message("usage.refreshkit", "&7/refreshkit");
+    public static final Localization.Message KIT_USAGE = new Localization.Message("usage.kit", "&7/kit");
+    public static final Localization.Message SHOP_USAGE = new Localization.Message("usage.shop", "&7/shop");
+    public static final Localization.Message EVENTSHOP_USAGE = new Localization.Message("usage.eventshop", "&7/eventshop");
+    public static final Localization.Message PRESTIGE_USAGE = new Localization.Message("usage.prestige", "&7/prestige");
+    public static final Localization.Message KITNAME_USAGE = new Localization.Message("usage.kitname", "&7/kitname &a<player>");
+    public static final Localization.Message VIEWKIT_USAGE = new Localization.Message("usage.viewkit", "&7/viewkit &a<kitname>");
+    public static final Localization.Message TRIGGEREVENT_USAGE = new Localization.Message("usage.triggerevent", "&7/triggerevent &a<event>");
+    public static final Localization.Message ECO_USAGE = new Localization.Message("usage.eco", "&7/eco &a<give/take/reset> <player/all> <amount>");
+    public static final Localization.Message EVENTECO_USAGE = new Localization.Message("usage.eventeco", "&7/eventeco &a<give/take/reset> <player/all> <amount>");
+    public static final Localization.Message REFUNDKS_USAGE = new Localization.Message("usage.refundks", "&7/refundks &a<player>");
+    public static final Localization.Message SETSTATS_USAGE = new Localization.Message("usage.setstats", "&7/setstat &a<player> <stat> <amount>");
+    public static final Localization.Message RESETSTATS_USAGE = new Localization.Message("usage.resetstats", "&7/resetstats &a<player>");
+    public static final Localization.Message LOCK_UNLOCK_USAGE = new Localization.Message("usage.lock-unlock", "&7/kit &a<lock/unlock> <player/all> <kitname>");
+    public static final Localization.Message KITSUNLOCKED_USAGE = new Localization.Message("usage.kitsunlocked", "&7/kitsunlocked &a<player>");
+
+    public static final Localization.Message KITPVPHELP_TITLE = new Localization.Message("title.kitpvphelp", "&7------------------&2KitPvP Help&7------------------");
+    public static final Localization.Message SOUP_DESCRIPTION = new Localization.Message("description.soup", "&7Gives the player soup.");
+    public static final Localization.Message REFRESHKIT_DESCRIPTION = new Localization.Message("description.refreshkit", "&7Refreshes a players current kit.");
+    public static final Localization.Message KIT_DESCRIPTION = new Localization.Message("description.kit", "&7Opens the kit menu.");
+    public static final Localization.Message SHOP_DESCRIPTION = new Localization.Message("description.shop", "&7Opens the shop menu.");
+    public static final Localization.Message EVENTSHOP_DESCRIPTION = new Localization.Message("description.eventshop", "&7Opens the eventshop menu.");
+    public static final Localization.Message PRESTIGE_DESCRIPTION = new Localization.Message("description.prestige", "&7Opens the prestige menu.");
+    public static final Localization.Message KITNAME_DESCRIPTION = new Localization.Message("description.kitname", "&7Displays the kit a player is currently using.");
+    public static final Localization.Message VIEWKIT_DESCRIPTION = new Localization.Message("description.viewkit", "&7Displays the contents of a kit.");
+    public static final Localization.Message TRIGGEREVENT_DESCRIPTION = new Localization.Message("description.triggerevent", "&7Starts an event.");
+    public static final Localization.Message ECO_DESCRIPTION = new Localization.Message("description.eco", "&7Changes a player's coin balance.");
+    public static final Localization.Message EVENTECO_DESCRIPTION = new Localization.Message("description.eventeco", "&7Changes a player's event token balance.");
+    public static final Localization.Message REFUNDKS_DESCRIPTION = new Localization.Message("description.refundks", "&7Gives that player their previous killstreak.");
+    public static final Localization.Message SETSTATS_DESCRIPTION = new Localization.Message("description.setstats", "&7Sets a player's kills, deaths, killstreak, highestkillstreak, or assists.");
+    public static final Localization.Message RESETSTATS_DESCRIPTION = new Localization.Message("description.resetstats", "&7Resets all stats for a player.");
+    public static final Localization.Message LOCK_UNLOCK_DESCRIPTION = new Localization.Message("description.lock-unlock", "&7Locks or unlocks a kit for a player.");
+    public static final Localization.Message KITSUNLOCKED_DESCRIPTION = new Localization.Message("description.kitsunlocked", "&7Displays all kits unlocked by a player.");
 
     //KitPvP Stats
     public static final Localization.Message STATS = new Localization.Message("command.your-stat-set",
@@ -64,6 +96,7 @@ public class Messages {
 
     //KitPvP Event Messages
     public static final Localization.Message NO_SUCH_EVENT = new Localization.Message("event.no-such-event", "&cNo such event.");
+    public static final Localization.Message EVENT_ALREADY_RUNNING = new Localization.Message("event.already-running", "&cAn event is already running!");
 
     //Double Credits
     public static final Localization.Message DOUBLECREDITS_START = new Localization.Message("event.doublecredits-start", "&a&lDOUBLE CREDITS! &r&aFor the next 30 minutes, everybody earns double the amount of coins!");
@@ -136,7 +169,7 @@ public class Messages {
     public static final Localization.Message POSITIONS_SWITCHED = new Localization.Message("kit.shaco.positions-switched", "&9Positions switched!");
     public static final Localization.Message HEALED = new Localization.Message("kit.vampire.healed", "&cHealed!");
     public static final Localization.Message BIT_BY = new Localization.Message("kit.vampire.bit-by", "&cYou are bit by &f%player%&c.");
-    public static final Localization.Message YOURE_FROZEN = new Localization.Message("kit.dualblader.frozen", "&aYou were frozen in place!");
+    public static final Localization.Message YOURE_FROZEN = new Localization.Message("kit.dualblader.frozen", "&aYou were frozen in place by &b%player% &ausing &b%kit%!");
     public static final Localization.Message PLAYER_HEALED = new Localization.Message("kit.medic.player-healed", "&c%player% was healed!");
     public static final Localization.Message FIRE_REMOVED = new Localization.Message("kit.firearcher.fire-removed", "&cFire removed.!");
 
@@ -225,7 +258,6 @@ public class Messages {
                 FIRE_REMOVED,
                 ON_COOLDOWN_NO_TIME,
                 OFF_COOLDOWN,
-                NOT_LOADED,
                 ALREADY_USING,
                 KIT_EQUIPPED,
                 KIT_EQUIPPED_RESPAWN,
@@ -236,8 +268,40 @@ public class Messages {
                 MAX_PRESTIGE,
                 NOT_THAT_PRESTIGE,
                 DONT_OWN,
-                STATS_UPDATING,
-                SOMETHING_WRONG
+                EVENT_ALREADY_RUNNING,
+                TRIGGEREVENT_USAGE,
+                ECO_USAGE,
+                EVENTECO_USAGE,
+                KITSUNLOCKED_USAGE,
+                REFUNDKS_USAGE,
+                SETSTATS_USAGE,
+                LOCK_UNLOCK_USAGE,
+                TRIGGEREVENT_DESCRIPTION,
+                ECO_DESCRIPTION,
+                EVENTECO_DESCRIPTION,
+                KITSUNLOCKED_DESCRIPTION,
+                REFUNDKS_DESCRIPTION,
+                SETSTATS_DESCRIPTION,
+                LOCK_UNLOCK_DESCRIPTION,
+                KITPVPHELP_TITLE,
+                SOUP_USAGE,
+                REFRESHKIT_USAGE,
+                KIT_USAGE,
+                SHOP_USAGE,
+                EVENTSHOP_USAGE,
+                PRESTIGE_USAGE,
+                KITNAME_USAGE,
+                VIEWKIT_USAGE,
+                RESETSTATS_USAGE,
+                SOUP_DESCRIPTION,
+                REFRESHKIT_DESCRIPTION,
+                KIT_DESCRIPTION,
+                SHOP_DESCRIPTION,
+                EVENTSHOP_DESCRIPTION,
+                PRESTIGE_DESCRIPTION,
+                KITNAME_DESCRIPTION,
+                VIEWKIT_DESCRIPTION,
+                RESETSTATS_DESCRIPTION
         );
     }
 }

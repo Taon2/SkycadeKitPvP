@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static net.skycade.kitpvp.Messages.COULDNT_FIND;
+import static net.skycade.kitpvp.Messages.KITSUNLOCKED_USAGE;
 
 @Permissible("kitpvp.admin")
 public class CommandKitsUnlocked extends SkycadeCommand {
@@ -24,7 +25,7 @@ public class CommandKitsUnlocked extends SkycadeCommand {
         Member member = MemberManager.getInstance().getMember((Player) commandSender);
 
         if (strings.length < 1) {
-            //todo usage
+            KITSUNLOCKED_USAGE.msg(commandSender);
             return;
         }
         if (Bukkit.getPlayer(strings[0]) == null) {

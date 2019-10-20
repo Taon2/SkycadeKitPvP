@@ -4,6 +4,7 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -17,78 +18,44 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
-import static java.lang.Integer.parseInt;
 import static net.skycade.kitpvp.Messages.CURRENT_COMBO;
 
 public class KitStrafe extends Kit {
 
+    private ItemStack boots;
+    private ItemStack weapon;
+
+    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
+
     private final Map<UUID, Integer> comboMap = new HashMap<>();
 
     public KitStrafe(KitManager kitManager) {
-        super(kitManager, "Strafe", KitType.STRAFE, 41000, false, "Do you like to strafe?");
+        super(kitManager, "Strafe", KitType.STRAFE, 41000, false, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        boots = new ItemBuilder(
+                Material.DIAMOND_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build();
+        weapon = new ItemBuilder(
+                Material.STONE_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5).build();
 
-        defaultsMap.put("kit.icon.material", "DIAMOND_BOOTS");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 41000);
+        constantEffects.put(PotionEffectType.SPEED, 3);
+        constantEffects.put(PotionEffectType.FAST_DIGGING, 2);
+        constantEffects.put(PotionEffectType.INCREASE_DAMAGE, 0);
 
-        defaultsMap.put("inventory.sword.material", "STONE_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
-
-        defaultsMap.put("armor.boots.material", "DIAMOND");
-        defaultsMap.put("armor.boots.enchantments.durability", 5);
-        defaultsMap.put("armor.boots.enchantments.protection", 1);
-
-        defaultsMap.put("potions.pot1", "SPEED:3");
-        defaultsMap.put("potions.pot2", "FAST_DIGGING:2");
-        defaultsMap.put("potions.pot3", "INCREASE_DAMAGE:0");
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.DIAMOND_BOOTS);
+        setIcon(icon);
     }
 
     @Override
     public void applyKit(Player p) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+        p.getInventory().addItem(weapon);
+        p.getInventory().setBoots(boots);
 
-        p.getInventory().setBoots(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS"))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.boots.enchantments.durability"))
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.boots.enchantments.protection")).build());
-
-        String[] pot1 = getConfig().getString("potions.pot1").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot1[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot1[1])));
-
-        String[] pot2 = getConfig().getString("potions.pot2").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot2[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot2[1])));
-
-        String[] pot3 = getConfig().getString("potions.pot3").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot3[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot3[1])));
+        constantEffects.forEach((effect, amplifier) -> {
+            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+        });
     }
 
     @Override
@@ -120,14 +87,23 @@ public class KitStrafe extends Kit {
         particleTracerEffect(p, Color.RED, 30);
     }
 
-    @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Comboing someone will make your", "§7hits more deadly");
-    }
-
     @EventHandler
     public void on(PlayerQuitEvent e) {
         comboMap.remove(e.getPlayer().getUniqueId());
     }
 
+    @Override
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Unobtainable.");
+    }
+
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Nyoom!",
+                "",
+                ChatColor.GRAY + "Comboing someone makes",
+                ChatColor.GRAY + "your hits more deadly."
+        );
+    }
 }

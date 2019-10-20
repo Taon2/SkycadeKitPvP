@@ -18,12 +18,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import static net.skycade.kitpvp.Messages.*;
-import static net.skycade.kitpvp.Messages.KIT_EQUIPPED_RESPAWN;
 
 public class KitMenu extends DynamicGui {
 
@@ -59,12 +57,12 @@ public class KitMenu extends DynamicGui {
 
                     meta.setDisplayName(ChatColor.GREEN + kit.getName());
 
-                    List<String> lore = new ArrayList<>(Arrays.asList(kit.getDescription()));
+                    List<String> lore = new ArrayList<>(kit.getDescription());
                     lore.add("");
                     if (stats.hasKit(kit.getKitType()))
                         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Click to use!");
                     else
-                        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase in /shop!");
+                        lore.addAll(kit.getHowToObtain());
                     meta.setLore(lore);
 
                     item.setItemMeta(meta);

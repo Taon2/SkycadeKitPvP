@@ -89,13 +89,11 @@ public class PlayerDamageListener implements Listener {
         e.getDrops().clear();
         e.setDeathMessage("");
 
-        //removes the wolves from the player before respawning, due to player teleporting back to wolves bug
+        //Removes the wolves from the player before respawning, due to player teleporting back to wolves bug
         Kit playerKit = plugin.getStats(MemberManager.getInstance().getMember(e.getEntity())).getActiveKit().getKit();
-        if (playerKit.getKitType() == KitType.WOLFPACK) {
-            ((KitWolfPack) playerKit).removeWolf(0, e.getEntity());
-        }
+        playerKit.removeSummon(0, e.getEntity());
 
-        if (e.getEntity().isOnline()) plugin.respawn(e.getEntity());
+        if (e.getEntity().isOnline()) PlayerListeners.respawn(e.getEntity());
 
         Player died = e.getEntity();
         Member diedMem = MemberManager.getInstance().getMember(died);
@@ -104,7 +102,7 @@ public class PlayerDamageListener implements Listener {
         // Increase highest killstreak
         int diedStreak = diedStats.getStreak();
 
-        // Increase deaths and reset ks
+        //Increase deaths and reset ks
         diedStats.setDeaths(plugin.getStats(diedMem).getDeaths() + 1);
         diedStats.setStreak(0);
 
@@ -113,7 +111,7 @@ public class PlayerDamageListener implements Listener {
 
         ScoreboardInfo.getInstance().updatePlayer(died);
 
-        // Try to get the killer
+        //Try to get the killer
         Player killer = died.getKiller();
         if (killer == null && lastDamagerMap.get(died.getUniqueId()) != null) {
             String customName;
@@ -170,14 +168,14 @@ public class PlayerDamageListener implements Listener {
             }
         });
 
-        // The same player got killed multiple times
+        //The same player got killed multiple times
         if (noKillRewards(killer, died)) {
             ScoreboardInfo.getInstance().updatePlayer(killer);
             return;
         }
 
         //Give rewards to the killer
-        // Bounties!
+        //Bounties!
         int bounty = 0;
 
         int bountyLevel;

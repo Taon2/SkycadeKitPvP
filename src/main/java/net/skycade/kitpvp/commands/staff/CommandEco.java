@@ -28,7 +28,7 @@ public class CommandEco extends SkycadeCommand {
 
     @Override
     public void onCommand(CommandSender commandSender, String[] strings) {
-        //todo usage
+        ECO_USAGE.msg(commandSender);
     }
 
     @SubCommand
@@ -40,7 +40,7 @@ public class CommandEco extends SkycadeCommand {
         @Override
         public void onCommand(CommandSender commandSender, String[] strings) {
             if (strings.length < 2) {
-                //todo usage
+                ECO_USAGE.msg(commandSender);
                 return;
             }
 
@@ -80,7 +80,7 @@ public class CommandEco extends SkycadeCommand {
         @Override
         public void onCommand(CommandSender commandSender, String[] strings) {
             if (strings.length < 2) {
-                //todo usage
+                ECO_USAGE.msg(commandSender);
                 return;
             }
 
@@ -120,7 +120,7 @@ public class CommandEco extends SkycadeCommand {
         @Override
         public void onCommand(CommandSender commandSender, String[] strings) {
             if (strings.length < 1) {
-                //todo usage
+                ECO_USAGE.msg(commandSender);
                 return;
             }
 

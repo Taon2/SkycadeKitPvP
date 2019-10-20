@@ -4,6 +4,7 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -12,78 +13,38 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.lang.Integer.parseInt;
+import java.util.*;
 
 public class KitGank extends Kit {
 
+    private ItemStack weapon;
+
+    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
+
     public KitGank(KitManager kitManager) {
-        super(kitManager, "Gank", KitType.GANK, 35000, "Gank your enemies");
+        super(kitManager, "Gank", KitType.GANK, 35000, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        weapon = new ItemBuilder(
+                Material.STONE_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.KNOCKBACK, 1).build();
 
-        defaultsMap.put("kit.icon.material", "STONE_SWORD");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 35000);
+        constantEffects.put(PotionEffectType.INCREASE_DAMAGE, 0);
+        constantEffects.put(PotionEffectType.DAMAGE_RESISTANCE, 0);
+        constantEffects.put(PotionEffectType.SPEED, 1);
+        constantEffects.put(PotionEffectType.REGENERATION, 0);
 
-        defaultsMap.put("inventory.sword.material", "STONE_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.knockback", 1);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
-
-        defaultsMap.put("potions.pot1", "INCREASE_DAMAGE:0");
-        defaultsMap.put("potions.pot2", "DAMAGE_RESISTANCE:0");
-        defaultsMap.put("potions.pot3", "SPEED:1");
-        defaultsMap.put("potions.pot4", "REGENERATION:0");
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.STONE_SWORD);
+        setIcon(icon);
     }
 
     @Override
     public void applyKit(Player p) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword.enchantments.knockback"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+        p.getInventory().addItem(weapon);
 
-        String[] pot1 = getConfig().getString("potions.pot1").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot1[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot1[1])));
-
-        String[] pot2 = getConfig().getString("potions.pot2").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot2[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot2[1])));
-
-        String[] pot3 = getConfig().getString("potions.pot3").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot3[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot3[1])));
-
-        String[] pot4 = getConfig().getString("potions.pot4").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot4[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot4[1])));
+        constantEffects.forEach((effect, amplifier) -> {
+            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+        });
     }
 
     @Override
@@ -91,4 +52,18 @@ public class KitGank extends Kit {
         particleTracerEffect(p, Color.GRAY, 20);
     }
 
+    @Override
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
+    }
+
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Strafe's little brother.",
+                "",
+                ChatColor.GRAY + "Has some potion effects,",
+                ChatColor.GRAY + "but no armor."
+        );
+    }
 }

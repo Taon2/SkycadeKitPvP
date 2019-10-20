@@ -62,7 +62,7 @@ public class CommandKit extends SkycadeCommand {
                 member = MemberManager.getInstance().getMember((Player) commandSender);
 
             if (strings.length < 2) {
-                //todo usage
+                LOCK_UNLOCK_USAGE.msg(commandSender);
                 return;
             }
             if (Bukkit.getPlayer(strings[0]) == null) {
@@ -79,7 +79,7 @@ public class CommandKit extends SkycadeCommand {
                         stats.addKit(kitType);
                 });
                 ScoreboardInfo.getInstance().updatePlayer(target);
-                KIT_UNLOCKED.msg(commandSender, "%player%", target.getName(), "%kit%", "every");
+                KIT_UNLOCKED.msg(commandSender, "%player%", target.getName(), "%kit%", "every kit");
                 if (!member.getPlayer().equals(target))
                     YOUR_KIT_UNLOCKED.msg(target, "%kit%", "Every kit");
                 return;
@@ -112,7 +112,7 @@ public class CommandKit extends SkycadeCommand {
                 member = MemberManager.getInstance().getMember((Player) commandSender);
 
             if (strings.length < 2) {
-                //todo usage
+                LOCK_UNLOCK_USAGE.msg(commandSender);
                 return;
             }
             if (Bukkit.getPlayer(strings[0]) == null) {

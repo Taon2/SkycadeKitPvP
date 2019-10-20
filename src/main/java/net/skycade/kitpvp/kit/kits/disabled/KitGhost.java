@@ -7,6 +7,7 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -18,63 +19,40 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 
-import static java.lang.Integer.parseInt;
 import static net.skycade.kitpvp.Messages.GET_SPOOKED;
 
 public class KitGhost extends Kit {
 
+    private ItemStack weapon;
+
+    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
+
     public KitGhost(KitManager kitManager) {
-        super(kitManager, "Ghost", KitType.GHOST, 22000, false, "Very spooky");
+        super(kitManager, "Ghost", KitType.GHOST, 22000, false, getLore());
+
+        weapon = new ItemBuilder(
+                Material.DIAMOND_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 2)
+                .addEnchantment(Enchantment.KNOCKBACK, 1).build();
+
+        constantEffects.put(PotionEffectType.INVISIBILITY, 10);
+        constantEffects.put(PotionEffectType.DAMAGE_RESISTANCE, 1);
+
+        ItemStack icon = new ItemStack(Material.POTION);
+        icon.setDurability((short) 8270);
+        setIcon(icon);
+
         setIcon(new ItemBuilder(new ItemStack(Material.POTION, 1, (short) 8270)).build());
-
-        Map<String, Object> defaultsMap = new HashMap<>();
-
-        defaultsMap.put("kit.icon.material", "POTION");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 22000);
-
-        defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.knockback", 1);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
-
-        defaultsMap.put("potions.pot1", "INVISIBILITY:10");
-        defaultsMap.put("potions.pot2", "DAMAGE_RESISTANCE:1");
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
     }
 
     @Override
     public void applyKit(Player p) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword.enchantments.knockback"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+        p.getInventory().addItem(weapon);
 
-        String[] pot1 = getConfig().getString("potions.pot1").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot1[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot1[1]), false, false));
-
-        String[] pot2 = getConfig().getString("potions.pot2").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot2[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot2[1])));
+        constantEffects.forEach((effect, amplifier) -> {
+            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+        });
     }
 
     @Override
@@ -114,8 +92,17 @@ public class KitGhost extends Kit {
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Right click with your sword", "§7to spook players around you");
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Unobtainable.");
     }
 
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "OooOOOooo!",
+                "",
+                ChatColor.GRAY + "Right clicking will",
+                ChatColor.GRAY + "spook players around you."
+        );
+    }
 }

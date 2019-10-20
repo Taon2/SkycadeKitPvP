@@ -25,80 +25,53 @@ import static net.skycade.kitpvp.Messages.SWING_SPEED_UP;
 
 public class KitUnicorn extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+
     private final Color[] rainbowColors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.AQUA, Color.BLUE, Color.PURPLE, Color.FUCHSIA};
     private final List<UUID> rodUse = new ArrayList<>();
 
     public KitUnicorn(KitManager kitManager) {
-        super(kitManager, "Unicorn", KitType.UNICORN, 40000, false, "Be a mythical creature");
+        super(kitManager, "Unicorn", KitType.UNICORN, 40000, false, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.LEATHER_HELMET)
+                .addEnchantment(Enchantment.DURABILITY, 14)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.PURPLE).build();
+        chestplate = new ItemBuilder(
+                Material.LEATHER_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.WHITE).build();
+        leggings = new ItemBuilder(
+                Material.LEATHER_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.WHITE).build();
+        boots = new ItemBuilder(
+                Material.LEATHER_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .setColour(Color.WHITE).build();
+        weapon = new ItemBuilder(
+                Material.STICK)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
 
-        defaultsMap.put("kit.icon.material", "HAY_BLOCK");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 40000);
-
-        defaultsMap.put("armor.helmet.material", "LEATHER");
-        defaultsMap.put("armor.helmet.enchantments.protection", 3);
-        defaultsMap.put("armor.helmet.enchantments.durability", 14);
-
-        defaultsMap.put("armor.chestplate.material", "LEATHER");
-        defaultsMap.put("armor.chestplate.enchantments.protection", 3);
-        defaultsMap.put("armor.chestplate.enchantments.durability", 12);
-
-        defaultsMap.put("armor.leggings.material", "LEATHER");
-        defaultsMap.put("armor.leggings.enchantments.protection", 2);
-        defaultsMap.put("armor.leggings.enchantments.durability", 12);
-
-        defaultsMap.put("armor.boots.material", "LEATHER");
-        defaultsMap.put("armor.boots.enchantments.protection", 4);
-        defaultsMap.put("armor.boots.enchantments.durability", 12);
-
-        defaultsMap.put("inventory.stick.enchantments.damage-all", 5);
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.HAY_BLOCK);
+        setIcon(icon);
     }
 
     @Override
     public void applyKit(Player p) {
-        p.getInventory().setHelmet(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.helmet.enchantments.protection"))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments.durability"))
-                .setColour(Color.PURPLE).build());
-
-        p.getInventory().setChestplate(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.chestplate.material").toUpperCase() + "_CHESTPLATE"))
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.chestplate.enchantments.protection"))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.chestplate.enchantments.durability"))
-                .setColour(Color.WHITE).build());
-
-        p.getInventory().setLeggings(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.leggings.material").toUpperCase() + "_LEGGINGS"))
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.leggings.enchantments.protection"))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.leggings.enchantments.durability"))
-                .setColour(Color.WHITE).build());
-
-        p.getInventory().setBoots(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS"))
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.boots.enchantments.protection"))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.boots.enchantments.durability"))
-                .setColour(Color.WHITE).build());
-
-        p.getInventory().addItem(new ItemBuilder(
-                Material.STICK)
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.stick.enchantments.damage-all")).build());
+        p.getInventory().addItem(weapon);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
     }
 
     @Override
@@ -156,8 +129,17 @@ public class KitUnicorn extends Kit {
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7You got a chance to gain", "§7damage resistance when getting hit", "§7and a chance to get haste when hitting someone", "§7use your wand to shoot a rainbow");
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Unobtainable.");
     }
 
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "A mythical creature.",
+                "",
+                ChatColor.GRAY + "Shoots rainbows from a wand.",
+                ChatColor.GRAY + "Has a chance to gain resistance and haste."
+        );
+    }
 }

@@ -6,6 +6,7 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -20,68 +21,56 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
-import static java.lang.Integer.parseInt;
 import static net.skycade.kitpvp.Messages.BLEED_ACTIVATED;
 import static net.skycade.kitpvp.Messages.BLEED_DEACTIVATED;
 
 public class KitHuntsman extends Kit implements Listener {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+
+    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
+
     private final List<UUID> huntsmanActiveBleed = new ArrayList<>();
     private final List<UUID> bleeding = new ArrayList<>();
 
     public KitHuntsman(KitManager kitManager) {
-        super(kitManager, "Huntsman", KitType.HUNTSMAN, 40000, false, "Hunt them down!");
+        super(kitManager, "Huntsman", KitType.HUNTSMAN, 40000, false, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.IRON_HELMET).build();
+        chestplate = new ItemBuilder(
+                Material.IRON_CHESTPLATE).build();
+        leggings = new ItemBuilder(
+                Material.IRON_LEGGINGS).build();
+        boots = new ItemBuilder(
+                Material.IRON_BOOTS).build();
+        weapon = new ItemBuilder(
+                Material.STONE_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 2)
+                .addEnchantment(Enchantment.KNOCKBACK, 1).build();
 
-        defaultsMap.put("kit.icon.material", "SKULL_ITEM");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 40000);
+        constantEffects.put(PotionEffectType.JUMP, 0);
 
-        defaultsMap.put("inventory.sword.material", "STONE_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.knockback", 1);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
-
-        defaultsMap.put("armor.material", "IRON");
-        defaultsMap.put("armor.enchantments.durability", 0);
-        defaultsMap.put("armor.enchantments.protection", 0);
-
-        defaultsMap.put("potions.pot1", "JUMP:0");
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.SKULL_ITEM);
+        setIcon(icon);
     }
 
     @Override
     public void applyKit(Player p) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword.enchantments.knockback"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+        p.getInventory().addItem(weapon);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
 
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection")));
-
-        String[] pot1 = getConfig().getString("potions.pot1").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot1[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot1[1])));
+        constantEffects.forEach((effect, amplifier) -> {
+            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+        });
     }
 
     @Override
@@ -130,8 +119,16 @@ public class KitHuntsman extends Kit implements Listener {
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7You can use your sword to give", "§7players a bleed effect");
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Unobtainable.");
     }
 
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "A bloody mess.",
+                "",
+                ChatColor.GRAY + "Makes players bleed."
+        );
+    }
 }

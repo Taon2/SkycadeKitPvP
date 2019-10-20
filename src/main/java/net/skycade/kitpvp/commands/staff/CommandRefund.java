@@ -23,7 +23,7 @@ public class CommandRefund extends SkycadeCommand {
     @Override
     public void onCommand(CommandSender commandSender, String[] strings) {
         if (strings.length < 1) {
-            //todo usage
+            REFUNDKS_USAGE.msg(commandSender);
             return;
         }
         if (Bukkit.getPlayer(strings[0]) == null) {

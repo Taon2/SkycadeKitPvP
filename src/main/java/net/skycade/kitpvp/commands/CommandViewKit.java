@@ -2,8 +2,6 @@ package net.skycade.kitpvp.commands;
 
 import net.skycade.SkycadeCore.utility.command.SkycadeCommand;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.ui.ViewKitMenu;
@@ -12,8 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Map;
 
-import static net.skycade.kitpvp.Messages.COULDNT_FIND;
-import static net.skycade.kitpvp.Messages.KIT_DISABLED;
+import static net.skycade.kitpvp.Messages.*;
 
 public class CommandViewKit extends SkycadeCommand {
     public CommandViewKit() {
@@ -22,23 +19,26 @@ public class CommandViewKit extends SkycadeCommand {
 
     @Override
     public void onCommand(CommandSender commandSender, String[] strings) {
-        Member member = MemberManager.getInstance().getMember((Player) commandSender);
-
-        if (strings.length < 1)
+        if (strings.length < 1) {
+            VIEWKIT_USAGE.msg(commandSender);
             return;
+        }
+
         Kit kit = null;
         for (Map.Entry<KitType, Kit> entry : KitPvP.getInstance().getKitManager().getKits().entrySet())
             if (entry.getValue().getName().equalsIgnoreCase(strings[0]))
                 kit = entry.getValue();
+
         if (kit == null) {
-            COULDNT_FIND.msg(member.getPlayer(), "%type%", "kit name", "%thing%", strings[0]);
-            return;
-        }
-        if (!kit.isEnabled()) {
-            KIT_DISABLED.msg(member.getPlayer());
+            COULDNT_FIND.msg(commandSender, "%type%", "kit name", "%thing%", strings[0]);
             return;
         }
 
-        new ViewKitMenu(kit).open(member.getPlayer());
+        if (!kit.isEnabled()) {
+            KIT_DISABLED.msg(commandSender);
+            return;
+        }
+
+        new ViewKitMenu(kit).open((Player) commandSender);
     }
 }

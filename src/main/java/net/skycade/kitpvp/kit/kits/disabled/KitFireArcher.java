@@ -20,75 +20,67 @@ import static net.skycade.kitpvp.Messages.FIRE_REMOVED;
 
 public class KitFireArcher extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+    private ItemStack bow;
+    private ItemStack arrows;
+
+    private int arrowStartAmount = 1;
+
     private final List<UUID> bowCooldown = new ArrayList<>();
     private final List<UUID> flameCooldown = new ArrayList<>();
 
     public KitFireArcher(KitManager kitManager) {
-        super(kitManager, "FireArcher", KitType.FIREARCHER, 24000, false, "Some of his arrows are", "Enchanted with fire");
+        super(kitManager, "FireArcher", KitType.FIREARCHER, 24000, false, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.LEATHER_HELMET)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+                .setColour(Color.ORANGE).build();
+        chestplate = new ItemBuilder(
+                Material.LEATHER_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+                .setColour(Color.ORANGE).build();
+        leggings = new ItemBuilder(
+                Material.LEATHER_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+                .setColour(Color.ORANGE).build();
+        boots = new ItemBuilder(
+                Material.LEATHER_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+                .setColour(Color.ORANGE).build();
+        weapon = new ItemBuilder(
+                Material.STONE_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
+        bow = new ItemBuilder(
+                Material.BOW)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.ARROW_INFINITE, 1)
+                .addEnchantment(Enchantment.ARROW_DAMAGE, 1).build();
+        arrows = new ItemBuilder(
+                Material.ARROW, arrowStartAmount).build();
 
-        defaultsMap.put("kit.icon.material", "ARROW");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 24000);
-
-        defaultsMap.put("inventory.sword.material", "STONE_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 1);
-
-        defaultsMap.put("inventory.bow.enchantments.durability", 5);
-        defaultsMap.put("inventory.bow.enchantments.arrow-infinite", 1);
-        defaultsMap.put("inventory.bow.enchantments.arrow-damage", 1);
-
-        defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 5);
-        defaultsMap.put("armor.enchantments.protection", 1);
-
-        defaultsMap.put("armor.helmet.material", "LEATHER");
-        defaultsMap.put("armor.helmet.enchantments.durability", 10);
-        defaultsMap.put("armor.helmet.enchantments.protection", 2);
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.ARROW);
+        setIcon(icon);
     }
 
     @Override
     public void applyKit(Player p) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
-
-        p.getInventory().addItem(new ItemBuilder(
-                Material.BOW)
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.bow.enchantments.durability"))
-                .addEnchantment(Enchantment.ARROW_INFINITE, getConfig().getInt("inventory.bow.enchantments.arrow-infinite"))
-                .addEnchantment(Enchantment.ARROW_DAMAGE, getConfig().getInt("inventory.bow.enchantments.arrow-damage")).build());
-
-        p.getInventory().addItem(new ItemBuilder(
-                Material.ARROW, 1).build());
-
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection")));
-
-        p.getInventory().setHelmet(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments.durability"))
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.helmet.enchantments.protection"))
-                .setColour(Color.ORANGE).build());
+        p.getInventory().addItem(weapon);
+        p.getInventory().addItem(bow);
+        p.getInventory().addItem(arrows);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
     }
 
     @Override
@@ -136,10 +128,18 @@ public class KitFireArcher extends Kit {
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Collections.singletonList("§7Your bow fires flaming arrows.");
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Unobtainable.");
     }
 
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Napalm!",
+                "",
+                ChatColor.GRAY + "Shoots flaming arrows."
+        );
+    }
 }
 
 

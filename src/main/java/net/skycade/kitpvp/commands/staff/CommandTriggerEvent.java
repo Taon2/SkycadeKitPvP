@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
 
-import static net.skycade.kitpvp.Messages.NO_SUCH_EVENT;
+import static net.skycade.kitpvp.Messages.*;
 
 @Permissible("kitpvp.admin")
 public class CommandTriggerEvent extends SkycadeCommand {
@@ -18,12 +18,12 @@ public class CommandTriggerEvent extends SkycadeCommand {
     @Override
     public void onCommand(CommandSender commandSender, String[] strings) {
         if (strings.length < 1) {
-            //todo usage
+            TRIGGEREVENT_USAGE.msg(commandSender);
             return;
         }
 
         if (RandomEvent.getCurrent() != null) {
-            //todo message saying running event already
+            EVENT_ALREADY_RUNNING.msg(commandSender);
             return;
         }
 

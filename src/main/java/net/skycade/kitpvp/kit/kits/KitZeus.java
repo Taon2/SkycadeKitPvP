@@ -6,10 +6,7 @@ import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -20,60 +17,62 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
-import static java.lang.Integer.parseInt;
 import static net.skycade.kitpvp.Messages.CANNOT_USE;
 
 public class KitZeus extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+
+    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
+
     public KitZeus(KitManager kitManager) {
-        super(kitManager, "Zeus", KitType.ZEUS, 30000, "Lightning strikes!");
+        super(kitManager, "Zeus", KitType.ZEUS, 30000, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.LEATHER_HELMET)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .setColour(Color.fromRGB(255, 255, 153)).build();
+        chestplate = new ItemBuilder(
+                Material.LEATHER_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .setColour(Color.fromRGB(255, 255, 153)).build();
+        leggings = new ItemBuilder(
+                Material.LEATHER_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .setColour(Color.fromRGB(255, 255, 153)).build();
+        boots = new ItemBuilder(
+                Material.LEATHER_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .setColour(Color.fromRGB(255, 255, 153)).build();
+        weapon = new ItemBuilder(
+                Material.BLAZE_ROD)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
 
-        defaultsMap.put("kit.icon.material", "BLAZE_ROD");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 30000);
+        constantEffects.put(PotionEffectType.FIRE_RESISTANCE, 0);
 
-        defaultsMap.put("inventory.blaze-rod.enchantments.damage-all", 5);
-
-        defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 12);
-        defaultsMap.put("armor.enchantments.protection", 4);
-
-        defaultsMap.put("potions.pot1", "FIRE_RESISTANCE:0");
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.BLAZE_ROD);
+        setIcon(icon);
     }
 
     @Override
     public void applyKit(Player p) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.BLAZE_ROD)
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.blaze-rod.enchantments.damage-all")).build());
+        p.getInventory().addItem(weapon);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
 
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection"),
-                Color.fromBGR(153, 255, 255)));
-
-        String[] pot1 = getConfig().getString("potions.pot1").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot1[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot1[1])));
+        constantEffects.forEach((effect, amplifier) -> {
+            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+        });
     }
 
     private static List<Material> allowedTypes;
@@ -124,8 +123,16 @@ public class KitZeus extends Kit {
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7There is a chance to strike lightning", "§7when you hit someone");
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /eventshop!");
     }
 
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Thou hast been smitten!",
+                "",
+                ChatColor.GRAY + "Strikes lightning on your foes."
+        );
+    }
 }

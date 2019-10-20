@@ -6,24 +6,25 @@ import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.region.DataPoint;
 import net.skycade.kitpvp.coreclasses.region.Region;
-import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.events.RandomEvent;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.listeners.WorldListeners;
 import net.skycade.kitpvp.listeners.chat.ChatClick;
 import net.skycade.kitpvp.listeners.player.*;
-import net.skycade.kitpvp.ui.prestige.PrestigeManager;
 import net.skycade.kitpvp.scoreboard.HighestKsUpdater;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.stat.RotationManager;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
-import org.bukkit.*;
+import net.skycade.kitpvp.ui.prestige.PrestigeManager;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -48,7 +49,6 @@ public class KitPvP extends SkycadePlugin {
 
         defaults.put("start-coins", 3500);
         defaults.put("start-kits", Arrays.asList(KitType.ARCHER.getAlias(), KitType.CHANCE.getAlias()));
-        defaults.put("start-keys", 1);
         defaults.put("rotation-seconds", 3600);
         defaults.put("kits-rotation-amount", 18);
         defaults.put("required-xp-multiplier", 1);
@@ -65,10 +65,10 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("spawn-location", new Location(Bukkit.getWorld("world"), 252.5, 73.0, -45.0, -45, 0));
         defaults.put("scoreboard.bottom-link", "play.skycade.net");
         defaults.put("kill-bonus-percentage", 5);
-        defaults.put("soup-price", 300);
+        defaults.put("soup-price", 100);
         defaults.put("soup-cooldown", 60);
-        defaults.put("refreshkit-price", 2500);
-        defaults.put("refreshkit-cooldown", 86400);
+        defaults.put("refreshkit-price", 2000);
+        defaults.put("refreshkit-cooldown", 10800);
         defaults.put("kits-rotation-enabled", "false");
         defaults.put("event-shop-enabled", "true");
         //looks in RotationManager for rotation settings in rotation.yml
@@ -212,27 +212,6 @@ public class KitPvP extends SkycadePlugin {
 
     public Location getSpawnLocation() {
         return spawnLocation;
-    }
-
-    // Not the best place for this method..
-    public void respawn(Player p) {
-        Bukkit.getScheduler().runTaskLater(this, () -> UtilPlayer.reset(p), 1);
-        p.setHealth(p.getMaxHealth());
-        p.setVelocity(new Vector(0, 0, 0));
-        p.setGameMode(GameMode.SURVIVAL);
-        p.setGameMode(GameMode.SURVIVAL);
-        p.teleport(KitPvP.getInstance().getSpawnLocation());
-        Bukkit.getScheduler().runTaskLater(this, p::updateInventory, 10);
-        Bukkit.getScheduler().runTaskLater(this, () -> p.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
-        KitPvPStats stats = getStats(p);
-        Bukkit.getScheduler().runTaskLater(this, () -> {
-            stats.getActiveKit().getKit().giveSoup(p, 32);
-        }, 5);
-        stats.applyKitPreference();
-        Bukkit.getScheduler().runTaskLater(this, () -> {
-            stats.getActiveKit().getKit().beginApplyKit(p);
-            eventShopManager.reapplyUpgrades(p);
-        }, 3);
     }
 
     public boolean isInSpawnArea(Player p) {

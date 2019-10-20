@@ -31,7 +31,7 @@ public class CommandViewStats extends SkycadeCommand {
         Member target = MemberManager.getInstance().getMember(Bukkit.getPlayer(strings[0]));
         KitPvPStats stats = KitPvP.getInstance().getStats(target);
         STATS.msg(member.getPlayer(),
-                "%player%", ChatColor.GRAY + "[" + ChatColor.WHITE + stats.getPrestigeLevel() + "★" + ChatColor.GRAY + "]" + ChatColor.WHITE + ChatColor.BOLD + target.getName(),
+                "%player%", ChatColor.GRAY + "[" + ChatColor.WHITE + stats.getPrestigeLevel() + "★" + ChatColor.GRAY + "] " + ChatColor.WHITE + ChatColor.BOLD + target.getName(),
                 "%deaths%", Integer.toString(stats.getDeaths()),
                 "%kills%", Integer.toString(stats.getKills()),
                 "%kdr%", Double.toString(UtilMath.getKDR(member.getKills(), member.getDeaths())),

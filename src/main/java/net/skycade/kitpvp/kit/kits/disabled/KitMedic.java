@@ -7,6 +7,7 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -23,78 +24,68 @@ import static net.skycade.kitpvp.Messages.PLAYER_HEALED;
 
 public class KitMedic extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+    private ItemStack shears;
+    private ItemStack medpack;
+
+    private int medpackRegenSpeed = 8;
+    private int medpackStartAmount = 5;
+    private int medpackMaxAmount = 5;
+
     public KitMedic(KitManager kitManager) {
-        super(kitManager, "Medic", KitType.MEDIC, 16000, false, "Helpful in battle");
+        super(kitManager, "Medic", KitType.MEDIC, 16000, false, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.LEATHER_HELMET)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.RED).build();
+        chestplate = new ItemBuilder(
+                Material.LEATHER_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.RED).build();
+        leggings = new ItemBuilder(
+                Material.LEATHER_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.RED).build();
+        boots = new ItemBuilder(
+                Material.LEATHER_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.RED).build();
+        weapon = new ItemBuilder(
+                Material.IRON_HOE)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
+        shears = new ItemBuilder(
+                Material.SHEARS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Can be used to heal a player.").build();
+        medpack = new ItemBuilder(
+                Material.LEATHER, medpackStartAmount)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Drop to heal players around you.")
+                .setName("Medpack").build();
 
-        defaultsMap.put("kit.icon.material", "SHEARS");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 16000);
-
-        defaultsMap.put("inventory.hoe.material", "IRON_HOE");
-        defaultsMap.put("inventory.hoe.enchantments.durability", 5);
-        defaultsMap.put("inventory.hoe.enchantments.damage-all", 5);
-
-        defaultsMap.put("inventory.leather.amount", 5);
-        defaultsMap.put("inventory.leather.max-amount", 5);
-        defaultsMap.put("inventory.leather.lore1", "§cDrop to heal");
-        defaultsMap.put("inventory.leather.lore2", "§cPlayers around you");
-        defaultsMap.put("inventory.leather.name", "§cMedpack");
-        defaultsMap.put("inventory.leather.interval", 8);
-
-        defaultsMap.put("inventory.shears.lore", "§cCan be used to heal a player.");
-
-        defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 12);
-        defaultsMap.put("armor.enchantments.protection", 3);
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.SHEARS);
+        setIcon(icon);
     }
 
     @Override
     public void applyKit(Player p) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.hoe.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.hoe.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.hoe.enchantments.damage-all")).build());
+        p.getInventory().addItem(weapon);
+        p.getInventory().addItem(shears);
+        p.getInventory().addItem(medpack);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
 
-        p.getInventory().addItem(new ItemBuilder(
-                Material.LEATHER, getConfig().getInt("inventory.leather.amount"))
-                .addLore(Arrays.asList(
-                        getConfig().getString("inventory.leather.lore1"),
-                        getConfig().getString("inventory.leather.lore2")))
-                .setName(getConfig().getString("inventory.leather.name")).build());
-
-        p.getInventory().addItem(new ItemBuilder(
-                Material.SHEARS)
-                .addLore(getConfig().getString("inventory.shears.lore")).build());
-
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection"),
-                Color.RED));
-
-        startItemRunnable(p, getConfig().getInt("inventory.leather.interval"), new ItemBuilder(
-                        Material.LEATHER, getConfig().getInt("inventory.leather.amount"))
-                        .addLore(Arrays.asList(
-                                getConfig().getString("inventory.leather.lore1"),
-                                getConfig().getString("inventory.leather.lore2")))
-                        .setName(getConfig().getString("inventory.leather.name")).build(),
-                getConfig().getInt("inventory.leather.max-amount"), KitType.MEDIC);
+        startItemRunnable(p, medpackRegenSpeed, getMedpack(1), medpackMaxAmount, KitType.MEDIC);
     }
 
     public void onMedpackUse(Player p, Item medpack) {
@@ -127,9 +118,25 @@ public class KitMedic extends Kit {
         HEALED.msg(target);
     }
 
-    @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Throw down medpacks to heal", "§7players around you and", "§7use the shears to heal someone");
+    private ItemStack getMedpack(int amount) {
+        ItemStack medpackRegen = new ItemStack(medpack);
+        medpackRegen.setAmount(amount);
+
+        return medpackRegen;
     }
 
+    @Override
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Unobtainable.");
+    }
+
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.GREEN + "" + ChatColor.BOLD + "Support Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Ground pound!",
+                "",
+                ChatColor.GRAY + "Shears heal players you click.",
+                ChatColor.GRAY + "Throwing medpacks can heal players."
+        );
+    }
 }

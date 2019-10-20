@@ -22,7 +22,7 @@ public class CommandSetStats extends SkycadeCommand {
     @Override
     public void onCommand(CommandSender commandSender, String[] strings) {
         if (strings.length < 3) {
-            //todo usage
+            SETSTATS_USAGE.msg(commandSender);
             return;
         }
         if (Bukkit.getPlayer(strings[0]) == null) {
@@ -32,7 +32,7 @@ public class CommandSetStats extends SkycadeCommand {
 
         int amount;
         try {
-            amount = Integer.parseInt(strings[1]);
+            amount = Integer.parseInt(strings[2]);
         } catch (NumberFormatException exception) {
             COULDNT_FIND.msg(commandSender, "%type%", "number", "%thing%", strings[2]);
             return;

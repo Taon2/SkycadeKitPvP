@@ -5,80 +5,76 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public class KitFisherman extends Kit {
 
-    private final List<UUID> rodCd = new ArrayList<>();
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+    private ItemStack fishingRod;
 
     public KitFisherman(KitManager kitManager) {
-        super(kitManager, "Fisherman", KitType.FISHERMAN, 48000, "This man is nothing without his fishing rod");
+        super(kitManager, "Fisherman", KitType.FISHERMAN, 48000, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.LEATHER_HELMET)
+                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .setColour(Color.fromRGB(200, 255, 255)).build();
+        chestplate = new ItemBuilder(
+                Material.LEATHER_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .setColour(Color.fromRGB(200, 255, 255)).build();
+        leggings = new ItemBuilder(
+                Material.LEATHER_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .setColour(Color.fromRGB(200, 255, 255)).build();
+        boots = new ItemBuilder(
+                Material.LEATHER_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .setColour(Color.fromRGB(200, 255, 255)).build();
+        weapon = new ItemBuilder(
+                Material.IRON_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5).build();
+        fishingRod = new ItemBuilder(
+                Material.FISHING_ROD)
+                .addEnchantment(Enchantment.DURABILITY, 10).build();
 
-        defaultsMap.put("kit.icon.material", "FISHING_ROD");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 48000);
-
-        defaultsMap.put("inventory.sword.material", "IRON_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
-
-        defaultsMap.put("inventory.fishing-rod.enchantments.durability", 10);
-
-        defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 6);
-        defaultsMap.put("armor.enchantments.protection", 4);
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.FISHING_ROD);
+        setIcon(icon);
     }
 
     @Override
     public void applyKit(Player p) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
-
-        p.getInventory().addItem(new ItemBuilder(
-                Material.FISHING_ROD)
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.fishing-rod.enchantments.durability")).build());
-
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection"),
-                Color.fromBGR(255, 255, 200)));
+        p.getInventory().addItem(weapon);
+        p.getInventory().addItem(fishingRod);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
     }
 
     public void onRodUse(Player p, ProjectileLaunchEvent e) {
-        if (rodCd.contains(p.getUniqueId()))
+        if (!addCooldown(p, "Grappling Hook", 4, true))
             return;
+
         Location target = getTarget(p, 30);
         if (target == null)
             return;
@@ -86,9 +82,6 @@ public class KitFisherman extends Kit {
         //For missions
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
-
-        rodCd.add(p.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> rodCd.remove(p.getUniqueId()), 80);
 
         p.teleport(p.getLocation().add(0, 0.5, 0));
         Vector v = getVectorForPoints(p.getLocation(), target);
@@ -113,14 +106,18 @@ public class KitFisherman extends Kit {
         return new Vector(vX, vY, vZ);
     }
 
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        rodCd.remove(e.getPlayer().getUniqueId());
-    }
-
     @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7You can use your rod as a", "§7grappling hook.");
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }
 
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "It got away...",
+                "",
+                ChatColor.GRAY + "Your fishing rod is",
+                ChatColor.GRAY + "a grappling hook."
+        );
+    }
 }

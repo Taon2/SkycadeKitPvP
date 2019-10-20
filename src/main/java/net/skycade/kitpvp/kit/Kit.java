@@ -13,8 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -32,17 +30,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import static net.skycade.kitpvp.Messages.*;
 
 public abstract class Kit implements Listener {
 
-    private ConfigurationSection config = new YamlConfiguration();
     private final Map<UUID, List<Long>> cooldownDate = new HashMap<>();
     private final Map<UUID, List<String>> playerCooldown = new HashMap<>();
 
@@ -61,19 +55,19 @@ public abstract class Kit implements Listener {
     private final KitType type;
     private int price;
     private final boolean enabled;
-    private final String[] description;
+    private final List<String> description;
 
     private ItemStack icon;
 
-    public Kit(KitManager kitManager, String name, KitType type, String... description) {
+    public Kit(KitManager kitManager, String name, KitType type, List<String> description) {
         this(kitManager, name, type, 0, description);
     }
 
-    public Kit(KitManager kitManager, String name, KitType type, int price, String... description) {
+    public Kit(KitManager kitManager, String name, KitType type, int price, List<String> description) {
         this(kitManager, name, type, price, true, description);
     }
 
-    public Kit(KitManager kitManager, String name, KitType type, int price, boolean enabled, String... description) {
+    public Kit(KitManager kitManager, String name, KitType type, int price, boolean enabled, List<String> description) {
         this.kitManager = kitManager;
         this.name = name;
         this.type = type;
@@ -116,7 +110,7 @@ public abstract class Kit implements Listener {
         return enabled;
     }
 
-    public String[] getDescription() {
+    public List<String> getDescription() {
         return description;
     }
 
@@ -157,9 +151,7 @@ public abstract class Kit implements Listener {
 
     public void onMove(Player p) {
     }
-
-    public List<String> getAbilityDesc() {
-        return null;
+    public void removeSummon(int seconds, Player p) {
     }
 
     protected boolean onCooldown(Player p, String ability) {
@@ -400,60 +392,5 @@ public abstract class Kit implements Listener {
 
     }
 
-    public ConfigurationSection getConfig() {
-        return config;
-    }
-
-    public void setConfigDefaults(Map<String, Object> defaultsMap) {
-        File configFile = new File(KitPvP.getInstance().getDataFolder(), "kits.yml");
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        ConfigurationSection kitSection = config.getConfigurationSection(getName());
-        if (kitSection == null) {
-            kitSection = new YamlConfiguration();
-            for (Map.Entry<String, Object> entry : defaultsMap.entrySet()) {
-                kitSection.set(entry.getKey(), entry.getValue());
-            }
-        }
-
-        if (defaultsMap != null) {
-            for (Map.Entry<String, Object> entry : defaultsMap.entrySet()) {
-                if (kitSection.get(entry.getKey(), null) == null) {
-                    kitSection.set(entry.getKey(), entry.getValue());
-                }
-            }
-        }
-        config.set(getName(), kitSection);
-        try {
-            config.save(configFile);
-        } catch (IOException e) {
-            KitPvP.getInstance().getLogger().log(Level.SEVERE, "An error occurred while trying to save kits.yml", e);
-        }
-        this.config = kitSection;
-    }
-
-    public void reloadConfig() {
-        setConfigDefaults(null);
-    }
-
-    public Color getColor(String paramString) {
-        if (paramString.equalsIgnoreCase("AQUA")) return Color.AQUA;
-        if (paramString.equalsIgnoreCase("BLACK")) return Color.BLACK;
-        if (paramString.equalsIgnoreCase("BLUE")) return Color.BLUE;
-        if (paramString.equalsIgnoreCase("FUCHSIA")) return Color.FUCHSIA;
-        if (paramString.equalsIgnoreCase("GRAY")) return Color.GRAY;
-        if (paramString.equalsIgnoreCase("GREEN")) return Color.GREEN;
-        if (paramString.equalsIgnoreCase("LIME")) return Color.LIME;
-        if (paramString.equalsIgnoreCase("MAROON")) return Color.MAROON;
-        if (paramString.equalsIgnoreCase("NAVY")) return Color.NAVY;
-        if (paramString.equalsIgnoreCase("OLIVE")) return Color.OLIVE;
-        if (paramString.equalsIgnoreCase("ORANGE")) return Color.ORANGE;
-        if (paramString.equalsIgnoreCase("PURPLE")) return Color.PURPLE;
-        if (paramString.equalsIgnoreCase("RED")) return Color.RED;
-        if (paramString.equalsIgnoreCase("SILVER")) return Color.SILVER;
-        if (paramString.equalsIgnoreCase("TEAL")) return Color.TEAL;
-        if (paramString.equalsIgnoreCase("WHITE")) return Color.WHITE;
-        if (paramString.equalsIgnoreCase("YELLOW")) return Color.YELLOW;
-        return null;
-    }
-
+    public abstract List<String> getHowToObtain();
 }

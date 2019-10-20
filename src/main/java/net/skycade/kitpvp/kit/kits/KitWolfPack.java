@@ -6,6 +6,7 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -22,53 +23,53 @@ import java.util.*;
 
 public class KitWolfPack extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+
+    private List<Wolf> wolfList = new ArrayList<>();
+
     public KitWolfPack(KitManager kitManager) {
-        super(kitManager, "Wolfpack", KitType.WOLFPACK, 25000, "Tamer of beasts");
+        super(kitManager, "Wolfpack", KitType.WOLFPACK, 25000, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.LEATHER_HELMET)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .setColour(Color.WHITE).build();
+        chestplate = new ItemBuilder(
+                Material.LEATHER_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .setColour(Color.WHITE).build();
+        leggings = new ItemBuilder(
+                Material.LEATHER_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .setColour(Color.WHITE).build();
+        boots = new ItemBuilder(
+                Material.LEATHER_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .setColour(Color.WHITE).build();
+        weapon = new ItemBuilder(
+                Material.IRON_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5).build();
 
-        defaultsMap.put("kit.icon.material", "BONE");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 25000);
-
-        defaultsMap.put("inventory.sword.material", "IRON_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
-
-        defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 12);
-        defaultsMap.put("armor.enchantments.protection", 4);
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.BONE);
+        setIcon(icon);
     }
 
     @Override
     public void applyKit(Player p) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
-
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection"),
-                Color.WHITE));
+        p.getInventory().addItem(weapon);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
     }
-
-    private List<Wolf> wolfList = new ArrayList<>();
 
     @Override
     public void onItemUse(Player p, ItemStack item) {
@@ -85,33 +86,21 @@ public class KitWolfPack extends Kit {
         for (int i = 0; i < wolfAmount; i++) {
             Wolf wolf = (Wolf) p.getWorld().spawnEntity(p.getLocation(), EntityType.WOLF);
             wolf.setAngry(true);
-            wolf.setCustomName(p.getName() + "'s" + " wolf");
+            wolf.setCustomName(p.getName() + "'s" + " Wolf");
             wolf.setOwner(p);
             wolf.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 2));
             wolfList.add(wolf);
         }
-        removeWolf(19);
+        removeSummon(19, p);
     }
 
-    public void removeWolf(Integer seconds) {
+    public void removeSummon(int seconds, Player p) {
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
             for (Wolf wolf : wolfList)
-                wolf.remove();
-        }, seconds * 20);
-    }
-
-    public void removeWolf(Integer seconds, Player p) {
-        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
-            for (Wolf wolf : wolfList)
-                if (wolf.getOwner().getUniqueId() == p.getUniqueId()) {
+                if (wolf.getCustomName().contains(p.getName())) {
                     wolf.remove();
                 }
         }, seconds * 20);
-    }
-
-    @Override
-    public List<String> getAbilityDesc() {
-        return Collections.singletonList("§7Use your sword ability to spawn wolves.");
     }
 
     @EventHandler
@@ -121,4 +110,18 @@ public class KitWolfPack extends Kit {
         e.setDamage(e.getDamage() * 2.5);
     }
 
+    @Override
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
+    }
+
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Bork!",
+                "",
+                ChatColor.GRAY + "Right clicking your sword",
+                ChatColor.GRAY + "summons wolves to fight for you."
+        );
+    }
 }

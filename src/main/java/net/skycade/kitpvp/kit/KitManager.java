@@ -38,7 +38,6 @@ public class KitManager {
         new CommandEventEco();
         new CommandKitsUnlocked();
         new CommandRefund();
-        new CommandReload();
         new CommandResetStats();
         new CommandSetStats();
         new CommandTriggerEvent();

@@ -3,6 +3,7 @@ package net.skycade.kitpvp.listeners.player;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPKillstreakChange;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
+import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.events.RandomEvent;
 import net.skycade.kitpvp.events.TagEvent;
 import net.skycade.kitpvp.kit.Kit;
@@ -28,6 +29,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 public class PlayerListeners implements Listener {
 
@@ -165,5 +167,26 @@ public class PlayerListeners implements Listener {
         }, 1);
 
         Bukkit.getScheduler().runTaskLater(plugin, p::updateInventory, 10);
+    }
+
+    // Not the best place for this method..
+    public static void respawn(Player p) {
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> UtilPlayer.reset(p), 1);
+        p.setHealth(p.getMaxHealth());
+        p.setVelocity(new Vector(0, 0, 0));
+        p.setGameMode(GameMode.SURVIVAL);
+        p.setGameMode(GameMode.SURVIVAL);
+        p.teleport(KitPvP.getInstance().getSpawnLocation());
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), p::updateInventory, 10);
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> p.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
+        KitPvPStats stats = KitPvP.getInstance().getStats(p);
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            stats.getActiveKit().getKit().giveSoup(p, 32);
+        }, 5);
+        stats.applyKitPreference();
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            stats.getActiveKit().getKit().beginApplyKit(p);
+            KitPvP.getInstance().getEventShopManager().reapplyUpgrades(p);
+        }, 3);
     }
 }

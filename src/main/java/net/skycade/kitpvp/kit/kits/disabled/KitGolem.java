@@ -6,6 +6,7 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,52 +24,41 @@ import java.util.stream.Collectors;
 
 import static net.skycade.kitpvp.Messages.CANT_USE_HERE;
 
-//This kit is broken and got disabled.
 public class KitGolem extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+
     public KitGolem(KitManager kitManager) {
-        super(kitManager, "Golem", KitType.GOLEM, 37000, false, "Smash the ground to cause players and blocks to fly!");
+        super(kitManager, "Golem", KitType.GOLEM, 37000, false, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.IRON_HELMET).build();
+        chestplate = new ItemBuilder(
+                Material.IRON_CHESTPLATE).build();
+        leggings = new ItemBuilder(
+                Material.IRON_LEGGINGS).build();
+        boots = new ItemBuilder(
+                Material.IRON_BOOTS).build();
+        weapon = new ItemBuilder(
+                Material.WOOD_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 4).build();
 
-        defaultsMap.put("kit.icon.material", "IRON_BLOCK");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 37000);
-
-        defaultsMap.put("inventory.sword.material", "WOOD_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 4);
-
-        defaultsMap.put("armor.material", "IRON");
-        defaultsMap.put("armor.enchantments.durability", 0);
-        defaultsMap.put("armor.enchantments.protection", 0);
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.IRON_BLOCK);
+        setIcon(icon);
     }
 
     @Override
     public void applyKit(Player p) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
-
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection")));
+        p.getInventory().addItem(weapon);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
     }
 
     @SuppressWarnings("deprecation")
@@ -155,8 +145,16 @@ public class KitGolem extends Kit {
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Collections.singletonList("§7Use your sword to smash the ground");
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Unobtainable.");
     }
 
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Ground pound!",
+                "",
+                ChatColor.GRAY + "Smashes the ground in front of you."
+        );
+    }
 }

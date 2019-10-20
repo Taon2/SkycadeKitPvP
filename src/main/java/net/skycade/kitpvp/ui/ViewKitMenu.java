@@ -36,8 +36,11 @@ public class ViewKitMenu extends DynamicGui {
         kit.applyKit(DUMMY_PLAYER);
         addItems(0, getItems(), getPotionEffects(DUMMY_PLAYER.getActivePotionEffects()));
         reset();
-        if (kit.getAbilityDesc() != null) {
-            setItem(13,  new ItemBuilder(Material.PAPER).addLore(kit.getAbilityDesc()).build());
+        if (kit.getDescription() != null) {
+            List<String> lore = new ArrayList<>(kit.getDescription());
+            lore.add("");
+            lore.addAll(kit.getHowToObtain());
+            setItem(13,  new ItemBuilder(Material.PAPER).setName(kit.getName()).addLore(lore).build());
         }
     }
 

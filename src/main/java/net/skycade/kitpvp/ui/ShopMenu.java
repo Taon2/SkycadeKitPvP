@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static net.skycade.kitpvp.Messages.ALREADY_UNLOCKED;
@@ -31,6 +30,9 @@ public class ShopMenu extends DynamicGui {
 
         kits.forEach(kitType -> addItemInteraction(p -> {
                     Kit kit = kitType.getKit();
+
+                    if (kit.getPrice() == 0) return null;
+
                     ItemStack item = new ItemStack(kit.getIcon());
 
                     if (stats.hasKit(kitType))
@@ -40,10 +42,13 @@ public class ShopMenu extends DynamicGui {
 
                     meta.setDisplayName(ChatColor.GREEN + kit.getName());
 
-                    List<String> lore = new ArrayList<>(Arrays.asList(kit.getDescription()));
+                    List<String> lore = new ArrayList<>(kit.getDescription());
                     lore.add("");
                     lore.add(ChatColor.GOLD + "Cost: " + ChatColor.WHITE + kit.getPrice() + " Coins");
-                    lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Click to purchase!");
+                    if (stats.hasKit(kitType))
+                        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "You already own this kit!");
+                    else
+                        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Click to purchase!");
                     meta.setLore(lore);
 
                     item.setItemMeta(meta);

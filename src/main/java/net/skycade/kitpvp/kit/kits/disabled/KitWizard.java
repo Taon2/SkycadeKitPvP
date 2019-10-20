@@ -21,56 +21,61 @@ import java.util.stream.Collectors;
 
 import static net.skycade.kitpvp.Messages.WOOSH;
 
-public class    KitWizard extends Kit {
+public class KitWizard extends Kit {
+
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+    private ItemStack book;
 
     private final HashMap<UUID, Location> lastWizardLoc = new HashMap<>();
     private final List<UUID> rodUse = new ArrayList<>();
 
     public KitWizard(KitManager kitManager) {
-        super(kitManager, "Wizard", KitType.WIZARD, 34000, false, "You're a wizard Harry!");
+        super(kitManager, "Wizard", KitType.WIZARD, 34000, false, getLore());
+
+        helmet = new ItemBuilder(
+                Material.LEATHER_HELMET)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.fromRGB(153, 153, 255)).build();
+        chestplate = new ItemBuilder(
+                Material.LEATHER_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.fromRGB(153, 153, 255)).build();
+        leggings = new ItemBuilder(
+                Material.LEATHER_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.fromRGB(153, 153, 255)).build();
+        boots = new ItemBuilder(
+                Material.LEATHER_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.fromRGB(153, 153, 255)).build();
+        weapon = new ItemBuilder(
+                Material.STICK)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
+        book = new ItemStack(
+                Material.BOOK);
+
+        ItemStack icon = new ItemStack(Material.REDSTONE_TORCH_ON);
+        setIcon(icon);
+
         onMove();
-
-        Map<String, Object> defaultsMap = new HashMap<>();
-
-        defaultsMap.put("kit.icon.material", "REDSTONE_TORCH_ON");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 34000);
-
-        defaultsMap.put("inventory.stick.enchantments.damage-all", 5);
-
-        defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 12);
-        defaultsMap.put("armor.enchantments.protection", 3);
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
     }
 
     @Override
     public void applyKit(Player p) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.STICK)
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.stick.enchantments.damage-all")).build());
-
-        p.getInventory().addItem(new ItemBuilder(
-                Material.BOOK).build());
-
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection"),
-                Color.fromBGR(255, 153, 153)));
+        p.getInventory().addItem(weapon);
+        p.getInventory().addItem(book);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
     }
 
     @Override
@@ -147,14 +152,23 @@ public class    KitWizard extends Kit {
         return p.getLineOfSight(new HashSet<Material>(Arrays.asList(Material.values())), length);
     }
 
-    @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Use your wand to shoot fire", "§7use the book to teleport to the", "§7particle location");
-    }
-
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         lastWizardLoc.remove(e.getPlayer().getUniqueId());
         rodUse.remove(e.getPlayer().getUniqueId());
+    }
+
+    @Override
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Unobtainable.");
+    }
+
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "You're a wizard Harry!",
+                "",
+                ChatColor.GRAY + "Shoots fire and teleports."
+        );
     }
 }
