@@ -89,6 +89,7 @@ public class KitMenu extends DynamicGui {
                             return;
                         }
                         UtilPlayer.reset(member.getPlayer());
+                        stats.getActiveKit().getKit().cancelRunnables(member.getPlayer());
                         kitManager.getKitPvP().getStats(member).setActiveKit(kit.getKitType());
                         kitManager.getKitPvP().getStats(member).setKitPreference(kit.getKitType());
                         kit.beginApplyKit(member.getPlayer());

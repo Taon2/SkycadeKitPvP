@@ -57,7 +57,7 @@ public class KitChance extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
 
-        ItemStack icon = new ItemStack(Material.NETHER_STAR);
+        ItemStack icon = new ItemStack(Material.ENCHANTMENT_TABLE);
         setIcon(icon);
     }
 

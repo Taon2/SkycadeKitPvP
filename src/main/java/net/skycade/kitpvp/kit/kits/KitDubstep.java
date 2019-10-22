@@ -45,7 +45,7 @@ public class KitDubstep extends Kit {
 
         constantEffects.put(PotionEffectType.SLOW_DIGGING, 3);
 
-        ItemStack icon = new ItemStack(Material.GLOWSTONE);
+        ItemStack icon = new ItemStack(Material.RECORD_4);
         setIcon(icon);
     }
 

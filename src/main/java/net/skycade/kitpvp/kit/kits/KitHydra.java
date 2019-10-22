@@ -100,7 +100,7 @@ public class KitHydra extends Kit {
     public static List<String> getLore() {
         return Arrays.asList(
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
-                ChatColor.GRAY + "" + ChatColor.ITALIC + "Hates the lava.",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Likes bubble baths.",
                 "",
                 ChatColor.GRAY + "Becomes stronger when in water."
         );

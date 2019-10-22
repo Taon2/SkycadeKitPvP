@@ -55,8 +55,7 @@ public class KitWither extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
 
-        ItemStack icon = new ItemStack(Material.SKULL_ITEM);
-        icon.setDurability((short) 1);
+        ItemStack icon = new ItemStack(Material.NETHER_STAR);
         setIcon(icon);
     }
 

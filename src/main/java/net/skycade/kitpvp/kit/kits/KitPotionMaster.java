@@ -105,7 +105,7 @@ public class KitPotionMaster extends Kit {
     public static List<String> getLore() {
         return Arrays.asList(
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
-                ChatColor.GRAY + "" + ChatColor.ITALIC + "Which potion do you drink?",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Bartender!",
                 "",
                 ChatColor.GRAY + "Right clicking throws potions.",
                 ChatColor.GRAY + "Heals with potions instead of soups."

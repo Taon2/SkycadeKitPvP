@@ -8,6 +8,7 @@ import net.skycade.kitpvp.bukkitevents.KitPvPKillPlayerEvent;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
+import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.events.DoubleCoinsEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
@@ -17,12 +18,14 @@ import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
+import org.bukkit.GameMode;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -92,8 +95,9 @@ public class PlayerDamageListener implements Listener {
         //Removes the wolves from the player before respawning, due to player teleporting back to wolves bug
         Kit playerKit = plugin.getStats(MemberManager.getInstance().getMember(e.getEntity())).getActiveKit().getKit();
         playerKit.removeSummon(0, e.getEntity());
+        playerKit.cancelRunnables(e.getEntity());
 
-        if (e.getEntity().isOnline()) PlayerListeners.respawn(e.getEntity());
+        if (e.getEntity().isOnline()) respawn(e.getEntity());
 
         Player died = e.getEntity();
         Member diedMem = MemberManager.getInstance().getMember(died);
@@ -237,6 +241,8 @@ public class PlayerDamageListener implements Listener {
                 ((KitShaco) kit).onSnowballUse(e);
             else if (kit.getKitType() == KitType.FROSTY)
                 ((KitFrosty) kit).onSnowballUse(e);
+            else if (kit.getKitType() == KitType.SHROOM)
+                ((KitShroom) kit).onSnowballUse(e);
         } else if (proj.getType() == EntityType.ARROW) {
             if (kit.getKitType() == KitType.ARCHER)
                 ((KitArcher) kit).onArrowLaunch(shooter, e);
@@ -277,6 +283,8 @@ public class PlayerDamageListener implements Listener {
             ((KitShaco) kit).onSnowballHit(shooter, damagee);
         else if (kit.getKitType() == KitType.FROSTY)
             ((KitFrosty) kit).onSnowballHit(shooter, damagee);
+        else if (kit.getKitType() == KitType.SHROOM)
+            ((KitShroom) kit).onSnowballHit(shooter, damagee);
         else if (kit.getKitType() == KitType.ARCHER)
             ((KitArcher) kit).onArrowHit(shooter, damagee, e);
         else if (kit.getKitType() == KitType.FIREARCHER)
@@ -378,7 +386,24 @@ public class PlayerDamageListener implements Listener {
         lastDamagerMap.remove(uuid);
         killAssist.remove(uuid);
         samePlayerKill.remove(uuid);
-        //plugin.getStats().remove(uuid);
     }
 
+    private void respawn(Player p) {
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> UtilPlayer.reset(p), 1);
+        p.setHealth(p.getMaxHealth());
+        p.setVelocity(new Vector(0, 0, 0));
+        p.setGameMode(GameMode.SURVIVAL);
+        p.teleport(KitPvP.getInstance().getSpawnLocation());
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), p::updateInventory, 10);
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> p.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
+        KitPvPStats stats = KitPvP.getInstance().getStats(p);
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            stats.getActiveKit().getKit().giveSoup(p, 32);
+        }, 5);
+        stats.applyKitPreference();
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            stats.getActiveKit().getKit().beginApplyKit(p);
+            KitPvP.getInstance().getEventShopManager().reapplyUpgrades(p);
+        }, 3);
+    }
 }

@@ -30,8 +30,6 @@ public class KitTeleporter extends Kit {
     private int pearlStartAmount = 5;
     private int pearlMaxAmount = 8;
 
-    private final List<Player> enderpearlCooldown = new ArrayList<>();
-
     public KitTeleporter(KitManager kitManager) {
         super(kitManager, "Teleporter", KitType.TELEPORTER, 32000, getLore());
 
@@ -75,16 +73,16 @@ public class KitTeleporter extends Kit {
     public void onPlayerInteract(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            if(player.getItemInHand().getType().equals(Material.ENDER_PEARL) && !addCooldown(e.getPlayer(), getName(), 10, true) || enderpearlCooldown.contains(e.getPlayer())) {
-                e.setCancelled(true);
+            if (player.getItemInHand().getType().equals(Material.ENDER_PEARL)) {
+                if (!addCooldown(e.getPlayer(), getName(), 10, true)) {
+                    e.setCancelled(true);
+                    return;
+                }
+
+                //For missions
+                KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(player, this.getKitType());
+                Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
             }
-
-            //For missions
-            KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(player, this.getKitType());
-            Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
-
-            enderpearlCooldown.add(e.getPlayer());
-            Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> enderpearlCooldown.remove(e.getPlayer()), 10);
         }
     }
 

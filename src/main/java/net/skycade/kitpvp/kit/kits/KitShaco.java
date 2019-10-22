@@ -64,7 +64,8 @@ public class KitShaco extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 2).build();
         snowball = new ItemBuilder(
-                Material.SNOW_BALL, snowballStartAmount).build();
+                Material.SNOW_BALL, snowballStartAmount)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 snowball every " + snowballRegenSpeed + " seconds.").build();
 
         ItemStack icon = new ItemStack(Material.FERMENTED_SPIDER_EYE);
         setIcon(icon);
@@ -79,9 +80,15 @@ public class KitShaco extends Kit {
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
 
-        startItemRunnable(p, snowballRegenSpeed, new ItemBuilder(Material.SNOW_BALL).build(), snowballMaxAmount, KitType.SHACO);
+        startItemRunnable(p, snowballRegenSpeed, getSnowball(1), snowballMaxAmount, KitType.SHACO);
     }
 
+    private ItemStack getSnowball(int amount) {
+        ItemStack snowballRegen = new ItemStack(snowball);
+        snowballRegen.setAmount(amount);
+
+        return snowballRegen;
+    }
 
     @Override
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
@@ -130,7 +137,7 @@ public class KitShaco extends Kit {
 
     public void onSnowballHit(Player shooter, Player damagee) {
         if (!addCooldown(shooter, "Switch Locations", 5, true)) {
-            reimburseItem(shooter, new ItemBuilder(Material.SNOW_BALL).build(), snowballMaxAmount, KitType.SHACO);
+            reimburseItem(shooter, getSnowball(1), snowballMaxAmount, KitType.SHACO);
             return;
         }
 

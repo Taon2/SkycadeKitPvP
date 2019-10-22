@@ -18,8 +18,6 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -82,7 +80,7 @@ public class KitGuardian extends Kit {
 
         int beamRunnable = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(KitPvP.getInstance(), new BukkitRunnable() {
             public void run() {
-                beam.setStartingPosition(p.getLocation().add(0, 1, 0));
+                beam.setStartingPosition(p.getLocation());
 
                 if (!getKitManager().getKitPvP().getSpawnRegion().contains(p)) {
                     Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 6);
@@ -91,15 +89,15 @@ public class KitGuardian extends Kit {
                     if (!(nearbyPlayers.isEmpty())) {
                         Player target = getClosestTarget(nearbyPlayers, p);
 
-                        if (areBlocksInWay(p.getLocation().add(0, 1, 0), target.getLocation().add(0, 1, 0))) {
-                            beam.setEndingPosition(p.getLocation().add(0, 1, 0));
+                        if (areBlocksInWay(p.getLocation(), target.getLocation())) {
+                            beam.setEndingPosition(p.getLocation());
                             return;
                         }
 
-                        beam.setEndingPosition(target.getLocation().add(0, 1, 0));
+                        beam.setEndingPosition(target.getLocation());
                     }
                     else
-                        beam.setEndingPosition(p.getLocation().add(0, 1, 0));
+                        beam.setEndingPosition(p.getLocation());
                 } else {
                     beam.setEndingPosition(p.getLocation());
                 }
@@ -125,11 +123,12 @@ public class KitGuardian extends Kit {
             }
         }, 60L, 60L);
 
-        beamMap.put(p.getUniqueId(), beam);
-
         List<Integer> runnables = new ArrayList<>();
         runnables.add(beamRunnable);
         runnables.add(damageRunnable);
+
+        cancelRunnables(p);
+        beamMap.put(p.getUniqueId(), beam);
         beamRunnableMap.put(p.getUniqueId(), runnables);
     }
 
@@ -160,21 +159,12 @@ public class KitGuardian extends Kit {
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        cancelRunnables(e.getPlayer());
-    }
-
-    @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent e) {
-        cancelRunnables(e.getEntity());
-    }
-
-    @EventHandler
     public void onEventStart(KitPvPEventStartEvent e) {
         cancelRunnables(e.getPlayer());
     }
 
-    private void cancelRunnables(Player p) {
+    @Override
+    public void cancelRunnables(Player p) {
         if (beamRunnableMap.containsKey(p.getUniqueId())) {
             List<Integer> runnables = beamRunnableMap.get(p.getUniqueId());
 
@@ -218,16 +208,11 @@ public class KitGuardian extends Kit {
             }
         }
 
-        Bukkit.getLogger().info(blocks.toString());
-
         for (Material block : blocks) {
-            if (!block.equals(Material.AIR) && !block.equals(Material.BARRIER) && !block.equals(Material.LEAVES) && !block.equals(Material.LEAVES_2)) {
-                Bukkit.getLogger().info("true");
+            if (!block.equals(Material.AIR) && !block.equals(Material.BARRIER) && !block.equals(Material.LEAVES) && !block.equals(Material.LEAVES_2))
                 return true;
-            }
         }
 
-        Bukkit.getLogger().info("false");
         return false;
     }
 

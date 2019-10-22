@@ -72,7 +72,7 @@ public class KitWarrior extends Kit {
     public static List<String> getLore() {
         return Arrays.asList(
                 ChatColor.AQUA + "" + ChatColor.BOLD + "Defensive Kit",
-                ChatColor.GRAY + "" + ChatColor.ITALIC + "Meow!",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "A softie on the inside!",
                 "",
                 ChatColor.GRAY + "Strong, but takes 1.4x damage when hit."
         );

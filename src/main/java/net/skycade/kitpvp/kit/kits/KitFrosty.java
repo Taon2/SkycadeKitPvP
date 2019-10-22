@@ -58,7 +58,8 @@ public class KitFrosty extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5).build();
         snowball = new ItemBuilder(
-                Material.SNOW_BALL, snowballStartAmount).build();
+                Material.SNOW_BALL, snowballStartAmount)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 snowball every " + snowballRegenSpeed + " seconds.").build();
 
         ItemStack icon = new ItemStack(Material.SNOW_BALL);
         setIcon(icon);
@@ -73,7 +74,14 @@ public class KitFrosty extends Kit {
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
 
-        startItemRunnable(p, snowballRegenSpeed, new ItemBuilder(Material.SNOW_BALL).build(), snowballMaxAmount, KitType.FROSTY);
+        startItemRunnable(p, snowballRegenSpeed, getSnowball(1), snowballMaxAmount, KitType.FROSTY);
+    }
+
+    private ItemStack getSnowball(int amount) {
+        ItemStack snowballRegen = new ItemStack(snowball);
+        snowballRegen.setAmount(amount);
+
+        return snowballRegen;
     }
 
     public void onSnowballUse(ProjectileLaunchEvent e) {
@@ -82,8 +90,7 @@ public class KitFrosty extends Kit {
 
     public void onSnowballHit(Player shooter, Player damagee) {
         if (!addCooldown(shooter, getName(), 5, true)) {
-            reimburseItem(shooter, new ItemBuilder(Material.SNOW_BALL).build(),
-                    snowballMaxAmount, KitType.FROSTY);
+            reimburseItem(shooter, getSnowball(1), snowballMaxAmount, KitType.FROSTY);
             return;
         }
 

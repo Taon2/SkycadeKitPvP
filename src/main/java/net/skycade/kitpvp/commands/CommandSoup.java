@@ -6,6 +6,7 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.events.KillTheKingEvent;
+import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -55,6 +56,9 @@ public class CommandSoup extends SkycadeCommand {
 
         stats.getActiveKit().getKit().giveSoup(member.getPlayer(), 30);
         stats.setCoins(coins - COST);
+
+        ScoreboardInfo.getInstance().updatePlayer(member.getPlayer());
+
         lastSoup.put(member.getUUID(), now);
         YOU_PURCHASED.msg(member.getPlayer(), "%thing%", "soup", "%amount%", Integer.toString(COST), "%currency%", "coins");
     }

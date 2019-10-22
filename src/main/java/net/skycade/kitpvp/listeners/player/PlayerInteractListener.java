@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -38,6 +39,18 @@ public class PlayerInteractListener implements Listener {
             return;
         plugin.getStats(e.getPlayer()).getActiveKit().getKit().onInteract(e.getPlayer(), (Player) e.getRightClicked(),
                 e.getPlayer().getInventory().getItemInHand());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onBlockPlace(BlockPlaceEvent e) {
+        if (plugin.isInSpawnArea(e.getPlayer()) || e.getPlayer().getGameMode().equals(GameMode.CREATIVE))
+            return;
+
+        KitType type = plugin.getStats(e.getPlayer()).getActiveKit();
+        if (type == KitType.BUILDUHC)
+            type.getKit().onBlockPlace(e.getPlayer(), e.getBlock());
+        else
+            e.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

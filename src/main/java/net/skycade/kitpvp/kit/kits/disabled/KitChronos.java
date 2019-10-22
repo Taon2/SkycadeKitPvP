@@ -68,7 +68,7 @@ public class KitChronos extends Kit {
 
     @Override
     public void onMove(Player p) {
-        particleMoveEffect(p, ParticleEffect.CRIT, 1, 30);
+        particleMoveEffect(p, ParticleEffect.CRIT, 2, 30);
 
         if (UtilPlayer.isMoving(p) && !getKitManager().getKitPvP().getSpawnRegion().contains(p)) {
             UtilPlayer.getNearbyPlayers(p.getLocation(), 2).forEach(target -> {

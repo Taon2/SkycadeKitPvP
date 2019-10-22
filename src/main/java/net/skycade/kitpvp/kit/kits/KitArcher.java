@@ -80,7 +80,7 @@ public class KitArcher extends Kit {
     public void applyKit(Player p) {
         p.getInventory().addItem(weapon);
         p.getInventory().addItem(bow);
-        p.getInventory().addItem(arrows);
+        p.getInventory().setItem(27, arrows);
         p.getInventory().setHelmet(helmet);
         p.getInventory().setChestplate(chestplate);
         p.getInventory().setLeggings(leggings);

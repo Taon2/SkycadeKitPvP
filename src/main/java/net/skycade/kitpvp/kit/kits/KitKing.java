@@ -69,7 +69,7 @@ public class KitKing extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), 4 * 10, true))
+        if (!addCooldown(p, getName(), 40, true))
             return;
 
         //For missions
@@ -119,7 +119,7 @@ public class KitKing extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Bow down.",
                 "",
-                ChatColor.GRAY + "Right clicking spawns a guardian",
+                ChatColor.GRAY + "Right clicking spawns a golem",
                 ChatColor.GRAY + "to attack enemies for you."
         );
     }

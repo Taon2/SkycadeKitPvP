@@ -12,11 +12,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -38,9 +40,9 @@ public abstract class Kit implements Listener {
     private final Map<UUID, List<Long>> cooldownDate = new HashMap<>();
     private final Map<UUID, List<String>> playerCooldown = new HashMap<>();
 
-    protected final Map<UUID, ItemRunnable> playerItemRunnable = new HashMap<>();
+    protected final Map<UUID, List<ItemRunnable>> playerItemRunnable = new HashMap<>();
 
-    protected final List<UUID> frozenPlayers = new ArrayList<>();
+    protected final Map<UUID, Map<Location, Material>> frozenPlayers = new HashMap<>();
     protected final List<UUID> shacoHit = new ArrayList<>();
 
     private static final CraftPlayer DUMMY_PLAYER = new CraftPlayer((CraftServer) Bukkit.getServer(),
@@ -144,6 +146,9 @@ public abstract class Kit implements Listener {
     public void onItemUse(Player p, ItemStack item) {
     }
 
+    public void onBlockPlace(Player p, Block block) {
+    }
+
     public void onInteract(Player p, Player target, ItemStack item) {
     }
 
@@ -153,8 +158,23 @@ public abstract class Kit implements Listener {
     public void removeSummon(int seconds, Player p) {
     }
 
+    public void cancelRunnables(Player p) {
+    }
+
     protected boolean onCooldown(Player p, String ability) {
-        return playerCooldown.containsKey(p.getUniqueId()) && playerCooldown.get(p.getUniqueId()).contains(ability);
+        if (playerCooldown.containsKey(p.getUniqueId()) && playerCooldown.get(p.getUniqueId()).contains(ability)) {
+            if (cooldownDate.containsKey(p.getUniqueId())) {
+                long remainingSeconds = (cooldownDate.get(p.getUniqueId()).get(playerCooldown.get(p.getUniqueId()).indexOf(ability)) - new Date().getTime()) / 1000;
+
+                ON_COOLDOWN.msg(p, "%time%", CoreUtil.niceFormat((int) remainingSeconds), "%thing%", ability);
+                return true;
+            } else {
+                ON_COOLDOWN_NO_TIME.msg(p, "%thing%", ability);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected void removeCooldowns(Player p, String ability) {
@@ -164,12 +184,6 @@ public abstract class Kit implements Listener {
 
     public boolean addCooldown(Player p, String ability, int seconds, boolean message) {
         if (onCooldown(p, ability)) {
-            if (cooldownDate.containsKey(p.getUniqueId())) {
-                long remainingSeconds = (cooldownDate.get(p.getUniqueId()).get(playerCooldown.get(p.getUniqueId()).indexOf(ability)) - new Date().getTime()) / 1000;
-
-                ON_COOLDOWN.msg(p, "%time%", CoreUtil.niceFormat((int) remainingSeconds), "%thing%", ability);
-            } else
-                ON_COOLDOWN_NO_TIME.msg(p, "%thing%", ability);
             return false;
         }
         List<String> cooldowns = playerCooldown.get(p.getUniqueId()) == null ? new ArrayList<>() : playerCooldown.get(p.getUniqueId());
@@ -179,7 +193,7 @@ public abstract class Kit implements Listener {
         playerCooldown.put(p.getUniqueId(), cooldowns);
         cooldownDate.put(p.getUniqueId(), cooldownDates);
 
-        // From cooldown messsage
+        // Send cooldown message
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
             if (playerCooldown.get(p.getUniqueId()).contains(ability)){
                 if (message)
@@ -192,7 +206,7 @@ public abstract class Kit implements Listener {
         p.setLevel(seconds + 1);
         new BukkitRunnable() {
             public void run() {
-                if (playerCooldown.get(p.getUniqueId()).contains(ability)) {
+                if (playerCooldown.get(p.getUniqueId()).contains(ability) && p.isOnline()) {
                     if (p.getLevel() > 0)
                         p.setLevel(p.getLevel() - 1);
                 } else {
@@ -255,10 +269,21 @@ public abstract class Kit implements Listener {
     }
 
     protected void startItemRunnable(Player p, int seconds, ItemStack item, int maxAmount, KitType kitType) {
-        if (playerItemRunnable.containsKey(p.getUniqueId()))
-            playerItemRunnable.get(p.getUniqueId()).stopRunnable();
         ItemRunnable runnable = new ItemRunnable(KitPvP.getInstance(), seconds, p, item, maxAmount, kitType);
-        playerItemRunnable.put(p.getUniqueId(), runnable);
+        if (playerItemRunnable.containsKey(p.getUniqueId()))
+            playerItemRunnable.get(p.getUniqueId()).add(runnable);
+        else {
+            List<ItemRunnable> runnables = new ArrayList<>();
+            runnables.add(runnable);
+            playerItemRunnable.put(p.getUniqueId(), runnables);
+        }
+    }
+
+    public void stopItemRunnables(Player p) {
+        if (!playerItemRunnable.containsKey(p.getUniqueId()))
+            return;
+
+        playerItemRunnable.get(p.getUniqueId()).forEach(ItemRunnable::stopRunnable);
     }
 
     protected void reimburseItem(Player p, ItemStack item, int maxAmount, KitType kitType) {
@@ -284,8 +309,6 @@ public abstract class Kit implements Listener {
     protected void freezePlayer(Player p, int sec) {
         frozenPlayers.remove(p.getUniqueId());
 
-        frozenPlayers.add(p.getUniqueId());
-
         if (!p.isOnGround()) {
             double y = Math.floor(p.getLocation().getY());
             while (!p.isOnGround()) {
@@ -304,6 +327,11 @@ public abstract class Kit implements Listener {
         Material initialType = loc.getBlock().getType();
         loc.getBlock().setType(Material.ICE);
 
+        Map<Location, Material> ice = new HashMap<>();
+        ice.put(loc, initialType);
+
+        frozenPlayers.put(p.getUniqueId(), ice);
+
         p.teleport(new Location(loc.getWorld(), Math.floor(loc.getX()) + .5, loc.getY(), Math.floor(loc.getZ()) + .5, loc.getYaw(), loc.getPitch()));
 
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
@@ -313,9 +341,20 @@ public abstract class Kit implements Listener {
         }, sec * 20);
     }
 
+    @EventHandler (ignoreCancelled = true, priority = EventPriority.LOWEST)
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        if (frozenPlayers.containsKey(event.getPlayer().getUniqueId())) {
+            frozenPlayers.get(event.getPlayer().getUniqueId()).forEach((location, material) -> {
+                location.getBlock().setType(material);
+            });
+
+            frozenPlayers.remove(event.getPlayer().getUniqueId());
+        }
+    }
+
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (frozenPlayers.contains(event.getPlayer().getUniqueId())) {
+        if (frozenPlayers.containsKey(event.getPlayer().getUniqueId())) {
             event.getTo().setX(event.getFrom().getX());
             event.getTo().setY(event.getFrom().getY());
             event.getTo().setZ(event.getFrom().getZ());

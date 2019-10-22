@@ -36,7 +36,10 @@ public class PlayerJoinQuitListener implements Listener {
         Member member = MemberManager.getInstance().getMember(p);
         if (member == null) return;
         if (!plugin.getSpawnRegion().contains(p) && !member.getPlayer().hasPermission(new Permission("kitpvp.admin", PermissionDefault.OP)))
-            plugin.getStats(e.getPlayer()).setStreak(0);
+            plugin.getStats(p).setStreak(0);
+
+        plugin.getStats(p).getActiveKit().getKit().stopItemRunnables(p);
+        plugin.getStats(p).getActiveKit().getKit().cancelRunnables(p);
 
     }
 
@@ -69,7 +72,6 @@ public class PlayerJoinQuitListener implements Listener {
 
                 ScoreboardInfo.getInstance().updatePlayer(p);
                 p.teleport(KitPvP.getInstance().getSpawnLocation());
-
             }
         }.runTaskLater(KitPvP.getInstance(), 1L);
     }

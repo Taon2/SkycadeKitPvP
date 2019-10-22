@@ -142,7 +142,7 @@ public class Messages {
 
     //Kit Messages
     public static final Localization.Message CANT_USE_HERE = new Localization.Message("kit.cant-use-here", "&cYou can't use that ability here.");
-    public static final Localization.Message YOURE_UNFROZEN = new Localization.Message("kit.unfrozen", "&aThawed out!");
+    public static final Localization.Message YOURE_UNFROZEN = new Localization.Message("kit.unfrozen", "&bThawed out!");
     public static final Localization.Message LOVE_U = new Localization.Message("kit.lover.love-u", "&cI LOVE YOU <3!");
     public static final Localization.Message HEALTH_BOOST = new Localization.Message("kit.archer.health-boost", "&cHealth boost!");
     public static final Localization.Message DOUBLE_DAMAGE = new Localization.Message("kit.archer.double-damage", "&eDouble damage!");
@@ -169,9 +169,13 @@ public class Messages {
     public static final Localization.Message POSITIONS_SWITCHED = new Localization.Message("kit.shaco.positions-switched", "&9Positions switched!");
     public static final Localization.Message HEALED = new Localization.Message("kit.vampire.healed", "&cHealed!");
     public static final Localization.Message BIT_BY = new Localization.Message("kit.vampire.bit-by", "&cYou are bit by &f%player%&c.");
-    public static final Localization.Message YOURE_FROZEN = new Localization.Message("kit.dualblader.frozen", "&aYou were frozen in place by &b%player% &ausing &b%kit%!");
+    public static final Localization.Message YOURE_FROZEN = new Localization.Message("kit.dualblader.frozen", "&bYou were frozen in place by &a%player% &busing &b%kit%!");
+    public static final Localization.Message YOURE_POISONED = new Localization.Message("kit.shroom.poisoned", "&2You were poisoned by &b%player%&2!");
     public static final Localization.Message PLAYER_HEALED = new Localization.Message("kit.medic.player-healed", "&c%player% was healed!");
     public static final Localization.Message FIRE_REMOVED = new Localization.Message("kit.firearcher.fire-removed", "&cFire removed.!");
+    public static final Localization.Message PLAYER_REPAIRED = new Localization.Message("kit.blacksmith.player-repaired", "&7You repaired &a%player%'s &7armor.");
+    public static final Localization.Message REPAIRED = new Localization.Message("kit.blacksmith.repaired", "&7Armor repaired by &a%player%!");
+
 
     static void init() {
         Localization.getInstance().registerMessages("skycade.kitpvp",
@@ -301,7 +305,10 @@ public class Messages {
                 PRESTIGE_DESCRIPTION,
                 KITNAME_DESCRIPTION,
                 VIEWKIT_DESCRIPTION,
-                RESETSTATS_DESCRIPTION
+                RESETSTATS_DESCRIPTION,
+                PLAYER_REPAIRED,
+                REPAIRED,
+                YOURE_POISONED
         );
     }
 }

@@ -48,8 +48,10 @@ public class KitManager {
         registerKit(new KitArcher(this));
         registerKit(new KitAssassin(this));
         registerKit(new KitBarbarian(this));
+        registerKit(new KitBlacksmith(this));
         registerKit(new KitBladeMaster(this));
         registerKit(new KitBomber(this));
+        registerKit(new KitBuildUHC(this));
         registerKit(new KitCaveMan(this));
         registerKit(new KitCerberus(this));
         registerKit(new KitChance(this));
@@ -76,6 +78,7 @@ public class KitManager {
         registerKit(new KitPrick(this));
         registerKit(new KitShaco(this));
         registerKit(new KitSharingan(this));
+        registerKit(new KitShroom(this));
         registerKit(new KitSniper(this));
         registerKit(new KitSonic(this));
         registerKit(new KitSoulMaster(this));
