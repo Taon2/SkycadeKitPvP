@@ -72,10 +72,12 @@ public class KitManager {
         registerKit(new KitKangaroo(this));
         registerKit(new KitKing(this));
         registerKit(new KitKnight(this));
+        registerKit(new KitMultishot(this));
         registerKit(new KitMystic(this));
         registerKit(new KitPlush(this));
         registerKit(new KitPotionMaster(this));
         registerKit(new KitPrick(this));
+        registerKit(new KitPyromancer(this));
         registerKit(new KitShaco(this));
         registerKit(new KitSharingan(this));
         registerKit(new KitShroom(this));

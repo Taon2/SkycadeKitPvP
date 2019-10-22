@@ -32,8 +32,6 @@ public class KitSniper extends Kit {
     private ItemStack bow;
     private ItemStack arrows;
 
-    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
-
     private int arrowStartAmount = 1;
 
     private final List<UUID> bowCooldown = new ArrayList<>();
@@ -41,7 +39,7 @@ public class KitSniper extends Kit {
     private final Map<UUID, Integer> sniperCombo = new HashMap<>();
 
     public KitSniper(KitManager kitManager) {
-        super(kitManager, "Sniper", KitType.SNIPER, 41000, getLore());
+        super(kitManager, "Sniper", KitType.SNIPER, 39000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)

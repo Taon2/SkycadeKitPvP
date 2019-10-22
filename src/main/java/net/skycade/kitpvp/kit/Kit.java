@@ -22,6 +22,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
@@ -156,6 +157,9 @@ public abstract class Kit implements Listener {
     }
 
     public void removeSummon(int seconds, Player p) {
+    }
+
+    public void onArrowLand(Player p, Block block, ProjectileHitEvent e) {
     }
 
     public void cancelRunnables(Player p) {

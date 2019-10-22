@@ -33,12 +33,13 @@ public enum KitType {
     JUMPER("jumper"),
     KANGAROO("kangaroo"),
     KING("king"),
-    KITMASTER("kitmaster"),
     KNIGHT("knight"),
+    MULTISHOT("multishot"),
     MYSTIC("mystic"),
     PLUSH("plush"),
     POTIONMASTER("potionmaster"),
     PRICK("prick"),
+    PYROMANCER("pyromancer"),
     SHACO("shaco"),
     SHARINGAN("sharingan"),
     SHROOM("shroom"),
@@ -51,6 +52,7 @@ public enum KitType {
     WITHER("wither"),
     WOLFPACK("wolfpack"),
     ZEUS("zeus"),
+    KITMASTER("kitmaster"),
 
     //disabled
     CHRONOS("chronos"),

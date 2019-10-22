@@ -25,6 +25,8 @@ public class KitTank extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
+    private double damageMultiplier = 1.5;
+
     public KitTank(KitManager kitManager) {
         super(kitManager, "Tank", KitType.TANK, 46000, getLore());
 
@@ -63,7 +65,7 @@ public class KitTank extends Kit {
 
     @Override
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        e.setDamage(e.getDamage() * 1.5);
+        e.setDamage(e.getDamage() * damageMultiplier);
     }
 
     @Override

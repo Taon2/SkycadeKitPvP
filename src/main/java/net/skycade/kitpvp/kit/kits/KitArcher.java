@@ -5,15 +5,12 @@ import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -37,8 +34,6 @@ public class KitArcher extends Kit {
     private int arrowRegenSpeed = 3;
     private int arrowStartAmount = 16;
     private int arrowMaxAmount = 64;
-
-    private final List<UUID> bowCooldown = new ArrayList<>();
 
     public KitArcher(KitManager kitManager) {
         super(kitManager, "Archer", KitType.ARCHER, 8000, getLore());
@@ -94,12 +89,9 @@ public class KitArcher extends Kit {
     }
 
     public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
-        if (bowCooldown.contains(shooter.getUniqueId())) {
+        if (!addCooldown(shooter, "bow", 1, true)) {
             e.setCancelled(true);
-            return;
         }
-        bowCooldown.add(shooter.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> bowCooldown.remove(shooter.getUniqueId()), 20);
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
@@ -136,11 +128,6 @@ public class KitArcher extends Kit {
     @Override
     public List<String> getHowToObtain() {
         return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "A default kit.");
-    }
-
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        bowCooldown.remove(e.getPlayer().getUniqueId());
     }
 
     public static List<String> getLore() {

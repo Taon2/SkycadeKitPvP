@@ -250,8 +250,11 @@ public class PlayerDamageListener implements Listener {
                 ((KitFireArcher) kit).onArrowLaunch(shooter, e);
             else if (kit.getKitType() == KitType.SNIPER)
                 ((KitSniper) kit).onArrowLaunch(shooter, e);
+            else if (kit.getKitType() == KitType.MULTISHOT)
+                ((KitMultishot) kit).onArrowLaunch(shooter, e);
+            else if (kit.getKitType() == KitType.PYROMANCER)
+                ((KitPyromancer) kit).onArrowLaunch(shooter, e);
         }
-
     }
 
     @EventHandler
