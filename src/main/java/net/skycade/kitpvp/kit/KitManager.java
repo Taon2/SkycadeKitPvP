@@ -65,6 +65,7 @@ public class KitManager {
         registerKit(new KitGank(this));
         registerKit(new KitGuardian(this));
         registerKit(new KitHades(this));
+        registerKit(new KitHulk(this));
         registerKit(new KitHydra(this));
         registerKit(new KitHyper(this));
         registerKit(new KitJesus(this));
@@ -74,6 +75,7 @@ public class KitManager {
         registerKit(new KitKnight(this));
         registerKit(new KitMultishot(this));
         registerKit(new KitMystic(this));
+        registerKit(new KitNecromancer(this));
         registerKit(new KitPlush(this));
         registerKit(new KitPotionMaster(this));
         registerKit(new KitPrick(this));

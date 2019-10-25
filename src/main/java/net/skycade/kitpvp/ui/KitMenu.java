@@ -9,7 +9,6 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -48,7 +47,7 @@ public class KitMenu extends DynamicGui {
                     if (!stats.hasKit(kit.getKitType()))
                         item.setType(Material.BEDROCK);
 
-                    ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
+                    ItemMeta meta = item.getItemMeta();
 
                     if (stats.getActiveKit().equals(kit.getKitType())) {
                         meta.addEnchant(Enchantment.DURABILITY, 10, true);

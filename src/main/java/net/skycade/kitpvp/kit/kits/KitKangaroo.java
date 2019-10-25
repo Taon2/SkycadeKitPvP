@@ -56,7 +56,7 @@ public class KitKangaroo extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 2).build();
 
-        ItemStack icon = new ItemStack(Material.LEATHER_BOOTS);
+        ItemStack icon = new ItemStack(Material.RABBIT_FOOT);
         setIcon(icon);
     }
 

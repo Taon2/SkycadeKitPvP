@@ -75,7 +75,7 @@ public class KitWolfPack extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), 20, false))
+        if (!addCooldown(p, "summon wolves", 20, false))
             return;
 
         //For missions

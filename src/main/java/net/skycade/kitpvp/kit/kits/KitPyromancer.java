@@ -32,7 +32,7 @@ public class KitPyromancer extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
-    private int arrowRegenSpeed = 10;
+    private int arrowRegenSpeed = 12;
     private int arrowStartAmount = 8;
     private int arrowMaxAmount = 8;
 

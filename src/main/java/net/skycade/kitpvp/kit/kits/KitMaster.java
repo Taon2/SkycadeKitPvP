@@ -117,6 +117,7 @@ public class KitMaster extends Kit {
     private void kitMasterRunnable(Player p, ItemStack[] playerArmor, HashMap<Integer, ItemStack> invItems) {
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
             if (!KitPvP.getInstance().getSpawnRegion().contains(p)) {
+                getKitManager().getKitPvP().getStats(p).getActiveKit().getKit().cancelRunnables(p);
                 getKitManager().getKits().get(KitType.KITMASTER).beginApplyKit(p);
                 getKitManager().getKitPvP().getStats(p).setActiveKit(KitType.KITMASTER);
                 clearInventory(p);

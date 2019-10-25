@@ -80,7 +80,7 @@ public class CommandKit extends SkycadeCommand {
                 });
                 ScoreboardInfo.getInstance().updatePlayer(target);
                 KIT_UNLOCKED.msg(commandSender, "%player%", target.getName(), "%kit%", "every kit");
-                if (!member.getPlayer().equals(target))
+                if (!member.getName().equals(target.getName()))
                     YOUR_KIT_UNLOCKED.msg(target, "%kit%", "Every kit");
                 return;
             }

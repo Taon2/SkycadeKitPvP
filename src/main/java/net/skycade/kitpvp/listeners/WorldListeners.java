@@ -4,6 +4,7 @@ import net.minecraft.server.v1_8_R3.EntityArrow;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -13,12 +14,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 
 public class WorldListeners implements Listener {
 
@@ -47,12 +46,6 @@ public class WorldListeners implements Listener {
             if (en instanceof FallingBlock)
                 e.getEntity().remove();
         e.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onEntitySpawn(EntitySpawnEvent e) {
-        if (!Arrays.asList(EntityType.ARMOR_STAND, EntityType.WOLF, EntityType.PRIMED_TNT, EntityType.IRON_GOLEM).contains(e.getEntityType()))
-            e.setCancelled(true);
     }
 
     @EventHandler
@@ -85,9 +78,12 @@ public class WorldListeners implements Listener {
 
                     if (y != -1) {
                         Block block = e.getEntity().getWorld().getBlockAt(x, y, z);
-                        Kit kit = plugin.getStats(shooter).getActiveKit().getKit();
+                        KitPvPStats stats = plugin.getStats(shooter);
+                        Kit kit = null;
+                        if (stats != null)
+                            kit = stats.getActiveKit().getKit();
 
-                        if (kit.getKitType() == KitType.PYROMANCER)
+                        if (kit != null && kit.getKitType() == KitType.PYROMANCER)
                             kit.onArrowLand(shooter, block, e);
                     }
 

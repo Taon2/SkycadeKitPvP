@@ -36,13 +36,11 @@ public class KitCaveMan extends Kit {
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 12)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
-                .setColour(Color.RED).build();
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
-                .setColour(Color.RED).build();
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3).build();
         boots = new ItemBuilder(
                 Material.IRON_BOOTS)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)

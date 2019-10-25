@@ -33,26 +33,26 @@ public class KitArcher extends Kit {
 
     private int arrowRegenSpeed = 3;
     private int arrowStartAmount = 16;
-    private int arrowMaxAmount = 64;
+    private int arrowMaxAmount = 16;
 
     public KitArcher(KitManager kitManager) {
         super(kitManager, "Archer", KitType.ARCHER, 8000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DURABILITY, 7)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DURABILITY, 7)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DURABILITY, 7)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DURABILITY, 7)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)

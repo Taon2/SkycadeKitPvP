@@ -153,8 +153,8 @@ public class Messages {
     public static final Localization.Message YOURE_BLINDED = new Localization.Message("kit.lover.youre-blinded", "&5You got blinded by %player%!");
     public static final Localization.Message CURRENT_COMBO = new Localization.Message("kit.strafe.current-combo", "&7Current combo is &a&combo&&7.");
     public static final Localization.Message GET_SPOOKED = new Localization.Message("kit.ghost.get-spooked", "&fGet spooked!");
-    public static final Localization.Message COPIED_KIT = new Localization.Message("kit.kitmaster.copied-kit", "&bYou copied the%kit% kit! You will return to the KitMaster kit in 20 seconds.");
-    public static final Localization.Message COPIED_YOUR_KIT = new Localization.Message("kit.kitmaster.copied-your-kit", "&b%player% &fcopied your kit!");
+    public static final Localization.Message COPIED_KIT = new Localization.Message("kit.kitmaster.copied-kit", "&bYou copied the %kit% kit! You will return to the KitMaster kit in 20 seconds.");
+    public static final Localization.Message COPIED_YOUR_KIT = new Localization.Message("kit.kitmaster.copied-your-kit", "&b%player% &7copied your kit!");
     public static final Localization.Message SOUP_REFILL = new Localization.Message("kit.chance.soup-refill", "&bSoup refill!");
     public static final Localization.Message SWING_SPEED_UP = new Localization.Message("kit.chance.swing-speed-up", "&fSwing speed up!");
     public static final Localization.Message SWING_SPEED_DOWN = new Localization.Message("kit.chance.swing-speed-down", "&fSwing speed down!");
@@ -175,7 +175,7 @@ public class Messages {
     public static final Localization.Message FIRE_REMOVED = new Localization.Message("kit.firearcher.fire-removed", "&cFire removed.!");
     public static final Localization.Message PLAYER_REPAIRED = new Localization.Message("kit.blacksmith.player-repaired", "&7You repaired &a%player%'s &7armor.");
     public static final Localization.Message REPAIRED = new Localization.Message("kit.blacksmith.repaired", "&7Armor repaired by &a%player%!");
-
+    public static final Localization.Message SUMMONED_GHOSTS = new Localization.Message("kit.necromancer.summoned-ghosts", "&7Summoned 2 ghosts to fight for you!");
 
     static void init() {
         Localization.getInstance().registerMessages("skycade.kitpvp",
@@ -308,7 +308,8 @@ public class Messages {
                 RESETSTATS_DESCRIPTION,
                 PLAYER_REPAIRED,
                 REPAIRED,
-                YOURE_POISONED
+                YOURE_POISONED,
+                SUMMONED_GHOSTS
         );
     }
 }

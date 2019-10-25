@@ -239,13 +239,23 @@ public abstract class Kit implements Listener {
 
     public void giveSoup(Player p, int amount) {
         if (p == null || !p.isOnline()) return;
+        KitType activeKit = KitPvP.getInstance().getStats(p).getActiveKit();
+
         for (int x = 0; x < amount; x++) {
             if (p.getInventory().firstEmpty() == -1)
                 break;
-            p.getInventory().addItem(
-                    KitPvP.getInstance().getStats(p).getActiveKit() == KitType.POTIONMASTER
-                            ? new ItemStack(Material.POTION, 1, (short) 16421)
-                            : new ItemStack(Material.MUSHROOM_SOUP, 1));
+
+            if (activeKit == KitType.POTIONMASTER || activeKit == KitType.BUILDUHC) {
+                p.getInventory().addItem(new ItemStack(Material.POTION, 1, (short) 16421));
+            } else if (activeKit == KitType.HULK) {
+                p.getInventory().addItem(new ItemStack(Material.MUSHROOM_SOUP, 1));
+            } else {
+                p.getInventory().addItem(new ItemStack(Material.MUSHROOM_SOUP, 1));
+            }
+        }
+
+        if (activeKit == KitType.HULK) {
+            p.getInventory().setItem(0, null);
         }
     }
 

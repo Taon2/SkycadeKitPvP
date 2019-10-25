@@ -28,9 +28,9 @@ public class KitMultishot extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
-    private int arrowRegenSpeed = 6;
+    private int arrowRegenSpeed = 12;
     private int arrowStartAmount = 4;
-    private int arrowMaxAmount = 8;
+    private int arrowMaxAmount = 6;
 
     private List<UUID> running = new ArrayList<>();
 
