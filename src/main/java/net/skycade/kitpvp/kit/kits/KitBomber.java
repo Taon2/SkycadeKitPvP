@@ -84,7 +84,6 @@ public class KitBomber extends Kit {
             p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
         });
 
-        //todo make all runnables like this into the guardian ones, to save on memory. dont want to run stuff that isnt necessary
         startItemRunnable(p, tntRegenSpeed, getTnt(1), tntMaxAmount, KitType.BOMBER);
     }
 

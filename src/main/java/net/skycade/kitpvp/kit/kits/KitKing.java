@@ -69,7 +69,7 @@ public class KitKing extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), 40, true))
+        if (!addCooldown(p, getName(), 35, true))
             return;
 
         //For missions

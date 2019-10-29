@@ -73,6 +73,11 @@ public class KitWither extends Kit {
         witherEffect(damagee);
     }
 
+    @Override
+    public void onDeath(Player p) {
+        p.getLocation().getWorld().createExplosion(p.getLocation().getBlockX(), p.getLocation().getBlockY(), p.getLocation().getBlockZ(), 4F, false, false);
+    }
+
     private void witherEffect(Player p) {
         int random = UtilMath.getRandom(0, 100);
         if (random <= 12) {
@@ -80,7 +85,7 @@ public class KitWither extends Kit {
             KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
             Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
-            p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 6 * 20, 1));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 120, 1));
         }
     }
 
@@ -94,7 +99,8 @@ public class KitWither extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "A powerful opponent.",
                 "",
-                ChatColor.GRAY + "Chance to give people wither effect."
+                ChatColor.GRAY + "Chance to give people wither effect.",
+                ChatColor.GRAY + "On death you create a large explosion."
         );
     }
 }

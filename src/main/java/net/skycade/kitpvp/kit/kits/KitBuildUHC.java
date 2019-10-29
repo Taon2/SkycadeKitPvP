@@ -57,7 +57,8 @@ public class KitBuildUHC extends Kit {
                 Material.IRON_BOOTS).build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 5).build();
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
         fishingrod = new ItemBuilder(
                 Material.FISHING_ROD)
                 .addEnchantment(Enchantment.DURABILITY, 5).build();
@@ -66,7 +67,8 @@ public class KitBuildUHC extends Kit {
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 block every " + blockRegenSpeed + " seconds.").build();
         bow = new ItemBuilder(
                 Material.BOW)
-                .addEnchantment(Enchantment.DURABILITY, 5).build();
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.ARROW_DAMAGE, 2).build();
         arrows = new ItemBuilder(
                 Material.ARROW, arrowStartAmount)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 arrow every " + arrowRegenSpeed + " seconds.").build();
@@ -164,7 +166,8 @@ public class KitBuildUHC extends Kit {
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "9999 Elo!",
                 "",
                 ChatColor.GRAY + "Can place blocks to escape enemies.",
-                ChatColor.GRAY + "Right clicking gives a golden head effect."
+                ChatColor.GRAY + "Right clicking gives a golden head effect.",
+                ChatColor.GRAY + "Heals with potions instead of soups."
         );
     }
 }

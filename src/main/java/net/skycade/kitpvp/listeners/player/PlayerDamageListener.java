@@ -92,6 +92,8 @@ public class PlayerDamageListener implements Listener {
         e.getDrops().clear();
         e.setDeathMessage("");
 
+        plugin.getStats(e.getEntity()).getActiveKit().getKit().onDeath(e.getEntity());
+
         //Removes the wolves from the player before respawning, due to player teleporting back to wolves bug
         Kit playerKit = plugin.getStats(MemberManager.getInstance().getMember(e.getEntity())).getActiveKit().getKit();
         playerKit.removeSummon(0, e.getEntity());
@@ -165,6 +167,9 @@ public class PlayerDamageListener implements Listener {
         final int streak = plugin.getStats(killer).getStreak() + 1;
         stats.setStreak(streak);
 
+        if (streak % 10 == 0)
+            HAS_KILLSTREAK.broadcast("%killer%", killer.getName(), "%ks%", Integer.toString(streak));
+
         Bukkit.getServer().getPluginManager().callEvent(new CoreAchievementEvent(killer, "kitpvpstreak") {
             @Override
             public boolean matcher(Achievement achievement) {
@@ -194,8 +199,10 @@ public class PlayerDamageListener implements Listener {
 
         //Extra coins when a high ks gets broken
         int killstreakCoins = diedStats.getStreak() >= 10 ? diedStats.getStreak() : 0;
-        if (diedStats.getStreak() >= 10)
-            BROKE_KILLSTREAK.msg(killerMem.getPlayer(), "%amount%", Integer.toString(diedStats.getStreak()), "%player%", diedMem.getName());
+        if (diedStats.getStreak() >= 10) {
+            YOU_BROKE_KILLSTREAK.msg(killerMem.getPlayer(), "%amount%", Integer.toString(diedStats.getStreak()), "%player%", diedMem.getName());
+            BROKE_KILLSTREAK.broadcast("%killer%", killer.getName(), "%dead%", died.getName(), "%ks%", Integer.toString(diedStats.getStreak()));
+        }
 
         //Normal kill coins
         int base = KitPvP.getInstance().getConfig().getInt("kill-coins");

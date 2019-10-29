@@ -1,5 +1,7 @@
 package net.skycade.kitpvp.listeners.player;
 
+import net.brcdev.gangs.GangsPlusApi;
+import net.brcdev.gangs.gang.Gang;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPKillstreakChange;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
@@ -113,8 +115,21 @@ public class PlayerListeners implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent e) {
         KitPvPStats stats = plugin.getStats(e.getPlayer());
 
+        String gangTitle = null;
+
+        Gang gang = GangsPlusApi.getPlayersGang(e.getPlayer().getPlayer());
+        String gangName;
+        if (gang != null) {
+            gangName = gang.getName();
+            gangTitle = ChatColor.GRAY + "[" + ChatColor.WHITE + gangName + ChatColor.GRAY + "]";
+        }
+
         String prestige = ChatColor.GRAY + "[" + ChatColor.WHITE + stats.getPrestigeLevel() + "★" + ChatColor.GRAY + "]";
-        e.setFormat(prestige + " " + ChatColor.RESET + e.getFormat());
+
+        if (gangTitle == null)
+            e.setFormat(prestige + " " + ChatColor.RESET + e.getFormat());
+        else
+            e.setFormat(gangTitle + " " + prestige + " " + ChatColor.RESET + e.getFormat());
     }
 
     private void resetKitAndKS(Player p) {

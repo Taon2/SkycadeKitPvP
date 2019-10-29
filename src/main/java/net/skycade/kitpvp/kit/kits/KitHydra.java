@@ -81,8 +81,8 @@ public class KitHydra extends Kit {
         if (p.getLocation().getBlock().getType() == Material.WATER || p.getLocation().getBlock().getType() == Material.STATIONARY_WATER) {
             p.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
             p.removePotionEffect(PotionEffectType.SLOW);
-            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40 * 3, 0));
-            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40 * 3, 2));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 80, 0));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 2));
         }
     }
 

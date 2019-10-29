@@ -36,7 +36,7 @@ public class ItemRunnable {
             Integer finalSlot = null;
             for (Integer i = 0; i < inv.getSize(); i++)
                 if (inv.getItem(i) != null)
-                    if (inv.getItem(i).getType() == item.getType()) {
+                    if (inv.getItem(i).getType() == item.getType() && inv.getItem(i).getDurability() == item.getDurability()) {
                         amount += inv.getItem(i).getAmount();
                         if (amount <= inv.getMaxStackSize())
                             finalSlot = i;

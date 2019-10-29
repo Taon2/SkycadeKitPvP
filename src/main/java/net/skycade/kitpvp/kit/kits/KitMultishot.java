@@ -60,7 +60,7 @@ public class KitMultishot extends Kit {
         bow = new ItemBuilder(
                 Material.BOW)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.ARROW_DAMAGE, 1).build();
+                .addEnchantment(Enchantment.ARROW_DAMAGE, 2).build();
         arrows = new ItemBuilder(
                 Material.ARROW, arrowStartAmount)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 arrow every " + arrowRegenSpeed + " seconds.").build();

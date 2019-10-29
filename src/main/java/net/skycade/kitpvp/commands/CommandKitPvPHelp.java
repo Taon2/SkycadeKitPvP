@@ -25,6 +25,7 @@ public class CommandKitPvPHelp extends SkycadeCommand {
         commandSender.sendMessage(PRESTIGE_USAGE + "" + ChatColor.WHITE + " - " + PRESTIGE_DESCRIPTION);
         commandSender.sendMessage(KITNAME_USAGE + "" + ChatColor.WHITE + " - " + KITNAME_DESCRIPTION);
         commandSender.sendMessage(VIEWKIT_USAGE + "" + ChatColor.WHITE + " - " + VIEWKIT_DESCRIPTION);
+        commandSender.sendMessage(VIEWSTATS_USAGE + "" + ChatColor.WHITE + " - " + VIEWSTATS_DESCRIPTION);
         commandSender.sendMessage(TRIGGEREVENT_USAGE + "" + ChatColor.WHITE + " - " + TRIGGEREVENT_DESCRIPTION);
         commandSender.sendMessage(ECO_USAGE + "" + ChatColor.WHITE + " - " + ECO_DESCRIPTION);
         commandSender.sendMessage(EVENTECO_USAGE + "" + ChatColor.WHITE + " - " + EVENTECO_DESCRIPTION);

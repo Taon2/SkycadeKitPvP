@@ -49,7 +49,7 @@ public class KitMenu extends DynamicGui {
 
                     ItemMeta meta = item.getItemMeta();
 
-                    if (stats.getActiveKit().equals(kit.getKitType())) {
+                    if (stats.getActiveKit() == kit.getKitType()) {
                         meta.addEnchant(Enchantment.DURABILITY, 10, true);
                         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     }

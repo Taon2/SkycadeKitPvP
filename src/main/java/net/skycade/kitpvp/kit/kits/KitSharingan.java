@@ -70,7 +70,7 @@ public class KitSharingan extends Kit {
 
         effects.forEach((eff) -> {
             if (eff.getDuration() > 1200 * 3)
-                damagee.addPotionEffect(new PotionEffect(eff.getType(), 1200 * 3, eff.getAmplifier()));
+                damagee.addPotionEffect(new PotionEffect(eff.getType(), 1800, eff.getAmplifier()));
             else
                 damagee.addPotionEffect(eff);
         });

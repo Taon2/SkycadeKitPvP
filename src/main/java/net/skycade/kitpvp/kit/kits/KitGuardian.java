@@ -136,7 +136,7 @@ public class KitGuardian extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.RAW_FISH)
             return;
-        if (!addCooldown(p, getName(), 30, true))
+        if (!addCooldown(p, getName(), 25, true))
             return;
 
         //For missions

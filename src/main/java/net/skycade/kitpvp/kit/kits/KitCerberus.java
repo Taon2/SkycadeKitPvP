@@ -80,8 +80,8 @@ public class KitCerberus extends Kit {
         if (p.getLocation().getBlock().getType() == Material.LAVA || p.getLocation().getBlock().getType() == Material.STATIONARY_LAVA) {
             p.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
             p.removePotionEffect(PotionEffectType.SLOW);
-            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40 * 3, 0));
-            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40 * 3, 2));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 80, 0));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 2));
         }
     }
 

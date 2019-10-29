@@ -86,7 +86,7 @@ public class KitEnderman extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (onCooldown(p, getName()) || !addCooldown(p, getName(), 16, true))
+        if (onCooldown(p, getName()) || !addCooldown(p, getName(), 12, true))
             return;
 
         //For missions

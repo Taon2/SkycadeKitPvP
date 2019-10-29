@@ -44,7 +44,6 @@ public class KitManager {
     }
 
     private void registerKits() {
-        registerKit(new KitDefault(this));
         registerKit(new KitArcher(this));
         registerKit(new KitAssassin(this));
         registerKit(new KitBarbarian(this));
@@ -76,6 +75,7 @@ public class KitManager {
         registerKit(new KitMultishot(this));
         registerKit(new KitMystic(this));
         registerKit(new KitNecromancer(this));
+        registerKit(new KitPaladin(this));
         registerKit(new KitPlush(this));
         registerKit(new KitPotionMaster(this));
         registerKit(new KitPrick(this));
@@ -89,6 +89,7 @@ public class KitManager {
         registerKit(new KitTank(this));
         registerKit(new KitTeleporter(this));
         registerKit(new KitWarrior(this));
+        registerKit(new KitWitchdoctor(this));
         registerKit(new KitWither(this));
         registerKit(new KitWolfPack(this));
         registerKit(new KitZeus(this));

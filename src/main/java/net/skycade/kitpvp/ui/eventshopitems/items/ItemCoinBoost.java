@@ -16,16 +16,15 @@ import java.util.List;
 
 public class ItemCoinBoost extends EventShopItem {
 
-    private YamlConfiguration yaml;
     private EventShopManager eventShopManager;
 
     public ItemCoinBoost(EventShopManager eventShopManager) {
-        super(eventShopManager, "§6Double Coins Upgrade", new ItemStack(Material.DOUBLE_PLANT, 1, (short) 0), 50, 600);
+        super(eventShopManager, ChatColor.GOLD + "Double Coins Upgrade", new ItemStack(Material.DOUBLE_PLANT, 1, (short) 0), 50, 600);
         this.eventShopManager = eventShopManager;
     }
 
     public void giveReward(Player p) {
-        this.yaml = eventShopManager.getYaml();
+        YamlConfiguration yaml = eventShopManager.getYaml();
         long now = System.currentTimeMillis();
         yaml.set((p.getUniqueId() + "." + getName()), now);
         eventShopManager.setYaml(yaml);

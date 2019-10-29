@@ -156,6 +156,9 @@ public abstract class Kit implements Listener {
     public void onMove(Player p) {
     }
 
+    public void onDeath(Player p) {
+    }
+
     public void removeSummon(int seconds, Player p) {
     }
 
@@ -245,7 +248,7 @@ public abstract class Kit implements Listener {
             if (p.getInventory().firstEmpty() == -1)
                 break;
 
-            if (activeKit == KitType.POTIONMASTER || activeKit == KitType.BUILDUHC) {
+            if (activeKit == KitType.POTIONMASTER || activeKit == KitType.BUILDUHC || activeKit == KitType.WITCHDOCTOR) {
                 p.getInventory().addItem(new ItemStack(Material.POTION, 1, (short) 16421));
             } else if (activeKit == KitType.HULK) {
                 p.getInventory().addItem(new ItemStack(Material.MUSHROOM_SOUP, 1));
@@ -420,14 +423,8 @@ public abstract class Kit implements Listener {
     }
 
     @EventHandler
-    public void onDeath(PlayerDeathEvent e) {
+    public void onPlayerDeath(PlayerDeathEvent e) {
         frozenPlayers.remove(e.getEntity().getUniqueId());
-    }
-
-    @EventHandler
-    public void onQuit(PlayerQuitEvent e) {
-        frozenPlayers.remove(e.getPlayer().getUniqueId());
-
     }
 
     public abstract List<String> getHowToObtain();

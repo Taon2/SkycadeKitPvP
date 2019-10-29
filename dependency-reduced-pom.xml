@@ -110,6 +110,13 @@
       <scope>system</scope>
       <systemPath>${basedir}/dependencies/CombatTagPlus.jar</systemPath>
     </dependency>
+    <dependency>
+      <groupId>net.brcdev</groupId>
+      <artifactId>gangs</artifactId>
+      <version>2.6.1</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/dependencies/GangsPlus-2.6.1.jar</systemPath>
+    </dependency>
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

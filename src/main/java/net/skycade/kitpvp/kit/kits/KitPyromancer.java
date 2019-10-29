@@ -65,7 +65,7 @@ public class KitPyromancer extends Kit {
         bow = new ItemBuilder(
                 Material.BOW)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.ARROW_DAMAGE, 1)
+                .addEnchantment(Enchantment.ARROW_DAMAGE, 2)
                 .addEnchantment(Enchantment.ARROW_FIRE, 1).build();
         arrows = new ItemBuilder(
                 Material.ARROW, arrowStartAmount)

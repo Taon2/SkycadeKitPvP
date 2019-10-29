@@ -91,7 +91,7 @@ public class KitBlacksmith extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_PICKAXE)
             return;
-        if (!addCooldown(p, "Anvil Drop", 20, true))
+        if (!addCooldown(p, "Anvil Drop", 15, true))
             return;
 
         for (int anvilNum = 2; anvilNum <= 6; anvilNum++) {

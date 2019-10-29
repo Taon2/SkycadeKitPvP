@@ -37,22 +37,22 @@ public class KitMaster extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DURABILITY, 7)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5)
                 .setColour(Color.fromBGR(0, 215, 255)).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DURABILITY, 7)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5)
                 .setColour(Color.fromBGR(0, 215, 255)).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DURABILITY, 7)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5)
                 .setColour(Color.fromBGR(0, 215, 255)).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DURABILITY, 7)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5)
                 .setColour(Color.fromBGR(0, 215, 255)).build();
         weapon = new ItemBuilder(

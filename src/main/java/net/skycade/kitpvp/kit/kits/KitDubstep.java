@@ -26,7 +26,7 @@ public class KitDubstep extends Kit {
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
     public KitDubstep(KitManager kitManager) {
-        super(kitManager, "Dubstep", KitType.DUBSTEP, 15000, getLore());
+        super(kitManager, "Dubstep", KitType.DUBSTEP, 35000, getLore());
 
         helmet = new ItemBuilder(
                 Material.IRON_HELMET).build();

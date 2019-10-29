@@ -1,11 +1,16 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.brcdev.gangs.GangsPlusApi;
+import net.brcdev.gangs.gang.Gang;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -13,7 +18,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static net.skycade.kitpvp.Messages.HEALED;
 
@@ -80,9 +87,17 @@ public class KitJesus extends Kit {
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
-        //todo gangs.forEach(). Send message saying Healed
-        p.addPotionEffects(Collections.singletonList(new PotionEffect(PotionEffectType.REGENERATION, 60, 1)));
-        HEALED.msg(p);
+        Gang gang = GangsPlusApi.getPlayersGang(p);
+
+        if (gang == null) {
+            p.addPotionEffects(Collections.singletonList(new PotionEffect(PotionEffectType.REGENERATION, 60, 1)));
+            HEALED.msg(p);
+        } else {
+            gang.getOnlineMembers().forEach(member -> {
+                member.addPotionEffects(Collections.singletonList(new PotionEffect(PotionEffectType.REGENERATION, 60, 1)));
+                HEALED.msg(member);
+            });
+        }
     }
 
     @Override
@@ -90,7 +105,6 @@ public class KitJesus extends Kit {
         return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }
 
-    //todo edit this kit and give it a regen heal ability
     public static List<String> getLore() {
         return Arrays.asList(
                 ChatColor.GREEN + "" + ChatColor.BOLD + "Support Kit",

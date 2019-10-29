@@ -86,7 +86,7 @@ public class KitHulk extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.AIR)
             return;
-        if (!addCooldown(p, "hulk smash", 25, true))
+        if (!addCooldown(p, "hulk smash", 20, true))
             return;
 
         //For missions

@@ -52,6 +52,7 @@ public class Messages {
     public static final Localization.Message PRESTIGE_USAGE = new Localization.Message("usage.prestige", "&7/prestige");
     public static final Localization.Message KITNAME_USAGE = new Localization.Message("usage.kitname", "&7/kitname &a<player>");
     public static final Localization.Message VIEWKIT_USAGE = new Localization.Message("usage.viewkit", "&7/viewkit &a<kitname>");
+    public static final Localization.Message VIEWSTATS_USAGE = new Localization.Message("usage.viewstats", "&7/viewstats &a<player>");
     public static final Localization.Message TRIGGEREVENT_USAGE = new Localization.Message("usage.triggerevent", "&7/triggerevent &a<event>");
     public static final Localization.Message ECO_USAGE = new Localization.Message("usage.eco", "&7/eco &a<give/take/reset> <player/all> <amount>");
     public static final Localization.Message EVENTECO_USAGE = new Localization.Message("usage.eventeco", "&7/eventeco &a<give/take/reset> <player/all> <amount>");
@@ -70,6 +71,7 @@ public class Messages {
     public static final Localization.Message PRESTIGE_DESCRIPTION = new Localization.Message("description.prestige", "&7Opens the prestige menu.");
     public static final Localization.Message KITNAME_DESCRIPTION = new Localization.Message("description.kitname", "&7Displays the kit a player is currently using.");
     public static final Localization.Message VIEWKIT_DESCRIPTION = new Localization.Message("description.viewkit", "&7Displays the contents of a kit.");
+    public static final Localization.Message VIEWSTATS_DESCRIPTION = new Localization.Message("description.viewstats", "&7Displays the stats of a player.");
     public static final Localization.Message TRIGGEREVENT_DESCRIPTION = new Localization.Message("description.triggerevent", "&7Starts an event.");
     public static final Localization.Message ECO_DESCRIPTION = new Localization.Message("description.eco", "&7Changes a player's coin balance.");
     public static final Localization.Message EVENTECO_DESCRIPTION = new Localization.Message("description.eventeco", "&7Changes a player's event token balance.");
@@ -82,6 +84,7 @@ public class Messages {
     //KitPvP Stats
     public static final Localization.Message STATS = new Localization.Message("command.your-stat-set",
             "&7---------- &f&l%player%'s KitPvP Stats &7----------\n" +
+                    "&fGang Affiliation - &a%gang%\n" +
                     "&fDeaths - &a%deaths%\n" +
                     "&fKills - &a%kills%\n" +
                     "&fK/D - &a%kdr%\n" +
@@ -105,8 +108,8 @@ public class Messages {
     //Kill The King
     public static final Localization.Message KILLTHEKING_START = new Localization.Message("event.killtheking-start", "&a&lKILL THE KING! &r&a%player% is the King. Everyone attack them!");
     public static final Localization.Message KILLTHEKING_TOO_LONG = new Localization.Message("event.killtheking-too-long", "&a&lThe King took too long to kill.");
-    public static final Localization.Message KILLTHEKING_PARTICIPATE = new Localization.Message("event.killtheking-participate", "You have received %amount% Event Tokens for participating!");
-    public static final Localization.Message KILLTHEKING_WON = new Localization.Message("event.killtheking-won", "You have killed the King! You have received %amount% Event Tokens for winning!");
+    public static final Localization.Message KILLTHEKING_PARTICIPATE = new Localization.Message("event.killtheking-participate", "&7You have received &a%amount% &7Event Tokens for participating!");
+    public static final Localization.Message KILLTHEKING_WON = new Localization.Message("event.killtheking-won", "&7You have killed the King! You have received &a%amount% &7Event Tokens for winning!");
     public static final Localization.Message KILLTHEKING_KILLED_BY = new Localization.Message("event.killtheking-killed-by", "&c%player% &ahas killed the King!");
     public static final Localization.Message KILLTHEKING_KILLED = new Localization.Message("event.killtheking-killed", "&aThe King has been killed!");
     public static final Localization.Message KILLTHEKING_LOGGED_OUT = new Localization.Message("event.killtheking-logged-out", "&aThe King has been killed!");
@@ -129,8 +132,8 @@ public class Messages {
             "&bTeam &9&lBLUE&b: &6%kills2% kill%s2%");
     public static final Localization.Message TEAMFIGHT_DRAW = new Localization.Message("event.teamfight.draw", "&aThe event ended with a &e&lDRAW&a! Thanks to everyone for participating!");
     public static final Localization.Message TEAMFIGHT_WINNER = new Localization.Message("event.teamfight.winner", "&aTeam %team% &awins, and gets &6&l2x coins &afor the next &630 minutes&a. &lCongratulations!");
-    public static final Localization.Message TEAMFIGHT_PARTICIPATE = new Localization.Message("event.teamfight-participate", "You have received %amount% Event Tokens for participating!");
-    public static final Localization.Message TEAMFIGHT_WON = new Localization.Message("event.teamfight-won", " You have received %amount% Event Tokens for winning!");
+    public static final Localization.Message TEAMFIGHT_PARTICIPATE = new Localization.Message("event.teamfight-participate", "&7You have received &a%amount% &7Event Tokens for participating!");
+    public static final Localization.Message TEAMFIGHT_WON = new Localization.Message("event.teamfight-won", "&7You have received &a%amount% &7Event Tokens for winning!");
 
     //KitPvP Kill Messages
     public static final Localization.Message NO_REWARDS = new Localization.Message("kill.no-rewards", "&7You killed the same player more than 3 times, &cno rewards &7rewarded.");
@@ -138,7 +141,9 @@ public class Messages {
     public static final Localization.Message KILLED_BY = new Localization.Message("kill.killed-by", "&7You were killed by &a%player%&7.");
     public static final Localization.Message YOU_KILLED = new Localization.Message("kill.you-killed", "&7You killed &a%player%&7.");
     public static final Localization.Message COLLECTED_BOUNTY = new Localization.Message("kill.collected-bounty", "&aYou got &a%amount% &7extra coins for collecting %player%'s bounty!");
-    public static final Localization.Message BROKE_KILLSTREAK = new Localization.Message("kill.broke-killstreak", "&aYou got &a%amount% &7extra coins for breaking %player%'s killstreak!");
+    public static final Localization.Message YOU_BROKE_KILLSTREAK = new Localization.Message("kill.you-broke-killstreak", "&7You got &a%amount% &7extra coins for breaking &a%player%'s &7killstreak!");
+    public static final Localization.Message BROKE_KILLSTREAK = new Localization.Message("kill.broke-killstreak", "&c&l%killer% &7broke &a%dead%'s &6killstreak of &c&l%ks%!");
+    public static final Localization.Message HAS_KILLSTREAK = new Localization.Message("kill.has-killstreak", "&c&l%killer% &6has a killstreak of &c&l%ks%!");
 
     //Kit Messages
     public static final Localization.Message CANT_USE_HERE = new Localization.Message("kit.cant-use-here", "&cYou can't use that ability here.");
@@ -225,7 +230,7 @@ public class Messages {
                 KILLED_BY,
                 YOU_KILLED,
                 COLLECTED_BOUNTY,
-                BROKE_KILLSTREAK,
+                YOU_BROKE_KILLSTREAK,
                 STATS_RESET,
                 STAT_SET,
                 YOUR_STAT_SET,
@@ -309,7 +314,11 @@ public class Messages {
                 PLAYER_REPAIRED,
                 REPAIRED,
                 YOURE_POISONED,
-                SUMMONED_GHOSTS
+                SUMMONED_GHOSTS,
+                VIEWSTATS_USAGE,
+                VIEWSTATS_DESCRIPTION,
+                BROKE_KILLSTREAK,
+                HAS_KILLSTREAK
         );
     }
 }

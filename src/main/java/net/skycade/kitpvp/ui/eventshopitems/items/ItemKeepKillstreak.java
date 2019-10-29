@@ -18,19 +18,17 @@ import java.util.List;
 
 public class ItemKeepKillstreak extends EventShopItem {
 
-    private YamlConfiguration yaml;
     private EventShopManager eventShopManager;
 
     public ItemKeepKillstreak(EventShopManager eventShopManager) {
-        super(eventShopManager, "§cKeep Kill Streak", new ItemStack(Material.DIAMOND_SWORD), 100, 60);
+        super(eventShopManager, ChatColor.RED + "Keep Kill Streak", new ItemStack(Material.DIAMOND_SWORD), 100, 0);
         this.eventShopManager = eventShopManager;
     }
 
     @Override
     public void giveReward(Player p) {
-        this.yaml = eventShopManager.getYaml();
-        long now = System.currentTimeMillis();
-        yaml.set((p.getUniqueId() + "." + getName()), now);
+        YamlConfiguration yaml = eventShopManager.getYaml();
+        yaml.set((p.getUniqueId() + "." + getName()), true);
         eventShopManager.setYaml(yaml);
         eventShopManager.save();
     }
@@ -42,20 +40,24 @@ public class ItemKeepKillstreak extends EventShopItem {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onPlayerDeath(PlayerDeathEvent e) {
         Player p = e.getEntity();
-        if (eventShopManager.getYaml().contains(p.getUniqueId().toString()) && eventShopManager.getYaml().contains(p.getUniqueId().toString() + "." + getName()) && (System.currentTimeMillis() - eventShopManager.getYaml().getLong(p.getUniqueId().toString() + "." + getName())) / 1000L < getDuration()) {
+        if (eventShopManager.getYaml().contains(p.getUniqueId().toString()) && eventShopManager.getYaml().contains(p.getUniqueId().toString() + "." + getName()) && eventShopManager.getYaml().getBoolean(p.getUniqueId().toString() + "." + getName())) {
             KitPvPStats stats = eventShopManager.getKitPvP().getStats(p);
             stats.setStreak(stats.getLastStreak());
             ScoreboardInfo.getInstance().updatePlayer(p);
+
+            YamlConfiguration yaml = eventShopManager.getYaml();
+            yaml.set((p.getUniqueId() + "." + getName()), false);
+            eventShopManager.setYaml(yaml);
+            eventShopManager.save();
         }
     }
 
     @Override
     public List<String> getDescription() {
         return Arrays.asList(
-                ChatColor.WHITE + "Keep your Kill Streak through",
-                ChatColor.WHITE + "death for the next minute.",
+                ChatColor.WHITE + "Keep your Kill Streak",
+                ChatColor.WHITE + "through your next death.",
                 ChatColor.GOLD + "Price: " + ChatColor.WHITE + getPrice() + " Tokens.",
-                ChatColor.GOLD + "Duration: " + ChatColor.WHITE + getDuration()/60 + " Minute.", "",
                 ChatColor.GRAY + "Click to buy this upgrade."
         );
     }

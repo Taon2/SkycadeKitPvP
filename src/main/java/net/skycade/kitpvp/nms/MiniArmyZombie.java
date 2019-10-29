@@ -186,14 +186,11 @@ public class MiniArmyZombie extends EntityZombie {
 
         public void c() {
             this.cooldown = 0;
-            //this.waterSpeed = this.miniArmyZombie.a(PathType.WATER); // todo check
-            //this.miniArmyZombie.a(PathType.WATER, 0.0F); // todo check
         }
 
         public void d() {
             this.owner = null;
             this.navigation.n();
-            //this.miniArmyZombie.a(PathType.WATER, this.waterSpeed); // todo check
         }
 
         private boolean a(BlockPosition var1) {
@@ -220,7 +217,7 @@ public class MiniArmyZombie extends EntityZombie {
                                 for (int offZ = 0; offZ <= 4; ++offZ) {
                                     IBlockData iblockdata = this.world.getType(new BlockPosition(x + offX, y - 1, z + offZ));
 
-                                    boolean f = iblockdata.getBlock().getMaterial().k(); // todo check
+                                    boolean f = iblockdata.getBlock().getMaterial().k();
 
                                     if ((offX < 1 || offZ < 1 || offX > 3 || offZ > 3) && f && this.a(new BlockPosition(x + offX, y, z + offZ)) && this.a(new BlockPosition(x + offX, y + 1, z + offZ))) {
                                         this.miniArmyZombie.setPositionRotation((double) ((float) (x + offX) + 0.5F), (double) y, (double) ((float) (z + offZ) + 0.5F), this.miniArmyZombie.yaw, this.miniArmyZombie.pitch);

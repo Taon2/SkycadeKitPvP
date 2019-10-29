@@ -50,7 +50,7 @@ public class PlayerInteractListener implements Listener {
     public void onPlayerRightClick(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         if (e.getItem() == null) {
-            if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && plugin.getStats(p).getActiveKit().equals(KitType.HULK) && !p.getGameMode().equals(GameMode.CREATIVE) && !plugin.isInSpawnArea(p)) {
+            if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && plugin.getStats(p).getActiveKit() == KitType.HULK && !p.getGameMode().equals(GameMode.CREATIVE) && !plugin.isInSpawnArea(p)) {
                 plugin.getStats(p).getActiveKit().getKit().onItemUse(p, new ItemStack(Material.AIR));
             }
             return;

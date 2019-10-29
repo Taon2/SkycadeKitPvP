@@ -1,21 +1,26 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.brcdev.gangs.GangsPlusApi;
+import net.brcdev.gangs.gang.Gang;
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
-import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class KitKnight extends Kit {
 
@@ -61,23 +66,20 @@ public class KitKnight extends Kit {
         p.getInventory().setBoots(boots);
     }
 
-    //todo remove this and replace with thing from below
     @Override
     public void onMove(Player p) {
-        for (Player target : UtilPlayer.getNearbyPlayers(p.getLocation(), 6)) {
-            if (getKitManager().getKitPvP().getStats(target).getActiveKit() == KitType.GHOST) {
-                Location location = target.getLocation();
-                for (int i = 0; i < 30; i++) {
-                    double angle, x, z;
-                    angle = 2 * Math.PI * i / 30;
-                    x = Math.cos(angle) * 1;
-                    z = Math.sin(angle) * 1;
-                    location.add(x, 0, z);
-                    ParticleEffect.VILLAGER_HAPPY.display(0.03F, 0.02F, 0.03F, 0.05F, 1, location, Collections.singletonList(p));
-                    location.subtract(x, 0, z);
-                }
+        Gang gang = GangsPlusApi.getPlayersGang(p);
+
+        Set<Player> nearby = UtilPlayer.getNearbyPlayers(p.getLocation(), 8);
+
+        gang.getOnlineMembers().forEach(member -> {
+            if (nearby.contains(member)) {
+                KitPvPStats stats = KitPvP.getInstance().getStats(member);
+
+                if (stats.getActiveKit() == KitType.KING)
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 40, 1));
             }
-        }
+        });
     }
 
     @Override
@@ -85,14 +87,13 @@ public class KitKnight extends Kit {
         return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }
 
-    //todo make this kit have an ability to simulate last line
     public static List<String> getLore() {
         return Arrays.asList(
                 ChatColor.AQUA + "" + ChatColor.BOLD + "Defensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Protects his king.",
                 "",
-                ChatColor.GRAY + "Being in a gang with a player",
-                ChatColor.GRAY + "using king kit increases your damage."
+                ChatColor.GRAY + "Being in a gang with a player using",
+                ChatColor.GRAY + "Kit King nearby increases your defence."
         );
     }
 }
