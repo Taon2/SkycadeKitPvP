@@ -28,7 +28,7 @@ public class KitKing extends Kit {
     private List<IronGolem> golemList = new ArrayList<>();
 
     public KitKing(KitManager kitManager) {
-        super(kitManager, "King", KitType.KING, 40000, getLore());
+        super(kitManager, "King", KitType.KING, 38000, getLore());
 
         helmet = new ItemBuilder(
                 Material.GOLD_HELMET)

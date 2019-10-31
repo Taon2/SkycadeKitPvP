@@ -51,6 +51,7 @@ public enum KitType {
     SOULMASTER("soulmaster"),
     TANK("tank"),
     TELEPORTER("teleporter"),
+    TREEENT("treeent"),
     WARRIOR("warrior"),
     WITCHDOCTOR("witchdoctor"),
     WITHER("wither"),

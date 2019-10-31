@@ -10,6 +10,7 @@ import net.skycade.kitpvp.events.TagEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.disabled.KitMedic;
+import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -84,12 +85,14 @@ public class PlayerListeners implements Listener {
         }.runTaskLater(plugin, 2);
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onPlayerMove(PlayerMoveEvent e) {
         if (e.getFrom().getBlock().equals(e.getTo().getBlock())) return;
 
-        KitPvPStats stats = KitPvP.getInstance().getStats(e.getPlayer());
-        stats.getActiveKit().getKit().onMove(e.getPlayer());
+        if (!plugin.getSpawnRegion().contains(e.getPlayer().getLocation())) {
+            KitPvPStats stats = KitPvP.getInstance().getStats(e.getPlayer());
+            stats.getActiveKit().getKit().onMove(e.getPlayer());
+        }
 
         if (!plugin.getSpawnRegion().contains(e.getTo()) || plugin.getSpawnRegion().contains(e.getFrom())) return;
         new BukkitRunnable() {
@@ -148,7 +151,9 @@ public class PlayerListeners implements Listener {
 
         if (streak > stats.getHighestStreak())
             stats.setHighestStreak(stats.getStreak());
-        stats.setStreak(0);
+
+        if (!KitPvP.getInstance().getEventShopManager().isKeepingKs(p))
+            stats.setStreak(0);
 
         if (RandomEvent.getCurrent() instanceof TagEvent) {
             TagEvent tagEvent = (TagEvent) RandomEvent.getCurrent();
@@ -171,5 +176,7 @@ public class PlayerListeners implements Listener {
         }, 1);
 
         Bukkit.getScheduler().runTaskLater(plugin, p::updateInventory, 10);
+
+        ScoreboardInfo.getInstance().updatePlayer(p);
     }
 }

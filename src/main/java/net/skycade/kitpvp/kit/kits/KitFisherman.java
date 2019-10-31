@@ -28,7 +28,7 @@ public class KitFisherman extends Kit {
     private ItemStack fishingRod;
 
     public KitFisherman(KitManager kitManager) {
-        super(kitManager, "Fisherman", KitType.FISHERMAN, 48000, getLore());
+        super(kitManager, "Fisherman", KitType.FISHERMAN, 46000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)

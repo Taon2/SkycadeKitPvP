@@ -26,7 +26,7 @@ public class KitHyper extends Kit {
     private ItemStack sugar;
 
     public KitHyper(KitManager kitManager) {
-        super(kitManager, "Hyper", KitType.HYPER, 28000, getLore());
+        super(kitManager, "Hyper", KitType.HYPER, 24000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)

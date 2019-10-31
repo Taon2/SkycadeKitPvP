@@ -35,7 +35,7 @@ public class PlayerJoinQuitListener implements Listener {
         // Reset killstreak
         Member member = MemberManager.getInstance().getMember(p);
         if (member == null) return;
-        if (!plugin.getSpawnRegion().contains(p) && !member.getPlayer().hasPermission(new Permission("kitpvp.admin", PermissionDefault.OP)))
+        if (!plugin.getSpawnRegion().contains(p) && !member.getPlayer().hasPermission(new Permission("kitpvp.admin", PermissionDefault.OP)) && !KitPvP.getInstance().getEventShopManager().isKeepingKs(p))
             plugin.getStats(p).setStreak(0);
 
         plugin.getStats(p).getActiveKit().getKit().stopItemRunnables(p);

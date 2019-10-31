@@ -33,7 +33,7 @@ public class KitJesus extends Kit {
     private ItemStack book;
 
     public KitJesus(KitManager kitManager) {
-        super(kitManager, "Jesus", KitType.JESUS, 30000, getLore());
+        super(kitManager, "Jesus", KitType.JESUS, 20000, getLore());
 
         chestplate = new ItemBuilder(
                 Material.DIAMOND_CHESTPLATE).build();

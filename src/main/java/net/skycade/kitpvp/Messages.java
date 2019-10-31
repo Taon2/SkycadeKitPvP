@@ -142,8 +142,8 @@ public class Messages {
     public static final Localization.Message YOU_KILLED = new Localization.Message("kill.you-killed", "&7You killed &a%player%&7.");
     public static final Localization.Message COLLECTED_BOUNTY = new Localization.Message("kill.collected-bounty", "&aYou got &a%amount% &7extra coins for collecting %player%'s bounty!");
     public static final Localization.Message YOU_BROKE_KILLSTREAK = new Localization.Message("kill.you-broke-killstreak", "&7You got &a%amount% &7extra coins for breaking &a%player%'s &7killstreak!");
-    public static final Localization.Message BROKE_KILLSTREAK = new Localization.Message("kill.broke-killstreak", "&c&l%killer% &7broke &a%dead%'s &6killstreak of &c&l%ks%!");
-    public static final Localization.Message HAS_KILLSTREAK = new Localization.Message("kill.has-killstreak", "&c&l%killer% &6has a killstreak of &c&l%ks%!");
+    public static final Localization.Message BROKE_KILLSTREAK = new Localization.Message("kill.broke-killstreak", "&c&l%killer% &6has broken &c&l%dead%'s &6killstreak of &c&l%ks%!");
+    public static final Localization.Message HAS_KILLSTREAK = new Localization.Message("kill.has-killstreak", "&c&l%killer% &6has reached a killstreak of &c&l%ks%&6!");
 
     //Kit Messages
     public static final Localization.Message CANT_USE_HERE = new Localization.Message("kit.cant-use-here", "&cYou can't use that ability here.");

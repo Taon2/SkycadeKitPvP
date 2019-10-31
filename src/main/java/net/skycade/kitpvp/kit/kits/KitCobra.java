@@ -28,7 +28,7 @@ public class KitCobra extends Kit {
     private ItemStack weapon;
 
     public KitCobra(KitManager kitManager) {
-        super(kitManager, "Cobra", KitType.COBRA, 12000, getLore());
+        super(kitManager, "Cobra", KitType.COBRA, 13000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)

@@ -34,7 +34,7 @@ public class KitFrosty extends Kit {
     private int snowballRegenSpeed = 20;
 
     public KitFrosty(KitManager kitManager) {
-        super(kitManager, "Frosty", KitType.FROSTY, 17000, getLore());
+        super(kitManager, "Frosty", KitType.FROSTY, 20000, getLore());
 
         helmet = new ItemBuilder(
                 Material.JACK_O_LANTERN)

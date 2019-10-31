@@ -37,7 +37,7 @@ public class KitAssassin extends Kit {
     private final Map<UUID, Integer> comboMap = new HashMap<>();
 
     public KitAssassin(KitManager kitManager) {
-        super(kitManager, "Assassin", KitType.ASSASSIN, 50000, getLore());
+        super(kitManager, "Assassin", KitType.ASSASSIN, 42000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)

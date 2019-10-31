@@ -35,7 +35,7 @@ public class KitMultishot extends Kit {
     private List<UUID> running = new ArrayList<>();
 
     public KitMultishot(KitManager kitManager) {
-        super(kitManager, "Multishot", KitType.MULTISHOT, 50000, getLore());
+        super(kitManager, "Multishot", KitType.MULTISHOT, 40000, getLore());
 
         helmet = new ItemBuilder(
                 Material.CHAINMAIL_HELMET)

@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.ui.eventshopitems.items;
 
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
@@ -21,7 +23,7 @@ public class ItemKeepKillstreak extends EventShopItem {
     private EventShopManager eventShopManager;
 
     public ItemKeepKillstreak(EventShopManager eventShopManager) {
-        super(eventShopManager, ChatColor.RED + "Keep Kill Streak", new ItemStack(Material.DIAMOND_SWORD), 100, 0);
+        super(eventShopManager, ChatColor.RED + "Keep Killstreak", new ItemStack(Material.DIAMOND_SWORD), 100, 0);
         this.eventShopManager = eventShopManager;
     }
 
@@ -40,22 +42,35 @@ public class ItemKeepKillstreak extends EventShopItem {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onPlayerDeath(PlayerDeathEvent e) {
         Player p = e.getEntity();
-        if (eventShopManager.getYaml().contains(p.getUniqueId().toString()) && eventShopManager.getYaml().contains(p.getUniqueId().toString() + "." + getName()) && eventShopManager.getYaml().getBoolean(p.getUniqueId().toString() + "." + getName())) {
+        if (eventShopManager.isKeepingKs(p)) {
             KitPvPStats stats = eventShopManager.getKitPvP().getStats(p);
             stats.setStreak(stats.getLastStreak());
             ScoreboardInfo.getInstance().updatePlayer(p);
+        }
+    }
 
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onPlayerMove(PlayerMoveEvent e) {
+        if (e.getFrom().getBlock().equals(e.getTo().getBlock())) return;
+
+        Player p = e.getPlayer();
+
+        if (KitPvP.getInstance().getSpawnRegion().contains(e.getFrom()) && KitPvP.getInstance().getSpawnRegion().contains(e.getTo()) && eventShopManager.isKeepingKs(p)) {
             YamlConfiguration yaml = eventShopManager.getYaml();
             yaml.set((p.getUniqueId() + "." + getName()), false);
             eventShopManager.setYaml(yaml);
             eventShopManager.save();
+        } else if (KitPvP.getInstance().getSpawnRegion().contains(p) && eventShopManager.isKeepingKs(p)){
+            KitPvPStats stats = eventShopManager.getKitPvP().getStats(p);
+            stats.setStreak(stats.getLastStreak());
+            ScoreboardInfo.getInstance().updatePlayer(p);
         }
     }
 
     @Override
     public List<String> getDescription() {
         return Arrays.asList(
-                ChatColor.WHITE + "Keep your Kill Streak",
+                ChatColor.WHITE + "Keep your Killstreak",
                 ChatColor.WHITE + "through your next death.",
                 ChatColor.GOLD + "Price: " + ChatColor.WHITE + getPrice() + " Tokens.",
                 ChatColor.GRAY + "Click to buy this upgrade."

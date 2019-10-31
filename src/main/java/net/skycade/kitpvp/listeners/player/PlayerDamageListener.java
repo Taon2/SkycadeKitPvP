@@ -108,9 +108,8 @@ public class PlayerDamageListener implements Listener {
         // Increase highest killstreak
         int diedStreak = diedStats.getStreak();
 
-        //Increase deaths and reset ks
+        //Increase deaths
         diedStats.setDeaths(plugin.getStats(diedMem).getDeaths() + 1);
-        diedStats.setStreak(0);
 
         died.getLocation().getWorld().playEffect(died.getLocation(), Effect.SMOKE, 1);
         plugin.getKitManager().getSignMap().remove(died.getUniqueId());
@@ -141,12 +140,13 @@ public class PlayerDamageListener implements Listener {
         //Update kills
         KitPvPStats stats = plugin.getStats(killerMem);
 
+        final int kills = stats.getKills() + 1;
+        stats.setKills(kills);
+        diedStats.setStreak(0);
+
         //For missions
         KitPvPKillPlayerEvent killEvent = new KitPvPKillPlayerEvent(killer, stats.getActiveKit());
         Bukkit.getServer().getPluginManager().callEvent(killEvent);
-
-        final int kills = stats.getKills() + 1;
-        stats.setKills(kills);
 
         Bukkit.getServer().getPluginManager().callEvent(new CoreAchievementEvent(killer, "kitpvpkills") {
             @Override
@@ -164,6 +164,7 @@ public class PlayerDamageListener implements Listener {
             }
         });
 
+        //Update ks
         final int streak = plugin.getStats(killer).getStreak() + 1;
         stats.setStreak(streak);
 
@@ -198,10 +199,10 @@ public class PlayerDamageListener implements Listener {
             COLLECTED_BOUNTY.msg(killerMem.getPlayer(), "%amount%", Integer.toString(bounty), "%player%", diedMem.getName());
 
         //Extra coins when a high ks gets broken
-        int killstreakCoins = diedStats.getStreak() >= 10 ? diedStats.getStreak() : 0;
-        if (diedStats.getStreak() >= 10) {
-            YOU_BROKE_KILLSTREAK.msg(killerMem.getPlayer(), "%amount%", Integer.toString(diedStats.getStreak()), "%player%", diedMem.getName());
-            BROKE_KILLSTREAK.broadcast("%killer%", killer.getName(), "%dead%", died.getName(), "%ks%", Integer.toString(diedStats.getStreak()));
+        int killstreakCoins = diedStreak >= 10 ? diedStreak : 0;
+        if (diedStreak >= 10) {
+            YOU_BROKE_KILLSTREAK.msg(killerMem.getPlayer(), "%amount%", Integer.toString(diedStreak), "%player%", diedMem.getName());
+            BROKE_KILLSTREAK.broadcast("%killer%", killer.getName(), "%dead%", died.getName(), "%ks%", Integer.toString(diedStreak));
         }
 
         //Normal kill coins

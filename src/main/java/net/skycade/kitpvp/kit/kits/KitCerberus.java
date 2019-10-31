@@ -28,7 +28,7 @@ public class KitCerberus extends Kit {
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
     public KitCerberus(KitManager kitManager) {
-        super(kitManager, "Cerberus", KitType.CERBERUS, 20000, getLore());
+        super(kitManager, "Cerberus", KitType.CERBERUS, 29000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)

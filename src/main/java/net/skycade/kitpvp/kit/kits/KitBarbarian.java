@@ -28,7 +28,7 @@ public class KitBarbarian extends Kit {
     private ItemStack weapon;
 
     public KitBarbarian(KitManager kitManager) {
-        super(kitManager, "Barbarian", KitType.BARBARIAN, 11000, getLore());
+        super(kitManager, "Barbarian", KitType.BARBARIAN, 12000, getLore());
 
         helmet = new ItemBuilder(
                 Material.IRON_HELMET).build();

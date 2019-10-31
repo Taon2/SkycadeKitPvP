@@ -88,6 +88,7 @@ public class KitManager {
         registerKit(new KitSoulMaster(this));
         registerKit(new KitTank(this));
         registerKit(new KitTeleporter(this));
+        registerKit(new KitTreeEnt(this));
         registerKit(new KitWarrior(this));
         registerKit(new KitWitchdoctor(this));
         registerKit(new KitWither(this));

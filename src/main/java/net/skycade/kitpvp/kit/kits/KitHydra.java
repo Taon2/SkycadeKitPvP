@@ -28,7 +28,7 @@ public class KitHydra extends Kit {
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
     public KitHydra(KitManager kitManager) {
-        super(kitManager, "Hydra", KitType.HYDRA, 20000, getLore());
+        super(kitManager, "Hydra", KitType.HYDRA, 29000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)

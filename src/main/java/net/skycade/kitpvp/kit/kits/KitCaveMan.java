@@ -31,7 +31,7 @@ public class KitCaveMan extends Kit {
     private int blockCooldown = 5;
 
     public KitCaveMan(KitManager kitManager) {
-        super(kitManager, "Caveman", KitType.CAVEMAN, 7000, getLore());
+        super(kitManager, "Caveman", KitType.CAVEMAN, 9000, getLore());
 
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
@@ -104,7 +104,7 @@ public class KitCaveMan extends Kit {
                 UtilPlayer.getNearbyPlayers(b.getLocation(), 2).forEach(player -> {
                     if (player != p)
                         if (Arrays.asList(GameMode.SURVIVAL, GameMode.ADVENTURE).contains(player.getGameMode()))
-                            player.damage(8 + 3, p);
+                            player.damage(11, p);
                 });
             }
         }.runTaskTimer(getKitManager().getKitPvP(), 0, 2);

@@ -60,11 +60,25 @@ public class EventShopManager {
 
     public void reapplyUpgrades(Player p) {
         eventShopItems.forEach((key, item) -> {
-
             if (yaml.contains(p.getUniqueId().toString()) && yaml.contains(p.getUniqueId().toString() + "." + item.getName()) && (System.currentTimeMillis() - yaml.getLong(p.getUniqueId().toString() + "." + item.getName())) / 1000L < item.getDuration()) {
                 item.reapplyReward(p);
             }
         });
+    }
+
+    public boolean isKeepingKs(Player p) {
+        boolean keepKs = false;
+        for (Map.Entry<String, EventShopItem> entry : eventShopItems.entrySet()) {
+            String key = entry.getKey();
+            EventShopItem item = entry.getValue();
+            if (key.contains("Killstreak")) {
+                keepKs = getYaml().contains(p.getUniqueId().toString()) &&
+                        getYaml().contains(p.getUniqueId().toString() + "." + item.getName()) &&
+                        getYaml().getBoolean(p.getUniqueId().toString() + "." + item.getName());
+            }
+        }
+
+        return keepKs;
     }
 
     public YamlConfiguration getYaml() {

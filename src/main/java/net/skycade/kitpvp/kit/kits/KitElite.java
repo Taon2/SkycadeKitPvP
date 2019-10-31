@@ -27,7 +27,7 @@ public class KitElite extends Kit {
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
     public KitElite(KitManager kitManager) {
-        super(kitManager, "Elite", KitType.ELITE, 16000, getLore());
+        super(kitManager, "Elite", KitType.ELITE, 12000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
