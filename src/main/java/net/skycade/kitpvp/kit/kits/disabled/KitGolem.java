@@ -32,6 +32,8 @@ public class KitGolem extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int smashCooldown = 25;
+
     public KitGolem(KitManager kitManager) {
         super(kitManager, "Golem", KitType.GOLEM, 37000, false, getLore());
 
@@ -46,7 +48,9 @@ public class KitGolem extends Kit {
         weapon = new ItemBuilder(
                 Material.WOOD_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 4).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + smashCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "smashes the ground around you.").build();
 
         ItemStack icon = new ItemStack(Material.IRON_BLOCK);
         setIcon(icon);
@@ -74,7 +78,7 @@ public class KitGolem extends Kit {
             CANT_USE_HERE.msg(p);
             return;
         }
-        if (!addCooldown(p, getName(), 30 - 5, true))
+        if (!addCooldown(p, "Ground Pound", smashCooldown, true))
             return;
 
         List<Block> blocks = golemBlocks(p);

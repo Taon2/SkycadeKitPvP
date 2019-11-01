@@ -7,8 +7,6 @@ import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -25,7 +23,7 @@ public class KitNinja extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
-    private final List<UUID> ninjaCooldown = new ArrayList<>();
+    private int dashCooldown = 60;
 
     public KitNinja(KitManager kitManager) {
         super(kitManager, "Ninja", KitType.NINJA, 32000, false, getLore());
@@ -53,7 +51,9 @@ public class KitNinja extends Kit {
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 3).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + dashCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "lets you dash around and have extra strength.").build();
 
         constantEffects.put(PotionEffectType.SPEED, 1);
 
@@ -80,10 +80,8 @@ public class KitNinja extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.STONE_SWORD)
             return;
-        if (ninjaCooldown.contains(p.getUniqueId()))
+        if (!addCooldown(p, "Dash", dashCooldown, false))
             return;
-        ninjaCooldown.add(p.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> ninjaCooldown.remove(p.getUniqueId()), 60);
         p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 60, 0));
         tpDash(p, 6);
     }
@@ -112,11 +110,6 @@ public class KitNinja extends Kit {
     @Override
     public void onMove(Player p) {
         particleTracerEffect(p, Color.PURPLE, 30);
-    }
-
-    @EventHandler
-    public void on(PlayerQuitEvent e) {
-        ninjaCooldown.remove(e.getPlayer().getUniqueId());
     }
 
     @Override

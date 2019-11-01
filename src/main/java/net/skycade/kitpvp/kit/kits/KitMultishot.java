@@ -28,6 +28,7 @@ public class KitMultishot extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
+    private int arrowCooldown = 2;
     private int arrowRegenSpeed = 12;
     private int arrowStartAmount = 4;
     private int arrowMaxAmount = 6;
@@ -60,7 +61,9 @@ public class KitMultishot extends Kit {
         bow = new ItemBuilder(
                 Material.BOW)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.ARROW_DAMAGE, 2).build();
+                .addEnchantment(Enchantment.ARROW_DAMAGE, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fire 5 arrows every " + arrowCooldown + " seconds.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Each shot only consumes 1 arrow.").build();
         arrows = new ItemBuilder(
                 Material.ARROW, arrowStartAmount)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 arrow every " + arrowRegenSpeed + " seconds.").build();
@@ -89,10 +92,9 @@ public class KitMultishot extends Kit {
     }
 
     public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
-        if (running.contains(shooter.getUniqueId())) {
+        if (running.contains(shooter.getUniqueId()))
             return;
-        }
-        if (!addCooldown(shooter, "bow", 2, true)) {
+        if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
             e.setCancelled(true);
             return;
         }

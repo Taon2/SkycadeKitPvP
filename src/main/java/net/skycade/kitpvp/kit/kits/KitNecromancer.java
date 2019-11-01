@@ -42,6 +42,8 @@ public class KitNecromancer extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int ghostCooldown = 20;
+
     private List<MiniArmyZombie> ghostList = new ArrayList<>();
 
     public KitNecromancer(KitManager kitManager) {
@@ -67,7 +69,9 @@ public class KitNecromancer extends Kit {
                 .setColour(Color.GRAY).build();
         weapon = new ItemBuilder(
                 Material.BONE)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + ghostCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "summons ghosts to fight for you.").build();
 
         ItemStack icon = new ItemStack(
                 Material.SKULL_ITEM);
@@ -89,7 +93,7 @@ public class KitNecromancer extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.BONE)
             return;
-        if (!addCooldown(p, "summon ghosts", 20, false))
+        if (!addCooldown(p, "Summon Ghosts", ghostCooldown, false))
             return;
 
         //For missions

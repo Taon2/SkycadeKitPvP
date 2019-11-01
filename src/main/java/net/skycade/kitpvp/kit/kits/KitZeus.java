@@ -54,7 +54,8 @@ public class KitZeus extends Kit {
                 .setColour(Color.fromRGB(255, 255, 153)).build();
         weapon = new ItemBuilder(
                 Material.BLAZE_ROD)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Damaging players has a chance to smite them with lightning.").build();
 
         constantEffects.put(PotionEffectType.FIRE_RESISTANCE, 0);
 

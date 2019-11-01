@@ -32,20 +32,29 @@ public class KitJesus extends Kit {
     private ItemStack weapon;
     private ItemStack book;
 
+    private int cleanseCooldown = 25;
+
     public KitJesus(KitManager kitManager) {
         super(kitManager, "Jesus", KitType.JESUS, 20000, getLore());
 
         chestplate = new ItemBuilder(
-                Material.DIAMOND_CHESTPLATE).build();
+                Material.DIAMOND_CHESTPLATE)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains speed in water.").build();
         leggings = new ItemBuilder(
-                Material.DIAMOND_LEGGINGS).build();
+                Material.DIAMOND_LEGGINGS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains speed in water.").build();
         boots = new ItemBuilder(
                 Material.DIAMOND_BOOTS)
                 .addEnchantment(Enchantment.DEPTH_STRIDER, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains speed in water.").build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 5).build();
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + cleanseCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "grants your nearby gang members regeneration.").build();
         book = new ItemStack(
                 Material.ENCHANTED_BOOK);
 
@@ -80,7 +89,7 @@ public class KitJesus extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.ENCHANTED_BOOK)
             return;
-        if (!addCooldown(p, getName(), 30, true))
+        if (!addCooldown(p, "Cleanse Sins", cleanseCooldown, true))
             return;
 
         //For missions

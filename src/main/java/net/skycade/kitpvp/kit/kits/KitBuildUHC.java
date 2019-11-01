@@ -14,6 +14,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -33,10 +34,13 @@ public class KitBuildUHC extends Kit {
     private ItemStack bow;
     private ItemStack arrows;
 
+    private int goldenHeadCooldown = 25;
+    private int arrowCooldown = 1;
     private int arrowRegenSpeed = 3;
     private int arrowStartAmount = 16;
     private int arrowMaxAmount = 32;
 
+    private int blockRemoveSpeed = 2;
     private int blockRegenSpeed = 3;
     private int blockStartAmount = 10;
     private int blockMaxAmount = 20;
@@ -47,28 +51,35 @@ public class KitBuildUHC extends Kit {
         super(kitManager, "BuildUHC", KitType.BUILDUHC, 29000, getLore());
 
         helmet = new ItemBuilder(
-                Material.IRON_HELMET).build();
+                Material.IRON_HELMET)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
         chestplate = new ItemBuilder(
                 Material.IRON_CHESTPLATE)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
         leggings = new ItemBuilder(
-                Material.IRON_LEGGINGS).build();
+                Material.IRON_LEGGINGS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
         boots = new ItemBuilder(
-                Material.IRON_BOOTS).build();
+                Material.IRON_BOOTS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + goldenHeadCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "grants a golden head effect.").build();
         fishingrod = new ItemBuilder(
                 Material.FISHING_ROD)
                 .addEnchantment(Enchantment.DURABILITY, 5).build();
         blocks = new ItemBuilder(
                 Material.WOOD, blockStartAmount)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Placed blocks are removed after " + blockRemoveSpeed + " seconds.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 block every " + blockRegenSpeed + " seconds.").build();
         bow = new ItemBuilder(
                 Material.BOW)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.ARROW_DAMAGE, 2).build();
+                .addEnchantment(Enchantment.ARROW_DAMAGE, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fire 1 arrow every " + arrowCooldown + " seconds.").build();
         arrows = new ItemBuilder(
                 Material.ARROW, arrowStartAmount)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 arrow every " + arrowRegenSpeed + " seconds.").build();
@@ -107,11 +118,17 @@ public class KitBuildUHC extends Kit {
         return blockRegen;
     }
 
+    public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
+        if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
+            e.setCancelled(true);
+        }
+    }
+
     @Override
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, "Golden Head", 25, true)) return;
+        if (!addCooldown(p, "Golden Head", goldenHeadCooldown, true)) return;
 
         //For missions
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
@@ -138,7 +155,7 @@ public class KitBuildUHC extends Kit {
 
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
             block.getLocation().getBlock().setType(Material.AIR);
-        }, 40);
+        }, blockRemoveSpeed * 20);
     }
 
     @EventHandler

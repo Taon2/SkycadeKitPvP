@@ -24,7 +24,7 @@ public class KitFireMage extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
-    private List<UUID> fireCooldown = new ArrayList<>();
+    private int flameCooldown = 4;
 
     public KitFireMage(KitManager kitManager) {
         super(kitManager, "FireMage", KitType.FIREMAGE, 34000, false, getLore());
@@ -51,7 +51,9 @@ public class KitFireMage extends Kit {
                 .setColour(Color.ORANGE).build();
         weapon = new ItemBuilder(
                 Material.STICK)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + flameCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "fires flames in front of you.").build();
 
         ItemStack icon = new ItemStack(Material.FIREWORK_CHARGE);
         setIcon(icon);
@@ -68,10 +70,11 @@ public class KitFireMage extends Kit {
 
     @Override
     public void onItemUse(Player p, ItemStack item) {
-        if (item.getType() != Material.STICK || fireCooldown.contains(p.getUniqueId()))
+        if (item.getType() != Material.STICK)
             return;
-        fireCooldown.add(p.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> fireCooldown.remove(p.getUniqueId()), 4);
+        if (!addCooldown(p, "Flame", flameCooldown, true)) {
+            return;
+        }
         p.getWorld().playSound(p.getLocation(), Sound.FIRE, 1, 1);
 
         new BukkitRunnable() {
@@ -112,7 +115,7 @@ public class KitFireMage extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Pyroblast!",
                 "",
-                ChatColor.GRAY + "Shoots fireballs."
+                ChatColor.GRAY + "Sprays flame in front of you."
         );
     }
 }

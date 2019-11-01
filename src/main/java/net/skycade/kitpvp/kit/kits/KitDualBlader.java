@@ -47,11 +47,13 @@ public class KitDualBlader extends Kit {
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .setName(ChatColor.RED + "Sword of Fire").build();
+                .setName(ChatColor.RED + "Sword of Fire")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Sets your enemies aflame.").build();
         weapon2 = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .setName(ChatColor.AQUA + "Sword of Frost").build();
+                .setName(ChatColor.AQUA + "Sword of Frost")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Freezes your enemies in place.").build();
 
         ItemStack icon = new ItemStack(Material.PACKED_ICE);
         setIcon(icon);

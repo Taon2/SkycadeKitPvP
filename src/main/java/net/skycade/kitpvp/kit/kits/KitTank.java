@@ -34,11 +34,14 @@ public class KitTank extends Kit {
                 Material.DIAMOND_HELMET)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
         chestplate = new ItemBuilder(
-                Material.DIAMOND_CHESTPLATE).build();
+                Material.DIAMOND_CHESTPLATE)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
         leggings = new ItemBuilder(
-                Material.DIAMOND_LEGGINGS).build();
+                Material.DIAMOND_LEGGINGS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
         boots = new ItemBuilder(
-                Material.DIAMOND_BOOTS).build();
+                Material.DIAMOND_BOOTS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)

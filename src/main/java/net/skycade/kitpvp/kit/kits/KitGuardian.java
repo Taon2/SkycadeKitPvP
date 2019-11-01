@@ -33,6 +33,8 @@ public class KitGuardian extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int fishCooldown = 20;
+
     private Map<UUID, Beam> beamMap = new HashMap<>();
     private Map<UUID, List<Integer>> beamRunnableMap = new HashMap<>();
 
@@ -43,25 +45,31 @@ public class KitGuardian extends Kit {
                 Material.LEATHER_HELMET)
                 .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fires a laser at the nearest enemy within 6 blocks.")
                 .setColour(Color.ORANGE).build();
         chestplate = new ItemBuilder(
                 Material.DIAMOND_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 10)
-                .addEnchantment(Enchantment.THORNS, 1).build();
+                .addEnchantment(Enchantment.THORNS, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fires a laser at the nearest enemy within 6 blocks.").build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fires a laser at the nearest enemy within 6 blocks.")
                 .setColour(Color.fromRGB(0, 204, 204)).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addEnchantment(Enchantment.DEPTH_STRIDER, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fires a laser at the nearest enemy within 6 blocks.")
                 .setColour(Color.fromRGB(0, 204, 204)).build();
         weapon = new ItemBuilder(
                 Material.RAW_FISH)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 3).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + fishCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "slows nearby enemies.").build();
 
         ItemStack icon = new ItemStack(Material.PRISMARINE_CRYSTALS);
         setIcon(icon);
@@ -136,7 +144,7 @@ public class KitGuardian extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.RAW_FISH)
             return;
-        if (!addCooldown(p, getName(), 25, true))
+        if (!addCooldown(p, getName(), fishCooldown, true))
             return;
 
         //For missions
@@ -226,7 +234,7 @@ public class KitGuardian extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "I'M A FIRIN MAH LAZER!",
                 "",
-                ChatColor.GRAY + "Constantly fires a lazer at the nearest enemy.",
+                ChatColor.GRAY + "Fires a laser at the nearest enemy.",
                 ChatColor.GRAY + "Right clicking slows players around you."
         );
     }

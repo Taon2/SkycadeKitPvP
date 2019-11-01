@@ -34,6 +34,8 @@ public class KitHulk extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
+    private int smashCooldown = 20;
+
     private Map<UUID, List<FallingBlock>> blockList = new HashMap<>();
     private Map<UUID, Boolean> isSmashing = new HashMap<>();
 
@@ -86,7 +88,7 @@ public class KitHulk extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.AIR)
             return;
-        if (!addCooldown(p, "hulk smash", 20, true))
+        if (!addCooldown(p, "Hulk Smash", smashCooldown, true))
             return;
 
         //For missions

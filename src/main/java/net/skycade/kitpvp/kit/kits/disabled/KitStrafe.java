@@ -38,7 +38,8 @@ public class KitStrafe extends Kit {
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build();
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 5).build();
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Comboing players deals extra damage.").build();
 
         constantEffects.put(PotionEffectType.SPEED, 3);
         constantEffects.put(PotionEffectType.FAST_DIGGING, 2);

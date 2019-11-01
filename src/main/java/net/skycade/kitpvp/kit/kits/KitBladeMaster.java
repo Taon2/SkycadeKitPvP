@@ -39,12 +39,14 @@ public class KitBladeMaster extends Kit {
                 Material.GOLD_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 3)
-                .setName(ChatColor.RED + "Sword of Damage").build();
+                .setName(ChatColor.RED + "Sword of Damage")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Deals heavy damage to enemies.").build();
         weapon2 = new ItemBuilder(
                 Material.GOLD_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.KNOCKBACK, 2)
-                .setName(ChatColor.DARK_AQUA + "Sword of Knockback").build();
+                .setName(ChatColor.DARK_AQUA + "Sword of Knockback")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Throws your enemies away from you.").build();
 
         ItemStack icon = new ItemStack(Material.GOLD_SWORD);
         setIcon(icon);

@@ -29,10 +29,14 @@ public class KitShaco extends Kit {
     private ItemStack weapon;
     private ItemStack snowball;
 
+    private int snowballCooldown = 5;
     private int snowballStartAmount = 6;
     private int snowballMaxAmount = 8;
     private int snowballRegenSpeed = 20;
     private double backstabMultiplier = 1.2;
+
+    private int invisibilityCooldown = 20;
+    private int invisibilityLength = 8;
 
     private final Map<UUID, ItemStack[]> shacoArmor = new HashMap<>();
 
@@ -62,9 +66,15 @@ public class KitShaco extends Kit {
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 2).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + invisibilityCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "makes you invisible for " + invisibilityLength + " seconds.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Hits from behind deal more damage while invisible .").build();
         snowball = new ItemBuilder(
                 Material.SNOW_BALL, snowballStartAmount)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Throwing a snowball every " + snowballCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "makes you switch locations with your target,")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "or teleport you behind your target while invisible.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 snowball every " + snowballRegenSpeed + " seconds.").build();
 
         ItemStack icon = new ItemStack(Material.FERMENTED_SPIDER_EYE);
@@ -109,7 +119,7 @@ public class KitShaco extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, "Invisibility", 20, true))
+        if (!addCooldown(p, "Invisibility", invisibilityCooldown, true))
             return;
 
         //For missions
@@ -121,7 +131,7 @@ public class KitShaco extends Kit {
 
         shacoArmor.put(p.getUniqueId(), p.getInventory().getArmorContents());
         p.getInventory().setArmorContents(null);
-        p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 160, 0));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, invisibilityLength * 20, 0));
 
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
             if (shacoArmor.containsKey(p.getUniqueId())) {
@@ -136,7 +146,7 @@ public class KitShaco extends Kit {
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
-        if (!addCooldown(shooter, "Switch Locations", 5, true)) {
+        if (!addCooldown(shooter, "Switch Locations", snowballCooldown, true)) {
             reimburseItem(shooter, getSnowball(1), snowballMaxAmount, KitType.SHACO);
             return;
         }
@@ -176,9 +186,10 @@ public class KitShaco extends Kit {
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Now you see me, now you don't.",
                 "",
                 ChatColor.GRAY + "Use snowballs to switch positions.",
-                ChatColor.GRAY + "Use your sword to become invisible.",
+                ChatColor.GRAY + "Right click your sword to become invisible.",
                 ChatColor.GRAY + "Using snowballs while invisible",
-                ChatColor.GRAY + "teleports you behind your enemy."
+                ChatColor.GRAY + "teleports you behind your enemy.",
+                ChatColor.GRAY + "Hits from behind deal more damage when invisible."
         );
     }
 }

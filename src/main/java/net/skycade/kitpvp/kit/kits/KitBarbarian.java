@@ -31,13 +31,17 @@ public class KitBarbarian extends Kit {
         super(kitManager, "Barbarian", KitType.BARBARIAN, 12000, getLore());
 
         helmet = new ItemBuilder(
-                Material.IRON_HELMET).build();
+                Material.IRON_HELMET)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when hit by enemies.").build();
         chestplate = new ItemBuilder(
-                Material.IRON_CHESTPLATE).build();
+                Material.IRON_CHESTPLATE)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when hit by enemies.").build();
         leggings = new ItemBuilder(
-                Material.IRON_LEGGINGS).build();
+                Material.IRON_LEGGINGS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when hit by enemies.").build();
         boots = new ItemBuilder(
-                Material.IRON_BOOTS).build();
+                Material.IRON_BOOTS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when hit by enemies.").build();
         weapon = new ItemBuilder(
                 Material.IRON_AXE)
                 .addEnchantment(Enchantment.DURABILITY, 5).build();

@@ -34,11 +34,14 @@ public class KitWarrior extends Kit {
         chestplate = new ItemBuilder(
                 Material.DIAMOND_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 1)
-                .addEnchantment(Enchantment.THORNS, 1).build();
+                .addEnchantment(Enchantment.THORNS, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Damage you receive is multiplied by " + damageMultiplier + ".").build();
         leggings = new ItemBuilder(
-                Material.DIAMOND_LEGGINGS).build();
+                Material.DIAMOND_LEGGINGS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Damage you receive is multiplied by " + damageMultiplier + ".").build();
         boots = new ItemBuilder(
-                Material.DIAMOND_BOOTS).build();
+                Material.DIAMOND_BOOTS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Damage you receive is multiplied by " + damageMultiplier + ".").build();
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)

@@ -36,6 +36,8 @@ public class KitBlacksmith extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
+    private int anvilDropCooldown = 15;
+    private int armorkitCooldown = 4;
     private int armorkitRegenSpeed = 15;
     private int armorkitStartAmount = 2;
     private int armorkitMaxAmount = 4;
@@ -59,9 +61,13 @@ public class KitBlacksmith extends Kit {
         weapon = new ItemBuilder(
                 Material.IRON_PICKAXE)
                 .addEnchantment(Enchantment.DURABILITY, 3)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 3).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + anvilDropCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "drops 5 anvils in front of you.").build();
         armorkits = new ItemBuilder(
                 Material.ANVIL, armorkitStartAmount)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking a player every " + armorkitCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "repairs their armor.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 armor kit every " + armorkitRegenSpeed + " seconds.")
                 .setName("Armor Kit").build();
 
@@ -91,7 +97,7 @@ public class KitBlacksmith extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_PICKAXE)
             return;
-        if (!addCooldown(p, "Anvil Drop", 15, true))
+        if (!addCooldown(p, "Anvil Drop", anvilDropCooldown, true))
             return;
 
         for (int anvilNum = 2; anvilNum <= 6; anvilNum++) {
@@ -119,7 +125,7 @@ public class KitBlacksmith extends Kit {
     public void onInteract(Player p, Player target, ItemStack item) {
         if (item.getType() != Material.ANVIL)
             return;
-        if (!addCooldown(p, "Repair Armor", 4, true))
+        if (!addCooldown(p, "Repair Armor", armorkitCooldown, true))
             return;
 
         for (ItemStack armor : target.getInventory().getArmorContents()) {

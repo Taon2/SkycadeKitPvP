@@ -25,6 +25,8 @@ public class KitHyper extends Kit {
     private ItemStack weapon;
     private ItemStack sugar;
 
+    private int sugarCooldown = 25;
+
     public KitHyper(KitManager kitManager) {
         super(kitManager, "Hyper", KitType.HYPER, 24000, getLore());
 
@@ -45,7 +47,9 @@ public class KitHyper extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.KNOCKBACK, 1).build();
-        sugar = new ItemStack(Material.SUGAR);
+        sugar = new ItemBuilder(Material.SUGAR)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + sugarCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "grants you speed and regeneration.").build();
 
         ItemStack icon = new ItemStack(Material.SUGAR);
         setIcon(icon);
@@ -65,7 +69,7 @@ public class KitHyper extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.SUGAR)
             return;
-        if (!addCooldown(p, getName(), 30, true))
+        if (!addCooldown(p, getName(), sugarCooldown, true))
             return;
 
         //For missions

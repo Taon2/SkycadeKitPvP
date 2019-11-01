@@ -30,6 +30,8 @@ public class KitPotionMaster extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int potCooldown = 20;
+
     public KitPotionMaster(KitManager kitManager) {
         super(kitManager, "PotionMaster", KitType.POTIONMASTER, 20000, getLore());
 
@@ -60,7 +62,9 @@ public class KitPotionMaster extends Kit {
                 .setColour(color).build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 5).build();
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + potCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws debuff potions in front of you.").build();
 
         ItemStack icon = new ItemStack(Material.BREWING_STAND_ITEM);
         setIcon(icon);
@@ -78,7 +82,7 @@ public class KitPotionMaster extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), 30, true))
+        if (!addCooldown(p, getName(), potCooldown, true))
             return;
 
         //For missions
@@ -91,8 +95,8 @@ public class KitPotionMaster extends Kit {
 
         targetPlayers.forEach(target -> {
             if (target != p) {
-                target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 180, 1));
-                target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 120, 1));
+                target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 160, 1));
+                target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 1));
             }
         });
     }
@@ -107,7 +111,7 @@ public class KitPotionMaster extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Bartender!",
                 "",
-                ChatColor.GRAY + "Right clicking throws potions.",
+                ChatColor.GRAY + "Right clicking throws debuff potions.",
                 ChatColor.GRAY + "Heals with potions instead of soups."
         );
     }

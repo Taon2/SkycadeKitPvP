@@ -55,7 +55,8 @@ public class KitChance extends Kit {
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Attacking enemies grants random buffs.").build();
 
         ItemStack icon = new ItemStack(Material.ENCHANTMENT_TABLE);
         setIcon(icon);
@@ -114,7 +115,7 @@ public class KitChance extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Test your luck.",
                 "",
-                ChatColor.GRAY + "Gives you random buffs."
+                ChatColor.GRAY + "Attacking enemies grants random buffs."
         );
     }
 }

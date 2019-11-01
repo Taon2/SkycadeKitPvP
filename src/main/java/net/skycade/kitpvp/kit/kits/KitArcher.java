@@ -31,6 +31,7 @@ public class KitArcher extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
+    private int arrowCooldown = 1;
     private int arrowRegenSpeed = 3;
     private int arrowStartAmount = 16;
     private int arrowMaxAmount = 16;
@@ -60,7 +61,8 @@ public class KitArcher extends Kit {
         bow = new ItemBuilder(
                 Material.BOW)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.ARROW_DAMAGE, 2).build();
+                .addEnchantment(Enchantment.ARROW_DAMAGE, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fire 1 arrow every " + arrowCooldown + " second.").build();
         arrows = new ItemBuilder(
                 Material.ARROW, arrowStartAmount)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 arrow every " + arrowRegenSpeed + " seconds.").build();
@@ -89,7 +91,7 @@ public class KitArcher extends Kit {
     }
 
     public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
-        if (!addCooldown(shooter, "bow", 1, true)) {
+        if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
             e.setCancelled(true);
         }
     }

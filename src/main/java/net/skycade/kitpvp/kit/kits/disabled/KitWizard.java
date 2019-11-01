@@ -30,8 +30,10 @@ public class KitWizard extends Kit {
     private ItemStack weapon;
     private ItemStack book;
 
+    private int teleportCooldown = 16;
+    private int fireballCooldown = 15;
+
     private final HashMap<UUID, Location> lastWizardLoc = new HashMap<>();
-    private final List<UUID> rodUse = new ArrayList<>();
 
     public KitWizard(KitManager kitManager) {
         super(kitManager, "Wizard", KitType.WIZARD, 34000, false, getLore());
@@ -58,9 +60,13 @@ public class KitWizard extends Kit {
                 .setColour(Color.fromRGB(153, 153, 255)).build();
         weapon = new ItemBuilder(
                 Material.STICK)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
-        book = new ItemStack(
-                Material.BOOK);
+                .addEnchantment(Enchantment.DAMAGE_ALL, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + fireballCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "shoots a fireball.").build();
+        book = new ItemBuilder(
+                Material.BOOK)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + teleportCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "teleports you in that direction.").build();
 
         ItemStack icon = new ItemStack(Material.REDSTONE_TORCH_ON);
         setIcon(icon);
@@ -80,13 +86,14 @@ public class KitWizard extends Kit {
 
     @Override
     public void onItemUse(Player p, ItemStack item) {
-        if (item.getType() == Material.BOOK) {
+        if (item.getType() != Material.BOOK) {
             if (!lastWizardLoc.containsKey(p.getUniqueId()))
                 return;
             if (lastWizardLoc.get(p.getUniqueId()).distance(p.getLocation()) > 30 || getKitManager().getKitPvP().getSpawnRegion().contains(lastWizardLoc.get(p.getUniqueId())))
                 return;
-            if (!addCooldown(p, getName() + " teleport", 16, true))
+            if (!addCooldown(p, "Teleport", teleportCooldown, true))
                 return;
+
             final Vector dir = p.getLocation().getDirection();
             Location newLoc = lastWizardLoc.get(p.getUniqueId());
             newLoc.setDirection(dir);
@@ -98,10 +105,8 @@ public class KitWizard extends Kit {
             p.getWorld().playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1, 1);
 
         } else if (item.getType() == Material.STICK) {
-            if (rodUse.contains(p.getUniqueId()))
+            if (!addCooldown(p, "Fireball", fireballCooldown, true))
                 return;
-            rodUse.add(p.getUniqueId());
-            Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> rodUse.remove(p.getUniqueId()), 15 * 20);
 
             new BukkitRunnable() {
                 Location loc = p.getLocation();
@@ -155,7 +160,6 @@ public class KitWizard extends Kit {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         lastWizardLoc.remove(e.getPlayer().getUniqueId());
-        rodUse.remove(e.getPlayer().getUniqueId());
     }
 
     @Override

@@ -53,7 +53,8 @@ public class KitCobra extends Kit {
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Attacking enemies may poison them.").build();
 
         ItemStack icon = new ItemStack(Material.POTION);
         icon.setDurability((short) 8196);

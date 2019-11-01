@@ -32,9 +32,12 @@ public class KitPyromancer extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
+    private int arrowCooldown = 2;
     private int arrowRegenSpeed = 12;
     private int arrowStartAmount = 8;
     private int arrowMaxAmount = 8;
+
+    private int fireballCooldown = 20;
 
     public KitPyromancer(KitManager kitManager) {
         super(kitManager, "Pyromancer", KitType.PYROMANCER, 50000, getLore());
@@ -61,12 +64,16 @@ public class KitPyromancer extends Kit {
                 .setColour(Color.RED).build();
         weapon = new ItemBuilder(
                 Material.BLAZE_ROD)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 3).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + fireballCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "launches a fireball.").build();
         bow = new ItemBuilder(
                 Material.BOW)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.ARROW_DAMAGE, 2)
-                .addEnchantment(Enchantment.ARROW_FIRE, 1).build();
+                .addEnchantment(Enchantment.ARROW_FIRE, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fire 1 arrow every " + arrowCooldown + " seconds.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Grounded arrows create a ring of fire around them.").build();
         arrows = new ItemBuilder(
                 Material.ARROW, arrowStartAmount)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 arrow every " + arrowRegenSpeed + " seconds.").build();
@@ -97,7 +104,7 @@ public class KitPyromancer extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.BLAZE_ROD)
             return;
-        if (!addCooldown(p, "fireball", 20, true))
+        if (!addCooldown(p, "Fireball", fireballCooldown, true))
             return;
 
         //For missions
@@ -108,7 +115,7 @@ public class KitPyromancer extends Kit {
     }
 
     public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
-        if (!addCooldown(shooter, "bow", 2, true)) {
+        if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
             e.setCancelled(true);
         }
     }
@@ -159,7 +166,7 @@ public class KitPyromancer extends Kit {
     public static List<String> getLore() {
         return Arrays.asList(
                 ChatColor.GOLD + "" + ChatColor.BOLD + "Ranged Kit",
-                ChatColor.GRAY + "" + ChatColor.ITALIC + "Watch them burn.",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Through fire and flames.",
                 "",
                 ChatColor.GRAY + "Grounded arrows create fire around them.",
                 ChatColor.GRAY + "Right click to shoot a fireball."

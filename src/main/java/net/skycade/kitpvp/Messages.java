@@ -181,6 +181,9 @@ public class Messages {
     public static final Localization.Message PLAYER_REPAIRED = new Localization.Message("kit.blacksmith.player-repaired", "&7You repaired &a%player%'s &7armor.");
     public static final Localization.Message REPAIRED = new Localization.Message("kit.blacksmith.repaired", "&7Armor repaired by &a%player%!");
     public static final Localization.Message SUMMONED_GHOSTS = new Localization.Message("kit.necromancer.summoned-ghosts", "&7Summoned 2 ghosts to fight for you!");
+    public static final Localization.Message DISGUISING = new Localization.Message("kit.blockhunt.transforming", "&7Stand still for &a3 &7seconds to disguise as this block!");
+    public static final Localization.Message DISGUISED = new Localization.Message("kit.blockhunt.transformed", "&aDisguised!");
+    public static final Localization.Message DISGUISE_REMOVED = new Localization.Message("kit.blockhunt.disguise-removed", "&7Disguise removed!");
 
     static void init() {
         Localization.getInstance().registerMessages("skycade.kitpvp",
@@ -318,7 +321,10 @@ public class Messages {
                 VIEWSTATS_USAGE,
                 VIEWSTATS_DESCRIPTION,
                 BROKE_KILLSTREAK,
-                HAS_KILLSTREAK
+                HAS_KILLSTREAK,
+                DISGUISING,
+                DISGUISED,
+                DISGUISE_REMOVED
         );
     }
 }

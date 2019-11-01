@@ -28,6 +28,8 @@ public class KitMystic extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int catCooldown = 4;
+
     public KitMystic(KitManager kitManager) {
         super(kitManager, "Mystic", KitType.MYSTIC, 31000, getLore());
 
@@ -54,7 +56,9 @@ public class KitMystic extends Kit {
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + catCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws cats that grant potion effects.").build();
 
         ItemStack icon = new ItemStack(Material.STICK);
         setIcon(icon);
@@ -73,7 +77,7 @@ public class KitMystic extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), 3, true))
+        if (!addCooldown(p, getName(), catCooldown, true))
             return;
 
         //For missions
@@ -81,8 +85,7 @@ public class KitMystic extends Kit {
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         Location loc = p.getEyeLocation();
-        LivingEntity cat = (LivingEntity) p.getWorld().spawnEntity(loc.add(loc.getDirection()),
-                EntityType.OCELOT);
+        LivingEntity cat = (LivingEntity) p.getWorld().spawnEntity(loc.add(loc.getDirection()), EntityType.OCELOT);
         cat.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 99));
         cat.setCustomName("Mystic cat");
 

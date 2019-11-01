@@ -27,6 +27,8 @@ public class KitFisherman extends Kit {
     private ItemStack weapon;
     private ItemStack fishingRod;
 
+    private int grappleCooldown = 4;
+
     public KitFisherman(KitManager kitManager) {
         super(kitManager, "Fisherman", KitType.FISHERMAN, 46000, getLore());
 
@@ -55,7 +57,9 @@ public class KitFisherman extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 5).build();
         fishingRod = new ItemBuilder(
                 Material.FISHING_ROD)
-                .addEnchantment(Enchantment.DURABILITY, 10).build();
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Using the fishing rod every " + 4 + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "grapples you towards the hook.").build();
 
         ItemStack icon = new ItemStack(Material.FISHING_ROD);
         setIcon(icon);
@@ -72,7 +76,7 @@ public class KitFisherman extends Kit {
     }
 
     public void onRodUse(Player p, ProjectileLaunchEvent e) {
-        if (!addCooldown(p, "Grappling Hook", 4, true))
+        if (!addCooldown(p, "Grapple", grappleCooldown, true))
             return;
 
         Location target = getTarget(p, 30);

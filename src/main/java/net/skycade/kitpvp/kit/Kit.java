@@ -147,6 +147,9 @@ public abstract class Kit implements Listener {
     public void onItemUse(Player p, ItemStack item) {
     }
 
+    public void onItemUse(Player p, ItemStack item, Block clickedBlock) {
+    }
+
     public void onBlockPlace(Player p, Block block) {
     }
 

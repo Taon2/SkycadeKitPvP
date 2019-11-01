@@ -32,6 +32,8 @@ public class KitVampire extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int healCooldown = 30;
+
     public KitVampire(KitManager kitManager) {
         super(kitManager, "Vampire", KitType.VAMPIRE, 25000, false, getLore());
 
@@ -57,7 +59,10 @@ public class KitVampire extends Kit {
                 .setColour(Color.RED).build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 5).build();
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + healCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "and being near bleeding players heals you.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Damaging players makes them bleed.").build();
 
         ItemStack icon = new ItemStack(Material.REDSTONE);
         setIcon(icon);
@@ -97,8 +102,9 @@ public class KitVampire extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), 30, true))
+        if (!addCooldown(p, "Suck Blood", healCooldown, true))
             return;
+
         Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 4);
         if (targetPlayers.size() <= 1) {
             removeCooldowns(p, getName());
@@ -149,7 +155,7 @@ public class KitVampire extends Kit {
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Dracula!",
                 "",
                 ChatColor.GRAY + "Makes players bleed.",
-                ChatColor.GRAY + "Being around many players heals you."
+                ChatColor.GRAY + "Bleeding players heal you."
         );
     }
 }

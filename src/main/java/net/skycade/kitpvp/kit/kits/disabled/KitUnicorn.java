@@ -31,6 +31,8 @@ public class KitUnicorn extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int rainbowCooldown = 20;
+
     private final Color[] rainbowColors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.AQUA, Color.BLUE, Color.PURPLE, Color.FUCHSIA};
     private final List<UUID> rodUse = new ArrayList<>();
 
@@ -41,25 +43,32 @@ public class KitUnicorn extends Kit {
                 Material.LEATHER_HELMET)
                 .addEnchantment(Enchantment.DURABILITY, 14)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Taking damage grants a resistance buff.")
                 .setColour(Color.PURPLE).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Taking damage grants a resistance buff.")
                 .setColour(Color.WHITE).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3 )
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Taking damage grants a resistance buff.")
                 .setColour(Color.WHITE).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Taking damage grants a resistance buff.")
                 .setColour(Color.WHITE).build();
         weapon = new ItemBuilder(
                 Material.STICK)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + rainbowCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "shoots a rainbow from your wand.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Attacking players grants a haste buff.").build();
 
         ItemStack icon = new ItemStack(Material.HAY_BLOCK);
         setIcon(icon);
@@ -93,39 +102,37 @@ public class KitUnicorn extends Kit {
 
     @Override
     public void onItemUse(Player p, ItemStack item) {
-        if (item.getType() == Material.STICK) {
-            if (rodUse.contains(p.getUniqueId()))
-                return;
-            rodUse.add(p.getUniqueId());
-            Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> rodUse.remove(p.getUniqueId()), 70);
+        if (item.getType() != Material.STICK)
+            return;
+        if (!addCooldown(p, "Rainbow", rainbowCooldown, true))
+            return;
 
-            new BukkitRunnable() {
-                Location loc = p.getEyeLocation().subtract(0, 0.2, 0);
-                Vector dir = p.getLocation().getDirection().normalize();
-                double t = 0.0;
+        new BukkitRunnable() {
+            Location loc = p.getEyeLocation().subtract(0, 0.2, 0);
+            Vector dir = p.getLocation().getDirection().normalize();
+            double t = 0.0;
 
-                public void run() {
-                    t += 0.07F;
-                    double x = dir.getX() * t;
-                    double y = dir.getY() * t;
-                    double z = dir.getZ() * t;
-                    loc.add(x, y, z);
+            public void run() {
+                t += 0.07F;
+                double x = dir.getX() * t;
+                double y = dir.getY() * t;
+                double z = dir.getZ() * t;
+                loc.add(x, y, z);
 
-                    for (int i = 0; i < 3; i++)
-                        for (Color col : rainbowColors)
-                            ParticleEffect.SPELL_MOB.display(new ParticleEffect.OrdinaryColor(col), loc, 30);
-                    if (UtilMath.getRandom(0, 3) == 2)
-                        ParticleEffect.LAVA.display(0, 0, 0, 0, 3, loc, 30);
+                for (int i = 0; i < 3; i++)
+                    for (Color col : rainbowColors)
+                        ParticleEffect.SPELL_MOB.display(new ParticleEffect.OrdinaryColor(col), loc, 30);
+                if (UtilMath.getRandom(0, 3) == 2)
+                    ParticleEffect.LAVA.display(0, 0, 0, 0, 3, loc, 30);
 
-                    for (Player target : UtilPlayer.getNearbyPlayers(loc, 1).stream().filter(player -> !player.equals(p) && player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList())) {
-                        target.damage(14, p);
-                        target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 1));
-                    }
-                    if (t > 1.7)
-                        this.cancel();
+                for (Player target : UtilPlayer.getNearbyPlayers(loc, 1).stream().filter(player -> !player.equals(p) && player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList())) {
+                    target.damage(14, p);
+                    target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 1));
                 }
-            }.runTaskTimer(getKitManager().getKitPvP(), 0, 1);
-        }
+                if (t > 1.7)
+                    this.cancel();
+            }
+        }.runTaskTimer(getKitManager().getKitPvP(), 0, 1);
     }
 
     @Override

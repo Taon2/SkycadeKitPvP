@@ -48,7 +48,9 @@ public class KitCaveMan extends Kit {
         weapon = new ItemBuilder(
                 Material.WOOD_SPADE)
                 .addEnchantment(Enchantment.DURABILITY, 7)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + blockCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws a dirt block.").build();
 
         constantEffects.put(PotionEffectType.DAMAGE_RESISTANCE, 0);
 
@@ -68,7 +70,6 @@ public class KitCaveMan extends Kit {
         });
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.WOOD_SPADE)

@@ -49,7 +49,7 @@ public class KitGank extends Kit {
 
     @Override
     public void onMove(Player p) {
-        particleTracerEffect(p, Color.GRAY, 20);
+        particleTracerEffect(p, Color.GRAY, 10);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class KitGank extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Strafe's little brother.",
                 "",
-                ChatColor.GRAY + "Has some potion effects,",
+                ChatColor.GRAY + "Lots of potion effects,",
                 ChatColor.GRAY + "but no armor."
         );
     }

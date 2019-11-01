@@ -5,7 +5,6 @@ import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -32,9 +31,9 @@ public class KitSniper extends Kit {
     private ItemStack bow;
     private ItemStack arrows;
 
+    private int arrowCooldown = 1;
     private int arrowStartAmount = 1;
 
-    private final List<UUID> bowCooldown = new ArrayList<>();
     private final Map<UUID, UUID> sniperPlayerHit = new HashMap<>();
     private final Map<UUID, Integer> sniperCombo = new HashMap<>();
 
@@ -70,7 +69,9 @@ public class KitSniper extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.ARROW_INFINITE, 1)
                 .addEnchantment(Enchantment.ARROW_KNOCKBACK, 1)
-                .addEnchantment(Enchantment.ARROW_DAMAGE, 3).build();
+                .addEnchantment(Enchantment.ARROW_DAMAGE, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fire 1 arrow every " + arrowCooldown + " second.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Landing successive shots deal more damage.").build();
         arrows = new ItemBuilder(
                 Material.ARROW, arrowStartAmount).build();
 
@@ -90,12 +91,9 @@ public class KitSniper extends Kit {
     }
 
     public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
-        if (bowCooldown.contains(shooter.getUniqueId())) {
+        if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
             e.setCancelled(true);
-            return;
         }
-        bowCooldown.add(shooter.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> bowCooldown.remove(shooter.getUniqueId()), 20);
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
@@ -132,7 +130,6 @@ public class KitSniper extends Kit {
     public void onPlayerQuit(PlayerQuitEvent e) {
         sniperCombo.remove(e.getPlayer().getUniqueId());
         sniperPlayerHit.remove(e.getPlayer().getUniqueId());
-        bowCooldown.remove(e.getPlayer().getUniqueId());
     }
 
     private boolean hasArmor(Player p) {

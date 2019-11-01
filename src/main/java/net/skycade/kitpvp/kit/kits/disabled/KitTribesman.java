@@ -33,15 +33,19 @@ public class KitTribesman extends Kit {
         super(kitManager, "Tribesman", KitType.TRIBESMAN, 37000, false, getLore());
 
         helmet = new ItemBuilder(
-                Material.IRON_HELMET).build();
+                Material.IRON_HELMET)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains potion effects when taking heavy damage.").build();
         chestplate = new ItemBuilder(
                 Material.GOLD_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 5).build();
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains potion effects when taking heavy damage.").build();
         leggings = new ItemBuilder(
                 Material.GOLD_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 5).build();
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains potion effects when taking heavy damage.").build();
         boots = new ItemBuilder(
-                Material.IRON_BOOTS).build();
+                Material.IRON_BOOTS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains potion effects when taking heavy damage.").build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)

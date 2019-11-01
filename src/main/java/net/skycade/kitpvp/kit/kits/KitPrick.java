@@ -26,6 +26,8 @@ public class KitPrick extends Kit {
     private ItemStack weapon;
     private ItemStack cactus;
 
+    private int cactusCooldown = 11;
+
     public KitPrick(KitManager kitManager) {
         super(kitManager, "Prick", KitType.PRICK, 22000, getLore());
 
@@ -57,8 +59,10 @@ public class KitPrick extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.KNOCKBACK, 1).build();
-        cactus = new ItemStack(
-                Material.CACTUS);
+        cactus = new ItemBuilder(
+                Material.CACTUS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking on a player every " + cactusCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "gives the target poison and damages their armor.").build();
 
         ItemStack icon = new ItemStack(Material.CACTUS);
         setIcon(icon);
@@ -78,7 +82,7 @@ public class KitPrick extends Kit {
     public void onInteract(Player p, Player target, ItemStack item) {
         if (item.getType() != Material.CACTUS)
             return;
-        if (!addCooldown(p, getName(), 11, true))
+        if (!addCooldown(p, getName(), cactusCooldown, true))
             return;
 
         //For missions

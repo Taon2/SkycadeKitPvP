@@ -12,6 +12,7 @@ public enum KitType {
     BARBARIAN("barbarian"),
     BLACKSMITH("blacksmith"),
     BLADEMASTER("blademaster"),
+    BLOCKHUNT("blockhunt"),
     BOMBER("bomber"),
     BUILDUHC("builduhc"),
     CAVEMAN("caveman"),

@@ -27,6 +27,7 @@ public class KitBomber extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
+    private int tntCooldown = 6;
     private int tntStartAmount = 10;
     private int tntMaxAmount = 10;
     private int tntRegenSpeed = 15;
@@ -63,6 +64,8 @@ public class KitBomber extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 5).build();
         tnt = new ItemBuilder(
                 Material.TNT, tntStartAmount)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + tntCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws 1 tnt.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 tnt every " + tntRegenSpeed + " seconds.").build();
 
         constantEffects.put(PotionEffectType.SPEED, 1);
@@ -91,7 +94,7 @@ public class KitBomber extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.TNT)
             return;
-        if (!addCooldown(p, getName(), 6, true)) return;
+        if (!addCooldown(p, getName(), tntCooldown, true)) return;
 
         //For missions
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());

@@ -28,6 +28,7 @@ public class KitFireArcher extends Kit {
     private ItemStack bow;
     private ItemStack arrows;
 
+    private int arrowCooldown = 1;
     private int arrowStartAmount = 1;
 
     private final List<UUID> bowCooldown = new ArrayList<>();
@@ -64,11 +65,13 @@ public class KitFireArcher extends Kit {
                 Material.BOW)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.ARROW_INFINITE, 1)
-                .addEnchantment(Enchantment.ARROW_DAMAGE, 1).build();
+                .addEnchantment(Enchantment.ARROW_DAMAGE, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fire 1 arrow every " + arrowCooldown + " second.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Some arrows are set aflame.").build();
         arrows = new ItemBuilder(
                 Material.ARROW, arrowStartAmount).build();
 
-        ItemStack icon = new ItemStack(Material.ARROW);
+        ItemStack icon = new ItemStack(Material.FIREBALL);
         setIcon(icon);
     }
 
@@ -108,12 +111,9 @@ public class KitFireArcher extends Kit {
 
 
     public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
-        if (bowCooldown.contains(shooter.getUniqueId())) {
+        if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
             e.setCancelled(true);
-            return;
         }
-        bowCooldown.add(shooter.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> bowCooldown.remove(shooter.getUniqueId()), 18);
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {

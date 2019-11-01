@@ -26,6 +26,8 @@ public class KitPlush extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int catCooldown = 5;
+
     private double jumpPower = 1.0;
 
     public KitPlush(KitManager kitManager) {
@@ -47,7 +49,9 @@ public class KitPlush extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addEnchantment(Enchantment.KNOCKBACK, 1).build();
+                .addEnchantment(Enchantment.KNOCKBACK, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + catCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws cats that grant potion effects.").build();
 
         ItemStack icon = new ItemStack(Material.RAW_FISH);
         setIcon(icon);
@@ -66,7 +70,7 @@ public class KitPlush extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), 5, true))
+        if (!addCooldown(p, getName(), catCooldown, true))
             return;
 
         //For missions

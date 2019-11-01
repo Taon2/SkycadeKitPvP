@@ -13,6 +13,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,6 +27,7 @@ public class KitKing extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int golemCooldown = 35;
     private List<IronGolem> golemList = new ArrayList<>();
 
     public KitKing(KitManager kitManager) {
@@ -42,7 +45,9 @@ public class KitKing extends Kit {
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 0).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + golemCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "summons a golem to fight for you.").build();
 
         ItemStack icon = new ItemStack(Material.GOLD_HELMET);
         setIcon(icon);
@@ -69,7 +74,7 @@ public class KitKing extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), 35, true))
+        if (!addCooldown(p, getName(), golemCooldown, true))
             return;
 
         //For missions
@@ -78,6 +83,7 @@ public class KitKing extends Kit {
 
         IronGolem golem = (IronGolem) p.getWorld().spawnEntity(p.getLocation(), EntityType.IRON_GOLEM);
         golem.setCustomName(p.getName() + " golem");
+        golem.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 2));
 
         Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 5);
         nearbyPlayers.remove(p);

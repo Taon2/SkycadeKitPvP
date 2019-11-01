@@ -65,8 +65,7 @@ public class KitTeleporter extends Kit {
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
 
-        startItemRunnable(p, pearlRegenSpeed, new ItemBuilder(
-                Material.ENDER_PEARL).build(), pearlMaxAmount, KitType.TELEPORTER);
+        startItemRunnable(p, pearlRegenSpeed, getPearls(1), pearlMaxAmount, KitType.TELEPORTER);
     }
 
     @EventHandler
@@ -84,6 +83,13 @@ public class KitTeleporter extends Kit {
                 Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
             }
         }
+    }
+
+    private ItemStack getPearls(int amount) {
+        ItemStack pearlRegen = new ItemStack(pearls);
+        pearlRegen.setAmount(amount);
+
+        return pearlRegen;
     }
 
     @Override

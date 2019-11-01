@@ -34,6 +34,8 @@ public class KitHuntsman extends Kit implements Listener {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
+    private int bleedCooldown = 20;
+
     private final List<UUID> huntsmanActiveBleed = new ArrayList<>();
     private final List<UUID> bleeding = new ArrayList<>();
 
@@ -52,7 +54,9 @@ public class KitHuntsman extends Kit implements Listener {
                 Material.STONE_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 2)
-                .addEnchantment(Enchantment.KNOCKBACK, 1).build();
+                .addEnchantment(Enchantment.KNOCKBACK, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + bleedCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "lets your attacks make players bleed.").build();
 
         constantEffects.put(PotionEffectType.JUMP, 0);
 
@@ -77,7 +81,7 @@ public class KitHuntsman extends Kit implements Listener {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD && item.getType() != Material.STONE_SWORD)
             return;
-        if (!addCooldown(p, getName(), 20, true))
+        if (!addCooldown(p, "Blood Frenzy", bleedCooldown, true))
             return;
         BLEED_ACTIVATED.msg(p);
         huntsmanActiveBleed.add(p.getUniqueId());

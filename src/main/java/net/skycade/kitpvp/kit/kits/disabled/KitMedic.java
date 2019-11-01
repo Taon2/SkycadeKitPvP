@@ -36,6 +36,8 @@ public class KitMedic extends Kit {
     private int medpackStartAmount = 5;
     private int medpackMaxAmount = 5;
 
+    private int shearsCooldown = 4;
+
     public KitMedic(KitManager kitManager) {
         super(kitManager, "Medic", KitType.MEDIC, 16000, false, getLore());
 
@@ -65,7 +67,8 @@ public class KitMedic extends Kit {
                 .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
         shears = new ItemBuilder(
                 Material.SHEARS)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Can be used to heal a player.").build();
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking a player every " + shearsCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "heals them.").build();
         medpack = new ItemBuilder(
                 Material.LEATHER, medpackStartAmount)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Drop to heal players around you.")
@@ -111,7 +114,7 @@ public class KitMedic extends Kit {
     public void onInteract(Player p, Player target, ItemStack item) {
         if (item.getType() != Material.SHEARS)
             return;
-        if (!addCooldown(p, "Shears", 4, false))
+        if (!addCooldown(p, "Stitch Up", shearsCooldown, true))
             return;
         target.setHealth(target.getMaxHealth());
         PLAYER_HEALED.msg(p, "%player%", target.getName());
@@ -133,7 +136,7 @@ public class KitMedic extends Kit {
     public static List<String> getLore() {
         return Arrays.asList(
                 ChatColor.GREEN + "" + ChatColor.BOLD + "Support Kit",
-                ChatColor.GRAY + "" + ChatColor.ITALIC + "Ground pound!",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "I need healing!",
                 "",
                 ChatColor.GRAY + "Shears heal players you click.",
                 ChatColor.GRAY + "Throwing medpacks can heal players."

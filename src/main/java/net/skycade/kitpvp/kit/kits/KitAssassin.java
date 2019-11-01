@@ -61,7 +61,8 @@ public class KitAssassin extends Kit {
                 .setColour(Color.RED).build();
         weapon = new ItemBuilder(
                 Material.DIAMOND_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 5).build();
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Hitting players from behind deals more damage.").build();
 
         constantEffects.put(PotionEffectType.SPEED, 0);
         constantEffects.put(PotionEffectType.FAST_DIGGING, 3);
@@ -154,5 +155,4 @@ public class KitAssassin extends Kit {
     public void onPlayerQuit(PlayerQuitEvent e) {
         comboMap.remove(e.getPlayer().getUniqueId());
     }
-
 }

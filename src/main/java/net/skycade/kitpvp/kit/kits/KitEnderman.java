@@ -26,6 +26,8 @@ public class KitEnderman extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int teleportCooldown = 12;
+
     public KitEnderman(KitManager kitManager) {
         super(kitManager, "Enderman", KitType.ENDERMAN, 35000, getLore());
 
@@ -33,26 +35,36 @@ public class KitEnderman extends Kit {
                 Material.LEATHER_HELMET)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Touching water damages you.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Immune to arrows.")
                 .setColour(Color.PURPLE).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Touching water damages you.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Immune to arrows.")
                 .setColour(Color.PURPLE).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Touching water damages you.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Immune to arrows.")
                 .setColour(Color.PURPLE).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Touching water damages you.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Immune to arrows.")
                 .setColour(Color.PURPLE).build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking your enemy every " + teleportCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "teleports you behind them.").build();
 
         ItemStack icon = new ItemStack(Material.ENDER_PEARL);
         setIcon(icon);
@@ -86,7 +98,7 @@ public class KitEnderman extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (onCooldown(p, getName()) || !addCooldown(p, getName(), 12, true))
+        if (!addCooldown(p, getName(), teleportCooldown, true))
             return;
 
         //For missions
@@ -146,7 +158,8 @@ public class KitEnderman extends Kit {
                 "",
                 ChatColor.GRAY + "Right clicking your enemy",
                 ChatColor.GRAY + "teleports you behind them.",
-                ChatColor.GRAY + "Touching water damages you."
+                ChatColor.GRAY + "Touching water damages you.",
+                ChatColor.GRAY + "Immune to arrows."
         );
     }
 }

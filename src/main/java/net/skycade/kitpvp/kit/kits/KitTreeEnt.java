@@ -54,7 +54,9 @@ public class KitTreeEnt extends Kit {
         weapon = new ItemBuilder(
                 Material.STICK)
                 .addEnchantment(Enchantment.KNOCKBACK, 1)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 3).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + blockCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws five leaf blocks in a shotgun pattern.").build();
 
         ItemStack icon = new ItemStack(Material.LEAVES);
         setIcon(icon);
@@ -69,7 +71,6 @@ public class KitTreeEnt extends Kit {
         p.getInventory().setBoots(boots);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.STICK)

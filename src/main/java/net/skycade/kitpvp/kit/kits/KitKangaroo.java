@@ -26,6 +26,7 @@ public class KitKangaroo extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int leapCooldown = 6;
     private double leapYVelocity = 0.07;
 
     public KitKangaroo(KitManager kitManager) {
@@ -54,7 +55,9 @@ public class KitKangaroo extends Kit {
         weapon = new ItemBuilder(
                 Material.GOLD_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 10)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 2).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + leapCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "makes you mega jump.").build();
 
         ItemStack icon = new ItemStack(Material.RABBIT_FOOT);
         setIcon(icon);
@@ -73,7 +76,7 @@ public class KitKangaroo extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.GOLD_SWORD)
             return;
-        if (!addCooldown(p, getName(), 6, true))
+        if (!addCooldown(p, "Leap", leapCooldown, true))
             return;
 
         //For missions
@@ -94,7 +97,7 @@ public class KitKangaroo extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "From down under.",
                 "",
-                ChatColor.GRAY + "Right clicking gives you a mega jump."
+                ChatColor.GRAY + "Right clicking makes you a mega jump."
         );
     }
 }

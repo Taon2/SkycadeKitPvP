@@ -30,29 +30,37 @@ public class KitKnight extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int steedCooldown = 25;
+
     public KitKnight(KitManager kitManager) {
         super(kitManager, "Knight", KitType.KNIGHT, 26000, getLore());
 
         helmet = new ItemBuilder(
                 Material.CHAINMAIL_HELMET)
                 .addEnchantment(Enchantment.DURABILITY, 8)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         chestplate = new ItemBuilder(
                 Material.CHAINMAIL_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 8)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         leggings = new ItemBuilder(
                 Material.CHAINMAIL_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 8)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         boots = new ItemBuilder(
                 Material.CHAINMAIL_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 8)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         weapon = new ItemBuilder(
                 Material.DIAMOND_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 5).build();
-
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + steedCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "lets you charge a horse into battle.").build();
+//todo horse thing
         ItemStack icon = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
         setIcon(icon);
     }

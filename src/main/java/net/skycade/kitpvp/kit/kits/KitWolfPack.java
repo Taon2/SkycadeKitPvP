@@ -29,6 +29,8 @@ public class KitWolfPack extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int wolvesCooldown = 20;
+
     private List<Wolf> wolfList = new ArrayList<>();
 
     public KitWolfPack(KitManager kitManager) {
@@ -56,7 +58,9 @@ public class KitWolfPack extends Kit {
                 .setColour(Color.WHITE).build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 5).build();
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + wolvesCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "summons wolves to fight for you.").build();
 
         ItemStack icon = new ItemStack(Material.BONE);
         setIcon(icon);
@@ -75,7 +79,7 @@ public class KitWolfPack extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, "summon wolves", 20, false))
+        if (!addCooldown(p, "Call Wolves", 20, false))
             return;
 
         //For missions

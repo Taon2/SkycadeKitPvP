@@ -13,9 +13,6 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -36,6 +33,7 @@ public class KitShroom extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
+    private int snowballCooldown = 7;
     private int snowballStartAmount = 6;
     private int snowballMaxAmount = 8;
     private int snowballRegenSpeed = 20;
@@ -45,19 +43,23 @@ public class KitShroom extends Kit {
 
         helmet = new ItemBuilder(
                 Material.HUGE_MUSHROOM_2)
-                .addEnchantment(Enchantment.THORNS, 1).build();
+                .addEnchantment(Enchantment.THORNS, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving makes people around you nauseous.").build();
         chestplate = new ItemBuilder(
                 Material.IRON_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 9)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build();
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving makes people around you nauseous.").build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving makes people around you nauseous.")
                 .setColour(Color.WHITE).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 9)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving makes people around you nauseous.")
                 .setColour(Color.WHITE).build();
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
@@ -65,6 +67,8 @@ public class KitShroom extends Kit {
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
         snowball = new ItemBuilder(
                 Material.SNOW_BALL, snowballStartAmount)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Throwing a snowball every " + snowballCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "gives your target poison.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 snowball every " + snowballRegenSpeed + " seconds.").build();
 
         constantEffects.put(PotionEffectType.JUMP, 1);
@@ -108,7 +112,7 @@ public class KitShroom extends Kit {
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
-        if (!addCooldown(shooter, getName(), 7, true)) {
+        if (!addCooldown(shooter, getName(), snowballCooldown, true)) {
             reimburseItem(shooter, getSnowball(1), snowballMaxAmount, KitType.SHROOM);
             return;
         }
@@ -119,13 +123,6 @@ public class KitShroom extends Kit {
 
         YOURE_POISONED.msg(damagee, "%player%", shooter.getName());
         damagee.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 4));
-    }
-
-    @EventHandler
-    public void onPlayerHit(EntityDamageByEntityEvent e) {
-        if (!(e.getDamager() instanceof Wolf && e.getEntity() instanceof Player))
-            return;
-        e.setDamage(e.getDamage() * 2.5);
     }
 
     @Override

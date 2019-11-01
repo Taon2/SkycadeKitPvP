@@ -35,6 +35,8 @@ public class KitWitchdoctor extends Kit {
     private int potionMaxAmount = 1;
     private int potionRegenSpeed = 15;
 
+    private int chantCooldown = 20;
+
     public KitWitchdoctor(KitManager kitManager) {
         super(kitManager, "Witchdoctor", KitType.WITCHDOCTOR, 20000, getLore());
 
@@ -60,19 +62,21 @@ public class KitWitchdoctor extends Kit {
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 2).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + chantCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "heals nearby allies and weakens nearby enemies.").build();
         regen = new ItemStack(Material.POTION, potionStartAmount, (short) 16385);
-        ItemMeta meta = regen.getItemMeta();
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 regeneration potion every " + potionRegenSpeed + " seconds.");
-        meta.setLore(lore);
-        regen.setItemMeta(meta);
+                ItemMeta meta = regen.getItemMeta();
+                List<String> lore = new ArrayList<>();
+                lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 regeneration potion every " + potionRegenSpeed + " seconds.");
+                meta.setLore(lore);
+                regen.setItemMeta(meta);
         weakness = new ItemStack(Material.POTION, potionStartAmount, (short) 16424);
-        ItemMeta meta2 = weakness.getItemMeta();
-        List<String> lore2 = new ArrayList<>();
-        lore2.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 weakness potion every " + potionRegenSpeed + " seconds.");
-        meta2.setLore(lore2);
-        weakness.setItemMeta(meta2);
+                ItemMeta meta2 = weakness.getItemMeta();
+                List<String> lore2 = new ArrayList<>();
+                lore2.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 weakness potion every " + potionRegenSpeed + " seconds.");
+                meta2.setLore(lore2);
+                weakness.setItemMeta(meta2);
 
         ItemStack icon = new ItemStack(Material.CAULDRON_ITEM);
         setIcon(icon);
@@ -95,7 +99,7 @@ public class KitWitchdoctor extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.STONE_SWORD)
             return;
-        if (!addCooldown(p, getName(), 25, true))
+        if (!addCooldown(p, "Chant", chantCooldown, true))
             return;
 
         //For missions

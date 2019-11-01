@@ -34,21 +34,25 @@ public class KitHades extends Kit {
                 Material.LEATHER_HELMET)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving sets nearby players on fire.")
                 .setColour(Color.fromBGR(0, 0, 102)).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving sets nearby players on fire.")
                 .setColour(Color.fromBGR(0, 0, 150)).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving sets nearby players on fire.")
                 .setColour(Color.fromBGR(0, 0, 200)).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving sets nearby players on fire.")
                 .setColour(Color.fromBGR(51, 51, 255)).build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)

@@ -32,6 +32,9 @@ public class KitMaster extends Kit {
     private ItemStack weapon;
     private ItemStack stick;
 
+    private int swapCooldown = 60;
+    private int swapLength = 20;
+
     public KitMaster(KitManager kitManager) {
         super(kitManager, "KitMaster", KitType.KITMASTER, 0, getLore());
 
@@ -59,8 +62,10 @@ public class KitMaster extends Kit {
                 Material.DIAMOND_SPADE)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
-        stick = new ItemStack(
-                Material.STICK);
+        stick = new ItemBuilder(
+                Material.STICK)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking a player every " + swapCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "lets you copy their kit for 20 seconds.").build();
 
         ItemStack icon = new ItemStack(Material.DIAMOND_SPADE);
         setIcon(icon);
@@ -80,7 +85,7 @@ public class KitMaster extends Kit {
     public void onInteract(Player p, Player target, ItemStack item) {
         if (item.getType() != Material.STICK)
             return;
-        if (!addCooldown(p, getName(), 60, true))
+        if (!addCooldown(p, getName(), swapCooldown, true))
             return;
 
         //For missions
@@ -128,7 +133,7 @@ public class KitMaster extends Kit {
                 for (PotionEffect effect : p.getActivePotionEffects())
                     p.removePotionEffect(effect.getType());
             }
-        }, 20 * 20);
+        }, swapLength * 20);
     }
 
     private int getSoupAmount(Inventory inv) {

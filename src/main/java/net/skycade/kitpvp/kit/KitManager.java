@@ -49,6 +49,7 @@ public class KitManager {
         registerKit(new KitBarbarian(this));
         registerKit(new KitBlacksmith(this));
         registerKit(new KitBladeMaster(this));
+        registerKit(new KitBlockhunt(this));
         registerKit(new KitBomber(this));
         registerKit(new KitBuildUHC(this));
         registerKit(new KitCaveMan(this));

@@ -31,21 +31,25 @@ public class KitSharingan extends Kit {
                 Material.LEATHER_HELMET)
                 .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Copies potion effects when hit.")
                 .setColour(Color.BLACK).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Copies potion effects when hit.")
                 .setColour(Color.BLACK).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Copies potion effects when hit.")
                 .setColour(Color.BLACK).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Copies potion effects when hit.")
                 .setColour(Color.BLACK).build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)

@@ -34,26 +34,31 @@ public class KitWither extends Kit {
                 Material.LEATHER_HELMET)
                 .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Explodes on death.")
                 .setColour(Color.BLACK).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Explodes on death.")
                 .setColour(Color.BLACK).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Explodes on death.")
                 .setColour(Color.BLACK).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Explodes on death.")
                 .setColour(Color.BLACK).build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Damaging players has a chance to give them withering.").build();
 
         ItemStack icon = new ItemStack(Material.NETHER_STAR);
         setIcon(icon);

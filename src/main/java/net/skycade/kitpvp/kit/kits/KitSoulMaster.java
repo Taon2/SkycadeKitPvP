@@ -24,6 +24,8 @@ public class KitSoulMaster extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int slowCooldown = 20;
+
     public KitSoulMaster(KitManager kitManager) {
         super(kitManager, "SoulMaster", KitType.SOULMASTER, 33000, getLore());
 
@@ -50,7 +52,9 @@ public class KitSoulMaster extends Kit {
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + slowCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "slows enemies around you.").build();
 
         ItemStack icon = new ItemStack(Material.SOUL_SAND);
         setIcon(icon);
@@ -69,7 +73,7 @@ public class KitSoulMaster extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), 30, true))
+        if (!addCooldown(p, "Soul Steal", slowCooldown, true))
             return;
 
         //For missions

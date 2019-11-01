@@ -32,21 +32,25 @@ public class KitChronos extends Kit {
                 Material.LEATHER_HELMET)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving slows nearby players down.")
                 .setColour(Color.fromRGB(51, 0, 102)).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving slows nearby players down.")
                 .setColour(Color.fromRGB(75, 0, 153)).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving slows nearby players down.")
                 .setColour(Color.fromRGB(100, 0, 204)).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving slows nearby players down.")
                 .setColour(Color.fromRGB(127, 0, 255)).build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)

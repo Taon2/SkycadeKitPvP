@@ -16,7 +16,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static net.skycade.kitpvp.Messages.YOURE_FROZEN;
 
@@ -29,6 +31,7 @@ public class KitFrosty extends Kit {
     private ItemStack weapon;
     private ItemStack snowball;
 
+    private int snowballCooldown = 5;
     private int snowballStartAmount = 6;
     private int snowballMaxAmount = 8;
     private int snowballRegenSpeed = 20;
@@ -38,27 +41,33 @@ public class KitFrosty extends Kit {
 
         helmet = new ItemBuilder(
                 Material.JACK_O_LANTERN)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Takes extra damage from lava and fire.").build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Takes extra damage from lava and fire.")
                 .setColour(Color.fromRGB(200, 255, 255)).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Takes extra damage from lava and fire.")
                 .setColour(Color.fromRGB(200, 255, 255)).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Takes extra damage from lava and fire.")
                 .setColour(Color.fromRGB(200, 255, 255)).build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5).build();
         snowball = new ItemBuilder(
                 Material.SNOW_BALL, snowballStartAmount)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Throwing a snowball every " + snowballCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "freezes the target in place.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 snowball every " + snowballRegenSpeed + " seconds.").build();
 
         ItemStack icon = new ItemStack(Material.SNOW_BALL);
@@ -89,7 +98,7 @@ public class KitFrosty extends Kit {
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
-        if (!addCooldown(shooter, getName(), 5, true)) {
+        if (!addCooldown(shooter, getName(), snowballCooldown, true)) {
             reimburseItem(shooter, getSnowball(1), snowballMaxAmount, KitType.FROSTY);
             return;
         }
@@ -105,6 +114,13 @@ public class KitFrosty extends Kit {
     }
 
     @Override
+    public void onMove(Player p) {
+        if (p.getLocation().getBlock().getType() == Material.STATIONARY_LAVA || p.getLocation().getBlock().getType() == Material.LAVA || p.getLocation().getBlock().getType() == Material.FIRE) {
+            p.damage(1);
+        }
+    }
+
+    @Override
     public List<String> getHowToObtain() {
         return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }
@@ -114,7 +130,8 @@ public class KitFrosty extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "I'm melting!",
                 "",
-                ChatColor.GRAY + "Your snowballs freeze players."
+                ChatColor.GRAY + "Snowballs freeze players in place.",
+                ChatColor.GRAY + "Takes extra damage from lava and fire."
         );
     }
 }

@@ -29,15 +29,19 @@ public class KitDubstep extends Kit {
         super(kitManager, "Dubstep", KitType.DUBSTEP, 35000, getLore());
 
         helmet = new ItemBuilder(
-                Material.IRON_HELMET).build();
+                Material.IRON_HELMET)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
         chestplate = new ItemBuilder(
-                Material.IRON_CHESTPLATE).build();
+                Material.IRON_CHESTPLATE)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
         leggings = new ItemBuilder(
                 Material.GOLD_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 7).build();
+                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
         boots = new ItemBuilder(
                 Material.GOLD_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 7).build();
+                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
         weapon = new ItemBuilder(
                 Material.DIAMOND_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)

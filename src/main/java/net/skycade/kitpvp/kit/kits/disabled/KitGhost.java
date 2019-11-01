@@ -27,6 +27,8 @@ public class KitGhost extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
+    private int spookCooldown = 10;
+
     public KitGhost(KitManager kitManager) {
         super(kitManager, "Ghost", KitType.GHOST, 22000, false, getLore());
 
@@ -34,7 +36,9 @@ public class KitGhost extends Kit {
                 Material.DIAMOND_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 2)
-                .addEnchantment(Enchantment.KNOCKBACK, 1).build();
+                .addEnchantment(Enchantment.KNOCKBACK, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + spookCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "levitates players around you.").build();
 
         constantEffects.put(PotionEffectType.INVISIBILITY, 10);
         constantEffects.put(PotionEffectType.DAMAGE_RESISTANCE, 1);
@@ -59,7 +63,7 @@ public class KitGhost extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.DIAMOND_SWORD)
             return;
-        if (!addCooldown(p, getName(), 10, true))
+        if (!addCooldown(p, "Spook", spookCooldown, true))
             return;
 
         int range = 4;

@@ -77,6 +77,10 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
+        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !p.getGameMode().equals(GameMode.CREATIVE) && !plugin.isInSpawnArea(p)) {
+            plugin.getStats(p).getActiveKit().getKit().onItemUse(p, e.getItem(), e.getClickedBlock());
+        }
+
         if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !p.getGameMode().equals(GameMode.CREATIVE) && !plugin.isInSpawnArea(p)) {
             plugin.getStats(p).getActiveKit().getKit().onItemUse(p, e.getItem());
         }

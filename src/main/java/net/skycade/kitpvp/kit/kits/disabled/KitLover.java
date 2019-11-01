@@ -27,6 +27,8 @@ public class KitLover extends Kit {
     private ItemStack weapon;
     private ItemStack rose;
 
+    private int loveCooldown = 15;
+
     public KitLover(KitManager kitManager) {
         super(kitManager, "Lover", KitType.LOVER, 19000, false, getLore());
 
@@ -53,7 +55,9 @@ public class KitLover extends Kit {
         weapon = new ItemBuilder(
                 Material.WOOD_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 10)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 2).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking a player every " + loveCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "gives your target debuff effects.").build();
         rose = new ItemStack(
                 Material.RED_ROSE);
 
@@ -75,7 +79,7 @@ public class KitLover extends Kit {
     public void onInteract(Player p, Player target, ItemStack item) {
         if (item.getType() != Material.RED_ROSE)
             return;
-        if (!addCooldown(p, getName(), 15, true))
+        if (!addCooldown(p, "Romance", loveCooldown, true))
             return;
         target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 3));
         target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 200, 1));
@@ -96,7 +100,7 @@ public class KitLover extends Kit {
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "<3",
                 "",
                 ChatColor.GRAY + "Right clicking with the flower",
-                ChatColor.GRAY + "gives them potion effects."
+                ChatColor.GRAY + "gives your target debuff potion effects."
         );
     }
 }

@@ -34,21 +34,25 @@ public class KitHydra extends Kit {
                 Material.LEATHER_HELMET)
                 .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when in water.")
                 .setColour(Color.BLUE).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when in water.")
                 .setColour(Color.BLUE).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when in water.")
                 .setColour(Color.BLUE).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when in water.")
                 .setColour(Color.BLUE).build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
