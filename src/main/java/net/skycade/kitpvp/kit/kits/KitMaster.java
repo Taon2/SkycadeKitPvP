@@ -16,6 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -120,19 +121,22 @@ public class KitMaster extends Kit {
     }
 
     private void kitMasterRunnable(Player p, ItemStack[] playerArmor, HashMap<Integer, ItemStack> invItems) {
-        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
-            if (!KitPvP.getInstance().getSpawnRegion().contains(p)) {
-                getKitManager().getKitPvP().getStats(p).getActiveKit().getKit().cancelRunnables(p);
-                getKitManager().getKits().get(KitType.KITMASTER).beginApplyKit(p);
-                getKitManager().getKitPvP().getStats(p).setActiveKit(KitType.KITMASTER);
-                clearInventory(p);
+       Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), new BukkitRunnable() {
+           @Override
+           public void run() {
+               if (!KitPvP.getInstance().getSpawnRegion().contains(p) && getKitManager().getKitPvP().getStats(p).getActiveKit() != KitType.KITMASTER) {
+                   getKitManager().getKitPvP().getStats(p).getActiveKit().getKit().cancelRunnables(p);
+                   getKitManager().getKits().get(KitType.KITMASTER).beginApplyKit(p);
+                   getKitManager().getKitPvP().getStats(p).setActiveKit(KitType.KITMASTER);
+                   clearInventory(p);
 
-                p.getInventory().setArmorContents(playerArmor);
-                for (Entry<Integer, ItemStack> entry : invItems.entrySet())
-                    p.getInventory().setItem(entry.getKey(), entry.getValue());
-                for (PotionEffect effect : p.getActivePotionEffects())
-                    p.removePotionEffect(effect.getType());
-            }
+                   p.getInventory().setArmorContents(playerArmor);
+                   for (Entry<Integer, ItemStack> entry : invItems.entrySet())
+                       p.getInventory().setItem(entry.getKey(), entry.getValue());
+                   for (PotionEffect effect : p.getActivePotionEffects())
+                       p.removePotionEffect(effect.getType());
+               }
+           }
         }, swapLength * 20);
     }
 

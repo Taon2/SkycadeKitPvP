@@ -82,7 +82,7 @@ public class KitPrick extends Kit {
     public void onInteract(Player p, Player target, ItemStack item) {
         if (item.getType() != Material.CACTUS)
             return;
-        if (!addCooldown(p, getName(), cactusCooldown, true))
+        if (!addCooldown(p, "Prick", cactusCooldown, true))
             return;
 
         //For missions

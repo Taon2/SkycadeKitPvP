@@ -74,7 +74,7 @@ public class KitKing extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), golemCooldown, true))
+        if (!addCooldown(p, "Summon Golem", golemCooldown, true))
             return;
 
         //For missions

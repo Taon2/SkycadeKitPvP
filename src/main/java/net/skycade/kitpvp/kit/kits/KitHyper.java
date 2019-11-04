@@ -69,7 +69,7 @@ public class KitHyper extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.SUGAR)
             return;
-        if (!addCooldown(p, getName(), sugarCooldown, true))
+        if (!addCooldown(p, "Sugar Rush", sugarCooldown, true))
             return;
 
         //For missions

@@ -112,7 +112,7 @@ public class KitShroom extends Kit {
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
-        if (!addCooldown(shooter, getName(), snowballCooldown, true)) {
+        if (!addCooldown(shooter, "Spore", snowballCooldown, true)) {
             reimburseItem(shooter, getSnowball(1), snowballMaxAmount, KitType.SHROOM);
             return;
         }

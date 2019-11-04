@@ -5,13 +5,6 @@ author: ["WhiteWalker72", "Riccardo Bello (RickyB98)", "Taon2"]
 depend: [SkycadeCore, GuardianBeamAPI]
 softdepend: [GangsPlus]
 commands:
-    givekey:
-    keys:
-    givekeys:
-    unlock:
-    unlockkit:
-    lock:
-    lockkit:
 permission:
   kitpvp.nametag.view:
     default: op

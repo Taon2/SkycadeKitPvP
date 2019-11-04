@@ -1,5 +1,7 @@
 package net.skycade.kitpvp;
 
+import net.brcdev.gangs.GangsPlusApi;
+import net.brcdev.gangs.gang.Gang;
 import net.skycade.SkycadeCore.SkycadePlugin;
 import net.skycade.SkycadeCore.utility.scoreboard.ScoreboardManager;
 import net.skycade.kitpvp.coreclasses.member.Member;
@@ -47,6 +49,8 @@ public class KitPvP extends SkycadePlugin {
     private void defaults() {
         Map<String, Object> defaults = new TreeMap<>();
 
+        defaults.put("database.kitpvp-table", "skycade_kitpvp_members");
+        defaults.put("database.kitpvp-prestige-levels", "skycade_kitpvp_prestige_levels");
         defaults.put("start-coins", 3500);
         defaults.put("start-kits", Arrays.asList(KitType.ARCHER.getAlias(), KitType.CHANCE.getAlias()));
         defaults.put("rotation-seconds", 3600);
@@ -71,12 +75,7 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("refreshkit-cooldown", 10800);
         defaults.put("kits-rotation-enabled", "false");
         defaults.put("event-shop-enabled", "true");
-        //looks in RotationManager for rotation settings in rotation.yml
-
         defaults.put("bounties", new YamlConfiguration());
-
-        defaults.put("database.kitpvp-table", "skycade_kitpvp_members");
-        defaults.put("database.kitpvp-prestige-levels", "skycade_kitpvp_prestige_levels");
 
         setConfigDefaults(defaults);
         loadDefaultConfig();
@@ -84,6 +83,7 @@ public class KitPvP extends SkycadePlugin {
 
     @Override
     public void onEnable() {
+        super.onEnable();
         defaults();
         instance = this;
 
@@ -119,7 +119,14 @@ public class KitPvP extends SkycadePlugin {
             return lastKiller != null && lastKiller.equals(player.getUniqueId()) ? Collections.singletonList(ChatColor.RED) : null;
         }, (p, v) -> null);
 
-        ScoreboardManager.getInstance().registerNametag(3, (p, v) -> null, (p, v) -> null, (p, v) -> {
+        net.skycade.SkycadeCore.utility.scoreboard.ScoreboardManager.getInstance().registerNametag(3, (p, v) -> null, (player, viewer) -> {
+            Member member = MemberManager.getInstance().getMember(viewer, false);
+            if (member == null) return null;
+            Gang gang = GangsPlusApi.getPlayersGang(member.getPlayer());
+            return player != null && gang.isMember(player) ? Collections.singletonList(ChatColor.GREEN) : null;
+        }, (p, v) -> null);
+
+        ScoreboardManager.getInstance().registerNametag(4, (p, v) -> null, (p, v) -> null, (p, v) -> {
             // Bounties!
             int bounty = 0;
 
@@ -142,6 +149,7 @@ public class KitPvP extends SkycadePlugin {
 
     @Override
     public void onDisable() {
+        super.onDisable();
         for (Member member : MemberManager.getInstance().getMembers().values()) {
             KitPvPDB.getInstance().setMemberDataSync(member);
         }

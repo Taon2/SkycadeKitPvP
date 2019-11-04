@@ -76,6 +76,8 @@ public class PlayerListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerTeleport(PlayerTeleportEvent e) {
+        //todo check to see if in combat, if so then cancel if its teleporting into spawn
+
         if (!plugin.getSpawnRegion().contains(e.getTo()) || plugin.getSpawnRegion().contains(e.getFrom())) return;
         new BukkitRunnable() {
             @Override

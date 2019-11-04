@@ -24,6 +24,7 @@ public enum KitType {
     ELITE("elite"),
     FISHERMAN("fisherman"),
     FROSTY("frosty"),
+    GAMBLER("gambler"),
     GANK("gank"),
     GUARDIAN("guardian"),
     ENDERMAN("enderman"),

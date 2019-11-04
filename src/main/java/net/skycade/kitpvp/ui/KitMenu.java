@@ -8,6 +8,7 @@ import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -87,17 +88,18 @@ public class KitMenu extends DynamicGui {
                             p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                             return;
                         }
+                        KIT_EQUIPPED.msg(member.getPlayer(), "%kit%", kit.getName());
                         UtilPlayer.reset(member.getPlayer());
                         stats.getActiveKit().getKit().cancelRunnables(member.getPlayer());
                         kitManager.getKitPvP().getStats(member).setActiveKit(kit.getKitType());
                         kitManager.getKitPvP().getStats(member).setKitPreference(kit.getKitType());
                         kit.beginApplyKit(member.getPlayer());
                         kit.giveSoup(member.getPlayer(), 32);
-                        KIT_EQUIPPED.msg(member.getPlayer(), "%kit%", kit.getName());
                         p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
+                        ScoreboardInfo.getInstance().updatePlayer(p);
                     } else {
-                        kitManager.getKitPvP().getStats(member).setKitPreference(kit.getKitType());
                         KIT_EQUIPPED_RESPAWN.msg(member.getPlayer(), "%kit%", kit.getName());
+                        kitManager.getKitPvP().getStats(member).setKitPreference(kit.getKitType());
                         p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
                     }
 

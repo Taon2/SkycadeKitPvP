@@ -75,7 +75,7 @@ public class KitTreeEnt extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.STICK)
             return;
-        if (!addCooldown(p, getName(), blockCooldown, true))
+        if (!addCooldown(p, "Leaf Storm", blockCooldown, true))
             return;
 
         //For missions

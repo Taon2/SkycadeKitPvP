@@ -16,7 +16,6 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -54,8 +53,8 @@ public class KitBlockhunt extends Kit {
         weapon = new ItemBuilder(
                 Material.IRON_AXE)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking on a block every " + disguiseCooldown)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "seconds disguises you as that block.").build();
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking on a block every " + disguiseCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "disguises you as that block.").build();
         bow = new ItemBuilder(
                 Material.BOW)
                 .addEnchantment(Enchantment.DURABILITY, 5)
@@ -92,6 +91,8 @@ public class KitBlockhunt extends Kit {
         if (disguised.containsKey(p.getUniqueId()))
             return;
         if (!addCooldown(p, "Block Disguise", disguiseCooldown, true))
+            return;
+        if (p.getLocation().getBlock().getType() != Material.AIR)
             return;
 
         //For missions
@@ -141,7 +142,7 @@ public class KitBlockhunt extends Kit {
         removeDisguise(p);
     }
 
-    @EventHandler
+    @Override
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
         removeDisguise(damager);
         removeDisguise(damagee);

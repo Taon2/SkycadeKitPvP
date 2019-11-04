@@ -62,6 +62,7 @@ public class KitManager {
         registerKit(new KitEnderman(this));
         registerKit(new KitFisherman(this));
         registerKit(new KitFrosty(this));
+        registerKit(new KitGambler(this));
         registerKit(new KitGank(this));
         registerKit(new KitGuardian(this));
         registerKit(new KitHades(this));

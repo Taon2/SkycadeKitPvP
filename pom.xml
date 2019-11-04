@@ -43,7 +43,7 @@
     <repositories>
         <repository>
             <id>my</id>
-            <url>file://${project.basedir}/jars</url>
+            <url>file://${project.basedir}/dependencies</url>
         </repository>
         <repository>
             <id>spigot-repo</id>
