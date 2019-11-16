@@ -159,7 +159,8 @@ public abstract class Kit implements Listener {
     public void onMove(Player p) {
     }
 
-    public void onDeath(Player p) {
+    public boolean onDeath(Player p) {
+        return true;
     }
 
     public void removeSummon(int seconds, Player p) {

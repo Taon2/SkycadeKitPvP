@@ -93,13 +93,6 @@ public class KitShaco extends Kit {
         startItemRunnable(p, snowballRegenSpeed, getSnowball(1), snowballMaxAmount, KitType.SHACO);
     }
 
-    private ItemStack getSnowball(int amount) {
-        ItemStack snowballRegen = new ItemStack(snowball);
-        snowballRegen.setAmount(amount);
-
-        return snowballRegen;
-    }
-
     @Override
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
         if (!(damager.hasPotionEffect(PotionEffectType.INVISIBILITY)))
@@ -173,6 +166,13 @@ public class KitShaco extends Kit {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         shacoArmor.remove(e.getPlayer().getUniqueId());
+    }
+
+    private ItemStack getSnowball(int amount) {
+        ItemStack snowballRegen = new ItemStack(snowball);
+        snowballRegen.setAmount(amount);
+
+        return snowballRegen;
     }
 
     @Override

@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -79,8 +80,9 @@ public class KitWither extends Kit {
     }
 
     @Override
-    public void onDeath(Player p) {
+    public boolean onDeath(Player p) {
         p.getLocation().getWorld().createExplosion(p.getLocation().getBlockX(), p.getLocation().getBlockY(), p.getLocation().getBlockZ(), 4F, false, false);
+        return true;
     }
 
     private void witherEffect(Player p) {

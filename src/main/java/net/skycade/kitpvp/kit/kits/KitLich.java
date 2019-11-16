@@ -1,6 +1,7 @@
 package net.skycade.kitpvp.kit.kits;
 
 import net.minelink.ctplus.CombatTagPlus;
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
@@ -9,10 +10,12 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.nms.EntityUtil;
 import net.skycade.kitpvp.nms.MiniArmyZombie;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.EntityEquipment;
@@ -27,60 +30,57 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static net.skycade.kitpvp.Messages.*;
 
-public class KitNecromancer extends Kit {
+public class KitLich extends Kit {
 
     private ItemStack helmet;
+    private ItemStack phylactery;
     private ItemStack chestplate;
     private ItemStack leggings;
     private ItemStack boots;
     private ItemStack weapon;
-    private ItemStack snowball;
 
-    private int ghostCooldown = 25;
-
-    private int snowballCooldown = 7;
-    private int snowballStartAmount = 6;
-    private int snowballMaxAmount = 8;
-    private int snowballRegenSpeed = 20;
-
+    private int ghostCooldown = 30;
     private Map<UUID, List<MiniArmyZombie>> ghostList = new HashMap<>();
 
-    public KitNecromancer(KitManager kitManager) {
-        super(kitManager, "Necromancer", KitType.NECROMANCER, 40000, getLore());
+    private int blockRemoveSpeed = 90;
+    private Map<UUID, Block> placed = new HashMap<>();
+
+    public KitLich(KitManager kitManager) {
+        super(kitManager, "Lich", KitType.LICH, 50000, getLore());
 
         helmet = new ItemBuilder(
                 Material.SKULL_ITEM)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3).build();
+                .setDurability((short) 1)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 8)
+                .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
-                .setColour(Color.GRAY).build();
+                .setColour(Color.fromRGB(25, 25, 112)).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 8)
+                .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
-                .setColour(Color.GRAY).build();
+                .setColour(Color.fromRGB(25, 25, 112)).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 8)
+                .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
-                .setColour(Color.GRAY).build();
+                .setColour(Color.fromRGB(25, 25, 112)).build();
         weapon = new ItemBuilder(
-                Material.BONE)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 5)
+                Material.STONE_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + ghostCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "summons ghosts to fight for you.").build();
-        snowball = new ItemBuilder(
-                Material.SNOW_BALL, snowballStartAmount)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Throwing a snowball every " + snowballCooldown + " seconds")
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "gives your target withering and teleports")
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "your ghosts to your enemies location.")
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 snowball every " + snowballRegenSpeed + " seconds.").build();
-
+        phylactery = new ItemBuilder(
+                Material.BEACON)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Can be placed.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "If you die within 1.5 minutes of placing, you")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "respawn with half health at the placed location.").build();
 
         ItemStack icon = new ItemStack(
-                Material.SKULL_ITEM);
+                Material.BEACON);
         setIcon(icon);
 
         EntityUtil.registerEntity(MiniArmyZombie.class, 54, "MiniArmyZombie");
@@ -89,20 +89,18 @@ public class KitNecromancer extends Kit {
     @Override
     public void applyKit(Player p) {
         p.getInventory().addItem(weapon);
-        p.getInventory().addItem(snowball);
+        p.getInventory().addItem(phylactery);
         p.getInventory().setHelmet(helmet);
         p.getInventory().setChestplate(chestplate);
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
-
-        startItemRunnable(p, snowballRegenSpeed, getSnowball(1), snowballMaxAmount, KitType.NECROMANCER);
     }
 
     @Override
     public void onItemUse(Player p, ItemStack item) {
-        if (item.getType() != Material.BONE)
+        if (item.getType() != Material.STONE_SWORD)
             return;
-        if (!addCooldown(p, "Summon Ghosts", ghostCooldown, false))
+        if (!addCooldown(p, "Raise Undead", ghostCooldown, false))
             return;
 
         //For missions
@@ -115,7 +113,7 @@ public class KitNecromancer extends Kit {
         List<MiniArmyZombie> ghosts = new ArrayList<>();
 
         for (int i = 0; i < 2; i++) {
-            // Can spawn 2 blocks in any direction
+            // Can spawn 2 phylactery in any direction
             Location loc = p.getLocation().clone().add(ThreadLocalRandom.current().nextInt(-2, 3), 0, ThreadLocalRandom.current().nextInt(-2, 3));
 
             // Make sure valid Y value
@@ -223,15 +221,13 @@ public class KitNecromancer extends Kit {
         Entity damager = event.getDamager();
         Entity damagee = event.getEntity();
 
-        if (damager instanceof LivingEntity && damagee instanceof LivingEntity) {
-           if (ghostList.containsKey(damager.getUniqueId())) {
-                for (MiniArmyZombie ghost : ghostList.get(damager.getUniqueId())) {
-                    ((Zombie) ghost.getBukkitEntity()).setTarget((LivingEntity) damagee);
-                }
-            } else if (ghostList.containsKey(damagee.getUniqueId())) {
-                for (MiniArmyZombie ghost : ghostList.get(damagee.getUniqueId())) {
-                    ((Zombie) ghost.getBukkitEntity()).setTarget((LivingEntity) damager);
-                }
+        if (ghostList.containsKey(damager.getUniqueId())) {
+            for (MiniArmyZombie ghost : ghostList.get(damager.getUniqueId())) {
+                ((Zombie) ghost.getBukkitEntity()).setTarget((LivingEntity) damagee);
+            }
+        } else if (ghostList.containsKey(damagee.getUniqueId())) {
+            for (MiniArmyZombie ghost : ghostList.get(damagee.getUniqueId())) {
+                ((Zombie) ghost.getBukkitEntity()).setTarget((LivingEntity) damager);
             }
         }
     }
@@ -252,50 +248,75 @@ public class KitNecromancer extends Kit {
         }
     }
 
-    public void onSnowballHit(Player shooter, Player damagee) {
-        if (!addCooldown(shooter, "Wither", snowballCooldown, true)) {
-            reimburseItem(shooter, getSnowball(1), snowballMaxAmount, KitType.NECROMANCER);
+    //TODO test phylactery system
+    @Override
+    public void onBlockPlace(Player p, Block block) {
+        if (block.getType() != Material.BEACON)
             return;
-        }
 
-        //For missions
-        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(shooter, this.getKitType());
-        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+        placed.put(p.getUniqueId(), block);
+        PHYLACTERY_PLACED.msg(p);
 
-        YOURE_WITHERED.msg(damagee, "%player%", shooter.getName());
-        damagee.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 80, 4));
-
-        if (ghostList.containsKey(shooter.getUniqueId())) {
-            for (MiniArmyZombie ghost : ghostList.get(shooter.getUniqueId())) {
-                ghost.teleportTo(damagee.getLocation(), false);
-                ((Zombie) ghost.getBukkitEntity()).setTarget(damagee);
-            }
-
-            TELEPORTED_GHOSTS.msg(shooter, "%player%", damagee.getName());
-        }
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            PHYLACTERY_EXPIRED.msg(p);
+            block.getLocation().getBlock().setType(Material.AIR);
+            placed.remove(p.getUniqueId());
+        }, blockRemoveSpeed * 20);
     }
 
-    private ItemStack getSnowball(int amount) {
-        ItemStack snowballRegen = new ItemStack(snowball);
-        snowballRegen.setAmount(amount);
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent e) {
+        Player p = e.getPlayer();
+        Block block = e.getBlock();
+        if (block.getType() != Material.BEACON)
+            return;
 
-        return snowballRegen;
+        placed.forEach((uuid, phylactery) -> {
+            if (phylactery.equals(block)) {
+                phylactery.setType(Material.AIR);
+
+                if (Bukkit.getOfflinePlayer(uuid).isOnline())
+                    PHYLACTERY_BROKEN.msg(Bukkit.getPlayer(uuid), "%player%", p.getName());
+                YOU_BROKE_PHYLACTERY.msg(p, "%player%", Bukkit.getOfflinePlayer(uuid).getName());
+            }
+        });
+    }
+
+    @Override
+    public boolean onDeath(Player p) {
+        if (!placed.containsKey(p.getUniqueId()))
+            return true;
+
+        Block block = placed.get(p.getUniqueId());
+
+        block.getLocation().getBlock().setType(Material.AIR);
+        p.teleport(block.getLocation());
+        p.setHealth(10);
+
+        PHYLACTERY_RESPAWNED.msg(p);
+
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            KitPvP.getInstance().getEventShopManager().reapplyUpgrades(p);
+        }, 3);
+
+        return false;
     }
 
     @Override
     public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 100!");
     }
 
     public static List<String> getLore() {
         return Arrays.asList(
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
-                ChatColor.GRAY + "" + ChatColor.ITALIC + "A healer with bad timing.",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Ruler of the undead.",
                 "",
-                ChatColor.GRAY + "Right clicking your sword",
-                ChatColor.GRAY + "summons ghosts to fight for you.",
-                ChatColor.GRAY + "Throw snowballs to wither enemies",
-                ChatColor.GRAY + "and make your ghosts target that enemy."
+                ChatColor.GRAY + "Right clicking summons 2 ghosts",
+                ChatColor.GRAY + "to attack enemies for you.",
+                ChatColor.GRAY + "If you die within 1.5 minutes of placing your",
+                ChatColor.GRAY + "phylactery, you respawn at the phylactery's location",
+                ChatColor.GRAY + "with half health. Players can break your phylactery."
         );
     }
 }

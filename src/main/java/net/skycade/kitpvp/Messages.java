@@ -181,9 +181,16 @@ public class Messages {
     public static final Localization.Message PLAYER_REPAIRED = new Localization.Message("kit.blacksmith.player-repaired", "&7You repaired &a%player%'s &7armor.");
     public static final Localization.Message REPAIRED = new Localization.Message("kit.blacksmith.repaired", "&7Armor repaired by &a%player%!");
     public static final Localization.Message SUMMONED_GHOSTS = new Localization.Message("kit.necromancer.summoned-ghosts", "&7Summoned 2 ghosts to fight for you!");
+    public static final Localization.Message YOURE_WITHERED = new Localization.Message("kit.necromancer.withered", "&8You were withered by &b%player%&8!");
+    public static final Localization.Message TELEPORTED_GHOSTS = new Localization.Message("kit.necromancer.teleported-ghosts", "&7Teleported ghosts to &b%player%&7!");
     public static final Localization.Message DISGUISING = new Localization.Message("kit.blockhunt.transforming", "&7Stand still for &a3 &7seconds to disguise as this block!");
     public static final Localization.Message DISGUISED = new Localization.Message("kit.blockhunt.transformed", "&aDisguised!");
     public static final Localization.Message DISGUISE_REMOVED = new Localization.Message("kit.blockhunt.disguise-removed", "&7Disguise removed!");
+    public static final Localization.Message PHYLACTERY_PLACED = new Localization.Message("kit.lich.phylactery-placed", "&7Phylactery placed! You will respawn at its location when you die, if it is still there.");
+    public static final Localization.Message PHYLACTERY_EXPIRED = new Localization.Message("kit.lich.phylactery-expired", "&7Your phylactery has expired.");
+    public static final Localization.Message PHYLACTERY_BROKEN = new Localization.Message("kit.lich.phylactery-broken", "&7Your phylactery was broken by %player%.");
+    public static final Localization.Message YOU_BROKE_PHYLACTERY = new Localization.Message("kit.lich.you-broke-phylactery", "&7You broke &a%player%'s &7phylactery.");
+    public static final Localization.Message PHYLACTERY_RESPAWNED = new Localization.Message("kit.lich.phylactery-respawned", "&7Respawned at your phylactery.");
 
     static void init() {
         Localization.getInstance().registerMessages("skycade.kitpvp",
@@ -318,13 +325,20 @@ public class Messages {
                 REPAIRED,
                 YOURE_POISONED,
                 SUMMONED_GHOSTS,
+                YOURE_WITHERED,
+                TELEPORTED_GHOSTS,
                 VIEWSTATS_USAGE,
                 VIEWSTATS_DESCRIPTION,
                 BROKE_KILLSTREAK,
                 HAS_KILLSTREAK,
                 DISGUISING,
                 DISGUISED,
-                DISGUISE_REMOVED
+                DISGUISE_REMOVED,
+                PHYLACTERY_PLACED,
+                PHYLACTERY_EXPIRED,
+                PHYLACTERY_BROKEN,
+                YOU_BROKE_PHYLACTERY,
+                PHYLACTERY_RESPAWNED
         );
     }
 }

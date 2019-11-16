@@ -17,6 +17,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -149,8 +150,9 @@ public class KitBlockhunt extends Kit {
     }
 
     @Override
-    public void onDeath(Player p) {
+    public boolean onDeath(Player p) {
         removeDisguise(p);
+        return true;
     }
 
     private void addFallingBlock(Player p, Material material, byte data) {

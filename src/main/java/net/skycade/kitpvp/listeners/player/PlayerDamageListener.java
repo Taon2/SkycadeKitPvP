@@ -92,14 +92,14 @@ public class PlayerDamageListener implements Listener {
         e.getDrops().clear();
         e.setDeathMessage("");
 
-        plugin.getStats(e.getEntity()).getActiveKit().getKit().onDeath(e.getEntity());
+        boolean resetStats = plugin.getStats(e.getEntity()).getActiveKit().getKit().onDeath(e.getEntity());
 
         //Removes the wolves from the player before respawning, due to player teleporting back to wolves bug
         Kit playerKit = plugin.getStats(MemberManager.getInstance().getMember(e.getEntity())).getActiveKit().getKit();
         playerKit.removeSummon(0, e.getEntity());
         playerKit.cancelRunnables(e.getEntity());
 
-        if (e.getEntity().isOnline()) respawn(e.getEntity());
+        if (e.getEntity().isOnline() && resetStats) respawn(e.getEntity());
 
         Player died = e.getEntity();
         Member diedMem = MemberManager.getInstance().getMember(died);
@@ -142,7 +142,9 @@ public class PlayerDamageListener implements Listener {
 
         final int kills = stats.getKills() + 1;
         stats.setKills(kills);
-        diedStats.setStreak(0);
+
+        if (resetStats)
+            diedStats.setStreak(0);
 
         //For missions
         KitPvPKillPlayerEvent killEvent = new KitPvPKillPlayerEvent(killer, stats.getActiveKit());
@@ -296,6 +298,8 @@ public class PlayerDamageListener implements Listener {
             ((KitFrosty) kit).onSnowballHit(shooter, damagee);
         else if (kit.getKitType() == KitType.SHROOM)
             ((KitShroom) kit).onSnowballHit(shooter, damagee);
+        else if (kit.getKitType() == KitType.NECROMANCER)
+            ((KitNecromancer) kit).onSnowballHit(shooter, damagee);
         else if (kit.getKitType() == KitType.ARCHER)
             ((KitArcher) kit).onArrowHit(shooter, damagee, e);
         else if (kit.getKitType() == KitType.FIREARCHER)

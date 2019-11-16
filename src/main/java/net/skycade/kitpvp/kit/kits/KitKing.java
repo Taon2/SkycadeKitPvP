@@ -63,14 +63,6 @@ public class KitKing extends Kit {
     }
 
     @Override
-    public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        List<Entity> entities = damagee.getNearbyEntities(4, 4, 4).stream()
-                .filter(en -> en instanceof Golem && en.getCustomName().contains(damagee.getName()))
-                .collect(Collectors.toList());
-        entities.forEach(golem -> ((Golem) golem).setTarget(damager));
-    }
-
-    @Override
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
@@ -103,6 +95,14 @@ public class KitKing extends Kit {
                     golem.remove();
                 }
         }, seconds * 20);
+    }
+
+    @Override
+    public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+        List<Entity> entities = damagee.getNearbyEntities(4, 4, 4).stream()
+                .filter(en -> en instanceof Golem && en.getCustomName().contains(damagee.getName()))
+                .collect(Collectors.toList());
+        entities.forEach(golem -> ((Golem) golem).setTarget(damager));
     }
 
     private Player getClosestTarget(Set<Player> players, Player p) {

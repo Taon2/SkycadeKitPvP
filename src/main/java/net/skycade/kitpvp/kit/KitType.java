@@ -37,6 +37,7 @@ public enum KitType {
     KANGAROO("kangaroo"),
     KING("king"),
     KNIGHT("knight"),
+    LICH("lich"),
     MULTISHOT("multishot"),
     MYSTIC("mystic"),
     NECROMANCER("necromancer"),

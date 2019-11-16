@@ -13,6 +13,8 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -46,6 +48,20 @@ public class WorldListeners implements Listener {
             if (en instanceof FallingBlock)
                 e.getEntity().remove();
         e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onEntityCombust(EntityCombustEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onEntityDeath(EntityDeathEvent event) {
+        if (event.getEntity().getType() == EntityType.PLAYER)
+            return;
+
+        event.getDrops().clear();
+        event.setDroppedExp(0);
     }
 
     @EventHandler

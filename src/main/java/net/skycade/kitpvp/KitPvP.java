@@ -123,7 +123,7 @@ public class KitPvP extends SkycadePlugin {
             Member member = MemberManager.getInstance().getMember(viewer, false);
             if (member == null) return null;
             Gang gang = GangsPlusApi.getPlayersGang(member.getPlayer());
-            return player != null && gang.isMember(player) ? Collections.singletonList(ChatColor.GREEN) : null;
+            return player != null && gang != null && gang.isMember(player) ? Collections.singletonList(ChatColor.GREEN) : null;
         }, (p, v) -> null);
 
         ScoreboardManager.getInstance().registerNametag(4, (p, v) -> null, (p, v) -> null, (p, v) -> {

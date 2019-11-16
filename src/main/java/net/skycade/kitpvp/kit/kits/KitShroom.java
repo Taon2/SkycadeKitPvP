@@ -93,13 +93,6 @@ public class KitShroom extends Kit {
         startItemRunnable(p, snowballRegenSpeed, getSnowball(1), snowballMaxAmount, KitType.SHROOM);
     }
 
-    private ItemStack getSnowball(int amount) {
-        ItemStack snowballRegen = new ItemStack(snowball);
-        snowballRegen.setAmount(amount);
-
-        return snowballRegen;
-    }
-
     public void onSnowballUse(ProjectileLaunchEvent e) {
         Player shooter = (Player) e.getEntity().getShooter();
         if (onCooldown(shooter, getName())) {
@@ -135,6 +128,13 @@ public class KitShroom extends Kit {
                     target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 0));
             });
         }
+    }
+
+    private ItemStack getSnowball(int amount) {
+        ItemStack snowballRegen = new ItemStack(snowball);
+        snowballRegen.setAmount(amount);
+
+        return snowballRegen;
     }
 
     @Override

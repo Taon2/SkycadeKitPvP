@@ -86,13 +86,6 @@ public class KitFrosty extends Kit {
         startItemRunnable(p, snowballRegenSpeed, getSnowball(1), snowballMaxAmount, KitType.FROSTY);
     }
 
-    private ItemStack getSnowball(int amount) {
-        ItemStack snowballRegen = new ItemStack(snowball);
-        snowballRegen.setAmount(amount);
-
-        return snowballRegen;
-    }
-
     public void onSnowballUse(ProjectileLaunchEvent e) {
         e.getEntity().setVelocity(e.getEntity().getVelocity().multiply(2));
     }
@@ -118,6 +111,13 @@ public class KitFrosty extends Kit {
         if (p.getLocation().getBlock().getType() == Material.STATIONARY_LAVA || p.getLocation().getBlock().getType() == Material.LAVA || p.getLocation().getBlock().getType() == Material.FIRE) {
             p.damage(1);
         }
+    }
+
+    private ItemStack getSnowball(int amount) {
+        ItemStack snowballRegen = new ItemStack(snowball);
+        snowballRegen.setAmount(amount);
+
+        return snowballRegen;
     }
 
     @Override

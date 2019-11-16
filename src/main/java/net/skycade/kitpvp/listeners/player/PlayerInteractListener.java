@@ -40,7 +40,7 @@ public class PlayerInteractListener implements Listener {
             return;
 
         KitType type = plugin.getStats(e.getPlayer()).getActiveKit();
-        if (type == KitType.BUILDUHC)
+        if (type == KitType.BUILDUHC || type == KitType.LICH)
             type.getKit().onBlockPlace(e.getPlayer(), e.getBlock());
         else
             e.setCancelled(true);
