@@ -37,7 +37,7 @@ public class GangPointsManager {
         });
     }
 
-    private void savePoints() {
+    public void save() {
         points.forEach((gangName, amount) ->
                 Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () -> {
 

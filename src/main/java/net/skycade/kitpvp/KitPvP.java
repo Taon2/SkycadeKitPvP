@@ -156,6 +156,7 @@ public class KitPvP extends SkycadePlugin {
 
         rotationManager.update();
         eventShopManager.save();
+        gangPointsManager.save();
     }
 
     private void registerListeners() {
