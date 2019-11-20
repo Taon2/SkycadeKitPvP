@@ -331,14 +331,14 @@ public class TeamFightEvent extends RandomEvent implements Listener {
             team1.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
                 if (stats != null) {
-                    stats.setEventCoins(stats.getEventTokens() + prizeAmount);
+                    stats.giveEventTokens(prizeAmount);
                     TEAMFIGHT_WON.msg(player, "%amount%", Integer.toString(prizeAmount));
                 }
             });
             team2.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
                 if (stats != null) {
-                    stats.setEventCoins(stats.getEventTokens() + participationAmount);
+                    stats.giveEventTokens(participationAmount);
                     TEAMFIGHT_PARTICIPATE.msg(player, "%amount%", Integer.toString(participationAmount));
                 }
             });
@@ -348,14 +348,14 @@ public class TeamFightEvent extends RandomEvent implements Listener {
             team2.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
                 if (stats != null) {
-                    stats.setEventCoins(stats.getEventTokens() + prizeAmount);
+                    stats.giveEventTokens(prizeAmount);
                     TEAMFIGHT_WON.msg(player, "%amount%", Integer.toString(prizeAmount));
                 }
             });
             team1.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
                 if (stats != null) {
-                    stats.setEventCoins(stats.getEventTokens() + participationAmount);
+                    stats.giveEventTokens(participationAmount);
                     TEAMFIGHT_PARTICIPATE.msg(player, "%amount%", Integer.toString(participationAmount));
                 }
             });

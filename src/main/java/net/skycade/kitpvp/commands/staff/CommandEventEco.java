@@ -144,13 +144,13 @@ public class CommandEventEco extends SkycadeCommand {
     }
 
     private void resetEventTokens(KitPvPStats targetStats, CommandSender commandSender, Player target) {
-        targetStats.setEventCoins(0);
+        targetStats.setEventTokens(0);
         YOUR_CURRENCY_RESET.msg(target, "%currency%", "event tokens");
         CURRENCY_RESET.msg(commandSender, "%player%", target.getName(), "%currency%", "event tokens");
     }
 
     private void incEventTokens(KitPvPStats targetStats, CommandSender commandSender, Player target, int amount) {
-        targetStats.setEventCoins(targetStats.getEventTokens() + amount);
+        targetStats.giveEventTokens(amount);
         YOUR_CURRENCY_ADDED.msg(target, "%amount%", Integer.toString(amount), "%currency%", "event tokens", "%total%", Integer.toString(targetStats.getEventTokens()));
         CURRENCY_ADDED.msg(commandSender, "%amount%", Integer.toString(amount), "%currency%", "event tokens", "%player%", target.getName());
     }
@@ -159,7 +159,7 @@ public class CommandEventEco extends SkycadeCommand {
         if (targetStats.getEventTokens() - amount < 0)
             resetEventTokens(targetStats, commandSender, target);
         else {
-            targetStats.setEventCoins(targetStats.getEventTokens() - amount);
+            targetStats.removeEventTokens(amount);
             YOUR_CURRENCY_REMOVED.msg(target, "%amount%", Integer.toString(amount), "%currency%", "event tokens");
             CURRENCY_REMOVED.msg(commandSender, "%player%", target.getName(), "%amount%", Integer.toString(amount), "%currency%", "event tokens", "%total%", Integer.toString(targetStats.getEventTokens()));
         }

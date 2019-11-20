@@ -4,26 +4,29 @@ import net.minelink.ctplus.CombatTagPlus;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
+import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.nms.EntityUtil;
 import net.skycade.kitpvp.nms.MiniArmyZombie;
+import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -44,6 +47,7 @@ public class KitLich extends Kit {
 
     private int blockRemoveSpeed = 90;
     private Map<UUID, Block> placed = new HashMap<>();
+    private List<UUID> removePhylactery = new ArrayList<>();
 
     public KitLich(KitManager kitManager) {
         super(kitManager, "Lich", KitType.LICH, 50000, getLore());
@@ -75,6 +79,7 @@ public class KitLich extends Kit {
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "summons ghosts to fight for you.").build();
         phylactery = new ItemBuilder(
                 Material.BEACON)
+                .setName(ChatColor.DARK_AQUA + "Phylactery")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Can be placed.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "If you die within 1.5 minutes of placing, you")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "respawn with half health at the placed location.").build();
@@ -89,7 +94,8 @@ public class KitLich extends Kit {
     @Override
     public void applyKit(Player p) {
         p.getInventory().addItem(weapon);
-        p.getInventory().addItem(phylactery);
+        if (!removePhylactery.contains(p.getUniqueId()))
+            p.getInventory().addItem(phylactery);
         p.getInventory().setHelmet(helmet);
         p.getInventory().setChestplate(chestplate);
         p.getInventory().setLeggings(leggings);
@@ -248,7 +254,6 @@ public class KitLich extends Kit {
         }
     }
 
-    //TODO test phylactery system
     @Override
     public void onBlockPlace(Player p, Block block) {
         if (block.getType() != Material.BEACON)
@@ -258,28 +263,33 @@ public class KitLich extends Kit {
         PHYLACTERY_PLACED.msg(p);
 
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            PHYLACTERY_EXPIRED.msg(p);
-            block.getLocation().getBlock().setType(Material.AIR);
-            placed.remove(p.getUniqueId());
+            if (placed.containsKey(p.getUniqueId())) {
+                PHYLACTERY_EXPIRED.msg(p);
+                block.getLocation().getBlock().setType(Material.AIR);
+                placed.remove(p.getUniqueId());
+            }
         }, blockRemoveSpeed * 20);
     }
 
-    @EventHandler
-    public void onBlockBreak(BlockBreakEvent e) {
-        Player p = e.getPlayer();
-        Block block = e.getBlock();
+    @Override
+    public void onBlockBreak(Player p, Block block) {
         if (block.getType() != Material.BEACON)
             return;
 
-        placed.forEach((uuid, phylactery) -> {
-            if (phylactery.equals(block)) {
-                phylactery.setType(Material.AIR);
+        for (Map.Entry<UUID, Block> entry : placed.entrySet()) {
+            UUID uuid = entry.getKey();
+            Block value = entry.getValue();
+
+            if (value.getLocation().equals(block.getLocation())) {
+                value.setType(Material.AIR);
 
                 if (Bukkit.getOfflinePlayer(uuid).isOnline())
                     PHYLACTERY_BROKEN.msg(Bukkit.getPlayer(uuid), "%player%", p.getName());
                 YOU_BROKE_PHYLACTERY.msg(p, "%player%", Bukkit.getOfflinePlayer(uuid).getName());
+
+                placed.remove(uuid);
             }
-        });
+        }
     }
 
     @Override
@@ -289,17 +299,39 @@ public class KitLich extends Kit {
 
         Block block = placed.get(p.getUniqueId());
 
-        block.getLocation().getBlock().setType(Material.AIR);
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> UtilPlayer.reset(p), 1);
+        p.setHealth(p.getMaxHealth()/2);
+        p.setVelocity(new Vector(0, 0, 0));
+        p.setGameMode(GameMode.SURVIVAL);
         p.teleport(block.getLocation());
-        p.setHealth(10);
-
-        PHYLACTERY_RESPAWNED.msg(p);
-
+        block.getLocation().getBlock().setType(Material.AIR);
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), p::updateInventory, 10);
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> p.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
+        KitPvPStats stats = KitPvP.getInstance().getStats(p);
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            stats.getActiveKit().getKit().giveSoup(p, 32);
+        }, 5);
+        stats.applyKitPreference();
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            removePhylactery.add(p.getUniqueId());
+            stats.getActiveKit().getKit().beginApplyKit(p);
             KitPvP.getInstance().getEventShopManager().reapplyUpgrades(p);
+            removePhylactery.remove(p.getUniqueId());
         }, 3);
 
+
+        PHYLACTERY_RESPAWNED.msg(p);
+        placed.remove(p.getUniqueId());
+
         return false;
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        if (placed.containsKey(event.getPlayer().getUniqueId())) {
+            placed.get(event.getPlayer().getUniqueId()).getLocation().getBlock().setType(Material.AIR);
+            placed.remove(event.getPlayer().getUniqueId());
+        }
     }
 
     @Override

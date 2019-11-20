@@ -144,7 +144,7 @@ public class KitGuardian extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.RAW_FISH)
             return;
-        if (!addCooldown(p, getName(), fishCooldown, true))
+        if (!addCooldown(p, "Elder Curse", fishCooldown, true))
             return;
 
         //For missions
@@ -152,8 +152,6 @@ public class KitGuardian extends Kit {
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 7);
-        if (targetPlayers.size() <= 1)
-            removeCooldowns(p, getName());
 
         targetPlayers.forEach(target -> {
             if (target != p) {

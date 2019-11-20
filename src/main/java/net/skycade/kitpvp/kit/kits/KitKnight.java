@@ -3,24 +3,28 @@ package net.skycade.kitpvp.kit.kits;
 import net.brcdev.gangs.GangsPlusApi;
 import net.brcdev.gangs.gang.Gang;
 import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class KitKnight extends Kit {
 
@@ -30,7 +34,8 @@ public class KitKnight extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
-    private int steedCooldown = 25;
+    private int steedCooldown = 50;
+    private Map<UUID, Horse> horses = new HashMap<>();
 
     public KitKnight(KitManager kitManager) {
         super(kitManager, "Knight", KitType.KNIGHT, 26000, getLore());
@@ -60,7 +65,7 @@ public class KitKnight extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + steedCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "lets you charge a horse into battle.").build();
-//todo horse thing
+
         ItemStack icon = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
         setIcon(icon);
     }
@@ -91,6 +96,59 @@ public class KitKnight extends Kit {
     }
 
     @Override
+    public void onItemUse(Player p, ItemStack item) {
+        if (item.getType() != Material.DIAMOND_SWORD)
+            return;
+        if (!addCooldown(p, "Summon Steed", steedCooldown, true))
+            return;
+
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
+        Horse horse = (Horse) p.getLocation().getWorld().spawnEntity(p.getLocation(), EntityType.HORSE);
+        horse.setAdult();
+        horse.setPassenger(p);
+        horse.setOwner(p);
+        horse.setTamed(true);
+        horse.setStyle(Horse.Style.WHITE);
+        horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
+        horse.getInventory().setArmor(new ItemStack(Material.GOLD_BARDING));
+        horse.setHealth(horse.getMaxHealth());
+
+        horses.put(p.getUniqueId(), horse);
+    }
+
+    @EventHandler
+    public void onExit(VehicleExitEvent event) {
+        if (event.getVehicle().getType() != EntityType.HORSE || event.getExited().getType() != EntityType.PLAYER)
+            return;
+
+        Horse horse = (Horse) event.getVehicle();
+        if (horse.getPassenger() instanceof Player) {
+            event.setCancelled(true);
+        }
+    }
+
+    @Override
+    public boolean onDeath(Player p) {
+        if (!horses.containsKey(p.getUniqueId()))
+            return true;
+
+        horses.get(p.getUniqueId()).remove();
+
+        return true;
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        if (horses.containsKey(event.getPlayer().getUniqueId())) {
+            horses.get(event.getPlayer().getUniqueId()).remove();
+            horses.remove(event.getPlayer().getUniqueId());
+        }
+    }
+
+    @Override
     public List<String> getHowToObtain() {
         return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }
@@ -101,7 +159,9 @@ public class KitKnight extends Kit {
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Protects his king.",
                 "",
                 ChatColor.GRAY + "Being in a gang with a player using",
-                ChatColor.GRAY + "Kit King nearby increases your defence."
+                ChatColor.GRAY + "Kit King nearby increases your defence.",
+                ChatColor.GRAY + "Right clicking with your sword mounts you",
+                ChatColor.GRAY + "onto a horse."
         );
     }
 }

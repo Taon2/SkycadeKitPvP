@@ -7,6 +7,7 @@ import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
+import net.skycade.kitpvp.nms.ActionBarUtil;
 import net.skycade.kitpvp.runnable.ItemRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -153,6 +154,9 @@ public abstract class Kit implements Listener {
     public void onBlockPlace(Player p, Block block) {
     }
 
+    public void onBlockBreak(Player p, Block block) {
+    }
+
     public void onInteract(Player p, Player target, ItemStack item) {
     }
 
@@ -177,10 +181,15 @@ public abstract class Kit implements Listener {
             if (cooldownDate.containsKey(p.getUniqueId())) {
                 long remainingSeconds = (cooldownDate.get(p.getUniqueId()).get(playerCooldown.get(p.getUniqueId()).indexOf(ability)) - new Date().getTime()) / 1000;
 
-                ON_COOLDOWN.msg(p, "%time%", CoreUtil.niceFormat((int) remainingSeconds), "%thing%", ability);
+                ActionBarUtil.sendActionBarMessage(p, ON_COOLDOWN.getMessage()
+                        .replace("%time%", CoreUtil.niceFormat((int) remainingSeconds))
+                        .replace("%thing%", ability),
+                        4, KitPvP.getInstance());
                 return true;
             } else {
-                ON_COOLDOWN_NO_TIME.msg(p, "%thing%", ability);
+                ActionBarUtil.sendActionBarMessage(p, ON_COOLDOWN_NO_TIME.getMessage()
+                                .replace("%thing%", ability),
+                        4, KitPvP.getInstance());
                 return true;
             }
         }
@@ -208,13 +217,15 @@ public abstract class Kit implements Listener {
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
             if (playerCooldown.get(p.getUniqueId()).contains(ability)){
                 if (message)
-                    OFF_COOLDOWN.msg(p, "%thing%", ability);
+                    ActionBarUtil.sendActionBarMessage(p, OFF_COOLDOWN.getMessage()
+                                    .replace("%thing%", ability),
+                            4, KitPvP.getInstance());
                 removeCooldowns(p, ability);
             }
         }, seconds * 20);
 
         // Show remaining seconds as level
-        p.setLevel(seconds + 1);
+        p.setLevel(seconds);
         new BukkitRunnable() {
             public void run() {
                 if (playerCooldown.get(p.getUniqueId()).contains(ability) && p.isOnline()) {

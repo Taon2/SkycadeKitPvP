@@ -49,7 +49,7 @@ class ConfirmMenu extends DynamicGui {
                     YOU_PURCHASED.msg(p, "%thing%", kit.getName(), "%amount%", Integer.toString(kit.getPrice()), "%currency%", "coins");
                     p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
                     stats.addKit(kitType);
-                    stats.setCoins(stats.getCoins() - kit.getPrice());
+                    stats.takeCoins(kit.getPrice());
 
                     ScoreboardInfo.getInstance().updatePlayer(p);
                     MemberManager.getInstance().update(member);
@@ -78,7 +78,7 @@ class ConfirmMenu extends DynamicGui {
                     YOU_PURCHASED.msg(member.getPlayer(), "%thing%", eventShopItem.getName(), "%amount%", Integer.toString(eventShopItem.getPrice()), "%currency%", "event tokens");
                     p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
                     eventShopItem.giveReward(((Player) ev.getWhoClicked()).getPlayer());
-                    stats.setEventCoins(stats.getEventTokens() - eventShopItem.getPrice());
+                    stats.takeEventTokens(eventShopItem.getPrice());
 
                     ScoreboardInfo.getInstance().updatePlayer(member.getPlayer());
                     MemberManager.getInstance().update(member);

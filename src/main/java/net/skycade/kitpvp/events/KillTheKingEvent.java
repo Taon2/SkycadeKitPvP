@@ -126,7 +126,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                     participated.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                         KitPvPStats stats = KitPvP.getInstance().getStats(player);
                         if (stats != null) {
-                            stats.setEventCoins(stats.getEventTokens() + participationAmount);
+                            stats.giveEventTokens(participationAmount);
                             KILLTHEKING_PARTICIPATE.msg(player, "%amount%", Integer.toString(participationAmount));
                         }
                     });
@@ -134,7 +134,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                     //Dish out event token rewards for the king
                     KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
                     if (kingStats != null) {
-                        kingStats.setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(king)).getEventTokens() + prizeAmount);
+                        kingStats.giveEventTokens(prizeAmount);
                         KILLTHEKING_PARTICIPATE.msg(Bukkit.getPlayer(king), "%amount%", Integer.toString(participationAmount));
                     }
                     end();
@@ -195,7 +195,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                 //Dish out event token rewards for killer
                 KitPvPStats killerStats = KitPvP.getInstance().getStats(killer);
                 if (killerStats != null) {
-                    killerStats.setEventCoins(KitPvP.getInstance().getStats(killer).getEventTokens() + prizeAmount);
+                    killerStats.giveEventTokens(prizeAmount);
                     KILLTHEKING_WON.msg(killer, "%amount%", Integer.toString(prizeAmount));
                 }
 
@@ -205,7 +205,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                     if (!(player == finalKiller)) {
                         KitPvPStats stats = KitPvP.getInstance().getStats(player);
                         if (stats != null) {
-                            stats.setEventCoins(stats.getEventTokens() + participationAmount);
+                            stats.giveEventTokens(participationAmount);
                             KILLTHEKING_PARTICIPATE.msg(player, "%amount%", Integer.toString(participationAmount));
                         }
                     }
@@ -216,7 +216,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
             //Dish out event token rewards for the king
             KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
             if (kingStats != null) {
-                kingStats.setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(king)).getEventTokens() + prizeAmount);
+                kingStats.giveEventTokens(prizeAmount);
                 KILLTHEKING_PARTICIPATE.msg(Bukkit.getPlayer(king), "%amount%", Integer.toString(participationAmount));
             }
 
@@ -264,7 +264,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
         if (begin == null) return;
 
         Player player = Bukkit.getPlayer(e.getEntity().getUniqueId());
-        if (this.king.equals(player.getUniqueId())){
+        if (player != null && this.king.equals(player.getUniqueId())){
             participated.add(e.getDamager().getUniqueId());
         }
     }

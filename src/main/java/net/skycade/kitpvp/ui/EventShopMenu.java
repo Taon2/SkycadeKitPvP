@@ -3,7 +3,9 @@ package net.skycade.kitpvp.ui;
 import net.md_5.bungee.api.ChatColor;
 import net.skycade.SkycadeCore.guis.dynamicnew.DynamicGui;
 import net.skycade.SkycadeCore.utility.CoreUtil;
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.kitpvp.nms.ActionBarUtil;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
@@ -69,7 +71,10 @@ public class EventShopMenu extends DynamicGui {
                         long diff = (now - purchasedUpgrades.get(clickedItem.getName())) / 1000L;
 
                         if (diff < clickedItem.getDuration()) {
-                            ON_COOLDOWN.msg(member.getPlayer(), "%time%", CoreUtil.niceFormat(clickedItem.getDuration() - ((Long) diff).intValue()), "%thing%", clickedItem.getName());
+                            ActionBarUtil.sendActionBarMessage(p, ON_COOLDOWN.getMessage()
+                                            .replace("%time%", CoreUtil.niceFormat(clickedItem.getDuration() - ((Long) diff).intValue()))
+                                            .replace("%thing%", clickedItem.getName()),
+                                    4, KitPvP.getInstance());
                             p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                             return;
                         }

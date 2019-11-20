@@ -4,6 +4,8 @@ import com.mojang.authlib.GameProfile;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_8_R3.*;
 import net.skycade.SkycadeCore.guis.dynamicnew.DynamicGui;
+import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import org.bukkit.Bukkit;
@@ -23,6 +25,10 @@ import java.util.UUID;
 
 public class ViewKitMenu extends DynamicGui {
 
+    private static final ItemStack BACK = new net.skycade.SkycadeCore.utility.ItemBuilder(Material.ARROW)
+            .setDisplayName(ChatColor.YELLOW + "" + ChatColor.GOLD + "Go Back")
+            .build();
+
     private static final CraftPlayer DUMMY_PLAYER = new CraftPlayer((CraftServer) Bukkit.getServer(), new EntityPlayer(((CraftServer) Bukkit.getServer()).getServer(), ((CraftWorld) Bukkit.getWorlds().get(0)).getHandle(),
             new GameProfile(UUID.randomUUID(), ""), new PlayerInteractManager(((CraftWorld) Bukkit.getWorlds().get(0)).getHandle())));
 
@@ -40,8 +46,13 @@ public class ViewKitMenu extends DynamicGui {
             List<String> lore = new ArrayList<>(kit.getDescription());
             lore.add("");
             lore.addAll(kit.getHowToObtain());
-            setItem(13,  new ItemBuilder(Material.PAPER).setName(kit.getName()).addLore(lore).build());
+            setItem(13,  new ItemBuilder(Material.PAPER).setName(ChatColor.GREEN + kit.getName()).addLore(lore).build());
         }
+
+        setItemInteraction(9, new net.skycade.SkycadeCore.utility.ItemBuilder(BACK).build(),
+                    (p, ev) -> {
+                        new KitMenu(KitPvP.getInstance().getKitManager(), MemberManager.getInstance().getMember(p)).open(p);
+                    });
     }
 
     private void addItems(int index, List<ItemStack> items, List<PotionEffect> effects) {

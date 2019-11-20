@@ -77,7 +77,7 @@ public class PrestigeManager {
             return false;
         }
 
-        stats.setCoins(stats.getCoins() - nextLevel.getCost());
+        stats.takeCoins(nextLevel.getCost());
         stats.setPrestigeLevel(currentLevel + 1);
         STAT_SET.msg(member.getPlayer(), "%player%", member.getName(), "%stat%", "prestige rank", "%amount%", Integer.toString(stats.getPrestigeLevel()));
         nextLevel.getCommands().forEach(command -> {

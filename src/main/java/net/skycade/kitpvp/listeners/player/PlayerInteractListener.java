@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -34,7 +35,7 @@ public class PlayerInteractListener implements Listener {
                 e.getPlayer().getInventory().getItemInHand());
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onBlockPlace(BlockPlaceEvent e) {
         if (plugin.isInSpawnArea(e.getPlayer()) || e.getPlayer().getGameMode().equals(GameMode.CREATIVE))
             return;
@@ -44,6 +45,15 @@ public class PlayerInteractListener implements Listener {
             type.getKit().onBlockPlace(e.getPlayer(), e.getBlock());
         else
             e.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    public void onBlockBreak(BlockBreakEvent e) {
+        if (plugin.isInSpawnArea(e.getPlayer()) || e.getPlayer().getGameMode().equals(GameMode.CREATIVE))
+            return;
+
+        KitType.LICH.getKit().onBlockBreak(e.getPlayer(), e.getBlock());
+        e.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

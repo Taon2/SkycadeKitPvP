@@ -238,13 +238,14 @@ public class KitNecromancer extends Kit {
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
-        Entity entity = event.getEntity();
+        if (event.getEntity().getKiller() == null)
+            return;
 
         if (ghostList.containsKey(event.getEntity().getKiller().getUniqueId())) {
             ghostList.forEach((uuid, ghosts) -> {
                 for (MiniArmyZombie ghost : ghosts) {
                     Zombie zombie = (Zombie) ghost.getBukkitEntity();
-                    if (zombie.getTarget().getUniqueId().equals(entity.getUniqueId())) {
+                    if (zombie.getTarget().getUniqueId().equals(event.getEntity().getUniqueId())) {
                         zombie.setTarget(null);
                     }
                 }

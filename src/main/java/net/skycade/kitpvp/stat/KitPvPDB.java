@@ -62,7 +62,7 @@ public class KitPvPDB {
                 }
 
                 stats.setCoins(result.getInt("Coins"));
-                stats.setEventCoins(result.getInt("EventCoins"));
+                stats.setEventTokens(result.getInt("EventCoins"));
                 stats.setAssists(result.getInt("Assists"));
                 stats.setKitPreference(KitType.valueOf(result.getString("ChosenKit")));
                 stats.setPrestigeLevel(result.getInt("PrestigeLevel"));
@@ -123,7 +123,6 @@ public class KitPvPDB {
     }
 
     private synchronized void executeUpdate(Member member) {
-
         try (Connection connection = CoreSettings.getInstance().getConnection()) {
             String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, EventCoins, Assists, ChosenKit, PrestigeLevel) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?, ?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), Coins = VALUES(Coins), EventCoins = VALUES(EventCoins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), PrestigeLevel = VALUES(PrestigeLevel)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {

@@ -39,6 +39,7 @@ public class KitManager {
         new CommandKitsUnlocked();
         new CommandRefund();
         new CommandResetStats();
+        new CommandResetGangPoints();
         new CommandSetStats();
         new CommandTriggerEvent();
     }

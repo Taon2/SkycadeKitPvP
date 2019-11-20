@@ -1,17 +1,22 @@
 package net.skycade.kitpvp.stat;
 
+import net.brcdev.gangs.GangsPlusApi;
+import net.brcdev.gangs.gang.Gang;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class KitPvPStats {
 
     private Integer lastStreak;
 
+    private UUID uuid;
     private int prestigeLevel = 0;
     private int kills = 0;
     private int deaths = 0;
@@ -25,9 +30,10 @@ public class KitPvPStats {
     private Map<KitType, KitData> kits = new HashMap<>();
     private ArrayList<EventShopItem> upgrades = new ArrayList<>();
 
-
-    public KitPvPStats() {
+    public KitPvPStats(UUID uuid) {
         //Unlocked from the start
+        this.uuid = uuid;
+
         for (String kitType : KitPvP.getInstance().getConfig().getStringList("start-kits")) {
             kits.put(KitType.byAlias(kitType), new KitData(KitType.byAlias(kitType)));
         }
@@ -57,12 +63,36 @@ public class KitPvPStats {
         this.coins = coins;
     }
 
+    public void giveCoins(int coins) {
+        this.coins += coins;
+
+        //Adds the amount of coins to the gang points
+        Gang gang = GangsPlusApi.getPlayersGang(Bukkit.getPlayer(uuid));
+        KitPvP.getInstance().getGangPointsManager().addPoints(gang.getName(), coins);
+    }
+
+    public void takeCoins(int coins) {
+        this.coins -= coins;
+    }
+
     public int getEventTokens() {
         return eventTokens;
     }
 
-    public void setEventCoins(int eventCoins) {
-        this.eventTokens = eventCoins;
+    public void giveEventTokens(int eventTokens) {
+        this.eventTokens += eventTokens;
+
+        //Adds the amount of event tokens times 5 to the gang points
+        Gang gang = GangsPlusApi.getPlayersGang(Bukkit.getPlayer(uuid));
+        KitPvP.getInstance().getGangPointsManager().addPoints(gang.getName(), eventTokens * 200);
+    }
+
+    public void takeEventTokens(int eventTokens) {
+        this.eventTokens -= eventTokens;
+    }
+
+    public void setEventTokens(int newTokens) {
+        this.eventTokens = newTokens;
     }
 
     public int getStreak() {

@@ -15,7 +15,6 @@ public class CommandKitPvPHelp extends SkycadeCommand {
 
     @Override
     public void onCommand(CommandSender commandSender, String[] strings) {
-
         commandSender.sendMessage(KITPVPHELP_TITLE + "");
         commandSender.sendMessage(SOUP_USAGE + "" + ChatColor.WHITE + " - " + SOUP_DESCRIPTION);
         commandSender.sendMessage(REFRESHKIT_USAGE + "" + ChatColor.WHITE + " - " + REFRESHKIT_DESCRIPTION);
@@ -32,6 +31,7 @@ public class CommandKitPvPHelp extends SkycadeCommand {
         commandSender.sendMessage(REFUNDKS_USAGE + "" + ChatColor.WHITE + " - " + REFUNDKS_DESCRIPTION);
         commandSender.sendMessage(SETSTATS_USAGE + "" + ChatColor.WHITE + " - " + SETSTATS_DESCRIPTION);
         commandSender.sendMessage(RESETSTATS_USAGE + "" + ChatColor.WHITE + " - " + RESETSTATS_DESCRIPTION);
+        commandSender.sendMessage(RESETGANGPOINTS_USAGE + "" + ChatColor.WHITE + " - " + RESETGANGPOINTS_DESCRIPTION);
         commandSender.sendMessage(LOCK_UNLOCK_USAGE + "" + ChatColor.WHITE + " - " + LOCK_UNLOCK_DESCRIPTION);
         commandSender.sendMessage(KITSUNLOCKED_USAGE + "" + ChatColor.WHITE + " - " + KITSUNLOCKED_DESCRIPTION);
     }

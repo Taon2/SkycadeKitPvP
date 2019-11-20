@@ -150,7 +150,7 @@ public class CommandEco extends SkycadeCommand {
     }
 
     private void incCoins(KitPvPStats targetStats, CommandSender commandSender, Player target, int amount) {
-        targetStats.setCoins(targetStats.getCoins() + amount);
+        targetStats.giveCoins(amount);
         YOUR_CURRENCY_ADDED.msg(target, "%amount%", Integer.toString(amount), "%currency%", "coins", "%total%", Integer.toString(targetStats.getCoins()));
         CURRENCY_ADDED.msg(commandSender, "%amount%", Integer.toString(amount), "%currency%", "coins", "%player%", target.getName());
     }
@@ -159,7 +159,7 @@ public class CommandEco extends SkycadeCommand {
         if (targetStats.getCoins() - amount < 0)
             resetCoins(targetStats, commandSender, target);
         else {
-            targetStats.setCoins(targetStats.getCoins() - amount);
+            targetStats.takeCoins(targetStats.getCoins() - amount);
             YOUR_CURRENCY_REMOVED.msg(target, "%amount%", Integer.toString(amount), "%currency%", "coins");
             CURRENCY_REMOVED.msg(commandSender, "%player%", target.getName(), "%amount%", Integer.toString(amount), "%currency%", "coins", "%total%", Integer.toString(targetStats.getCoins()));
         }

@@ -42,6 +42,7 @@ public class Messages {
     public static final Localization.Message YOUR_STAT_SET = new Localization.Message("command.your-stat-set", "&7Your %stat% has been set to %amount%.");
     public static final Localization.Message MAX_PRESTIGE = new Localization.Message("command.max-prestige", "&cYou are already the maximum prestige level!.");
     public static final Localization.Message NOT_THAT_PRESTIGE = new Localization.Message("command.not-that-prestige", "&cYou cannot rank up to that prestige yet.");
+    public static final Localization.Message GANG_POINTS_RESET = new Localization.Message("command.gang-points-reset", "&a%gang%'s &7gang points are reset.");
 
     //KitPvP Command Usages
     public static final Localization.Message SOUP_USAGE = new Localization.Message("usage.soup", "&7/soup");
@@ -61,6 +62,7 @@ public class Messages {
     public static final Localization.Message RESETSTATS_USAGE = new Localization.Message("usage.resetstats", "&7/resetstats &a<player>");
     public static final Localization.Message LOCK_UNLOCK_USAGE = new Localization.Message("usage.lock-unlock", "&7/kit &a<lock/unlock> <player/all> <kitname>");
     public static final Localization.Message KITSUNLOCKED_USAGE = new Localization.Message("usage.kitsunlocked", "&7/kitsunlocked &a<player>");
+    public static final Localization.Message RESETGANGPOINTS_USAGE = new Localization.Message("usage.resetgangpoints", "&7/resetgangpoints &a<gangname/all>");
 
     public static final Localization.Message KITPVPHELP_TITLE = new Localization.Message("title.kitpvphelp", "&7------------------&2KitPvP Help&7------------------");
     public static final Localization.Message SOUP_DESCRIPTION = new Localization.Message("description.soup", "&7Gives the player soup.");
@@ -80,6 +82,7 @@ public class Messages {
     public static final Localization.Message RESETSTATS_DESCRIPTION = new Localization.Message("description.resetstats", "&7Resets all stats for a player.");
     public static final Localization.Message LOCK_UNLOCK_DESCRIPTION = new Localization.Message("description.lock-unlock", "&7Locks or unlocks a kit for a player.");
     public static final Localization.Message KITSUNLOCKED_DESCRIPTION = new Localization.Message("description.kitsunlocked", "&7Displays all kits unlocked by a player.");
+    public static final Localization.Message RESETGANGPOINTS_DESCRIPTION = new Localization.Message("description.resetgangpoints", "&7Resets the points of a gang.");
 
     //KitPvP Stats
     public static final Localization.Message STATS = new Localization.Message("command.your-stat-set",
@@ -188,7 +191,7 @@ public class Messages {
     public static final Localization.Message DISGUISE_REMOVED = new Localization.Message("kit.blockhunt.disguise-removed", "&7Disguise removed!");
     public static final Localization.Message PHYLACTERY_PLACED = new Localization.Message("kit.lich.phylactery-placed", "&7Phylactery placed! You will respawn at its location when you die, if it is still there.");
     public static final Localization.Message PHYLACTERY_EXPIRED = new Localization.Message("kit.lich.phylactery-expired", "&7Your phylactery has expired.");
-    public static final Localization.Message PHYLACTERY_BROKEN = new Localization.Message("kit.lich.phylactery-broken", "&7Your phylactery was broken by %player%.");
+    public static final Localization.Message PHYLACTERY_BROKEN = new Localization.Message("kit.lich.phylactery-broken", "&7Your phylactery was broken by &a%player%&7.");
     public static final Localization.Message YOU_BROKE_PHYLACTERY = new Localization.Message("kit.lich.you-broke-phylactery", "&7You broke &a%player%'s &7phylactery.");
     public static final Localization.Message PHYLACTERY_RESPAWNED = new Localization.Message("kit.lich.phylactery-respawned", "&7Respawned at your phylactery.");
 
@@ -338,7 +341,10 @@ public class Messages {
                 PHYLACTERY_EXPIRED,
                 PHYLACTERY_BROKEN,
                 YOU_BROKE_PHYLACTERY,
-                PHYLACTERY_RESPAWNED
+                PHYLACTERY_RESPAWNED,
+                RESETGANGPOINTS_USAGE,
+                RESETGANGPOINTS_DESCRIPTION,
+                GANG_POINTS_RESET
         );
     }
 }

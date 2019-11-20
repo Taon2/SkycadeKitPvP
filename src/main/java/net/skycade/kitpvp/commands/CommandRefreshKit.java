@@ -9,6 +9,7 @@ import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.events.KillTheKingEvent;
 import net.skycade.kitpvp.events.TagEvent;
 import net.skycade.kitpvp.events.TeamFightEvent;
+import net.skycade.kitpvp.nms.ActionBarUtil;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.command.CommandSender;
@@ -68,7 +69,10 @@ public class CommandRefreshKit extends SkycadeCommand {
             long diff = (now - lastRefresh.get(member.getUUID())) / 1000L;
 
             if (diff < COOLDOWN) {
-                ON_COOLDOWN.msg(member.getPlayer(), "%time%", CoreUtil.niceFormat(COOLDOWN - ((Long) diff).intValue()), "%thing%", "/refreshkit");
+                ActionBarUtil.sendActionBarMessage(member.getPlayer(), ON_COOLDOWN.getMessage()
+                                .replace("%time%", CoreUtil.niceFormat(COOLDOWN - ((Long) diff).intValue()))
+                                .replace("%thing%", "/refreshkit"),
+                        4, KitPvP.getInstance());
                 return;
             }
         }
@@ -83,7 +87,7 @@ public class CommandRefreshKit extends SkycadeCommand {
         UtilPlayer.reset(member.getPlayer());
         stats.getActiveKit().getKit().beginApplyKit(member.getPlayer());
         stats.getActiveKit().getKit().giveSoup(member.getPlayer(), 32);
-        stats.setCoins(coins - COST);
+        stats.takeCoins(COST);
 
         ScoreboardInfo.getInstance().updatePlayer(member.getPlayer());
 

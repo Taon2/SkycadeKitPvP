@@ -33,7 +33,7 @@ public class CommandResetStats extends SkycadeCommand {
         Member target = MemberManager.getInstance().getMember(Bukkit.getPlayer(strings[0]));
         KitPvPStats stats = KitPvP.getInstance().getStats(target);
         stats.setCoins(0);
-        stats.setEventCoins(0);
+        stats.setEventTokens(0);
         stats.setKills(0);
         stats.setDeaths(0);
         stats.setStreak(0);

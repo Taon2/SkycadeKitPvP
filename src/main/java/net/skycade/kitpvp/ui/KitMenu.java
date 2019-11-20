@@ -8,11 +8,13 @@ import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.nms.ActionBarUtil;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -59,9 +61,10 @@ public class KitMenu extends DynamicGui {
 
                     List<String> lore = new ArrayList<>(kit.getDescription());
                     lore.add("");
-                    if (stats.hasKit(kit.getKitType()))
-                        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Click to use!");
-                    else
+                    lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to view this kit!");
+                    if (stats.hasKit(kit.getKitType())) {
+                        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Left click to use!");
+                    } else
                         lore.addAll(kit.getHowToObtain());
                     meta.setLore(lore);
 
@@ -70,40 +73,46 @@ public class KitMenu extends DynamicGui {
                     return item;
                 },
                 (p, ev) -> {
-                    if (!stats.hasKit(kit.getKitType())) {
-                        DONT_OWN.msg(member.getPlayer(), "%kit%", "kit " + kit.getName());
-                        p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
-                        return;
-                    }
-
-                    if (stats.getActiveKit() == kit.getKitType()) {
-                        ALREADY_USING.msg(member.getPlayer(), "%kit%", kit.getKitType().getKit().getName());
-                        p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
-                        return;
-                    }
-
-                    if (kitManager.getKitPvP().getSpawnRegion().contains(member.getPlayer())) {
-                        if (kitManager.getSignMap().containsKey(member.getUUID())) {
-                            ON_COOLDOWN_NO_TIME.msg(member.getPlayer(), "%thing%", "Kit refreshing");
+                    if (ev.getClick() == ClickType.RIGHT) {
+                        new ViewKitMenu(kit).open(p);
+                    } else if (ev.getClick() == ClickType.LEFT) {
+                        if (!stats.hasKit(kit.getKitType())) {
+                            DONT_OWN.msg(member.getPlayer(), "%kit%", "kit " + kit.getName());
                             p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                             return;
                         }
-                        KIT_EQUIPPED.msg(member.getPlayer(), "%kit%", kit.getName());
-                        UtilPlayer.reset(member.getPlayer());
-                        stats.getActiveKit().getKit().cancelRunnables(member.getPlayer());
-                        kitManager.getKitPvP().getStats(member).setActiveKit(kit.getKitType());
-                        kitManager.getKitPvP().getStats(member).setKitPreference(kit.getKitType());
-                        kit.beginApplyKit(member.getPlayer());
-                        kit.giveSoup(member.getPlayer(), 32);
-                        p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
-                        ScoreboardInfo.getInstance().updatePlayer(p);
-                    } else {
-                        KIT_EQUIPPED_RESPAWN.msg(member.getPlayer(), "%kit%", kit.getName());
-                        kitManager.getKitPvP().getStats(member).setKitPreference(kit.getKitType());
-                        p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
-                    }
 
-                    p.getOpenInventory().close();
+                        if (stats.getActiveKit() == kit.getKitType()) {
+                            ALREADY_USING.msg(member.getPlayer(), "%kit%", kit.getKitType().getKit().getName());
+                            p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
+                            return;
+                        }
+
+                        if (kitManager.getKitPvP().getSpawnRegion().contains(member.getPlayer())) {
+                            if (kitManager.getSignMap().containsKey(member.getUUID())) {
+                                ActionBarUtil.sendActionBarMessage(p, ON_COOLDOWN_NO_TIME.getMessage()
+                                                .replace("%thing%", "Kit refreshing"),
+                                        4, KitPvP.getInstance());
+                                p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
+                                return;
+                            }
+                            KIT_EQUIPPED.msg(member.getPlayer(), "%kit%", kit.getName());
+                            UtilPlayer.reset(member.getPlayer());
+                            stats.getActiveKit().getKit().cancelRunnables(member.getPlayer());
+                            kitManager.getKitPvP().getStats(member).setActiveKit(kit.getKitType());
+                            kitManager.getKitPvP().getStats(member).setKitPreference(kit.getKitType());
+                            kit.beginApplyKit(member.getPlayer());
+                            kit.giveSoup(member.getPlayer(), 32);
+                            p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
+                            ScoreboardInfo.getInstance().updatePlayer(p);
+                        } else {
+                            KIT_EQUIPPED_RESPAWN.msg(member.getPlayer(), "%kit%", kit.getName());
+                            kitManager.getKitPvP().getStats(member).setKitPreference(kit.getKitType());
+                            p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
+                        }
+
+                        p.getOpenInventory().close();
+                    }
                 }));
     }
 }

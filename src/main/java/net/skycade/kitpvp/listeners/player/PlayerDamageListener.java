@@ -221,7 +221,7 @@ public class PlayerDamageListener implements Listener {
         Bukkit.getPluginManager().callEvent(event);
 
         if (!event.isCancelled()) {
-            stats.setCoins(stats.getCoins() + event.getNewCoins());
+            stats.giveCoins(event.getNewCoins());
         }
 
         checkAssist(died, killer);
@@ -380,7 +380,7 @@ public class PlayerDamageListener implements Listener {
                             ASSIST_REWARD.msg(keyPlayer, "%amount%", Integer.toString(assist), "%player%", killed.getName());
                         }
 
-                        plugin.getStats(keyPlayer).setCoins(plugin.getStats(keyPlayer).getCoins() + assist);
+                        plugin.getStats(keyPlayer).giveCoins(assist);
                         plugin.getStats(keyPlayer).setAssists(plugin.getStats(keyPlayer).getAssists() + 1);
                     }
                 }

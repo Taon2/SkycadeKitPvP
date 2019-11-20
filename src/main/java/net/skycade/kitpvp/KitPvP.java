@@ -14,11 +14,11 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.listeners.WorldListeners;
 import net.skycade.kitpvp.listeners.chat.ChatClick;
 import net.skycade.kitpvp.listeners.player.*;
-import net.skycade.kitpvp.scoreboard.HighestKsUpdater;
+import net.skycade.kitpvp.managers.RotationManager;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
+import net.skycade.kitpvp.stat.GangPointsManager;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import net.skycade.kitpvp.stat.RotationManager;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import net.skycade.kitpvp.ui.prestige.PrestigeManager;
 import org.bukkit.Bukkit;
@@ -39,7 +39,7 @@ public class KitPvP extends SkycadePlugin {
     private PrestigeManager prestigeManager;
     private EventShopManager eventShopManager;
     private RotationManager rotationManager;
-    private HighestKsUpdater ksUpdater;
+    private GangPointsManager gangPointsManager;
     private ChatClick chatClick;
 
     private Region spawnRegion;
@@ -94,7 +94,7 @@ public class KitPvP extends SkycadePlugin {
         this.prestigeManager = new PrestigeManager(this);
         this.eventShopManager = new EventShopManager(this);
         this.rotationManager = new RotationManager();
-        this.ksUpdater = new HighestKsUpdater(this);
+        this.gangPointsManager = new GangPointsManager();
         Bukkit.getPluginManager().registerEvents(chatClick = new ChatClick(), this);
 
         ScoreboardInfo.getInstance();
@@ -174,7 +174,7 @@ public class KitPvP extends SkycadePlugin {
     public KitPvPStats getStats(Member member) {
         if (member == null) return null;
         if (!stats.containsKey(member.getUUID()))
-            stats.put(member.getUUID(), new KitPvPStats());
+            stats.put(member.getUUID(), new KitPvPStats(member.getUUID()));
         return stats.get(member.getUUID());
     }
 
@@ -210,12 +210,12 @@ public class KitPvP extends SkycadePlugin {
         return eventShopManager;
     }
 
-    public RotationManager getKitPvPDocManager() {
-        return rotationManager;
+    public GangPointsManager getGangPointsManager() {
+        return gangPointsManager;
     }
 
-    public HighestKsUpdater getKsUpdater() {
-        return ksUpdater;
+    public RotationManager getKitPvPDocManager() {
+        return rotationManager;
     }
 
     public Location getSpawnLocation() {

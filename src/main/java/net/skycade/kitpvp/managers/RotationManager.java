@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.stat;
+package net.skycade.kitpvp.managers;
 
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
