@@ -72,7 +72,7 @@ public class KitTeleporter extends Kit {
     public void onPlayerInteract(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            if (player.getItemInHand().getType().equals(Material.ENDER_PEARL)) {
+            if (player.getItemInHand().getType() == Material.ENDER_PEARL) {
                 if (!addCooldown(e.getPlayer(), getName(), 10, true)) {
                     e.setCancelled(true);
                     return;

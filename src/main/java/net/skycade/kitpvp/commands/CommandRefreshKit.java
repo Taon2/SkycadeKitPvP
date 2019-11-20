@@ -8,10 +8,11 @@ import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.events.KillTheKingEvent;
 import net.skycade.kitpvp.events.TagEvent;
-import net.skycade.kitpvp.events.TeamFightEvent;
+import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.nms.ActionBarUtil;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -44,18 +45,18 @@ public class CommandRefreshKit extends SkycadeCommand {
 
         if (KillTheKingEvent.getInstance() != null && KillTheKingEvent.getInstance().getCurrentKing() != null) {
             if (member.getUUID().equals(KillTheKingEvent.getInstance().getCurrentKing())) {
-                CANNOT_USE.msg(member.getPlayer(), "%thing%", "/refreshkit", "%reason%", "as the King");
+                CANNOT_USE.msg(member.getPlayer(), "%thing%", "/refreshkit", "%reason%", ChatColor.RED + "as " + ChatColor.AQUA + "the King");
                 return;
             }
         }
 
-        if (TeamFightEvent.getInstance().getBegin() != null) {
-            CANNOT_USE.msg(member.getPlayer(), "%thing%", "/refreshkit", "%reason%", "during Team Fight");
+        if (CaptureTheFlagEvent.getInstance().getBegin() != null) {
+            CANNOT_USE.msg(member.getPlayer(), "%thing%", "/refreshkit", "%reason%", ChatColor.RED + "during " + ChatColor.AQUA + "Capture The Flag");
             return;
         }
 
         if (TagEvent.getInstance().getBegin() != null) {
-            CANNOT_USE.msg(member.getPlayer(), "%thing%", "/refreshkit", "%reason%", "during Infection");
+            CANNOT_USE.msg(member.getPlayer(), "%thing%", "/refreshkit", "%reason%", ChatColor.RED + "during " + ChatColor.AQUA + "Infection");
             return;
         }
 

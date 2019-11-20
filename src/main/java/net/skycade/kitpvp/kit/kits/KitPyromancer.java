@@ -135,7 +135,7 @@ public class KitPyromancer extends Kit {
                 for (int z = cz - r; z <= cz +r; z++) {
                     if ((cx - x) * (cx - x) + (cz - z) * (cz - z) <= rSquared) {
                         Block block = w.getBlockAt(x, cy, z);
-                        if (block.getType().equals(Material.AIR)) {
+                        if (block.getType() == Material.AIR) {
                             block.setType(Material.FIRE);
 
                             Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), new BukkitRunnable() {

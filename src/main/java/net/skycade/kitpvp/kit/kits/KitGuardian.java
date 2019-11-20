@@ -158,8 +158,7 @@ public class KitGuardian extends Kit {
                 Packet<?> packet = new PacketPlayOutWorldParticles(EnumParticle.MOB_APPEARANCE, false, (float) target.getLocation().getX(), (float) target.getLocation().getY(), (float) target.getLocation().getZ(), 0F, 0F, 0F, 10, 1);
                 ((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
 
-                target.addPotionEffect(
-                        new PotionEffect(PotionEffectType.SLOW, 200, 1));
+                target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 200, 1));
             }
         });
     }

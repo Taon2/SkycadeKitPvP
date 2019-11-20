@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.events.teamfight;
+package net.skycade.kitpvp.events.capturetheflag;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -8,7 +8,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.events.PacketListener;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.events.RandomEvent;
-import net.skycade.kitpvp.events.TeamFightEvent;
+import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -16,18 +16,17 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class TeamFightPacketListener implements PacketListener {
+public class CaptureTheFlagPacketListener implements PacketListener {
     @Override
     public void onPacketSending(PacketEvent event) {
-        if (!(RandomEvent.getCurrent() instanceof TeamFightEvent)) return;
+        if (!(RandomEvent.getCurrent() instanceof CaptureTheFlagEvent)) return;
 
-        Long begin = ((TeamFightEvent) RandomEvent.getCurrent()).getBegin();
+        Long begin = ((CaptureTheFlagEvent) RandomEvent.getCurrent()).getBegin();
         if (begin == null || begin > System.currentTimeMillis()) return;
 
         PacketContainer packet = event.getPacket();
         Integer eid = packet.getIntegers().read(0);
         Integer slot = packet.getIntegers().read(1);
-        //ItemStack is = packet.getItemModifier().read(0);
 
         Player player = Bukkit.getOnlinePlayers().stream().filter(e -> e.getEntityId() == eid).findAny().orElse(null);
 
@@ -35,7 +34,7 @@ public class TeamFightPacketListener implements PacketListener {
 
         if (slot == 4) {
             event.setCancelled(true);
-            ItemStack banner = TeamFightEvent.getBannerFor(player.getUniqueId());
+            ItemStack banner = CaptureTheFlagEvent.getBannerFor(player.getUniqueId());
             if (banner == null) return;
             packet.getItemModifier().write(0, banner);
             try {

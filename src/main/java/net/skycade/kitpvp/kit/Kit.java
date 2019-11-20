@@ -346,7 +346,7 @@ public abstract class Kit implements Listener {
             while (!p.isOnGround()) {
                 Location loc = p.getLocation();
                 loc.setY(y);
-                if (loc.getBlock().getType().equals(Material.AIR)) {
+                if (loc.getBlock().getType() == Material.AIR) {
                     y--;
                 } else {
                     p.teleport(new Location(loc.getWorld(), Math.floor(loc.getX()) + .5, y+1, Math.floor(loc.getZ()) + .5, loc.getYaw(), loc.getPitch()));

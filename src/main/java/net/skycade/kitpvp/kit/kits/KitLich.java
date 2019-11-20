@@ -242,7 +242,7 @@ public class KitLich extends Kit {
     public void onEntityDeath(EntityDeathEvent event) {
         Entity entity = event.getEntity();
 
-        if (ghostList.containsKey(event.getEntity().getKiller().getUniqueId())) {
+        if (event.getEntity() != null && event.getEntity().getKiller() != null && ghostList.containsKey(event.getEntity().getKiller().getUniqueId())) {
             ghostList.forEach((uuid, ghosts) -> {
                 for (MiniArmyZombie ghost : ghosts) {
                     Zombie zombie = (Zombie) ghost.getBukkitEntity();

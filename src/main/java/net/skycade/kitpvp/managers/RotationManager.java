@@ -42,7 +42,7 @@ public class RotationManager {
             }
             save();
         }
-        if (KitPvP.getInstance().getConfig().getString("kits-rotation-enabled").equals("false"))
+        if (!KitPvP.getInstance().getConfig().getBoolean("kits-rotation-enabled"))
             updateNoRotation();
         else
             startRotationUpdater();
@@ -58,7 +58,7 @@ public class RotationManager {
     }
 
     private List<String> getCurrentKitRotation() {
-        if (KitPvP.getInstance().getConfig().getString("kits-rotation-enabled").equals("false")){
+        if (!KitPvP.getInstance().getConfig().getBoolean("kits-rotation-enabled")){
             List<String> list = yaml.getStringList("no-rotation");
             if (list == null || list.isEmpty()) updateNoRotation();
             return yaml.getStringList("no-rotation") == null ? new ArrayList<>() : yaml.getStringList("no-rotation");

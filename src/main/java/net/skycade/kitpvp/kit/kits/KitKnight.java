@@ -34,7 +34,7 @@ public class KitKnight extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
-    private int steedCooldown = 50;
+    private int steedCooldown = 60;
     private Map<UUID, Horse> horses = new HashMap<>();
 
     public KitKnight(KitManager kitManager) {
@@ -121,21 +121,19 @@ public class KitKnight extends Kit {
 
     @EventHandler
     public void onExit(VehicleExitEvent event) {
-        if (event.getVehicle().getType() != EntityType.HORSE || event.getExited().getType() != EntityType.PLAYER)
-            return;
-
-        Horse horse = (Horse) event.getVehicle();
-        if (horse.getPassenger() instanceof Player) {
-            event.setCancelled(true);
+        if (horses.containsKey(event.getExited().getUniqueId())) {
+            horses.get(event.getExited().getUniqueId()).remove();
+            horses.remove(event.getExited().getUniqueId());
         }
     }
 
     @Override
     public boolean onDeath(Player p) {
-        if (!horses.containsKey(p.getUniqueId()))
-            return true;
-
-        horses.get(p.getUniqueId()).remove();
+        if (horses.containsKey(p.getUniqueId())) {
+            p.getVehicle().eject();
+            horses.get(p.getUniqueId()).remove();
+            horses.remove(p.getUniqueId());
+        }
 
         return true;
     }
@@ -143,9 +141,20 @@ public class KitKnight extends Kit {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         if (horses.containsKey(event.getPlayer().getUniqueId())) {
+            event.getPlayer().getVehicle().eject();
             horses.get(event.getPlayer().getUniqueId()).remove();
             horses.remove(event.getPlayer().getUniqueId());
         }
+    }
+
+    public void removeSummon(int seconds, Player p) {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+            if (horses.containsKey(p.getUniqueId())) {
+                p.getVehicle().eject();
+                horses.get(p.getUniqueId()).remove();
+                horses.remove(p.getUniqueId());
+            }
+        }, seconds * 20);
     }
 
     @Override

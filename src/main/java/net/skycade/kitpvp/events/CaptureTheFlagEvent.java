@@ -9,8 +9,8 @@ import net.skycade.SkycadeCore.utility.scoreboard.ScoreboardManager;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPCoinsRewardEvent;
 import net.skycade.kitpvp.bukkitevents.KitPvPEventStartEvent;
-import net.skycade.kitpvp.events.teamfight.TeamFightPacketListener;
-import net.skycade.kitpvp.events.teamfight.TeamFightStartDelay;
+import net.skycade.kitpvp.events.capturetheflag.CaptureTheFlagFlagListener;
+import net.skycade.kitpvp.events.capturetheflag.CaptureTheFlagStartDelay;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,7 +24,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
@@ -36,33 +35,34 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static net.skycade.kitpvp.Messages.*;
 
-public class TeamFightEvent extends RandomEvent implements Listener {
+public class CaptureTheFlagEvent extends RandomEvent implements Listener {
 
     private BukkitRunnable task;
 
     private int prizeAmount = 5;
     private int participationAmount = 1;
 
-    private static TeamFightEvent instance;
+    private static CaptureTheFlagEvent instance;
 
     private List<UUID> lastWinners = new ArrayList<>();
     private Long lastEvent = -1L;
     private BukkitRunnable actionBarTask;
     private ScoreboardManager.QueuedDisplay queuedDisplay;
 
-    public TeamFightEvent() {
+    CaptureTheFlagEvent() {
         super();
         instance = this;
         Bukkit.getServer().getPluginManager().registerEvents(this, KitPvP.getInstance());
 
-        ProtocolLibrary.getProtocolManager().addPacketListener(new TeamFightPacketListener());
+        //ProtocolLibrary.getProtocolManager().addPacketListener(new CaptureTheFlagPacketListener());
+        KitPvP.getInstance().registerListeners(new CaptureTheFlagFlagListener(KitPvP.getInstance(), instance));
     }
 
     private Set<UUID> team1 = new HashSet<>();
     private Set<UUID> team2 = new HashSet<>();
 
-    private int team1Kills = 0;
-    private int team2Kills = 0;
+    private int team1Points = 0;
+    private int team2Points = 0;
 
     private Long begin = null;
 
@@ -93,11 +93,11 @@ public class TeamFightEvent extends RandomEvent implements Listener {
 
     public static ItemStack getBannerFor(UUID uuid) {
         RandomEvent current = RandomEvent.getCurrent();
-        if (!(current instanceof TeamFightEvent)) return null;
+        if (!(current instanceof CaptureTheFlagEvent)) return null;
 
-        if (((TeamFightEvent) current).team1.contains(uuid)) {
+        if (((CaptureTheFlagEvent) current).team1.contains(uuid)) {
             return BANNER1.clone();
-        } else if (((TeamFightEvent) current).team2.contains(uuid)) {
+        } else if (((CaptureTheFlagEvent) current).team2.contains(uuid)) {
             return BANNER2.clone();
         }
 
@@ -111,7 +111,6 @@ public class TeamFightEvent extends RandomEvent implements Listener {
 
     @Override
     public void run() {
-
         begin = System.currentTimeMillis() + 60 * 1000L;
         ThreadLocalRandom rand = ThreadLocalRandom.current();
 
@@ -143,31 +142,26 @@ public class TeamFightEvent extends RandomEvent implements Listener {
             }
         }
 
-        new TeamFightStartDelay(begin, 60);
+        new CaptureTheFlagStartDelay(begin);
     }
 
     public void start() {
         lastWinners.clear();
 
-        TEAMFIGHT_START.broadcast();
+        CAPTURETHEFLAG_START.broadcast();
+
+        CaptureTheFlagFlagListener.getInstance().spawnBanner();
 
         Bukkit.getOnlinePlayers().forEach(player -> {
             KitPvPEventStartEvent eventStartEvent = new KitPvPEventStartEvent(player);
             Bukkit.getServer().getPluginManager().callEvent(eventStartEvent);
 
             if (team1.contains(player.getUniqueId())) {
-                TEAMFIGHT_TEAM1.msg(player);
+                CAPTURETHEFLAG_TEAM.msg(player, "%team%", ChatColor.RED + "" + ChatColor.BOLD + "RED");
             } else {
-                TEAMFIGHT_TEAM2.msg(player);
+                CAPTURETHEFLAG_TEAM.msg(player, "%team%", ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE");
             }
         });
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                refreshArmor();
-            }
-        }.runTask(KitPvP.getInstance());
 
         task = new BukkitRunnable() {
             @Override
@@ -194,13 +188,13 @@ public class TeamFightEvent extends RandomEvent implements Listener {
                     boolean red = team1.contains(player.getUniqueId());
                     ActionBarAPI.sendActionBar(player,
                             ChatColor.GREEN +
-                                    "You are in team " + (red ? ChatColor.RED + "" + ChatColor.BOLD + "RED" : ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE") + ChatColor.GREEN + "!" + ChatColor.WHITE + " - " +
+                                    "You are on team " + (red ? ChatColor.RED + "" + ChatColor.BOLD + "RED" : ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE") + ChatColor.GREEN + "!" + ChatColor.WHITE + " - " +
                     ChatColor.GOLD + CoreUtil.niceFormat(sec, true));
                 }
 
                 ScoreboardManager.getInstance().updateScores("timeleft", p -> ChatColor.GRAY + "Time left: " + ChatColor.YELLOW + CoreUtil.niceFormat(sec, true));
-                ScoreboardManager.getInstance().updateScores("team1", p -> ChatColor.RED + "" + ChatColor.BOLD + "RED" + ": " + ChatColor.GOLD + team1Kills);
-                ScoreboardManager.getInstance().updateScores("team2", p -> ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE" + ": " + ChatColor.GOLD + team2Kills);
+                ScoreboardManager.getInstance().updateScores("team1", p -> ChatColor.RED + "" + ChatColor.BOLD + "RED" + ": " + ChatColor.GOLD + team1Points);
+                ScoreboardManager.getInstance().updateScores("team2", p -> ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE" + ": " + ChatColor.GOLD + team2Points);
             }
         };
         actionBarTask.runTaskTimer(KitPvP.getInstance(), 20L, 20L);
@@ -208,7 +202,7 @@ public class TeamFightEvent extends RandomEvent implements Listener {
         queuedDisplay = ScoreboardManager.getInstance().addQueuedDisplay((p, d) -> {
             int i = 10;
             int sec = ((Long) (5 * 60 - (System.currentTimeMillis() - begin) / 1000L)).intValue();
-            d.setTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "Team Fight");
+            d.setTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "Capture The Flag");
             d.setScore("blank" + i, " ", --i);
             d.setScore("your", ChatColor.GRAY + "Your team: " + (team2.contains(p.getUniqueId()) ?
                     ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE" :
@@ -217,22 +211,22 @@ public class TeamFightEvent extends RandomEvent implements Listener {
             d.setScore("blank" + i, "  ", --i);
             d.setScore("timeleft", ChatColor.GRAY + "Time left: " + ChatColor.YELLOW + CoreUtil.niceFormat(sec, true), --i);
             d.setScore("blank" + i, "   ", --i);
-            d.setScore("kills", ChatColor.GRAY + "Kills", --i);
-            d.setScore("team1", ChatColor.RED + "" + ChatColor.BOLD + "RED" + ": " + ChatColor.GOLD + team1Kills, --i);
-            d.setScore("team2", ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE" + ": " + ChatColor.GOLD + team2Kills, --i);
+            d.setScore("points", ChatColor.GRAY + "Points", --i);
+            d.setScore("team1", ChatColor.RED + "" + ChatColor.BOLD + "RED" + ": " + ChatColor.GOLD + team1Points, --i);
+            d.setScore("team2", ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE" + ": " + ChatColor.GOLD + team2Points, --i);
         }, 2);
     }
 
-    private void refreshArmor() {
-        Bukkit.getOnlinePlayers().forEach(this::refreshArmor);
+    private void refreshArmor(boolean banner) {
+        Bukkit.getOnlinePlayers().forEach(p -> refreshArmor(p, banner));
     }
 
-    private void refreshArmor(Player p) {
+    public void refreshArmor(Player p, boolean banner) {
         PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.ENTITY_EQUIPMENT);
         ItemStack helmet = p.getInventory().getHelmet();
         packet.getIntegers().write(0, p.getEntityId());
         packet.getIntegers().write(1, 4);
-        if (begin == null || begin > System.currentTimeMillis()) {
+        if (!banner) {
             packet.getItemModifier().write(0, helmet == null ? new ItemStack(Material.AIR) : helmet);
         } else {
             if (team1.contains(p.getUniqueId())) {
@@ -243,7 +237,6 @@ public class TeamFightEvent extends RandomEvent implements Listener {
         }
 
         for (Player viewer : Bukkit.getOnlinePlayers()) {
-            if (viewer.getUniqueId().equals(p.getUniqueId())) continue;
             try {
                 ProtocolLibrary.getProtocolManager().sendServerPacket(viewer, packet, false);
             } catch (InvocationTargetException e) {
@@ -257,11 +250,12 @@ public class TeamFightEvent extends RandomEvent implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (begin == null) return;
 
-        UUID uuid = event.getPlayer().getUniqueId();
+        Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
 
         if (!team1.contains(uuid) && !team2.contains(uuid)) {
 
-            if (team1Kills > team2Kills) {
+            if (team1Points > team2Points) {
                 // should assign to 2, but
                 if (getOnlineSize(team2) - getOnlineSize(team1) > 4) {
                     // assign to 1
@@ -269,7 +263,7 @@ public class TeamFightEvent extends RandomEvent implements Listener {
                 } else {
                     team2.add(uuid);
                 }
-            } else if (team1Kills == team2Kills) {
+            } else if (team1Points == team2Points) {
                 int diff = getOnlineSize(team1) - getOnlineSize(team2);
                 if (diff == 0) {
                     if (ThreadLocalRandom.current().nextInt(2) == 0) {
@@ -294,11 +288,10 @@ public class TeamFightEvent extends RandomEvent implements Listener {
         }
 
         if (begin <= System.currentTimeMillis()) {
-            refreshArmor(event.getPlayer());
-            if (team1.contains(uuid)) {
-                TEAMFIGHT_TEAM1.msg(event.getPlayer());
+            if (team1.contains(player.getUniqueId())) {
+                CAPTURETHEFLAG_TEAM.msg(player, "%team%", ChatColor.RED + "" + ChatColor.BOLD + "RED");
             } else {
-                TEAMFIGHT_TEAM2.msg(event.getPlayer());
+                CAPTURETHEFLAG_TEAM.msg(player, "%team%", ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE");
             }
         }
     }
@@ -308,62 +301,70 @@ public class TeamFightEvent extends RandomEvent implements Listener {
         super.end();
 
         begin = null;
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                refreshArmor();
-            }
-        }.runTask(KitPvP.getInstance());
 
-        TEAMFIGHT_FINAL_STATS.broadcast(
-                "%kills1%", team1Kills + "",
-                "%s1%", team1Kills != 1 ? "s" : "",
-                "%s2%", team2Kills != 1 ? "s" : "",
-                "%kills2%", team2Kills + ""
+        CaptureTheFlagFlagListener.getInstance().removeBanner();
+
+        CAPTURETHEFLAG_FINAL_STATS.broadcast(
+                "%points1%", team1Points + "",
+                "%points2%", team2Points + ""
         );
 
         lastWinners.clear();
         lastEvent = System.currentTimeMillis();
-        if (team1Kills == team2Kills) {
-            TEAMFIGHT_DRAW.broadcast();
-        } else if (team1Kills > team2Kills) {
-            TEAMFIGHT_WINNER.broadcast("%team%", ChatColor.translateAlternateColorCodes('&', "&c&lRED"));
+        if (team1Points == team2Points) {
+            CAPTURETHEFLAG_DRAW.broadcast();
             team1.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
                 if (stats != null) {
-                    stats.giveEventTokens(prizeAmount);
-                    TEAMFIGHT_WON.msg(player, "%amount%", Integer.toString(prizeAmount));
+                    stats.giveEventTokens(participationAmount);
+                    CAPTURETHEFLAG_PARTICIPATE.msg(player, "%amount%", Integer.toString(participationAmount));
                 }
             });
             team2.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
                 if (stats != null) {
                     stats.giveEventTokens(participationAmount);
-                    TEAMFIGHT_PARTICIPATE.msg(player, "%amount%", Integer.toString(participationAmount));
+                    CAPTURETHEFLAG_PARTICIPATE.msg(player, "%amount%", Integer.toString(participationAmount));
+                }
+            });
+        } else if (team1Points > team2Points) {
+            CAPTURETHEFLAG_WINNER.broadcast("%team%", ChatColor.translateAlternateColorCodes('&', "&c&lRED"));
+            team1.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
+                KitPvPStats stats = KitPvP.getInstance().getStats(player);
+                if (stats != null) {
+                    stats.giveEventTokens(prizeAmount);
+                    CAPTURETHEFLAG_WON.msg(player, "%amount%", Integer.toString(prizeAmount));
+                }
+            });
+            team2.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
+                KitPvPStats stats = KitPvP.getInstance().getStats(player);
+                if (stats != null) {
+                    stats.giveEventTokens(participationAmount);
+                    CAPTURETHEFLAG_PARTICIPATE.msg(player, "%amount%", Integer.toString(participationAmount));
                 }
             });
             lastWinners.addAll(team1);
         } else {
-            TEAMFIGHT_WINNER.broadcast("%team%", ChatColor.translateAlternateColorCodes('&', "&9&lBLUE"));
+            CAPTURETHEFLAG_WINNER.broadcast("%team%", ChatColor.translateAlternateColorCodes('&', "&9&lBLUE"));
             team2.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
                 if (stats != null) {
                     stats.giveEventTokens(prizeAmount);
-                    TEAMFIGHT_WON.msg(player, "%amount%", Integer.toString(prizeAmount));
+                    CAPTURETHEFLAG_WON.msg(player, "%amount%", Integer.toString(prizeAmount));
                 }
             });
             team1.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
                 if (stats != null) {
                     stats.giveEventTokens(participationAmount);
-                    TEAMFIGHT_PARTICIPATE.msg(player, "%amount%", Integer.toString(participationAmount));
+                    CAPTURETHEFLAG_PARTICIPATE.msg(player, "%amount%", Integer.toString(participationAmount));
                 }
             });
             lastWinners.addAll(team2);
         }
 
-        team1Kills = 0;
-        team2Kills = 0;
+        team1Points = 0;
+        team2Points = 0;
         team1.clear();
         team2.clear();
         begin = null;
@@ -372,7 +373,7 @@ public class TeamFightEvent extends RandomEvent implements Listener {
         if (actionBarTask != null) actionBarTask.cancel();
         if (queuedDisplay != null) queuedDisplay.remove();
 
-        refreshArmor();
+        refreshArmor(false);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
@@ -380,17 +381,6 @@ public class TeamFightEvent extends RandomEvent implements Listener {
         if (lastEvent < System.currentTimeMillis() - 30 * 60 * 1000L) return;
         if (lastWinners.contains(event.getPlayer().getUniqueId())) {
             event.setNewCoins(event.getCoins() * 2);
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        if (begin == null || begin > System.currentTimeMillis()) return;
-        UUID uuid = event.getEntity().getUniqueId();
-        if (team1.contains(uuid)) {
-            ++team2Kills;
-        } else {
-            ++team1Kills;
         }
     }
 
@@ -424,16 +414,28 @@ public class TeamFightEvent extends RandomEvent implements Listener {
         return c.stream().mapToInt(e -> Bukkit.getPlayer(e) != null ? 1 : 0).sum();
     }
 
-    public static TeamFightEvent getInstance() {
+    public static CaptureTheFlagEvent getInstance() {
         return instance;
     }
 
     @Override
     public String getName() {
-        return "teamfight";
+        return "capturetheflag";
     }
 
     public Long getBegin() {
         return begin;
+    }
+
+    public boolean isTeamRed(Player p) {
+        return team1.contains(p.getUniqueId());
+    }
+
+    public void addRedPoints(int points) {
+        team1Points += points;
+    }
+
+    public void addBluePoints(int points) {
+        team2Points += points;
     }
 }

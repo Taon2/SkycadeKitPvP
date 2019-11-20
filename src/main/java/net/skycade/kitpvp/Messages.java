@@ -123,20 +123,22 @@ public class Messages {
     public static final Localization.Message TAG_START = new Localization.Message("event.tag-start", "&a&lINFECTION! &r&a%player% is infected. Stay away from them for 5 minutes to get a coin bonus!");
     public static final Localization.Message TAG_ENDED = new Localization.Message("event.tag-ended", "&a&lINFECTION ENDED!");
 
-    //Team Fight
-    public static final Localization.Message TEAMFIGHT_START = new Localization.Message("event.teamfight-start", "&a&lTEAM FIGHT! &r&aFight against the opposite team!");
-    public static final Localization.Message TEAMFIGHT_STARTING = new Localization.Message("event.teamfight.starting", "&a&lTEAM FIGHT &astarting in &6%time%&a!");
-    public static final Localization.Message TEAMFIGHT_TEAM1 = new Localization.Message("event.teamfight.team1", "&a&lYou have been assigned to team &c&lRED&a!\n" +
-            "&aFight against the other team. The team with the most kills gets &6&l2x coins &aat the end for 30 minutes!");
-    public static final Localization.Message TEAMFIGHT_TEAM2 = new Localization.Message("event.teamfight.team2", "&a&lYou have been assigned to team &9&lBLUE&a!\n" +
-            "&bFight against the other team. The team with the most kills gets &6&l2x coins &bat the end for 30 minutes!");
-    public static final Localization.Message TEAMFIGHT_FINAL_STATS = new Localization.Message("event.teamfight.final-stats", "&a&lThe team fight event is over! &aHere are the results:\n" +
-            "&bTeam &c&lRED&b: &6%kills1% kill%s1%\n" +
-            "&bTeam &9&lBLUE&b: &6%kills2% kill%s2%");
-    public static final Localization.Message TEAMFIGHT_DRAW = new Localization.Message("event.teamfight.draw", "&aThe event ended with a &e&lDRAW&a! Thanks to everyone for participating!");
-    public static final Localization.Message TEAMFIGHT_WINNER = new Localization.Message("event.teamfight.winner", "&aTeam %team% &awins, and gets &6&l2x coins &afor the next &630 minutes&a. &lCongratulations!");
-    public static final Localization.Message TEAMFIGHT_PARTICIPATE = new Localization.Message("event.teamfight-participate", "&7You have received &a%amount% &7Event Tokens for participating!");
-    public static final Localization.Message TEAMFIGHT_WON = new Localization.Message("event.teamfight-won", "&7You have received &a%amount% &7Event Tokens for winning!");
+    //Capture The Flag
+    public static final Localization.Message CAPTURETHEFLAG_START = new Localization.Message("event.capturetheflag-start", "&a&lCAPTURE THE FLAG! &r&aTake the flag for your own!");
+    public static final Localization.Message CAPTURETHEFLAG_STARTING = new Localization.Message("event.capturetheflag.starting", "&a&lCAPTURE THE FLAG &astarting in &6%time%&a!");
+    public static final Localization.Message CAPTURETHEFLAG_TEAM = new Localization.Message("event.capturetheflag.team", "&a&lYou have been assigned to team %team%&a!\n" +
+            "&aSteal the flag in the center and bring it to your capture point. The team with the most captures at the end gets &6&l2x coins &aat the end for 30 minutes and &6&l5 event tokens&a!");
+    public static final Localization.Message CAPTURETHEFLAG_POINT = new Localization.Message("event.capturetheflag.point", "%player% &ahas gained a point for the %team% &ateam!");
+    public static final Localization.Message CAPTURETHEFLAG_DROPPED_FLAG = new Localization.Message("event.capturetheflag.dropped-flag", "&a&l%player% &ahas dropped the flag!");
+    public static final Localization.Message CAPTURETHEFLAG_CANT_CARRY = new Localization.Message("event.capturetheflag.cant-carry", "&cYou cannot carry the flag now! You were the last one to carry the flag.");
+    public static final Localization.Message CAPTURETHEFLAG_PICKED_UP_FLAG = new Localization.Message("event.capturetheflag.picked-up-flag", "%player% &ahas picked up the flag!");
+    public static final Localization.Message CAPTURETHEFLAG_FINAL_STATS = new Localization.Message("event.capturetheflag.final-stats", "&a&lThe Capture The Flag event is over! &aHere are the results:\n" +
+            "&bTeam &c&lRED&b: &6%points1% Points\n" +
+            "&bTeam &9&lBLUE&b: &6%points2% Points");
+    public static final Localization.Message CAPTURETHEFLAG_DRAW = new Localization.Message("event.capturetheflag.draw", "&aThe event ended with a &e&lDRAW&a! Thanks to everyone for participating!");
+    public static final Localization.Message CAPTURETHEFLAG_WINNER = new Localization.Message("event.capturetheflag.winner", "&aTeam %team% &awins, and gets &6&l2x coins &afor the next &630 minutes&a. &lCongratulations!");
+    public static final Localization.Message CAPTURETHEFLAG_PARTICIPATE = new Localization.Message("event.capturetheflag-participate", "&7You have received &a%amount% &7Event Tokens for participating!");
+    public static final Localization.Message CAPTURETHEFLAG_WON = new Localization.Message("event.capturetheflag-won", "&7You have received &a%amount% &7Event Tokens for winning!");
 
     //KitPvP Kill Messages
     public static final Localization.Message NO_REWARDS = new Localization.Message("kill.no-rewards", "&7You killed the same player more than 3 times, &cno rewards &7rewarded.");
@@ -204,15 +206,15 @@ public class Messages {
                 NOT_ENOUGH,
                 ALL_KITS_UNLOCKED,
                 NO_SUCH_EVENT,
-                TEAMFIGHT_START,
-                TEAMFIGHT_TEAM1,
-                TEAMFIGHT_TEAM2,
-                TEAMFIGHT_FINAL_STATS,
-                TEAMFIGHT_DRAW,
-                TEAMFIGHT_WINNER,
-                TEAMFIGHT_STARTING,
-                TEAMFIGHT_PARTICIPATE,
-                TEAMFIGHT_WON,
+                CAPTURETHEFLAG_START,
+                CAPTURETHEFLAG_TEAM,
+                CAPTURETHEFLAG_POINT,
+                CAPTURETHEFLAG_FINAL_STATS,
+                CAPTURETHEFLAG_DRAW,
+                CAPTURETHEFLAG_WINNER,
+                CAPTURETHEFLAG_STARTING,
+                CAPTURETHEFLAG_PARTICIPATE,
+                CAPTURETHEFLAG_WON,
                 TAG_START,
                 KILLTHEKING_START,
                 KILLTHEKING_TOO_LONG,

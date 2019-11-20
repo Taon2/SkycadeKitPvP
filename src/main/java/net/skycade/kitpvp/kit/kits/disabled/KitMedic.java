@@ -105,7 +105,7 @@ public class KitMedic extends Kit {
     }
 
     public void onMove(Player p) {
-        if (p.getItemInHand().getType().equals(Material.LEATHER)) {
+        if (p.getItemInHand().getType() == Material.LEATHER) {
             particleMoveEffect(p, ParticleEffect.CRIT, 3, 16);
         }
     }

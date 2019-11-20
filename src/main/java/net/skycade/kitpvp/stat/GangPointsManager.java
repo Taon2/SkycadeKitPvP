@@ -38,26 +38,23 @@ public class GangPointsManager {
     }
 
     public void save() {
-        points.forEach((gangName, amount) ->
-                Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () -> {
-
-                try (Connection connection = CoreSettings.getInstance().getConnection()) {
-                    String sql = "INSERT INTO skycade_kitpvp_gangs_points (`name`, `points`, `season`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE points = VALUES(points)";
-                    PreparedStatement statement = connection.prepareStatement(sql);
-                    try {
-                        statement.setString(1, gangName);
-                        statement.setInt(2, amount);
-                        statement.setString(3, CoreSettings.getInstance().getSeason());
-                        statement.addBatch();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    statement.executeBatch();
+        points.forEach((gangName, amount) -> {
+            try (Connection connection = CoreSettings.getInstance().getConnection()) {
+                String sql = "INSERT INTO skycade_kitpvp_gangs_points (`name`, `points`, `season`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE points = VALUES(points)";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                try {
+                    statement.setString(1, gangName);
+                    statement.setInt(2, amount);
+                    statement.setString(3, CoreSettings.getInstance().getSeason());
+                    statement.addBatch();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-            })
-        );
+                statement.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public Map<String, Integer> getAllPoints() {

@@ -159,7 +159,7 @@ public class CommandEventEco extends SkycadeCommand {
         if (targetStats.getEventTokens() - amount < 0)
             resetEventTokens(targetStats, commandSender, target);
         else {
-            targetStats.removeEventTokens(amount);
+            targetStats.takeEventTokens(amount);
             YOUR_CURRENCY_REMOVED.msg(target, "%amount%", Integer.toString(amount), "%currency%", "event tokens");
             CURRENCY_REMOVED.msg(commandSender, "%player%", target.getName(), "%amount%", Integer.toString(amount), "%currency%", "event tokens", "%total%", Integer.toString(targetStats.getEventTokens()));
         }

@@ -8,6 +8,7 @@ import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.region.DataPoint;
 import net.skycade.kitpvp.coreclasses.region.Region;
+import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.events.RandomEvent;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
@@ -51,31 +52,43 @@ public class KitPvP extends SkycadePlugin {
 
         defaults.put("database.kitpvp-table", "skycade_kitpvp_members");
         defaults.put("database.kitpvp-prestige-levels", "skycade_kitpvp_prestige_levels");
-        defaults.put("start-coins", 3500);
+
         defaults.put("start-kits", Arrays.asList(KitType.ARCHER.getAlias(), KitType.CHANCE.getAlias()));
+        defaults.put("start-coins", 3500);
+
         defaults.put("rotation-seconds", 3600);
         defaults.put("kits-rotation-amount", 18);
-        defaults.put("required-xp-multiplier", 1);
-        defaults.put("display-hit-damage", true);
-        defaults.put("ks-update-time", 30);
-        defaults.put("kill-coins", 15);
-        defaults.put("coins-modifier", 100d);
-        defaults.put("chest-cooldown", 30);
-        defaults.put("sign-refresh-cooldown", 120);
-        defaults.put("stat-refresh-time", 1800);
-        defaults.put("scoreboard.name", "SkycadeKitPvP");
-        defaults.put("spawn-region.point-1", new Location(Bukkit.getWorld("world"), -100, 0, 200));
-        defaults.put("spawn-region.point-2", new Location(Bukkit.getWorld("world"), 300, 250, 290));
-        defaults.put("spawn-location", new Location(Bukkit.getWorld("world"), 252.5, 73.0, -45.0, -45, 0));
-        defaults.put("scoreboard.bottom-link", "play.skycade.net");
-        defaults.put("kill-bonus-percentage", 5);
+        defaults.put("kits-rotation-enabled", false);
+
         defaults.put("soup-price", 100);
         defaults.put("soup-cooldown", 60);
         defaults.put("refreshkit-price", 2000);
         defaults.put("refreshkit-cooldown", 10800);
-        defaults.put("kits-rotation-enabled", "false");
-        defaults.put("event-shop-enabled", "true");
+
+        defaults.put("display-hit-damage", true);
+        defaults.put("kill-coins", 15);
+        defaults.put("kill-bonus-percentage", 5);
+        defaults.put("coins-modifier", 100d);
+        defaults.put("ks-update-time", 30);
+        defaults.put("stat-refresh-time", 1800);
+
         defaults.put("bounties", new YamlConfiguration());
+
+        defaults.put("scoreboard.bottom-link", "&b&lplay.skycade.net");
+        defaults.put("scoreboard.name", "SkycadeKitPvP");
+
+        defaults.put("spawn-location", new Location(Bukkit.getWorld("world"), 252.5, 73.0, -45.0, -45, 0));
+
+        defaults.put("spawn-region.point-1", new Location(Bukkit.getWorld("world"), -100, 0, 200));
+        defaults.put("spawn-region.point-2", new Location(Bukkit.getWorld("world"), 300, 250, 290));
+
+        defaults.put("teleport-locations.point-1", new Location(Bukkit.getWorld("world"), 252.5, 73.0, -45.0, -45, 0));
+
+        defaults.put("capturetheflag.banner-spawn", new Location(Bukkit.getWorld("world"), 252.5, 73.0, -45.0, -45, 0));
+        defaults.put("capturetheflag.red-region.point-1", new Location(Bukkit.getWorld("world"), -100, 0, 200));
+        defaults.put("capturetheflag.red-region.point-2", new Location(Bukkit.getWorld("world"), 300, 250, 290));
+        defaults.put("capturetheflag.blue-region.point-1", new Location(Bukkit.getWorld("world"), -100, 0, 200));
+        defaults.put("capturetheflag.blue-region.point-2", new Location(Bukkit.getWorld("world"), 300, 250, 290));
 
         setConfigDefaults(defaults);
         loadDefaultConfig();
@@ -126,6 +139,13 @@ public class KitPvP extends SkycadePlugin {
             return player != null && gang != null && gang.isMember(player) ? Collections.singletonList(ChatColor.GREEN) : null;
         }, (p, v) -> null);
 
+        net.skycade.SkycadeCore.utility.scoreboard.ScoreboardManager.getInstance().registerNametag(4, (p, v) -> null, (player, viewer) -> {
+            Member member = MemberManager.getInstance().getMember(viewer, false);
+            CaptureTheFlagEvent captureTheFlagEvent = CaptureTheFlagEvent.getInstance();
+            if (member == null || player == null || captureTheFlagEvent.getBegin() == null) return null;
+            return captureTheFlagEvent.isTeamRed(player) ? Collections.singletonList(ChatColor.RED) : Collections.singletonList(ChatColor.BLUE);
+        }, (p, v) -> null);
+
         ScoreboardManager.getInstance().registerNametag(4, (p, v) -> null, (p, v) -> null, (p, v) -> {
             // Bounties!
             int bounty = 0;
@@ -153,6 +173,9 @@ public class KitPvP extends SkycadePlugin {
         for (Member member : MemberManager.getInstance().getMembers().values()) {
             KitPvPDB.getInstance().setMemberDataSync(member);
         }
+
+        if (RandomEvent.getCurrent() != null)
+            RandomEvent.getCurrent().end();
 
         rotationManager.update();
         eventShopManager.save();

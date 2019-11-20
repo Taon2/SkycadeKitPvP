@@ -1,27 +1,25 @@
-package net.skycade.kitpvp.events.teamfight;
+package net.skycade.kitpvp.events.capturetheflag;
 
 import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.events.RandomEvent;
-import net.skycade.kitpvp.events.TeamFightEvent;
+import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.skycade.kitpvp.Messages.TEAMFIGHT_STARTING;
+import static net.skycade.kitpvp.Messages.CAPTURETHEFLAG_STARTING;
 
-public class TeamFightStartDelay extends BukkitRunnable {
+public class CaptureTheFlagStartDelay extends BukkitRunnable {
 
     private final Long start;
     private List<Integer> announced = new ArrayList<>();
     private static int[] announce = new int[]{60, 30, 15, 10, 5, 4, 3, 2, 1};
 
-    public TeamFightStartDelay(Long start, int i) {
+    public CaptureTheFlagStartDelay(Long start) {
         this.start = start;
         runTaskTimer(KitPvP.getInstance(), 20L, 20L);
-
-//        STARTING.broadcast("%time%", CoreUtil.niceFormat(i));
     }
 
     @Override
@@ -30,15 +28,15 @@ public class TeamFightStartDelay extends BukkitRunnable {
             cancel();
 
             RandomEvent current = RandomEvent.getCurrent();
-            if (!(current instanceof TeamFightEvent)) return;
+            if (!(current instanceof CaptureTheFlagEvent)) return;
 
-            ((TeamFightEvent) current).start();
+            ((CaptureTheFlagEvent) current).start();
         } else {
             int diff = ((Long) ((start - System.currentTimeMillis()) / 1000L)).intValue();
 
             for (int i : announce) {
                 if (diff <= i && !announced.contains(i)) {
-                    TEAMFIGHT_STARTING.broadcast("%time%", CoreUtil.niceFormat(i));
+                    CAPTURETHEFLAG_STARTING.broadcast("%time%", CoreUtil.niceFormat(i));
                     announced.add(i);
                     break;
                 }
