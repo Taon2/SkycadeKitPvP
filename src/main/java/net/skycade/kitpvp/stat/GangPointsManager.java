@@ -61,7 +61,7 @@ public class GangPointsManager {
         return points;
     }
 
-    public int getPoints(String gangName) {
+    public Integer getPoints(String gangName) {
         return points.get(gangName);
     }
 

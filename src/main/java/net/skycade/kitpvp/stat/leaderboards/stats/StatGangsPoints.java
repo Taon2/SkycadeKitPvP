@@ -12,12 +12,12 @@ import java.util.List;
 public class StatGangsPoints extends StatisticType<String, Integer> {
 
     public StatGangsPoints() {
-        super("gangs-poins");
+        super("gangs-points");
         List<String> gangNames = new ArrayList<>();
         for(Gang g : GangsPlusApi.getAllGangs()){
             gangNames.add(g.getName());
-        }
-        update(gangNames, true);
+        }        update(gangNames, true);
+
     }
 
 
@@ -32,7 +32,7 @@ public class StatGangsPoints extends StatisticType<String, Integer> {
     }
 
     @Override
-    public String valueToString(Integer aDouble) {
-        return Double.toString(aDouble);
+    public String valueToString(Integer integer) {
+        return Integer.toString(integer);
     }
 }
