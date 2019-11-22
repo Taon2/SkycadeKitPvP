@@ -28,47 +28,48 @@ public class ShopMenu extends DynamicGui {
         KitPvPStats stats = kitManager.getKitPvP().getStats(member);
         List<KitType> kits = KitPvP.getInstance().getKitPvPDocManager().getCurrentKits();
 
-        kits.forEach(kitType -> addItemInteraction(p -> {
-                    Kit kit = kitType.getKit();
+        for (KitType kitType : kits) {
+            Kit kit = kitType.getKit();
+            if (kit.getPrice() == 0) continue;
 
-                    if (kit.getPrice() == 0) return null;
+            addItemInteraction(p -> {
+                        ItemStack item = new ItemStack(kit.getIcon());
 
-                    ItemStack item = new ItemStack(kit.getIcon());
+                        if (stats.hasKit(kitType))
+                            item.setType(Material.BEDROCK);
 
-                    if (stats.hasKit(kitType))
-                        item.setType(Material.BEDROCK);
+                        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
 
-                    ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
+                        meta.setDisplayName(ChatColor.GREEN + kit.getName());
 
-                    meta.setDisplayName(ChatColor.GREEN + kit.getName());
+                        List<String> lore = new ArrayList<>(kit.getDescription());
+                        lore.add("");
+                        lore.add(ChatColor.GOLD + "Cost: " + ChatColor.WHITE + kit.getPrice() + " Coins");
+                        if (stats.hasKit(kitType))
+                            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "You already own this kit!");
+                        else
+                            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Click to purchase!");
+                        meta.setLore(lore);
 
-                    List<String> lore = new ArrayList<>(kit.getDescription());
-                    lore.add("");
-                    lore.add(ChatColor.GOLD + "Cost: " + ChatColor.WHITE + kit.getPrice() + " Coins");
-                    if (stats.hasKit(kitType))
-                        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "You already own this kit!");
-                    else
-                        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Click to purchase!");
-                    meta.setLore(lore);
+                        item.setItemMeta(meta);
 
-                    item.setItemMeta(meta);
+                        return item;
+                    },
+                    (p, ev) -> {
+                        if (stats.hasKit(kitType)) {
+                            ALREADY_UNLOCKED.msg(member.getPlayer(), "%thing%", "kit " + kitType.getKit().getName());
+                            p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
+                            return;
+                        }
 
-                    return item;
-                },
-                (p, ev) -> {
-                    if (stats.hasKit(kitType)) {
-                        ALREADY_UNLOCKED.msg(member.getPlayer(), "%thing%", "kit " + kitType.getKit().getName());
-                        p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
-                        return;
-                    }
+                        if (stats.getCoins() - kitType.getKit().getPrice() < 0) {
+                            NOT_ENOUGH_CURRENCY.msg(p, "%currency%", "coins", "%thing%", "kit " + kitType.getKit().getName());
+                            p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
+                            return;
+                        }
 
-                    if (stats.getCoins() - kitType.getKit().getPrice() < 0) {
-                        NOT_ENOUGH_CURRENCY.msg(p, "%currency%", "coins", "%thing%", "kit " + kitType.getKit().getName());
-                        p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
-                        return;
-                    }
-
-                    new ConfirmMenu(kitManager, member, kitType).open(p);
-                }));
+                        new ConfirmMenu(kitManager, member, kitType).open(p);
+                    });
+        }
     }
 }
