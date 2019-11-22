@@ -50,7 +50,7 @@ public class KitLich extends Kit {
     private List<UUID> removePhylactery = new ArrayList<>();
 
     public KitLich(KitManager kitManager) {
-        super(kitManager, "Lich", KitType.LICH, 50000, getLore());
+        super(kitManager, "Lich", KitType.LICH, 0, getLore());
 
         helmet = new ItemBuilder(
                 Material.SKULL_ITEM)

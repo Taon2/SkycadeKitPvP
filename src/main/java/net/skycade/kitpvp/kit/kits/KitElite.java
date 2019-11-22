@@ -57,8 +57,6 @@ public class KitElite extends Kit {
                 Material.DIAMOND_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5).build();
 
-        constantEffects.put(PotionEffectType.FAST_DIGGING, 2);
-
         ItemStack icon = new ItemBuilder(
                 Material.LEATHER_HELMET)
                 .setColour(Color.WHITE).build();

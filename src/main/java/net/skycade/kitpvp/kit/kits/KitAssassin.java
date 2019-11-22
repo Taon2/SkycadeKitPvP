@@ -65,7 +65,6 @@ public class KitAssassin extends Kit {
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Hitting players from behind deals more damage.").build();
 
         constantEffects.put(PotionEffectType.SPEED, 0);
-        constantEffects.put(PotionEffectType.FAST_DIGGING, 3);
 
         ItemStack icon = new ItemStack(Material.COAL);
         setIcon(icon);

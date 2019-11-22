@@ -30,7 +30,7 @@ public class KitZeus extends Kit {
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
     public KitZeus(KitManager kitManager) {
-        super(kitManager, "Zeus", KitType.ZEUS, 30000, getLore());
+        super(kitManager, "Zeus", KitType.ZEUS, 0, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)

@@ -42,7 +42,6 @@ public class KitStrafe extends Kit {
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Comboing players deals extra damage.").build();
 
         constantEffects.put(PotionEffectType.SPEED, 3);
-        constantEffects.put(PotionEffectType.FAST_DIGGING, 2);
         constantEffects.put(PotionEffectType.INCREASE_DAMAGE, 0);
 
         ItemStack icon = new ItemStack(Material.DIAMOND_BOOTS);

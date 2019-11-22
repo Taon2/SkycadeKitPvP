@@ -45,7 +45,7 @@ public class KitBlacksmith extends Kit {
     private Map<UUID, List<Block>> anvils = new HashMap<>();
 
     public KitBlacksmith(KitManager kitManager) {
-        super(kitManager, "Blacksmith", KitType.BLACKSMITH, 30000, getLore());
+        super(kitManager, "Blacksmith", KitType.BLACKSMITH, 0, getLore());
 
         helmet = new ItemBuilder(
                 Material.CHAINMAIL_HELMET)

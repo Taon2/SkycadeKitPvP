@@ -14,10 +14,10 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static net.skycade.kitpvp.Messages.*;
 
@@ -30,7 +30,7 @@ public class KitChance extends Kit {
     private ItemStack weapon;
 
     public KitChance(KitManager kitManager) {
-        super(kitManager, "Chance", KitType.CHANCE, 17000, getLore());
+        super(kitManager, "Chance", KitType.CHANCE, 0, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
@@ -88,12 +88,6 @@ public class KitChance extends Kit {
         } else if (random <= healthPer + doublePer + soupPer) {
             giveSoup(damager, 5);
             SOUP_REFILL.msg(damager);
-        } else if (random <= healthPer + doublePer + soupPer + swingDownPer) {
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 200, 1));
-            SWING_SPEED_DOWN.msg(damager);
-        } else if (random <= healthPer + doublePer + soupPer + swingDownPer + swingUpPer) {
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 200, 1));
-            SWING_SPEED_UP.msg(damager);
         } else if (random <= healthPer + doublePer + soupPer + swingDownPer + swingUpPer + backPer) {
             damager.damage(e.getDamage());
             BACKFIRE.msg(damager);

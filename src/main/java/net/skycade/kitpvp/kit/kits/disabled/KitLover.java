@@ -82,7 +82,6 @@ public class KitLover extends Kit {
         if (!addCooldown(p, "Romance", loveCooldown, true))
             return;
         target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 3));
-        target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 200, 1));
         target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 0));
 
         ParticleEffect.HEART.display(0.5F, 0.5F, 0.5F, 1, 10, target.getLocation().add(0, 2, 0), 100);

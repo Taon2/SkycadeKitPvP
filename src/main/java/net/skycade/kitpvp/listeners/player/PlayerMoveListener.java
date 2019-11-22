@@ -43,7 +43,12 @@ public class PlayerMoveListener implements Listener {
         Bukkit.getOnlinePlayers().stream()
                 .filter(p -> (p.getLocation().getBlock().getType() == Material.GOLD_PLATE)
                         && UtilPlayer.isMoving(p)).collect(Collectors.toList())
-                .forEach(p -> p.teleport(teleports.get(ThreadLocalRandom.current().nextInt(0, teleports.size()))));
+                .forEach(p -> {
+                    Location teleport = teleports.get(ThreadLocalRandom.current().nextInt(0, teleports.size()));
+                    teleport.setYaw(p.getLocation().getYaw());
+                    teleport.setPitch(p.getLocation().getPitch());
+                    p.teleport(teleport);
+                });
         Bukkit.getScheduler().runTaskLater(plugin, this::startPressurePadEffect, 5);
     }
 }

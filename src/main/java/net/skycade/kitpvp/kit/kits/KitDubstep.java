@@ -23,10 +23,8 @@ public class KitDubstep extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
-    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
-
     public KitDubstep(KitManager kitManager) {
-        super(kitManager, "Dubstep", KitType.DUBSTEP, 35000, getLore());
+        super(kitManager, "Dubstep", KitType.DUBSTEP, 0, getLore());
 
         helmet = new ItemBuilder(
                 Material.IRON_HELMET)
@@ -47,8 +45,6 @@ public class KitDubstep extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
 
-        constantEffects.put(PotionEffectType.SLOW_DIGGING, 3);
-
         ItemStack icon = new ItemStack(Material.RECORD_4);
         setIcon(icon);
     }
@@ -60,10 +56,6 @@ public class KitDubstep extends Kit {
         p.getInventory().setChestplate(chestplate);
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
-
-        constantEffects.forEach((effect, amplifier) -> {
-            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
-        });
     }
 
     public void onMove(Player p) {

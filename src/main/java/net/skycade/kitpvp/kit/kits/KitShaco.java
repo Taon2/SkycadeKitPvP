@@ -41,7 +41,7 @@ public class KitShaco extends Kit {
     private final Map<UUID, ItemStack[]> shacoArmor = new HashMap<>();
 
     public KitShaco(KitManager kitManager) {
-        super(kitManager, "Shaco", KitType.SHACO, 42000, getLore());
+        super(kitManager, "Shaco", KitType.SHACO, 0, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)

@@ -37,7 +37,7 @@ public class KitArcher extends Kit {
     private int arrowMaxAmount = 16;
 
     public KitArcher(KitManager kitManager) {
-        super(kitManager, "Archer", KitType.ARCHER, 8000, getLore());
+        super(kitManager, "Archer", KitType.ARCHER, 0, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
@@ -97,10 +97,10 @@ public class KitArcher extends Kit {
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
-        archerChanceEffects(shooter, damagee, e, 60, 50, 30, 30, 20);
+        archerChanceEffects(shooter, damagee, e, 60, 50, 30,20);
     }
 
-    private void archerChanceEffects(Player archer, Player target, EntityDamageByEntityEvent e, int regainHealth, int doubleDamage, int slowEffect, int miningEffect, int blindEffect) {
+    private void archerChanceEffects(Player archer, Player target, EntityDamageByEntityEvent e, int regainHealth, int doubleDamage, int slowEffect, int blindEffect) {
         int randomNumber = UtilMath.getRandom(0, 700);
         if (randomNumber <= regainHealth) {
             archer.setHealth(archer.getMaxHealth());
@@ -113,7 +113,7 @@ public class KitArcher extends Kit {
             TARGET_SLOWED.msg(archer);
             target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 5, 0));
             YOURE_SLOWED.msg(target, "%player%", archer.getName());
-        } else if (randomNumber <= regainHealth + doubleDamage + slowEffect + miningEffect + blindEffect) {
+        } else if (randomNumber <= regainHealth + doubleDamage + slowEffect + blindEffect) {
             TARGET_BLINDED.msg(archer);
             target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 6 * 20, 0));
             YOURE_BLINDED.msg(target, "%player%", archer.getName());

@@ -48,7 +48,7 @@ public class KitBuildUHC extends Kit {
     private Map<UUID, List<Block>> placed = new HashMap<>();
 
     public KitBuildUHC(KitManager kitManager) {
-        super(kitManager, "BuildUHC", KitType.BUILDUHC, 29000, getLore());
+        super(kitManager, "BuildUHC", KitType.BUILDUHC, 0, getLore());
 
         helmet = new ItemBuilder(
                 Material.IRON_HELMET)

@@ -81,7 +81,7 @@ public class KitSharingan extends Kit {
         if (damagee.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE))
             damagee.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
 
-        for (PotionEffectType effect : Arrays.asList(PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HARM, PotionEffectType.POISON, PotionEffectType.SLOW, PotionEffectType.SLOW_DIGGING, PotionEffectType.WEAKNESS, PotionEffectType.WITHER))
+        for (PotionEffectType effect : Arrays.asList(PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HARM, PotionEffectType.POISON, PotionEffectType.SLOW, PotionEffectType.WEAKNESS, PotionEffectType.WITHER))
             if (damagee.hasPotionEffect(effect))
                 damagee.removePotionEffect(effect);
     }

@@ -21,7 +21,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.skycade.kitpvp.Messages.DEFENCE_UP;
-import static net.skycade.kitpvp.Messages.SWING_SPEED_UP;
 
 public class KitUnicorn extends Kit {
 
@@ -67,8 +66,7 @@ public class KitUnicorn extends Kit {
                 Material.STICK)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 5)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + rainbowCooldown + " seconds")
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "shoots a rainbow from your wand.")
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Attacking players grants a haste buff.").build();
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "shoots a rainbow from your wand.").build();
 
         ItemStack icon = new ItemStack(Material.HAY_BLOCK);
         setIcon(icon);
@@ -81,14 +79,6 @@ public class KitUnicorn extends Kit {
         p.getInventory().setChestplate(chestplate);
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
-    }
-
-    @Override
-    public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        if (UtilMath.getRandom(0, 100) <= 3) {
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 160, 3));
-            SWING_SPEED_UP.msg(damager);
-        }
     }
 
     @Override
@@ -146,7 +136,7 @@ public class KitUnicorn extends Kit {
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "A mythical creature.",
                 "",
                 ChatColor.GRAY + "Shoots rainbows from a wand.",
-                ChatColor.GRAY + "Has a chance to gain resistance and haste."
+                ChatColor.GRAY + "Has a chance to gain resistance."
         );
     }
 }

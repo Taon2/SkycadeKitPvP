@@ -39,7 +39,7 @@ public class KitGuardian extends Kit {
     private Map<UUID, List<Integer>> beamRunnableMap = new HashMap<>();
 
     public KitGuardian(KitManager kitManager) {
-        super(kitManager, "Guardian", KitType.GUARDIAN, 50000, getLore());
+        super(kitManager, "Guardian", KitType.GUARDIAN, 0, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
