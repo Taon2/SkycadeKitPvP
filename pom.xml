@@ -83,7 +83,7 @@
             <scope>system</scope>
             <systemPath>${basedir}/dependencies/ActionBarAPI-1.5.4.jar</systemPath>
         </dependency>
-        <!--ActionBarAPI-->
+        <!--GuardianBeamAPI-->
         <dependency>
             <groupId>net.jaxonbrown</groupId>
             <artifactId>guardianbeam</artifactId>
@@ -99,7 +99,7 @@
             <scope>system</scope>
             <systemPath>${basedir}/dependencies/CombatTagPlus.jar</systemPath>
         </dependency>
-        <!-- GangsPlus -->
+        <!--GangsPlus-->
         <dependency>
             <groupId>net.brcdev</groupId>
             <artifactId>gangs</artifactId>
