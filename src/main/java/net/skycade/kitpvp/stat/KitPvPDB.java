@@ -6,7 +6,9 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
+import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONObject;
@@ -15,9 +17,7 @@ import org.json.simple.parser.ParseException;
 import redis.clients.jedis.Jedis;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class KitPvPDB {
 
@@ -28,10 +28,10 @@ public class KitPvPDB {
     }
 
     private static KitPvPDB instance;
-    private final String kitPvPTable;
+    public static final String kitPvPTable = "skycade_kitpvp_members";
 
     private KitPvPDB() {
-        kitPvPTable = KitPvP.getInstance().getConfig().getString("database.kitpvp-table");
+        //kitPvPTable = KitPvP.getInstance().getConfig().getString("database.kitpvp-table");
     }
 
     public Member getMemberData(UUID uuid) {
@@ -75,14 +75,20 @@ public class KitPvPDB {
         }
     }
 
-    public ResultSet getAllMembers() {
+    public List<UUID> getAllUUIDs() {
+        List<UUID> uuidList = new ArrayList<>();
         try (Connection connection = CoreSettings.getInstance().getConnection()) {
             try (Statement statement = connection.createStatement()) {
-                return statement.executeQuery("SELECT * FROM " + kitPvPTable);
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM " + kitPvPTable);
+                while (resultSet.next()) {
+                    String uuidString = resultSet.getString("UUID");
+                    uuidList.add(UUID.fromString(uuidString));
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return uuidList;
     }
 
     public UUID getUUIDForName(String playerName) {

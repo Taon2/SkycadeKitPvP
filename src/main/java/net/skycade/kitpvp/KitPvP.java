@@ -20,8 +20,14 @@ import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.GangPointsManager;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import net.skycade.kitpvp.stat.leaderboards.caching.automatic.Update;
+import net.skycade.kitpvp.stat.leaderboards.stats.StatGangsKills;
+import net.skycade.kitpvp.stat.leaderboards.stats.StatGangsPoints;
+import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPCoins;
+import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPKills;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import net.skycade.kitpvp.ui.prestige.PrestigeManager;
+import net.skycade.skycadeleaderboards.SkycadeLeaderboards;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -50,6 +56,7 @@ public class KitPvP extends SkycadePlugin {
     private void defaults() {
         Map<String, Object> defaults = new TreeMap<>();
 
+        defaults.put("update-delay", 6000);
         defaults.put("database.kitpvp-table", "skycade_kitpvp_members");
         defaults.put("database.kitpvp-prestige-levels", "skycade_kitpvp_prestige_levels");
 
@@ -165,6 +172,17 @@ public class KitPvP extends SkycadePlugin {
 
         RandomEvent.init();
         Messages.init();
+
+        // register stats
+        if (Bukkit.getPluginManager().getPlugin("SkycadeLeaderboards") != null) {
+            SkycadeLeaderboards.getAPI().register(this.getName(), new StatKitPvPKills());
+            SkycadeLeaderboards.getAPI().register(this.getName(), new StatKitPvPCoins());
+            SkycadeLeaderboards.getAPI().register(this.getName(), new StatGangsKills());
+            SkycadeLeaderboards.getAPI().register(this.getName(), new StatGangsPoints());
+        }
+
+        // register update method
+        new Update().startTask();
     }
 
     @Override
@@ -253,4 +271,6 @@ public class KitPvP extends SkycadePlugin {
     public int getAvailableKits() {
         return availableKits;
     }
+
+
 }

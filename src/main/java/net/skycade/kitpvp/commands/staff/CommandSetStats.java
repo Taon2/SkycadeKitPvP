@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import static net.skycade.kitpvp.Messages.*;
@@ -16,7 +17,7 @@ import static net.skycade.kitpvp.Messages.*;
 @Permissible("kitpvp.admin")
 public class CommandSetStats extends SkycadeCommand {
     public CommandSetStats() {
-        super("setstat", Collections.singletonList("statset"));
+        super("setstat", Arrays.asList("statset", "setstats", "statsset"));
     }
 
     @Override
