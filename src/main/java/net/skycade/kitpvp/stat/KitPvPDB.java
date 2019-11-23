@@ -28,10 +28,10 @@ public class KitPvPDB {
     }
 
     private static KitPvPDB instance;
-    public static final String kitPvPTable = "skycade_kitpvp_members";
+    public static String kitPvPTable;
 
     private KitPvPDB() {
-        //kitPvPTable = KitPvP.getInstance().getConfig().getString("database.kitpvp-table");
+        kitPvPTable = KitPvP.getInstance().getConfig().getString("database.kitpvp-table");
     }
 
     public Member getMemberData(UUID uuid) {
