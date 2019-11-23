@@ -12,16 +12,15 @@ public class Update {
         return taskID;
     }
 
-    @SuppressWarnings("all")
     public boolean startTask() {
         if (!Bukkit.getScheduler().isCurrentlyRunning(taskID) && taskID == -1) {
-            taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(SkycadeLeaderboards.getInstance(), new UpdateRunnable(), 0L, KitPvP.getInstance().getConfig().getInt("update-delay"));
+            taskID = Bukkit.getScheduler().runTaskLaterAsynchronously(SkycadeLeaderboards.getInstance(), new UpdateRunnable(),KitPvP.getInstance().getConfig().getInt("update-delay")).getTaskId();
             return true;
         }
         return false;
     }
 
-    public boolean stopTask(){
+    public boolean stopTask() {
         if(taskID != -1){
             Bukkit.getScheduler().cancelTask(taskID);
             taskID = -1;

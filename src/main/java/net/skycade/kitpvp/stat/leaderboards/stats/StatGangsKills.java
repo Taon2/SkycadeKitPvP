@@ -10,19 +10,26 @@ import java.util.List;
 
 public class StatGangsKills extends StatisticType<String, Integer> {
 
-    public StatGangsKills() {
+    private static StatGangsKills instance;
+
+    private StatGangsKills() {
         super("gangs-kills");
         List<String> gangNames = new ArrayList<>();
-        for(Gang g : GangsPlusApi.getAllGangs()){
+        for (Gang g : GangsPlusApi.getAllGangs()) {
             gangNames.add(g.getName());
         }
         update(gangNames, true);
     }
 
+    public static StatGangsKills getInstance() {
+        if (instance == null)
+            instance = new StatGangsKills();
+        return instance;
+    }
+
     @Override
     public Integer get(String s) {
-        int kills = GangsPlugin.getInstance().gangManager.getGang(s).getKills();
-        return kills;
+        return GangsPlugin.getInstance().gangManager.getGang(s).getKills();
     }
 
     @Override

@@ -175,10 +175,13 @@ public class KitPvP extends SkycadePlugin {
 
         // register stats
         if (Bukkit.getPluginManager().getPlugin("SkycadeLeaderboards") != null) {
-            SkycadeLeaderboards.getAPI().register(this.getName(), new StatKitPvPKills());
-            SkycadeLeaderboards.getAPI().register(this.getName(), new StatKitPvPCoins());
-            SkycadeLeaderboards.getAPI().register(this.getName(), new StatGangsKills());
-            SkycadeLeaderboards.getAPI().register(this.getName(), new StatGangsPoints());
+            List<UUID> uuids = KitPvPDB.getInstance().getAllUUIDs();
+            StatKitPvPKills.getInstance().init(uuids);
+            StatKitPvPCoins.getInstance().init(uuids);
+            SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPKills.getInstance());
+            SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPCoins.getInstance());
+            SkycadeLeaderboards.getAPI().register(this.getName(), StatGangsKills.getInstance());
+            SkycadeLeaderboards.getAPI().register(this.getName(), StatGangsPoints.getInstance());
         }
 
         // register update method

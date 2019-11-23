@@ -1,6 +1,5 @@
 package net.skycade.kitpvp.stat.leaderboards.stats;
 
-import net.brcdev.gangs.GangsPlugin;
 import net.brcdev.gangs.GangsPlusApi;
 import net.brcdev.gangs.gang.Gang;
 import net.skycade.kitpvp.KitPvP;
@@ -11,15 +10,22 @@ import java.util.List;
 
 public class StatGangsPoints extends StatisticType<String, Integer> {
 
-    public StatGangsPoints() {
+    private static StatGangsPoints instance;
+
+    private StatGangsPoints() {
         super("gangs-points");
         List<String> gangNames = new ArrayList<>();
-        for(Gang g : GangsPlusApi.getAllGangs()){
+        for (Gang g : GangsPlusApi.getAllGangs()) {
             gangNames.add(g.getName());
-        }        update(gangNames, true);
-
+        }
+        update(gangNames, true);
     }
 
+    public static StatGangsPoints getInstance() {
+        if (instance == null)
+            instance = new StatGangsPoints();
+        return instance;
+    }
 
     @Override
     public Integer get(String s) {

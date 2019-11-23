@@ -177,7 +177,9 @@ public class PlayerListeners implements Listener {
             }
         }, 1);
 
-        Bukkit.getScheduler().runTaskLater(plugin, p::updateInventory, 10);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (p.isOnline()) p.updateInventory();
+        }, 10);
 
         ScoreboardInfo.getInstance().updatePlayer(p);
     }

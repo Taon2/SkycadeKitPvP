@@ -46,6 +46,7 @@ public class PlayerJoinQuitListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent e) {
         e.setJoinMessage(null);
+
         Player p = e.getPlayer();
         new BukkitRunnable() {
             @Override
@@ -54,10 +55,15 @@ public class PlayerJoinQuitListener implements Listener {
 
                 KitPvPStats stats = plugin.getStats(p);
 
-                if (!stats.getActiveKit().getKit().isEnabled()) {
-                    stats.setActiveKit(KitType.CHANCE);
-                    stats.getActiveKit().getKit().giveSoup(p, 32);
-                }
+                // TODO: CHANGE BEFORE LAUNCH
+                KitPvP.getInstance().getKitManager().getKits().forEach((kitType, kit) -> {
+                    if (kit.isEnabled())
+                        stats.addKit(kitType);
+                });
+//                if (!stats.getActiveKit().getKit().isEnabled()) {
+//                    stats.setActiveKit(KitType.CHANCE);
+//                    stats.getActiveKit().getKit().giveSoup(p, 32);
+//                }
 
                 if (plugin.isInSpawnArea(p)) {
                     stats.getActiveKit().getKit().beginApplyKit(p);
