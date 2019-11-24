@@ -2,23 +2,22 @@ package net.skycade.kitpvp.stat.leaderboards.stats;
 
 import net.skycade.SkycadeCore.utility.MojangUtil;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
-import net.skycade.kitpvp.stat.leaderboards.caching.LeaderboardsCache;
 import net.skycade.skycadeleaderboards.leaderboards.StatisticType;
 
 import java.util.List;
 import java.util.UUID;
 
-public class StatKitPvPKills extends StatisticType<UUID, Integer> {
+public class StatKitPvPKillStreak extends StatisticType<UUID, Integer> {
 
-    private static StatKitPvPKills instance;
+    private static StatKitPvPKillStreak instance;
 
-    private StatKitPvPKills() {
-        super("kitpvp-kills");
+    private StatKitPvPKillStreak() {
+        super("kitpvp-killstreak");
     }
 
-    public static StatKitPvPKills getInstance() {
+    public static StatKitPvPKillStreak getInstance() {
         if (instance == null)
-            instance = new StatKitPvPKills();
+            instance = new StatKitPvPKillStreak();
         return instance;
     }
 
@@ -28,7 +27,7 @@ public class StatKitPvPKills extends StatisticType<UUID, Integer> {
 
     @Override
     public Integer get(UUID s) {
-        return MemberManager.getInstance().getMember(s, true).getKills();
+        return MemberManager.getInstance().getMember(s, true).getHighestStreak();
     }
 
     @Override

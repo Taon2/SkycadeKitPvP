@@ -21,10 +21,7 @@ import net.skycade.kitpvp.stat.GangPointsManager;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.stat.leaderboards.caching.automatic.Update;
-import net.skycade.kitpvp.stat.leaderboards.stats.StatGangsKills;
-import net.skycade.kitpvp.stat.leaderboards.stats.StatGangsPoints;
-import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPCoins;
-import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPKills;
+import net.skycade.kitpvp.stat.leaderboards.stats.*;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import net.skycade.kitpvp.ui.prestige.PrestigeManager;
 import net.skycade.skycadeleaderboards.SkycadeLeaderboards;
@@ -176,16 +173,22 @@ public class KitPvP extends SkycadePlugin {
         // register stats
         if (Bukkit.getPluginManager().getPlugin("SkycadeLeaderboards") != null) {
             List<UUID> uuids = KitPvPDB.getInstance().getAllUUIDs();
+            // initializing ones that use UUIDs
             StatKitPvPKills.getInstance().init(uuids);
             StatKitPvPCoins.getInstance().init(uuids);
+            StatKitPvPKillStreak.getInstance().init(uuids);
+            StatKitPvPDeaths.getInstance().init(uuids);
+            // registering via the leaderBoards API
             SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPKills.getInstance());
             SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPCoins.getInstance());
             SkycadeLeaderboards.getAPI().register(this.getName(), StatGangsKills.getInstance());
             SkycadeLeaderboards.getAPI().register(this.getName(), StatGangsPoints.getInstance());
+            SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPKillStreak.getInstance());
+            SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPDeaths.getInstance());
         }
 
         // register update method
-        new Update().startTask();
+        //new Update().startTask();
     }
 
     @Override
