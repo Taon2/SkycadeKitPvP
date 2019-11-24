@@ -5,6 +5,8 @@ import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPCoins;
+import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPDeaths;
+import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPKillStreak;
 import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPKills;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -56,8 +58,11 @@ public class MemberJoinQuit implements Listener {
             }
             memberManager.getMembers().put(member.getUUID(), member);
 
+            // update the UUIDs when a player joins so that the stats includes them
             StatKitPvPKills.getInstance().update(Collections.singletonList(member.getUUID()), true);
             StatKitPvPCoins.getInstance().update(Collections.singletonList(member.getUUID()), true);
+            StatKitPvPDeaths.getInstance().update(Collections.singletonList(member.getUUID()), true);
+            StatKitPvPKillStreak.getInstance().update(Collections.singletonList(member.getUUID()), true);
         } catch (Exception a) {
             e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "Sorry, your data was not loaded correctly! Please re-join!");
             KitPvP.getInstance().getLogger().log(Level.WARNING, "An error occurred while loading player's data.", a);

@@ -20,7 +20,7 @@ import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.GangPointsManager;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import net.skycade.kitpvp.stat.leaderboards.caching.automatic.Update;
+import net.skycade.kitpvp.stat.leaderboards.runnables.Update;
 import net.skycade.kitpvp.stat.leaderboards.stats.*;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import net.skycade.kitpvp.ui.prestige.PrestigeManager;
@@ -187,8 +187,8 @@ public class KitPvP extends SkycadePlugin {
             SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPDeaths.getInstance());
         }
 
-        // register update method
-        //new Update().startTask();
+        // start update runnable for stats cache
+        new Update().startTask();
     }
 
     @Override

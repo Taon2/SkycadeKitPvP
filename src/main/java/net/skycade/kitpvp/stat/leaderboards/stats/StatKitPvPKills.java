@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.stat.leaderboards.stats;
 
 import net.skycade.SkycadeCore.utility.MojangUtil;
-import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.stat.leaderboards.caching.LeaderboardsCache;
 import net.skycade.skycadeleaderboards.leaderboards.StatisticType;
 
@@ -28,7 +27,7 @@ public class StatKitPvPKills extends StatisticType<UUID, Integer> {
 
     @Override
     public Integer get(UUID s) {
-        return MemberManager.getInstance().getMember(s, true).getKills();
+        return LeaderboardsCache.get(s).getKills();
     }
 
     @Override

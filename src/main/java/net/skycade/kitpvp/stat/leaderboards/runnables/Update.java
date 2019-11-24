@@ -1,7 +1,5 @@
-package net.skycade.kitpvp.stat.leaderboards.caching.automatic;
-
+package net.skycade.kitpvp.stat.leaderboards.runnables;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.skycadeleaderboards.SkycadeLeaderboards;
 import org.bukkit.Bukkit;
 
 public class Update {
@@ -12,15 +10,16 @@ public class Update {
         return taskID;
     }
 
+    @SuppressWarnings("all")
     public boolean startTask() {
         if (!Bukkit.getScheduler().isCurrentlyRunning(taskID) && taskID == -1) {
-            taskID = Bukkit.getScheduler().runTaskLaterAsynchronously(SkycadeLeaderboards.getInstance(), new UpdateRunnable(),KitPvP.getInstance().getConfig().getInt("update-delay")).getTaskId();
+            taskID = new UpdateRunnable().runTaskTimerAsynchronously(KitPvP.getInstance(), 0L, KitPvP.getInstance().getConfig().getInt("update-delay")).getTaskId();
             return true;
         }
         return false;
     }
 
-    public boolean stopTask() {
+    public boolean stopTask(){
         if(taskID != -1){
             Bukkit.getScheduler().cancelTask(taskID);
             taskID = -1;
