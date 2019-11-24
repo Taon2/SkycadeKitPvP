@@ -8,8 +8,10 @@ import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -45,7 +47,7 @@ public class KitBuildUHC extends Kit {
     private int blockStartAmount = 10;
     private int blockMaxAmount = 20;
 
-    private Map<UUID, List<Block>> placed = new HashMap<>();
+    private Map<UUID, List<Map<Location, Block>>> placed = new HashMap<>();
 
     public KitBuildUHC(KitManager kitManager) {
         super(kitManager, "BuildUHC", KitType.BUILDUHC, 0, getLore());
@@ -139,30 +141,46 @@ public class KitBuildUHC extends Kit {
     }
 
     @Override
-    public void onBlockPlace(Player p, Block block) {
+    public void onBlockPlace(Player p, Block block, BlockState replaced) {
         if (block.getType() != Material.WOOD)
             return;
 
-        List<Block> blocks;
+        List<Map<Location, Block>> blocks;
         if (placed.containsKey(p.getUniqueId()))
             blocks = placed.get(p.getUniqueId());
         else
             blocks = new ArrayList<>();
 
-        blocks.add(block);
+        Map<Location, Block> replacedBlock = new HashMap<>();
+        replacedBlock.put(block.getLocation(), replaced.getBlock());
+        blocks.add(replacedBlock);
 
         placed.put(p.getUniqueId(), blocks);
 
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            block.getLocation().getBlock().setType(Material.AIR);
+            placed.get(p.getUniqueId()).forEach(blockList -> {
+                for (Map.Entry<Location, Block> entry : blockList.entrySet()) {
+                    Location loc = entry.getKey();
+                    Block b = entry.getValue();
+
+                    if (loc == block.getLocation()) {
+                        loc.getBlock().setType(b.getType());
+                    }
+                }
+            });
         }, blockRemoveSpeed * 20);
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         if (placed.containsKey(event.getPlayer().getUniqueId())) {
-            placed.get(event.getPlayer().getUniqueId()).forEach(block -> {
-                block.getLocation().getBlock().setType(Material.AIR);
+            placed.get(event.getPlayer().getUniqueId()).forEach(blockList -> {
+                for (Map.Entry<Location, Block> entry : blockList.entrySet()) {
+                    Location loc = entry.getKey();
+                    Block b = entry.getValue();
+
+                    loc.getBlock().setType(b.getType());
+                }
             });
         }
     }

@@ -170,7 +170,7 @@ public class Messages {
     public static final Localization.Message SWING_SPEED_DOWN = new Localization.Message("kit.chance.swing-speed-down", "&fSwing speed down!");
     public static final Localization.Message BACKFIRE = new Localization.Message("kit.chance.backfire", "&4Backfire!");
     public static final Localization.Message DEFENCE_UP = new Localization.Message("kit.unicorn.defence-up", "&fDefence up!");
-    public static final Localization.Message CAT = new Localization.Message("kit.mystic.cat", "&[Cat]: %effect%!");
+    public static final Localization.Message CAT = new Localization.Message("kit.mystic.cat", "&2[Cat]: %effect%!");
     public static final Localization.Message WOOSH = new Localization.Message("kit.enderman.woosh", "&5Woosh!");
     public static final Localization.Message BLEED_ACTIVATED = new Localization.Message("kit.huntsman.bleed-activated", "&cBleed activated!");
     public static final Localization.Message BLEED_DEACTIVATED = new Localization.Message("kit.huntsman.bleed-deactivated", "&7Bleed deactivated!");

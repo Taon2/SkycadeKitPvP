@@ -214,7 +214,7 @@ public class KitGuardian extends Kit {
         }
 
         for (Material block : blocks) {
-            if (!block.equals(Material.AIR) && !block.equals(Material.BARRIER) && !block.equals(Material.LEAVES) && !block.equals(Material.LEAVES_2))
+            if (block != Material.AIR && block != Material.BARRIER && block != Material.LEAVES && block != Material.LEAVES_2)
                 return true;
         }
 

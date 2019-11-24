@@ -13,6 +13,7 @@ import net.skycade.kitpvp.nms.MiniArmyZombie;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -255,7 +256,7 @@ public class KitLich extends Kit {
     }
 
     @Override
-    public void onBlockPlace(Player p, Block block) {
+    public void onBlockPlace(Player p, Block block, BlockState replaced) {
         if (block.getType() != Material.BEACON)
             return;
 

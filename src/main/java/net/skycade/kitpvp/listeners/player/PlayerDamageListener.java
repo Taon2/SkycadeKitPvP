@@ -264,6 +264,8 @@ public class PlayerDamageListener implements Listener {
                 ((KitMultishot) kit).onArrowLaunch(shooter, e);
             else if (kit.getKitType() == KitType.PYROMANCER)
                 ((KitPyromancer) kit).onArrowLaunch(shooter, e);
+            else if (kit.getKitType() == KitType.BUILDUHC)
+                ((KitBuildUHC) kit).onArrowLaunch(shooter, e);
         }
     }
 

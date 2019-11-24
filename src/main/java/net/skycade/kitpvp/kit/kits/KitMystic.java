@@ -113,21 +113,21 @@ public class KitMystic extends Kit {
     private void mysticEffects(Player target, Player p, int speedPer, int regPer, int slowPer, int weakPer, int poisPer, int blindPer, int freezePer) {
         int percentage = UtilMath.getRandom(0, 100);
         if (percentage <= speedPer) {
-            onCatHit(target, p, "&fSPEED UP!", PotionEffectType.SPEED, 160, 1);
+            onCatHit(target, p, ChatColor.WHITE + "SPEED UP!", PotionEffectType.SPEED, 160, 1);
         } else if (percentage <= speedPer + regPer) {
-            onCatHit(target, p, "&cREGENERATION!", PotionEffectType.REGENERATION, 100, 1);
+            onCatHit(target, p, ChatColor.RED + "REGENERATION!", PotionEffectType.REGENERATION, 100, 1);
         } else if (percentage <= speedPer + regPer + slowPer) {
-            onCatHit(target, p, "&7SLOWNESS!", PotionEffectType.SLOW, 160, 0);
+            onCatHit(target, p, ChatColor.GRAY + "SLOWNESS!", PotionEffectType.SLOW, 160, 0);
         } else if (percentage <= speedPer + regPer + slowPer + weakPer) {
-            onCatHit(target, p, "&cWEAKNESS!", PotionEffectType.WEAKNESS, 200, 0);
+            onCatHit(target, p, ChatColor.RED + "WEAKNESS!", PotionEffectType.WEAKNESS, 200, 0);
         } else if (percentage <= speedPer + regPer + slowPer + weakPer + poisPer) {
-            onCatHit(target, p, "&2POISON", PotionEffectType.POISON, 140, 0);
+            onCatHit(target, p, ChatColor.DARK_GREEN + "POISON", PotionEffectType.POISON, 140, 0);
         } else if (percentage <= speedPer + regPer + slowPer + weakPer + poisPer + blindPer) {
-            onCatHit(target, p, "&0BLINDNESS", PotionEffectType.BLINDNESS, 140, 0);
+            onCatHit(target, p, ChatColor.BLACK + "BLINDNESS", PotionEffectType.BLINDNESS, 140, 0);
         } else {
             freezePlayer(target, 5);
-            CAT.msg(target, "%effect%", "&bFROZEN!");
-            CAT.msg(p, "%effect%", "&bFREEZE!");
+            CAT.msg(target, "%effect%", ChatColor.AQUA + "FROZEN!");
+            CAT.msg(p, "%effect%", ChatColor.AQUA + "FREEZE!");
         }
     }
 

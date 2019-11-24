@@ -96,7 +96,7 @@ public class KitFisherman extends Kit {
 
     private Location getTarget(Player hookshooter, Integer amount) {
         for (Block block : hookshooter.getLineOfSight((Set<Material>) null, amount))
-            if (!block.getType().equals(Material.AIR))
+            if (block.getType() != Material.AIR)
                 return block.getLocation();
         return null;
     }

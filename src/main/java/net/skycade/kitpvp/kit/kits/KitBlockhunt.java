@@ -17,7 +17,6 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -218,7 +217,7 @@ public class KitBlockhunt extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Hide and go seek!",
                 "",
-                ChatColor.GRAY + "Shift wright click on a block",
+                ChatColor.GRAY + "Shift right click on a block",
                 ChatColor.GRAY + "disguises you as that block.",
                 ChatColor.GRAY + "Moving, attacking, or taking",
                 ChatColor.GRAY + "damage removes this disguise."

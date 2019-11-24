@@ -49,7 +49,6 @@ public class KitPlush extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addEnchantment(Enchantment.KNOCKBACK, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + catCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws cats that grant potion effects.").build();
 

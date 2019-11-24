@@ -14,6 +14,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -151,7 +152,7 @@ public abstract class Kit implements Listener {
     public void onItemUse(Player p, ItemStack item, Block clickedBlock) {
     }
 
-    public void onBlockPlace(Player p, Block block) {
+    public void onBlockPlace(Player p, Block block, BlockState replaced) {
     }
 
     public void onBlockBreak(Player p, Block block) {

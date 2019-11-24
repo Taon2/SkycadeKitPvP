@@ -45,8 +45,7 @@ public class KitWarrior extends Kit {
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addEnchantment(Enchantment.KNOCKBACK, 1).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
 
 
         ItemStack icon = new ItemStack(Material.DIAMOND_CHESTPLATE);
