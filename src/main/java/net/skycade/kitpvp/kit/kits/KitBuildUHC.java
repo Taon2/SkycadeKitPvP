@@ -47,7 +47,7 @@ public class KitBuildUHC extends Kit {
     private int blockStartAmount = 10;
     private int blockMaxAmount = 20;
 
-    private Map<UUID, List<Map<Location, Block>>> placed = new HashMap<>();
+    private Map<UUID, List<Map<Location, BlockState>>> placed = new HashMap<>();
 
     public KitBuildUHC(KitManager kitManager) {
         super(kitManager, "BuildUHC", KitType.BUILDUHC, 0, getLore());
@@ -145,26 +145,31 @@ public class KitBuildUHC extends Kit {
         if (block.getType() != Material.WOOD)
             return;
 
-        List<Map<Location, Block>> blocks;
+        List<Map<Location, BlockState>> blocks;
         if (placed.containsKey(p.getUniqueId()))
             blocks = placed.get(p.getUniqueId());
         else
             blocks = new ArrayList<>();
 
-        Map<Location, Block> replacedBlock = new HashMap<>();
-        replacedBlock.put(block.getLocation(), replaced.getBlock());
+        Map<Location, BlockState> replacedBlock = new HashMap<>();
+        replacedBlock.put(block.getLocation(), replaced);
         blocks.add(replacedBlock);
 
         placed.put(p.getUniqueId(), blocks);
 
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
             placed.get(p.getUniqueId()).forEach(blockList -> {
-                for (Map.Entry<Location, Block> entry : blockList.entrySet()) {
+                for (Map.Entry<Location, BlockState> entry : blockList.entrySet()) {
                     Location loc = entry.getKey();
-                    Block b = entry.getValue();
+                    Material material = entry.getValue().getType();
+                    BlockState state = entry.getValue();
 
-                    if (loc == block.getLocation()) {
-                        loc.getBlock().setType(b.getType());
+                    if (loc.equals(block.getLocation())) {
+                        Bukkit.getLogger().info("running");
+                        loc.getBlock().setType(material);
+                        BlockState blockState = loc.getBlock().getState();
+                        blockState.setData(state.getData());
+                        blockState.update();
                     }
                 }
             });
@@ -175,11 +180,15 @@ public class KitBuildUHC extends Kit {
     public void onPlayerQuit(PlayerQuitEvent event) {
         if (placed.containsKey(event.getPlayer().getUniqueId())) {
             placed.get(event.getPlayer().getUniqueId()).forEach(blockList -> {
-                for (Map.Entry<Location, Block> entry : blockList.entrySet()) {
+                for (Map.Entry<Location, BlockState> entry : blockList.entrySet()) {
                     Location loc = entry.getKey();
-                    Block b = entry.getValue();
+                    Material material = entry.getValue().getType();
+                    BlockState state = entry.getValue();
 
-                    loc.getBlock().setType(b.getType());
+                    loc.getBlock().setType(material);
+                    BlockState blockState = loc.getBlock().getState();
+                    blockState.setData(state.getData());
+                    blockState.update();
                 }
             });
         }
