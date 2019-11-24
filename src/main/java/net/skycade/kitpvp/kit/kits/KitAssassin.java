@@ -129,9 +129,7 @@ public class KitAssassin extends Kit {
         final double diffX = damager.getLocation().getDirection().getX() - damagee.getLocation().getDirection().getX();
         final double diffZ = damager.getLocation().getDirection().getZ() - damagee.getLocation().getDirection().getZ();
         if (diffX > 0 && diffX < 1 || diffX < 0 && diffX > -1) {
-            if (diffZ > 0 && diffZ < 1 || diffZ < 0 && diffZ > -1) {
-                return true;
-            }
+            return diffZ > 0 && diffZ < 1 || diffZ < 0 && diffZ > -1;
         }
         return false;
     }

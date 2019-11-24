@@ -220,7 +220,7 @@ public class MiniArmyZombie extends EntityZombie {
                                     boolean f = iblockdata.getBlock().getMaterial().k();
 
                                     if ((offX < 1 || offZ < 1 || offX > 3 || offZ > 3) && f && this.a(new BlockPosition(x + offX, y, z + offZ)) && this.a(new BlockPosition(x + offX, y + 1, z + offZ))) {
-                                        this.miniArmyZombie.setPositionRotation((double) ((float) (x + offX) + 0.5F), (double) y, (double) ((float) (z + offZ) + 0.5F), this.miniArmyZombie.yaw, this.miniArmyZombie.pitch);
+                                        this.miniArmyZombie.setPositionRotation((float) (x + offX) + 0.5F, y, (float) (z + offZ) + 0.5F, this.miniArmyZombie.yaw, this.miniArmyZombie.pitch);
                                         this.navigation.n();
                                         return;
                                     }

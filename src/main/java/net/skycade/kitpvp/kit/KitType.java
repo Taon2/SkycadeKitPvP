@@ -122,7 +122,7 @@ public enum KitType {
         if (item == null || item.getItemMeta() == null || item.getItemMeta().getDisplayName() == null)
             return null;
         String name = item.getItemMeta().getDisplayName();
-        return KitType.getTypeFromString(name.substring(2, name.length()));
+        return KitType.getTypeFromString(name.substring(2));
     }
 
     public static KitType byAlias(String alias) {

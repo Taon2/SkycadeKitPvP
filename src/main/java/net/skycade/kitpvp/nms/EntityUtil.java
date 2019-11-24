@@ -30,9 +30,9 @@ public class EntityUtil {
         }
 
         try {
-            ((Map)cFieldEntityTypes.get((Object)null)).put(name, entity);
-            ((Map)dFieldEntityTypes.get((Object)null)).put(entity, name);
-            ((Map)fFieldEntityTypes.get((Object)null)).put(entity, id);
+            ((Map)cFieldEntityTypes.get(null)).put(name, entity);
+            ((Map)dFieldEntityTypes.get(null)).put(entity, name);
+            ((Map)fFieldEntityTypes.get(null)).put(entity, id);
             return true;
         } catch (IllegalAccessException var4) {
             var4.printStackTrace();
