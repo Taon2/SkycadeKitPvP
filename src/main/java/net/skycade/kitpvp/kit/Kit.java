@@ -139,10 +139,10 @@ public abstract class Kit implements Listener {
         return KitPvP.getInstance().getStats(p).getActiveKit() == type;
     }
 
-    public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+    public void onDamageDealHit(EntityDamageByEntityEvent event, Player damager, Player damagee) {
     }
 
-    public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+    public void onDamageGetHit(EntityDamageByEntityEvent event, Player damager, Player damagee) {
     }
 
     public void onItemUse(Player p, ItemStack item) {
@@ -170,7 +170,7 @@ public abstract class Kit implements Listener {
     public void removeSummon(int seconds, Player p) {
     }
 
-    public void onArrowLand(Player p, Block block, ProjectileHitEvent e) {
+    public void onArrowLand(Player p, Block block, ProjectileHitEvent event) {
     }
 
     public void cancelRunnables(Player p) {
@@ -421,8 +421,8 @@ public abstract class Kit implements Listener {
     }
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent e) {
-        frozenPlayers.remove(e.getEntity().getUniqueId());
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        frozenPlayers.remove(event.getEntity().getUniqueId());
     }
 
     public abstract List<String> getHowToObtain();

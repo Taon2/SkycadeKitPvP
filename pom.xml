@@ -111,8 +111,8 @@
         <dependency>
             <groupId>net.skycade</groupId>
             <artifactId>SkycadeLeaderboards</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
-            <systemPath>${basedir}/dependencies/SkycadeLeaderboards-1.0.1-SNAPSHOT.jar</systemPath>
+            <version>1.0.3-SNAPSHOT</version>
+            <systemPath>${basedir}/dependencies/SkycadeLeaderboards-1.0.3-SNAPSHOT.jar</systemPath>
             <scope>system</scope>
         </dependency>
         <!-- Skycade Koth -->

@@ -56,7 +56,6 @@ public class PlayerMoveListener implements Listener {
                     p.playSound(p.getLocation(), Sound.PORTAL_TRAVEL, 1f, 1f);
                     p.setGameMode(GameMode.SPECTATOR);
                     p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 2));
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, Integer.MAX_VALUE, 2));
 
                     new BukkitRunnable() {
                         public void run() {

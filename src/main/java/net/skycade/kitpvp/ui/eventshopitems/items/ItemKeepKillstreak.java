@@ -40,8 +40,8 @@ public class ItemKeepKillstreak extends EventShopItem {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void onPlayerDeath(PlayerDeathEvent e) {
-        Player p = e.getEntity();
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        Player p = event.getEntity();
         if (eventShopManager.isKeepingKs(p)) {
             KitPvPStats stats = eventShopManager.getKitPvP().getStats(p);
             stats.setStreak(stats.getLastStreak());
@@ -50,12 +50,12 @@ public class ItemKeepKillstreak extends EventShopItem {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void onPlayerMove(PlayerMoveEvent e) {
-        if (e.getFrom().getBlock().equals(e.getTo().getBlock())) return;
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (event.getFrom().getBlock().equals(event.getTo().getBlock())) return;
 
-        Player p = e.getPlayer();
+        Player p = event.getPlayer();
 
-        if (KitPvP.getInstance().getSpawnRegion().contains(e.getFrom()) && KitPvP.getInstance().getSpawnRegion().contains(e.getTo()) && eventShopManager.isKeepingKs(p)) {
+        if (KitPvP.getInstance().getSpawnRegion().contains(event.getFrom()) && KitPvP.getInstance().getSpawnRegion().contains(event.getTo()) && eventShopManager.isKeepingKs(p)) {
             YamlConfiguration yaml = eventShopManager.getYaml();
             yaml.set((p.getUniqueId() + "." + getName()), false);
             eventShopManager.setYaml(yaml);

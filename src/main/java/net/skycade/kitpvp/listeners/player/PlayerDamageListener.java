@@ -93,6 +93,10 @@ public class PlayerDamageListener implements Listener {
         event.getDrops().clear();
         event.setDeathMessage("");
 
+        CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
+
+        pl.getTagManager().untag(event.getEntity().getUniqueId());
+
         boolean resetStats = plugin.getStats(event.getEntity()).getActiveKit().getKit().onDeath(event.getEntity());
 
         //Removes the wolves from the player before respawning, due to player teleporting back to wolves bug

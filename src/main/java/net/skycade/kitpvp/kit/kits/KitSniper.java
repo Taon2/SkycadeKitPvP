@@ -94,17 +94,17 @@ public class KitSniper extends Kit {
         p.getInventory().setBoots(boots);
     }
 
-    public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
+    public void onArrowLaunch(Player shooter, ProjectileLaunchEvent event) {
         if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
-            e.setCancelled(true);
+            event.setCancelled(true);
         }
 
-        e.getEntity().setCustomName(shooter.getName());
-        e.getEntity().setCustomNameVisible(false);
-        arrowList.add((Arrow) e.getEntity());
+        event.getEntity().setCustomName(shooter.getName());
+        event.getEntity().setCustomNameVisible(false);
+        arrowList.add((Arrow) event.getEntity());
     }
 
-    public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
+    public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent event) {
         if (UtilMath.getRandom(0, 100) < 3)
             damagee.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 90, 0));
 
@@ -121,7 +121,7 @@ public class KitSniper extends Kit {
                 return;
             int combo = sniperCombo.get(shooter.getUniqueId());
             double increasedDamage = 1 + (combo < 10 ? combo * 0.05 : 0.5);
-            e.setDamage(e.getDamage() * increasedDamage);
+            event.setDamage(event.getDamage() * increasedDamage);
         } else {
             sniperCombo.put(shooter.getUniqueId(), 1);
             sniperPlayerHit.put(shooter.getUniqueId(), damagee.getUniqueId());
@@ -129,15 +129,15 @@ public class KitSniper extends Kit {
     }
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent e) {
-        sniperCombo.remove(e.getEntity().getUniqueId());
-        sniperPlayerHit.remove(e.getEntity().getUniqueId());
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        sniperCombo.remove(event.getEntity().getUniqueId());
+        sniperPlayerHit.remove(event.getEntity().getUniqueId());
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        sniperCombo.remove(e.getPlayer().getUniqueId());
-        sniperPlayerHit.remove(e.getPlayer().getUniqueId());
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        sniperCombo.remove(event.getPlayer().getUniqueId());
+        sniperPlayerHit.remove(event.getPlayer().getUniqueId());
     }
 
     private boolean hasArmor(Player p) {
