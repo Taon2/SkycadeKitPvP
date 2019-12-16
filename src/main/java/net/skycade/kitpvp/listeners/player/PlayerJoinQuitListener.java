@@ -28,9 +28,9 @@ public class PlayerJoinQuitListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        e.setQuitMessage(null);
-        Player p = e.getPlayer();
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        event.setQuitMessage(null);
+        Player p = event.getPlayer();
 
         // Reset killstreak
         Member member = MemberManager.getInstance().getMember(p);
@@ -43,11 +43,11 @@ public class PlayerJoinQuitListener implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        e.setJoinMessage(null);
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        event.setJoinMessage(null);
 
-        Player p = e.getPlayer();
+        Player p = event.getPlayer();
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -55,15 +55,15 @@ public class PlayerJoinQuitListener implements Listener {
 
                 KitPvPStats stats = plugin.getStats(p);
 
-                // TODO: CHANGE BEFORE LAUNCH
-                KitPvP.getInstance().getKitManager().getKits().forEach((kitType, kit) -> {
-                    if (kit.isEnabled())
-                        stats.addKit(kitType);
-                });
-//                if (!stats.getActiveKit().getKit().isEnabled()) {
-//                    stats.setActiveKit(KitType.CHANCE);
-//                    stats.getActiveKit().getKit().giveSoup(p, 32);
-//                }
+                // Gives every kit, only used during beta testing.
+//                KitPvP.getInstance().getKitManager().getKits().forEach((kitType, kit) -> {
+//                    if (kit.isEnabled())
+//                        stats.addKit(kitType);
+//                });
+                if (!stats.getActiveKit().getKit().isEnabled()) {
+                    stats.setActiveKit(KitType.CHANCE);
+                    stats.getActiveKit().getKit().giveSoup(p, 32);
+                }
 
                 if (plugin.isInSpawnArea(p)) {
                     stats.getActiveKit().getKit().beginApplyKit(p);

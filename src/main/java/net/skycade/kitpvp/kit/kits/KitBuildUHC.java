@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -45,9 +46,11 @@ public class KitBuildUHC extends Kit {
     private int blockRemoveSpeed = 2;
     private int blockRegenSpeed = 3;
     private int blockStartAmount = 10;
-    private int blockMaxAmount = 20;
+    private int blockMaxAmount = 12;
 
     private Map<UUID, List<Map<Location, BlockState>>> placed = new HashMap<>();
+
+    private List<Arrow> arrowList = new ArrayList<>();
 
     public KitBuildUHC(KitManager kitManager) {
         super(kitManager, "BuildUHC", KitType.BUILDUHC, 0, getLore());
@@ -124,6 +127,10 @@ public class KitBuildUHC extends Kit {
         if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
             e.setCancelled(true);
         }
+
+        e.getEntity().setCustomName(shooter.getName());
+        e.getEntity().setCustomNameVisible(false);
+        arrowList.add((Arrow) e.getEntity());
     }
 
     @Override
@@ -165,7 +172,6 @@ public class KitBuildUHC extends Kit {
                     BlockState state = entry.getValue();
 
                     if (loc.equals(block.getLocation())) {
-                        Bukkit.getLogger().info("running");
                         loc.getBlock().setType(material);
                         BlockState blockState = loc.getBlock().getState();
                         blockState.setData(state.getData());
@@ -197,6 +203,24 @@ public class KitBuildUHC extends Kit {
     @Override
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
         e.setDamage(e.getDamage() * 1.5);
+    }
+
+    @Override
+    public void reimburseItem(Player p, ItemStack item) {
+        if (item != null && item.getType() == Material.POTION && item.getDurability() == 16421) {
+            ItemStack newItem = new ItemStack(Material.POTION, 1, (short) 16421);
+
+            p.getInventory().addItem(newItem);
+        }
+    }
+
+    public void removeSummon(int seconds, Player p) {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+            for (Arrow arrow : arrowList)
+                if (arrow.getCustomName().contains(p.getName())) {
+                    arrow.remove();
+                }
+        }, seconds * 20);
     }
 
     @Override

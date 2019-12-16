@@ -36,25 +36,25 @@ public class MemberJoinQuit implements Listener {
     }
 
     @EventHandler
-    public void onPreLogin(AsyncPlayerPreLoginEvent e) {
+    public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         if (System.currentTimeMillis() - startup < 2000) {
-            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Server starting up...");
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Server starting up...");
             return;
         }
-        if (lastLogin.containsKey(e.getUniqueId())
-                && System.currentTimeMillis() - lastLogin.get(e.getUniqueId()) < 4000L) {
-            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Please wait before re-logging in");
+        if (lastLogin.containsKey(event.getUniqueId())
+                && System.currentTimeMillis() - lastLogin.get(event.getUniqueId()) < 4000L) {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Please wait before re-logging in");
             return;
         }
 
-        lastLogin.put(e.getUniqueId(), System.currentTimeMillis());
+        lastLogin.put(event.getUniqueId(), System.currentTimeMillis());
         Member member;
         try {
-            member = memberManager.getMember(e.getUniqueId(), true);
+            member = memberManager.getMember(event.getUniqueId(), true);
             if (member == null) {
-                member = new Member(e.getUniqueId(), e.getName());
+                member = new Member(event.getUniqueId(), event.getName());
             } else {
-                member.setName(e.getName());
+                member.setName(event.getName());
             }
             memberManager.getMembers().put(member.getUUID(), member);
 
@@ -64,20 +64,20 @@ public class MemberJoinQuit implements Listener {
             StatKitPvPDeaths.getInstance().update(Collections.singletonList(member.getUUID()), true);
             StatKitPvPKillStreak.getInstance().update(Collections.singletonList(member.getUUID()), true);
         } catch (Exception a) {
-            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "Sorry, your data was not loaded correctly! Please re-join!");
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "Sorry, your data was not loaded correctly! Please re-join!");
             KitPvP.getInstance().getLogger().log(Level.WARNING, "An error occurred while loading player's data.", a);
-            memberManager.getMembers().remove(e.getUniqueId());
+            memberManager.getMembers().remove(event.getUniqueId());
         }
 
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player p = event.getPlayer();
         Member member = memberManager.getMember(p, true);
 
         if (member == null) {
-            e.getPlayer().kickPlayer("§cSorry, your data was not loaded correctly! Please re-join!");
+            event.getPlayer().kickPlayer("§cSorry, your data was not loaded correctly! Please re-join!");
             return;
         }
 
@@ -87,15 +87,15 @@ public class MemberJoinQuit implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        Member member = memberManager.getMember(e.getPlayer());
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Member member = memberManager.getMember(event.getPlayer());
 
-        UtilPlayer.removeAttachment(e.getPlayer());
+        UtilPlayer.removeAttachment(event.getPlayer());
 
         if (member != null) {
             MemberManager.getInstance().update(member, true);
         } else
-            e.setQuitMessage(null);
+            event.setQuitMessage(null);
     }
 
 }

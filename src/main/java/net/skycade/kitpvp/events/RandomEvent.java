@@ -1,6 +1,7 @@
 package net.skycade.kitpvp.events;
 
 import net.skycade.kitpvp.KitPvP;
+import net.skycade.koth.SkycadeKoth;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -74,6 +75,7 @@ public abstract class RandomEvent {
         @Override
         public void run() {
             if (current != null) return;
+            if (SkycadeKoth.getInstance().getGameManager().getActiveKOTHGame() != null) return;
 
             RandomSchedule peek = queue.peek();
             if (peek == null) {

@@ -9,6 +9,7 @@ import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -36,6 +37,8 @@ public class KitPyromancer extends Kit {
     private int arrowRegenSpeed = 12;
     private int arrowStartAmount = 8;
     private int arrowMaxAmount = 8;
+
+    private List<Arrow> arrowList = new ArrayList<>();
 
     private int fireballCooldown = 20;
 
@@ -118,6 +121,10 @@ public class KitPyromancer extends Kit {
         if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
             e.setCancelled(true);
         }
+
+        e.getEntity().setCustomName(shooter.getName());
+        e.getEntity().setCustomNameVisible(false);
+        arrowList.add((Arrow) e.getEntity());
     }
 
     public void onArrowLand(Player shooter, Block block, ProjectileHitEvent e) {
@@ -156,6 +163,15 @@ public class KitPyromancer extends Kit {
         arrowRegen.setAmount(amount);
 
         return arrowRegen;
+    }
+
+    public void removeSummon(int seconds, Player p) {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+            for (Arrow arrow : arrowList)
+                if (arrow.getCustomName().contains(p.getName())) {
+                    arrow.remove();
+                }
+        }, seconds * 20);
     }
 
     @Override

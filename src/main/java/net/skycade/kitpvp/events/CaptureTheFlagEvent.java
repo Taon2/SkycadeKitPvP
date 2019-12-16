@@ -48,13 +48,13 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
     private Long lastEvent = -1L;
     private BukkitRunnable actionBarTask;
     private ScoreboardManager.QueuedDisplay queuedDisplay;
+    private boolean suddenDeath = false;
 
     CaptureTheFlagEvent() {
         super();
         instance = this;
         Bukkit.getServer().getPluginManager().registerEvents(this, KitPvP.getInstance());
 
-        //ProtocolLibrary.getProtocolManager().addPacketListener(new CaptureTheFlagPacketListener());
         KitPvP.getInstance().registerListeners(new CaptureTheFlagFlagListener(KitPvP.getInstance(), instance));
     }
 
@@ -171,8 +171,15 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
                     return;
                 }
                 if (System.currentTimeMillis() - begin > 5 * 60 * 1000L) {
-                    end();
-                    cancel();
+                    if (team1Points == team2Points) {
+                        if (!suddenDeath) {
+                            CAPTURETHEFLAG_SUDDEN_DEATH.broadcast();
+                            suddenDeath = true;
+                        }
+                    } else {
+                        end();
+                        cancel();
+                    }
                 }
             }
         };
@@ -192,6 +199,20 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
                     ChatColor.GOLD + CoreUtil.niceFormat(sec, true));
                 }
 
+                int x = (int) (CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() == null ?
+                        CaptureTheFlagFlagListener.getInstance().getCurrentFlagLocation().getX() :
+                        CaptureTheFlagFlagListener.getInstance().getCurrentCarrier().getLocation().getX());
+                int z = (int) (CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() == null ?
+                        CaptureTheFlagFlagListener.getInstance().getCurrentFlagLocation().getZ() :
+                        CaptureTheFlagFlagListener.getInstance().getCurrentCarrier().getLocation().getZ());
+                ChatColor chatColor = (CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() == null ?
+                        ChatColor.GRAY :
+                        isTeamRed(CaptureTheFlagFlagListener.getInstance().getCurrentCarrier()) ?
+                            ChatColor.RED :
+                            ChatColor.BLUE);
+
+                ScoreboardManager.getInstance().updateScores("carrier", p -> ChatColor.GRAY + "Carrier: " + chatColor + (CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() == null ? "None" : CaptureTheFlagFlagListener.getInstance().getCurrentCarrier().getName()));
+                ScoreboardManager.getInstance().updateScores("location", p -> ChatColor.GRAY + "Flag location: " + ChatColor.YELLOW + "(" + x + " X, " + z + " Z)");
                 ScoreboardManager.getInstance().updateScores("timeleft", p -> ChatColor.GRAY + "Time left: " + ChatColor.YELLOW + CoreUtil.niceFormat(sec, true));
                 ScoreboardManager.getInstance().updateScores("team1", p -> ChatColor.RED + "" + ChatColor.BOLD + "RED" + ": " + ChatColor.GOLD + team1Points);
                 ScoreboardManager.getInstance().updateScores("team2", p -> ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE" + ": " + ChatColor.GOLD + team2Points);
@@ -200,7 +221,10 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
         actionBarTask.runTaskTimer(KitPvP.getInstance(), 20L, 20L);
 
         queuedDisplay = ScoreboardManager.getInstance().addQueuedDisplay((p, d) -> {
-            int i = 10;
+            int x = (int) (CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() == null ? CaptureTheFlagFlagListener.getInstance().getCurrentFlagLocation().getX() : CaptureTheFlagFlagListener.getInstance().getCurrentCarrier().getLocation().getX());
+            int z = (int) (CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() == null ? CaptureTheFlagFlagListener.getInstance().getCurrentFlagLocation().getZ() : CaptureTheFlagFlagListener.getInstance().getCurrentCarrier().getLocation().getZ());
+
+            int i = 12;
             int sec = ((Long) (5 * 60 - (System.currentTimeMillis() - begin) / 1000L)).intValue();
             d.setTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "Capture The Flag");
             d.setScore("blank" + i, " ", --i);
@@ -209,9 +233,12 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
                     ChatColor.RED + "" + ChatColor.BOLD + "RED"
             ), --i);
             d.setScore("blank" + i, "  ", --i);
+            d.setScore("carrier", ChatColor.GRAY + "Carrier: " + ChatColor.GRAY + "None", --i);
+            d.setScore("location", ChatColor.GRAY + "Flag location: " + ChatColor.YELLOW + "(" + x + " X, " + z + " Z)", --i);
+            d.setScore("blank" + i, "  ", --i);
             d.setScore("timeleft", ChatColor.GRAY + "Time left: " + ChatColor.YELLOW + CoreUtil.niceFormat(sec, true), --i);
             d.setScore("blank" + i, "   ", --i);
-            d.setScore("points", ChatColor.GRAY + "Points", --i);
+            d.setScore("points", ChatColor.GRAY + "Flag Captures", --i);
             d.setScore("team1", ChatColor.RED + "" + ChatColor.BOLD + "RED" + ": " + ChatColor.GOLD + team1Points, --i);
             d.setScore("team2", ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE" + ": " + ChatColor.GOLD + team2Points, --i);
         }, 2);
@@ -303,6 +330,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
         begin = null;
 
         CaptureTheFlagFlagListener.getInstance().removeBanner();
+        CaptureTheFlagFlagListener.getInstance().clearFlagCarrier();
 
         CAPTURETHEFLAG_FINAL_STATS.broadcast(
                 "%points1%", team1Points + "",

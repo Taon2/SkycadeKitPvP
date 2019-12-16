@@ -133,6 +133,19 @@ public class KitWitchdoctor extends Kit {
     }
 
     @Override
+    public void reimburseItem(Player p, ItemStack item) {
+        if (item != null && item.getType() == getWeakness(1).getType() && item.getDurability() == getWeakness(1).getDurability()) {
+            ItemStack newItem = getWeakness(1);
+
+            p.getInventory().addItem(newItem);
+        } else if (item != null && item.getType() == getRegen(1).getType() && item.getDurability() == getRegen(1).getDurability()) {
+            ItemStack newItem = getRegen(1);
+
+            p.getInventory().addItem(newItem);
+        }
+    }
+
+    @Override
     public List<String> getHowToObtain() {
         return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }

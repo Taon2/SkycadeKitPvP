@@ -2,6 +2,7 @@ package net.skycade.kitpvp.listeners.player;
 
 import net.brcdev.gangs.GangsPlusApi;
 import net.brcdev.gangs.gang.Gang;
+import net.minelink.ctplus.CombatTagPlus;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPKillstreakChange;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
@@ -30,6 +31,9 @@ import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class PlayerListeners implements Listener {
 
     private final KitPvP plugin;
@@ -39,68 +43,73 @@ public class PlayerListeners implements Listener {
     }
 
     @EventHandler
-    public void onPlayerPickupItem(PlayerPickupItemEvent e) {
-        if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
-            e.setCancelled(true);
-            e.getItem().remove();
+    public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+        if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+            event.setCancelled(true);
+            event.getItem().remove();
         }
     }
 
     @EventHandler
-    public void onPlayerDropItem(PlayerDropItemEvent e) {
-        if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
-            if (e.getItemDrop().getItemStack().getType() != Material.LEATHER)
-                e.setCancelled(true);
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+            if (event.getItemDrop().getItemStack().getType() != Material.LEATHER)
+                event.setCancelled(true);
             else {
-                Kit playerKit = plugin.getStats(MemberManager.getInstance().getMember(e.getPlayer()))
+                Kit playerKit = plugin.getStats(MemberManager.getInstance().getMember(event.getPlayer()))
                         .getActiveKit().getKit();
                 if (playerKit.getKitType() == KitType.MEDIC)
-                    ((KitMedic) playerKit).onMedpackUse(e.getPlayer(), e.getItemDrop());
+                    ((KitMedic) playerKit).onMedpackUse(event.getPlayer(), event.getItemDrop());
             }
         }
     }
 
     @EventHandler
-    public void onFoodLevelChange(FoodLevelChangeEvent e) {
-        e.setCancelled(true);
+    public void onFoodLevelChange(FoodLevelChangeEvent event) {
+        event.setCancelled(true);
     }
 
     @EventHandler
-    public void onInventoryOpen(InventoryOpenEvent e) {
-        if (e.getInventory().getHolder() instanceof Chest || e.getInventory().getHolder() instanceof DoubleChest
-                || e.getInventory().getType() == InventoryType.ANVIL
-                || e.getInventory().getType() == InventoryType.FURNACE)
-            if (e.getPlayer().getGameMode() != GameMode.CREATIVE)
-                e.setCancelled(true);
+    public void onInventoryOpen(InventoryOpenEvent event) {
+        if (event.getInventory().getHolder() instanceof Chest || event.getInventory().getHolder() instanceof DoubleChest
+                || event.getInventory().getType() == InventoryType.ANVIL
+                || event.getInventory().getType() == InventoryType.FURNACE)
+            if (event.getPlayer().getGameMode() != GameMode.CREATIVE)
+                event.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    public void onPlayerTeleport(PlayerTeleportEvent e) {
-        //todo check to see if in combat, if so then cancel if its teleporting into spawn
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
 
-        if (!plugin.getSpawnRegion().contains(e.getTo()) || plugin.getSpawnRegion().contains(e.getFrom())) return;
+        if (plugin.getSpawnLocation().equals(event.getTo()) && !plugin.isInSpawnArea(event.getPlayer()) && pl.getTagManager().isTagged(event.getPlayer().getUniqueId())) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!plugin.getSpawnRegion().contains(event.getTo()) || plugin.getSpawnRegion().contains(event.getFrom())) return;
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!e.isCancelled()) resetKitAndKS(e.getPlayer());
+                if (!event.isCancelled()) resetKitAndKS(event.getPlayer());
             }
         }.runTaskLater(plugin, 2);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void onPlayerMove(PlayerMoveEvent e) {
-        if (e.getFrom().getBlock().equals(e.getTo().getBlock())) return;
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (event.getFrom().getBlock().equals(event.getTo().getBlock())) return;
 
-        if (!plugin.getSpawnRegion().contains(e.getPlayer().getLocation())) {
-            KitPvPStats stats = KitPvP.getInstance().getStats(e.getPlayer());
-            stats.getActiveKit().getKit().onMove(e.getPlayer());
+        if (!plugin.getSpawnRegion().contains(event.getPlayer().getLocation())) {
+            KitPvPStats stats = KitPvP.getInstance().getStats(event.getPlayer());
+            stats.getActiveKit().getKit().onMove(event.getPlayer());
         }
 
-        if (!plugin.getSpawnRegion().contains(e.getTo()) || plugin.getSpawnRegion().contains(e.getFrom())) return;
+        if (!plugin.getSpawnRegion().contains(event.getTo()) || plugin.getSpawnRegion().contains(event.getFrom())) return;
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!e.isCancelled()) resetKitAndKS(e.getPlayer());
+                if (!event.isCancelled()) resetKitAndKS(event.getPlayer());
             }
         }.runTaskLater(plugin, 2);
     }
@@ -110,19 +119,38 @@ public class PlayerListeners implements Listener {
         resetKitAndKS(event.getPlayer());
     }
 
+    private static List<Integer> bannedSlots;
+
+    static {
+        bannedSlots = Arrays.asList(
+                80,
+                81,
+                82,
+                83
+        );
+    }
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
-    public void onInventoryClick(InventoryClickEvent e) {
-        if (e.getClickedInventory() != null && e.getClickedInventory().getName() != null && !e.getWhoClicked().getGameMode().equals(GameMode.CREATIVE) && e.getInventory().getType() != InventoryType.CRAFTING)
-            e.setCancelled(true);
+    public void onInventoryClick(InventoryClickEvent event) {
+        if ((event.getClickedInventory() != null
+                && event.getClickedInventory().getName() != null
+                && !event.getWhoClicked().getGameMode().equals(GameMode.CREATIVE)
+                && event.getInventory().getType() != InventoryType.CRAFTING)
+                || event.getSlotType() == InventoryType.SlotType.CRAFTING)
+            event.setCancelled(true);
+
+        if (event.getWhoClicked().getOpenInventory().getTopInventory().getContents().length > 0) {
+
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onPlayerChat(AsyncPlayerChatEvent e) {
-        KitPvPStats stats = plugin.getStats(e.getPlayer());
+    public void onPlayerChat(AsyncPlayerChatEvent event) {
+        KitPvPStats stats = plugin.getStats(event.getPlayer());
 
         String gangTitle = null;
 
-        Gang gang = GangsPlusApi.getPlayersGang(e.getPlayer().getPlayer());
+        Gang gang = GangsPlusApi.getPlayersGang(event.getPlayer().getPlayer());
         String gangName;
         if (gang != null) {
             gangName = gang.getName();
@@ -132,14 +160,15 @@ public class PlayerListeners implements Listener {
         String prestige = ChatColor.GRAY + "[" + ChatColor.WHITE + stats.getPrestigeLevel() + "★" + ChatColor.GRAY + "]";
 
         if (gangTitle == null)
-            e.setFormat(prestige + " " + ChatColor.RESET + e.getFormat());
+            event.setFormat(prestige + " " + ChatColor.RESET + event.getFormat());
         else
-            e.setFormat(gangTitle + " " + prestige + " " + ChatColor.RESET + e.getFormat());
+            event.setFormat(gangTitle + " " + prestige + " " + ChatColor.RESET + event.getFormat());
     }
 
     private void resetKitAndKS(Player p) {
         KitPvPStats stats = plugin.getStats(p);
         if (stats == null) return;
+        stats.getActiveKit().getKit().cancelRunnables(p);
         stats.applyKitPreference();
         p.getInventory().clear();
         if (p.getItemOnCursor().getType() != null && p.getItemOnCursor().getType() != Material.AIR)

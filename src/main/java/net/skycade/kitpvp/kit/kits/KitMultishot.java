@@ -4,6 +4,7 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -34,6 +35,8 @@ public class KitMultishot extends Kit {
     private int arrowMaxAmount = 6;
 
     private List<UUID> running = new ArrayList<>();
+
+    private List<Arrow> arrowList = new ArrayList<>();
 
     public KitMultishot(KitManager kitManager) {
         super(kitManager, "Multishot", KitType.MULTISHOT, 40000, getLore());
@@ -92,6 +95,10 @@ public class KitMultishot extends Kit {
     }
 
     public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
+        e.getEntity().setCustomName(shooter.getName());
+        e.getEntity().setCustomNameVisible(false);
+        arrowList.add((Arrow) e.getEntity());
+
         if (running.contains(shooter.getUniqueId()))
             return;
         if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
@@ -125,6 +132,15 @@ public class KitMultishot extends Kit {
         arrowRegen.setAmount(amount);
 
         return arrowRegen;
+    }
+
+    public void removeSummon(int seconds, Player p) {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+            for (Arrow arrow : arrowList)
+                if (arrow.getCustomName().contains(p.getName())) {
+                    arrow.remove();
+                }
+        }, seconds * 20);
     }
 
     @Override

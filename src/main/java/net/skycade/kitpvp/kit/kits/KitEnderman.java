@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
@@ -98,7 +99,7 @@ public class KitEnderman extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), teleportCooldown, true))
+        if (!addCooldown(p, getName(), teleportCooldown, true) || frozenPlayers.containsKey(p.getUniqueId()))
             return;
 
         //For missions
@@ -107,6 +108,14 @@ public class KitEnderman extends Kit {
 
         Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 10);
         targetPlayers.remove(p);
+
+        List<Player> toRemove = new ArrayList<>();
+        targetPlayers.forEach(target -> {
+            if (KitPvP.getInstance().isInSpawnArea(target))
+                toRemove.add(target);
+        });
+        targetPlayers.removeAll(toRemove);
+
         if (targetPlayers.isEmpty()) {
             removeCooldowns(p, getName());
             return;
@@ -159,7 +168,7 @@ public class KitEnderman extends Kit {
                 ChatColor.GRAY + "Right clicking your enemy",
                 ChatColor.GRAY + "teleports you behind them.",
                 ChatColor.GRAY + "Touching water damages you.",
-                ChatColor.GRAY + "Immune to arrows."
+                ChatColor.GRAY + "Immune to projectiles."
         );
     }
 }

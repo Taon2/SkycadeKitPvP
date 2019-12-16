@@ -102,6 +102,15 @@ public class KitPotionMaster extends Kit {
     }
 
     @Override
+    public void reimburseItem(Player p, ItemStack item) {
+        if (item != null && item.getType() == Material.POTION && item.getDurability() == 16421) {
+            ItemStack newItem = new ItemStack(Material.POTION, 1, (short) 16421);
+
+            p.getInventory().addItem(newItem);
+        }
+    }
+
+    @Override
     public List<String> getHowToObtain() {
         return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }

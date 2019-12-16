@@ -90,7 +90,7 @@ public class KitWolfPack extends Kit {
         for (int i = 0; i < wolfAmount; i++) {
             Wolf wolf = (Wolf) p.getWorld().spawnEntity(p.getLocation(), EntityType.WOLF);
             wolf.setAngry(true);
-            wolf.setCustomName(p.getName() + "'s" + " Wolf");
+            wolf.setCustomName(p.getName());
             wolf.setOwner(p);
             wolf.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 2));
             wolfList.add(wolf);

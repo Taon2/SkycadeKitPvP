@@ -3,7 +3,7 @@ main: net.skycade.kitpvp.KitPvP
 version: 4.0.0-SNAPSHOT
 authors: ["WhiteWalker72", "Riccardo Bello (RickyB98)", "Taon2"]
 depend: [SkycadeCore, GuardianBeamAPI]
-softdepend: [SkycadeLeaderboards, GangsPlus]
+softdepend: [SkycadeLeaderboards, GangsPlus, SkycadeKoth]
 commands:
 permission:
   kitpvp.nametag.view:

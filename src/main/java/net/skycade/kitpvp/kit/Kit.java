@@ -27,7 +27,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -45,7 +44,7 @@ public abstract class Kit implements Listener {
 
     protected final Map<UUID, List<ItemRunnable>> playerItemRunnable = new HashMap<>();
 
-    protected final Map<UUID, Map<Location, Material>> frozenPlayers = new HashMap<>();
+    protected static final Map<UUID, Map<Location, Material>> frozenPlayers = new HashMap<>();
     protected final List<UUID> shacoHit = new ArrayList<>();
 
     private static final CraftPlayer DUMMY_PLAYER = new CraftPlayer((CraftServer) Bukkit.getServer(),
@@ -175,6 +174,9 @@ public abstract class Kit implements Listener {
     }
 
     public void cancelRunnables(Player p) {
+    }
+
+    public void reimburseItem(Player p, ItemStack item){
     }
 
     protected boolean onCooldown(Player p, String ability) {
@@ -317,26 +319,6 @@ public abstract class Kit implements Listener {
             return;
 
         playerItemRunnable.get(p.getUniqueId()).forEach(ItemRunnable::stopRunnable);
-    }
-
-    protected void reimburseItem(Player p, ItemStack item, int maxAmount, KitType kitType) {
-        Inventory inv = p.getInventory();
-        int amount = 0;
-
-        Integer finalSlot = null;
-        for (Integer i = 0; i < inv.getSize(); i++)
-            if (inv.getItem(i) != null)
-                if (inv.getItem(i).getType() == item.getType()) {
-                    amount += inv.getItem(i).getAmount();
-                    if (amount <= inv.getMaxStackSize())
-                        finalSlot = i;
-                }
-        if (finalSlot != null && amount > 0 && KitPvP.getInstance().getStats(p).getActiveKit() == kitType) {
-            ItemStack invItem = inv.getItem(finalSlot);
-            if (amount < maxAmount)
-                inv.setItem(finalSlot, new ItemStack(invItem.getType(), invItem.getAmount() + 1));
-        } else
-            p.getInventory().addItem(item);
     }
 
     protected void freezePlayer(Player p, int sec) {

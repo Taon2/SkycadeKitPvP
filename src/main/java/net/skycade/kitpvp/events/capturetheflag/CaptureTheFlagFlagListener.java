@@ -7,11 +7,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -59,7 +57,6 @@ public class CaptureTheFlagFlagListener implements Listener {
             captureTheFlagEvent.refreshArmor(flagCarrier, true);
             flagCarrier.getLocation().getBlock().setType(Material.AIR);
             flagCarrier.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 2));
-            flagCarrier.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0));
             bannerCurrentLocation = null;
         }
 
@@ -86,7 +83,10 @@ public class CaptureTheFlagFlagListener implements Listener {
 
         if (p.equals(flagCarrier)) {
             CAPTURETHEFLAG_DROPPED_FLAG.broadcast("%player%", captureTheFlagEvent.isTeamRed(p) ? ChatColor.RED + "" + ChatColor.BOLD + p.getName() : ChatColor.BLUE + "" + ChatColor.BOLD + p.getName());
-            p.getLocation().getBlock().setType(Material.STANDING_BANNER);
+            if (p.getLocation().getBlock().getType() != Material.AIR)
+                p.getLocation().add(0, 1, 0).getBlock().setType(Material.STANDING_BANNER);
+            else
+                p.getLocation().getBlock().setType(Material.STANDING_BANNER);
             bannerCurrentLocation = p.getLocation();
             clearFlagCarrier();
         }
@@ -100,7 +100,10 @@ public class CaptureTheFlagFlagListener implements Listener {
 
         if (p.equals(flagCarrier)) {
             CAPTURETHEFLAG_DROPPED_FLAG.broadcast("%player%", captureTheFlagEvent.isTeamRed(p) ? ChatColor.RED + "" + ChatColor.BOLD + p.getName() : ChatColor.BLUE + "" + ChatColor.BOLD + p.getName());
-            p.getLocation().getBlock().setType(Material.STANDING_BANNER);
+            if (p.getLocation().getBlock().getType() != Material.AIR)
+                p.getLocation().add(0, 1, 0).getBlock().setType(Material.STANDING_BANNER);
+            else
+                p.getLocation().getBlock().setType(Material.STANDING_BANNER);
             bannerCurrentLocation = p.getLocation();
             clearFlagCarrier();
         }
@@ -114,21 +117,10 @@ public class CaptureTheFlagFlagListener implements Listener {
 
         if (p.equals(flagCarrier)) {
             CAPTURETHEFLAG_DROPPED_FLAG.broadcast("%player%", captureTheFlagEvent.isTeamRed(p) ? ChatColor.RED + "" + ChatColor.BOLD + p.getName() : ChatColor.BLUE + "" + ChatColor.BOLD + p.getName());
-            p.getLocation().getBlock().setType(Material.STANDING_BANNER);
-            bannerCurrentLocation = p.getLocation();
-            clearFlagCarrier();
-        }
-    }
-
-    @EventHandler
-    public void onPlayerTakeDamage(EntityDamageByEntityEvent event) {
-        if (captureTheFlagEvent.getBegin() == null || event.getEntity().getType() != EntityType.PLAYER) return;
-
-        Player p = (Player) event.getEntity();
-
-        if (p.equals(flagCarrier)) {
-            CAPTURETHEFLAG_DROPPED_FLAG.broadcast("%player%", captureTheFlagEvent.isTeamRed(p) ? ChatColor.RED + "" + ChatColor.BOLD + p.getName() : ChatColor.BLUE + "" + ChatColor.BOLD + p.getName());
-            p.getLocation().getBlock().setType(Material.STANDING_BANNER);
+            if (p.getLocation().getBlock().getType() != Material.AIR)
+                p.getLocation().add(0, 1, 0).getBlock().setType(Material.STANDING_BANNER);
+            else
+                p.getLocation().getBlock().setType(Material.STANDING_BANNER);
             bannerCurrentLocation = p.getLocation();
             clearFlagCarrier();
         }
@@ -144,9 +136,8 @@ public class CaptureTheFlagFlagListener implements Listener {
         return false;
     }
 
-    private void clearFlagCarrier() {
+    public void clearFlagCarrier() {
         flagCarrier.removePotionEffect(PotionEffectType.SLOW);
-        flagCarrier.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
         captureTheFlagEvent.refreshArmor(flagCarrier, false);
         lastCarrier = flagCarrier;
         flagCarrier = null;
@@ -165,6 +156,14 @@ public class CaptureTheFlagFlagListener implements Listener {
 
     public static CaptureTheFlagFlagListener getInstance() {
         return instance;
+    }
+
+    public Player getCurrentCarrier() {
+        return flagCarrier;
+    }
+
+    public Location getCurrentFlagLocation() {
+        return bannerCurrentLocation;
     }
 
     private void load() {

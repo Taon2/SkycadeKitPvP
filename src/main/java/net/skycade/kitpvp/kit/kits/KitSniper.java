@@ -5,10 +5,12 @@ import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -36,6 +38,8 @@ public class KitSniper extends Kit {
 
     private final Map<UUID, UUID> sniperPlayerHit = new HashMap<>();
     private final Map<UUID, Integer> sniperCombo = new HashMap<>();
+
+    private List<Arrow> arrowList = new ArrayList<>();
 
     public KitSniper(KitManager kitManager) {
         super(kitManager, "Sniper", KitType.SNIPER, 38000, getLore());
@@ -94,6 +98,10 @@ public class KitSniper extends Kit {
         if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
             e.setCancelled(true);
         }
+
+        e.getEntity().setCustomName(shooter.getName());
+        e.getEntity().setCustomNameVisible(false);
+        arrowList.add((Arrow) e.getEntity());
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
@@ -138,6 +146,15 @@ public class KitSniper extends Kit {
                 if (item.getType() != Material.AIR)
                     return true;
         return false;
+    }
+
+    public void removeSummon(int seconds, Player p) {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+            for (Arrow arrow : arrowList)
+                if (arrow.getCustomName().contains(p.getName())) {
+                    arrow.remove();
+                }
+        }, seconds * 20);
     }
 
     @Override

@@ -181,10 +181,10 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerDeath(PlayerDeathEvent e) {
+    public void onPlayerDeath(PlayerDeathEvent event) {
         if (begin == null) return;
 
-        Player died = e.getEntity();
+        Player died = event.getEntity();
         if (this.king.equals(died.getUniqueId())) {
             stop();
 
@@ -250,41 +250,41 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onMoveEvent(PlayerMoveEvent e){
+    public void onMoveEvent(PlayerMoveEvent event){
         if (begin == null) return;
 
-        Player player = e.getPlayer();
+        Player player = event.getPlayer();
         if (this.king.equals(player.getUniqueId())){
             particleMoveEffect(player, ParticleEffect.CRIT, 1, 30);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerDamage(EntityDamageByEntityEvent e){
+    public void onPlayerDamage(EntityDamageByEntityEvent event){
         if (begin == null) return;
 
-        Player player = Bukkit.getPlayer(e.getEntity().getUniqueId());
+        Player player = Bukkit.getPlayer(event.getEntity().getUniqueId());
         if (player != null && this.king.equals(player.getUniqueId())){
-            participated.add(e.getDamager().getUniqueId());
+            participated.add(event.getDamager().getUniqueId());
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onTeleport(PlayerTeleportEvent e){
-        if(KitPvP.getInstance().isInSpawnArea(e.getPlayer()) && e.getPlayer().getUniqueId().equals(this.king)){
+    public void onTeleport(PlayerTeleportEvent event){
+        if(KitPvP.getInstance().isInSpawnArea(event.getPlayer()) && event.getPlayer().getUniqueId().equals(this.king)){
             KILLTHEKING_TO_SPAWN.broadcast();
             stop();
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onInventoryClick(InventoryClickEvent e) {
+    public void onInventoryClick(InventoryClickEvent event) {
         if (begin == null) return;
 
         //stops king from removing their armor
-        if (this.king.equals(e.getWhoClicked().getUniqueId())) {
-            if (e.getSlotType() == InventoryType.SlotType.ARMOR) {
-                e.setCancelled(true);
+        if (this.king.equals(event.getWhoClicked().getUniqueId())) {
+            if (event.getSlotType() == InventoryType.SlotType.ARMOR) {
+                event.setCancelled(true);
             }
         }
     }

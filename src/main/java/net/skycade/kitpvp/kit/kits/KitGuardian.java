@@ -90,7 +90,7 @@ public class KitGuardian extends Kit {
             public void run() {
                 beam.setStartingPosition(p.getLocation());
 
-                if (!getKitManager().getKitPvP().getSpawnRegion().contains(p)) {
+                if (!getKitManager().getKitPvP().isInSpawnArea(p)) {
                     Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 6);
                     nearbyPlayers.remove(p);
 
@@ -120,7 +120,7 @@ public class KitGuardian extends Kit {
                 if (!(nearbyPlayers.isEmpty())) {
                     Player target = getClosestTarget(nearbyPlayers, p);
 
-                    if (areBlocksInWay(p.getLocation().add(0, 1, 0), target.getLocation().add(0, 1, 0))) {
+                    if (target == null || areBlocksInWay(p.getLocation().add(0, 1, 0), target.getLocation().add(0, 1, 0))) {
                         return;
                     }
 

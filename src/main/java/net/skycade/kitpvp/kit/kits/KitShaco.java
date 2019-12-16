@@ -8,10 +8,12 @@ import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -33,6 +35,9 @@ public class KitShaco extends Kit {
     private int snowballStartAmount = 6;
     private int snowballMaxAmount = 8;
     private int snowballRegenSpeed = 20;
+
+    private List<Snowball> snowballList = new ArrayList<>();
+
     private double backstabMultiplier = 1.2;
 
     private int invisibilityCooldown = 20;
@@ -134,13 +139,16 @@ public class KitShaco extends Kit {
         }, 160);
     }
 
-    public void onSnowballUse(ProjectileLaunchEvent e) {
+    public void onSnowballUse(Player shooter, ProjectileLaunchEvent e) {
+        e.getEntity().setCustomName(shooter.getName());
+        e.getEntity().setCustomNameVisible(false);
+        snowballList.add((Snowball) e.getEntity());
+
         e.getEntity().setVelocity(e.getEntity().getVelocity().multiply(2.5D));
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
-        if (!addCooldown(shooter, "Switch Locations", snowballCooldown, true)) {
-            reimburseItem(shooter, getSnowball(1), snowballMaxAmount, KitType.SHACO);
+        if (!addCooldown(shooter, "Switch Locations", snowballCooldown, true) || frozenPlayers.containsKey(shooter.getUniqueId()) || frozenPlayers.containsKey(damagee.getUniqueId())) {
             return;
         }
 
@@ -173,6 +181,39 @@ public class KitShaco extends Kit {
         snowballRegen.setAmount(amount);
 
         return snowballRegen;
+    }
+
+    @Override
+    public void reimburseItem(Player p, ItemStack item) {
+        if (item != null && item.getType() == getSnowball(item.getAmount()).getType()) {
+            Inventory inv = p.getInventory();
+            int amount = 0;
+            ItemStack newItem = getSnowball(1);
+
+            Integer finalSlot = null;
+            for (Integer i = 0; i < inv.getSize(); i++)
+                if (inv.getItem(i) != null)
+                    if (inv.getItem(i).getType() == newItem.getType()) {
+                        amount += inv.getItem(i).getAmount();
+                        if (amount <= inv.getMaxStackSize())
+                            finalSlot = i;
+                    }
+            if (finalSlot != null && amount > 0) {
+                ItemStack invItem = inv.getItem(finalSlot);
+                if (amount < snowballMaxAmount)
+                    inv.setItem(finalSlot, new ItemStack(invItem.getType(), invItem.getAmount() + 1));
+            } else
+                p.getInventory().addItem(newItem);
+        }
+    }
+
+    public void removeSummon(int seconds, Player p) {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+            for (Snowball snowball : snowballList)
+                if (snowball.getCustomName().contains(p.getName())) {
+                    snowball.remove();
+                }
+        }, seconds * 20);
     }
 
     @Override

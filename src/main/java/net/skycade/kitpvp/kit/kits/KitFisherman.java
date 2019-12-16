@@ -76,7 +76,7 @@ public class KitFisherman extends Kit {
     }
 
     public void onRodUse(Player p, ProjectileLaunchEvent e) {
-        if (!addCooldown(p, "Grapple", grappleCooldown, true))
+        if (!addCooldown(p, "Grapple", grappleCooldown, true) || frozenPlayers.containsKey(p.getUniqueId()))
             return;
 
         Location target = getTarget(p, 30);
@@ -87,7 +87,6 @@ public class KitFisherman extends Kit {
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
-        p.teleport(p.getLocation().add(0, 0.5, 0));
         Vector v = getVectorForPoints(p.getLocation(), target);
         e.getEntity().setVelocity(v);
 

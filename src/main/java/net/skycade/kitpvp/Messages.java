@@ -11,7 +11,7 @@ public class Messages {
     public static final Localization.Message ON_COOLDOWN_NO_TIME = new Localization.Message("on-cooldown-no-time", "&b%thing% &cis on cooldown!");
     public static final Localization.Message OFF_COOLDOWN = new Localization.Message("off-cooldown", "&7You can now use &a%thing%&7.");
     public static final Localization.Message NOT_ENOUGH = new Localization.Message("not-enough", "&cYou don't have enough &b%thing%&7.");
-    public static final Localization.Message CANNOT_USE = new Localization.Message("cannot-use", "&cYou cannot use &b%thing% %reason%&c!");
+    public static final Localization.Message CANNOT_USE = new Localization.Message("cannot-use", "&cYou cannot use &b%thing% &c%reason%!");
     public static final Localization.Message ALREADY_USING = new Localization.Message("already-using", "&cYou are already using kit &b%kit%&c.");
     public static final Localization.Message KIT_EQUIPPED = new Localization.Message("kit-equipped", "&7Equipped kit &a%kit%&7.");
     public static final Localization.Message KIT_EQUIPPED_RESPAWN = new Localization.Message("kit-equipped", "&7Equipped kit &a%kit%&7. It will be active after you respawn.");
@@ -139,12 +139,14 @@ public class Messages {
     public static final Localization.Message CAPTURETHEFLAG_WINNER = new Localization.Message("event.capturetheflag.winner", "&aTeam %team% &awins, and gets &6&l2x coins &afor the next &630 minutes&a. &lCongratulations!");
     public static final Localization.Message CAPTURETHEFLAG_PARTICIPATE = new Localization.Message("event.capturetheflag-participate", "&7You have received &a%amount% &7Event Tokens for participating!");
     public static final Localization.Message CAPTURETHEFLAG_WON = new Localization.Message("event.capturetheflag-won", "&7You have received &a%amount% &7Event Tokens for winning!");
+    public static final Localization.Message CAPTURETHEFLAG_SUDDEN_DEATH = new Localization.Message("event.capturetheflag-sudden-death", "&a&lSUDDEN DEATH! &7The scores are tied! Next flag capture wins!");
 
     //KitPvP Kill Messages
     public static final Localization.Message NO_REWARDS = new Localization.Message("kill.no-rewards", "&7You killed the same player more than 3 times, &cno rewards &7rewarded.");
     public static final Localization.Message ASSIST_REWARD = new Localization.Message("kill.assist-rewards", "&7You got &6%amount% &7coins for assisting to kill %player%&7!");
     public static final Localization.Message KILLED_BY = new Localization.Message("kill.killed-by", "&7You were killed by &a%player%&7.");
     public static final Localization.Message YOU_KILLED = new Localization.Message("kill.you-killed", "&7You killed &a%player%&7.");
+    public static final Localization.Message YOU_KILLED_LOGGED_OUT = new Localization.Message("kill.you-killed-logged-out", "&7You killed &a%player%&7 because they logged out while in combat with you.");
     public static final Localization.Message COLLECTED_BOUNTY = new Localization.Message("kill.collected-bounty", "&aYou got &a%amount% &7extra coins for collecting %player%'s bounty!");
     public static final Localization.Message YOU_BROKE_KILLSTREAK = new Localization.Message("kill.you-broke-killstreak", "&7You got &a%amount% &7extra coins for breaking &a%player%'s &7killstreak!");
     public static final Localization.Message BROKE_KILLSTREAK = new Localization.Message("kill.broke-killstreak", "&c&l%killer% &6has broken &c&l%dead%'s &6killstreak of &c&l%ks%!");
@@ -346,7 +348,9 @@ public class Messages {
                 PHYLACTERY_RESPAWNED,
                 RESETGANGPOINTS_USAGE,
                 RESETGANGPOINTS_DESCRIPTION,
-                GANG_POINTS_RESET
+                GANG_POINTS_RESET,
+                YOU_KILLED_LOGGED_OUT,
+                CAPTURETHEFLAG_SUDDEN_DEATH
         );
     }
 }

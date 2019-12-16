@@ -6,6 +6,7 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.events.KillTheKingEvent;
+import net.skycade.kitpvp.events.capturetheflag.CaptureTheFlagFlagListener;
 import net.skycade.kitpvp.nms.ActionBarUtil;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
@@ -35,6 +36,13 @@ public class CommandSoup extends SkycadeCommand {
         if (KillTheKingEvent.getInstance() != null && KillTheKingEvent.getInstance().getCurrentKing() != null) {
             if (member.getUUID().equals(KillTheKingEvent.getInstance().getCurrentKing())) {
                 CANNOT_USE.msg(member.getPlayer(), "%thing%", "/soup", "%reason%", "as the King");
+                return;
+            }
+        }
+
+        if (CaptureTheFlagFlagListener.getInstance() != null && CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() != null) {
+            if (member.getUUID().equals(CaptureTheFlagFlagListener.getInstance().getCurrentCarrier().getUniqueId())) {
+                CANNOT_USE.msg(member.getPlayer(), "%thing%", "/soup", "%reason%", "as the Flag Carrier");
                 return;
             }
         }

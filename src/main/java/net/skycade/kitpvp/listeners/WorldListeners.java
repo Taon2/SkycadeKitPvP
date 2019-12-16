@@ -9,10 +9,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArrow;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -40,10 +44,14 @@ public class WorldListeners implements Listener {
         }, 5);
     }
 
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public synchronized void onBlockFromTo(BlockFromToEvent event) {
+        if (event.getBlock().isLiquid())
+            event.setCancelled(true);
+    }
+
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent e) {
-        if (!(e.getEntity() instanceof TNTPrimed))
-            return;
         for (Entity en : e.getEntity().getNearbyEntities(4, 4, 4))
             if (en instanceof FallingBlock)
                 e.getEntity().remove();

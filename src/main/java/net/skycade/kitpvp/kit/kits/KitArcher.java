@@ -5,9 +5,11 @@ import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -35,6 +37,8 @@ public class KitArcher extends Kit {
     private int arrowRegenSpeed = 3;
     private int arrowStartAmount = 16;
     private int arrowMaxAmount = 16;
+
+    private List<Arrow> arrowList = new ArrayList<>();
 
     public KitArcher(KitManager kitManager) {
         super(kitManager, "Archer", KitType.ARCHER, 0, getLore());
@@ -94,6 +98,10 @@ public class KitArcher extends Kit {
         if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
             e.setCancelled(true);
         }
+
+        e.getEntity().setCustomName(shooter.getName());
+        e.getEntity().setCustomNameVisible(false);
+        arrowList.add((Arrow) e.getEntity());
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
@@ -125,6 +133,15 @@ public class KitArcher extends Kit {
         arrowRegen.setAmount(amount);
 
         return arrowRegen;
+    }
+
+    public void removeSummon(int seconds, Player p) {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+            for (Arrow arrow : arrowList)
+                if (arrow.getCustomName().contains(p.getName())) {
+                    arrow.remove();
+                }
+        }, seconds * 20);
     }
 
     @Override
