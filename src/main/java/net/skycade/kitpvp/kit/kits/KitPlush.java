@@ -1,12 +1,14 @@
 package net.skycade.kitpvp.kit.kits;
 
-import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -20,61 +22,79 @@ import java.util.*;
 
 public class KitPlush extends Kit {
 
-    private ItemStack helmet;
-    private ItemStack chestplate;
-    private ItemStack leggings;
-    private ItemStack boots;
-    private ItemStack weapon;
-
-    private int catCooldown = 5;
-
-    private double jumpPower = 1.0;
-
     public KitPlush(KitManager kitManager) {
-        super(kitManager, "Plush", KitType.PLUSH, 24000, getLore());
+        super(kitManager, "Plush", KitType.PLUSH, 24000, "Launch players into oblivion");
 
-        helmet = new ItemBuilder(
-                Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 10)
-                .setColour(Color.fromRGB(200, 255, 255)).build();
-        chestplate = new ItemBuilder(
-                Material.IRON_CHESTPLATE).build();
-        leggings = new ItemBuilder(
-                Material.IRON_LEGGINGS).build();
-        boots = new ItemBuilder(
-                Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 5)
-                .setColour(Color.fromRGB(200, 255, 255)).build();
-        weapon = new ItemBuilder(
-                Material.IRON_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + catCooldown + " seconds")
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws cats that grant potion effects.").build();
+        Map<String, Object> defaultsMap = new HashMap<>();
 
-        ItemStack icon = new ItemStack(Material.RAW_FISH);
-        setIcon(icon);
+        defaultsMap.put("kit.icon.material", "RAW_FISH");
+        defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 24000);
+
+        defaultsMap.put("inventory.sword.material", "IRON_SWORD");
+        defaultsMap.put("inventory.sword.enchantments.durability", 5);
+        defaultsMap.put("inventory.sword.enchantments.damage-all", 1);
+        defaultsMap.put("inventory.sword.enchantments.knockback", 1);
+
+        defaultsMap.put("armor.helmet.material", "LEATHER");
+        defaultsMap.put("armor.helmet.enchantments.durability", 10);
+        defaultsMap.put("armor.helmet.enchantments.protection", 0);
+
+        defaultsMap.put("armor.chestplate.material", "IRON");
+
+        defaultsMap.put("armor.leggings.material", "IRON");
+
+        defaultsMap.put("armor.boots.material", "LEATHER");
+        defaultsMap.put("armor.boots.enchantments.durability", 5);
+
+        defaultsMap.put("ability.jump-power", 1d);
+
+        setConfigDefaults(defaultsMap);
+
+        if (getConfig().getString("kit.icon.material") != null) {
+            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+            } else {
+                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+            }
+        } else {
+            setIcon(new ItemStack(Material.DIRT));
+        }
+        setPrice(getConfig().getInt("kit.price"));
     }
 
     @Override
-    public void applyKit(Player p) {
-        p.getInventory().addItem(weapon);
-        p.getInventory().setHelmet(helmet);
-        p.getInventory().setChestplate(chestplate);
-        p.getInventory().setLeggings(leggings);
-        p.getInventory().setBoots(boots);
+    public void applyKit(Player p, int level) {
+        p.getInventory().addItem(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all"))
+                .addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword.enchantments.knockback")).build());
+
+        p.getInventory().setHelmet(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments.durability"))
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.helmet.enchantments.protection")).build());
+
+        p.getInventory().setChestplate(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("armor.chestplate.material").toUpperCase() + "_CHESTPLATE")).build());
+
+        p.getInventory().setLeggings(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("armor.leggings.material").toUpperCase() + "_LEGGINGS")).build());
+
+        p.getInventory().setBoots(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS"))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.boots.enchantments.durability")).build());
     }
 
     @Override
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), catCooldown, true))
+        if (!addCooldown(p, getName(), 5, true))
             return;
-
-        //For missions
-        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
-        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+        int level = getLevel(p);
 
         Location loc = p.getEyeLocation();
         LivingEntity cat = (LivingEntity) p.getWorld().spawnEntity(loc.add(loc.getDirection()), EntityType.OCELOT);
@@ -86,14 +106,22 @@ public class KitPlush extends Kit {
                     ent.remove();
 
         cat.setVelocity(loc.getDirection().multiply(0.5D));
-        cat.setCustomName("Plush Cat");
-        p.getWorld().playSound(loc, Sound.CAT_MEOW, 1F, 1F);
+        cat.setCustomName("Plush cat");
+        p.playSound(loc, Sound.CAT_MEOW, 0, 0);
 
-        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
             Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(cat.getLocation(), 3.5);
             targetPlayers.forEach(target -> {
+                /* if (level == 1) {
+					target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 2));
+					target.setVelocity(new Vector(0, 2, 0));
+				} else if (level == 2) {
+					target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 3));
+					target.setVelocity(new Vector(0, 2.3, 0));
+				} else { */
                 target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 3));
-                target.setVelocity(new Vector(0, jumpPower, 0));
+                target.setVelocity(new Vector(0, getConfig().getDouble("ability.jump-power"), 0));
+                //}
             });
 
             cat.getLocation().getWorld().createExplosion(cat.getLocation(), 0);
@@ -115,17 +143,8 @@ public class KitPlush extends Kit {
     }
 
     @Override
-    public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
+    public List<String> getAbilityDesc() {
+        return Arrays.asList("§7Use your sword to throw a cat", "§7the cat can launch players");
     }
 
-    public static List<String> getLore() {
-        return Arrays.asList(
-                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
-                ChatColor.GRAY + "" + ChatColor.ITALIC + "It's so fluffy I'm gonna die!",
-                "",
-                ChatColor.GRAY + "Throws cats that launch",
-                ChatColor.GRAY + "players into oblivion."
-        );
-    }
 }

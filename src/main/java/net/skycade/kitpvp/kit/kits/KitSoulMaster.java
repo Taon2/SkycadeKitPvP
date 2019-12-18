@@ -1,13 +1,15 @@
 package net.skycade.kitpvp.kit.kits;
 
-import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.*;
+import org.bukkit.Color;
+import org.bukkit.Effect;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -18,67 +20,59 @@ import java.util.*;
 
 public class KitSoulMaster extends Kit {
 
-    private ItemStack helmet;
-    private ItemStack chestplate;
-    private ItemStack leggings;
-    private ItemStack boots;
-    private ItemStack weapon;
-
-    private int slowCooldown = 20;
-
     public KitSoulMaster(KitManager kitManager) {
-        super(kitManager, "SoulMaster", KitType.SOULMASTER, 33000, getLore());
+        super(kitManager, "SoulMaster", KitType.SOULMASTER, 33000, "Your soul is mine!");
 
-        helmet = new ItemBuilder(
-                Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 11)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
-                .setColour(Color.fromRGB(51, 51, 0)).build();
-        chestplate = new ItemBuilder(
-                Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 11)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
-                .setColour(Color.fromRGB(51, 51, 0)).build();
-        leggings = new ItemBuilder(
-                Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 11)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
-                .setColour(Color.fromRGB(51, 51, 0)).build();
-        boots = new ItemBuilder(
-                Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 11)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
-                .setColour(Color.fromRGB(51, 51, 0)).build();
-        weapon = new ItemBuilder(
-                Material.IRON_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + slowCooldown + " seconds")
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "slows enemies around you.").build();
+        Map<String, Object> defaultsMap = new HashMap<>();
 
-        ItemStack icon = new ItemStack(Material.SOUL_SAND);
-        setIcon(icon);
+        defaultsMap.put("kit.icon.material", "SOUL_SAND");
+        defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 33000);
+
+        defaultsMap.put("inventory.sword.material", "IRON_SWORD");
+        defaultsMap.put("inventory.sword.enchantments.durability", 5);
+        defaultsMap.put("inventory.sword.enchantments.damage-all", 1);
+
+        defaultsMap.put("armor.material", "LEATHER");
+        defaultsMap.put("armor.enchantments.durability", 11);
+        defaultsMap.put("armor.enchantments.protection", 4);
+
+        setConfigDefaults(defaultsMap);
+
+        if (getConfig().getString("kit.icon.material") != null) {
+            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+            } else {
+                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+            }
+        } else {
+            setIcon(new ItemStack(Material.DIRT));
+        }
+        setPrice(getConfig().getInt("kit.price"));
     }
 
     @Override
-    public void applyKit(Player p) {
-        p.getInventory().addItem(weapon);
-        p.getInventory().setHelmet(helmet);
-        p.getInventory().setChestplate(chestplate);
-        p.getInventory().setLeggings(leggings);
-        p.getInventory().setBoots(boots);
+    public void applyKit(Player p, int level) {
+        p.getInventory().addItem(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+
+        p.getInventory().setArmorContents(getArmour(
+                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+                getConfig().getInt("armor.enchantments.durability"),
+                getConfig().getInt("armor.enchantments.protection"),
+                Color.fromBGR(0, 51, 51)));
     }
 
     @Override
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, "Soul Steal", slowCooldown, true))
+        int level = getLevel(p);
+        if (!addCooldown(p, getName(), 30, true))
             return;
-
-        //For missions
-        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
-        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 6);
         if (targetPlayers.size() <= 1)
@@ -90,21 +84,13 @@ public class KitSoulMaster extends Kit {
                         new PotionEffect(PotionEffectType.SLOW, 200, 1));
         });
         p.getWorld().playEffect(p.getLocation(), Effect.ENDER_SIGNAL, 1);
+        p.getWorld().playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
         shootParticlesFromLoc(p, ParticleEffect.SMOKE_LARGE, 500, 0.5F);
     }
 
     @Override
-    public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
+    public List<String> getAbilityDesc() {
+        return Arrays.asList("§7Use your sword ability to slow", "§7all players around you");
     }
 
-    public static List<String> getLore() {
-        return Arrays.asList(
-                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
-                ChatColor.GRAY + "" + ChatColor.ITALIC + "Give me your soul.",
-                "",
-                ChatColor.GRAY + "Right clicking your sword",
-                ChatColor.GRAY + "slows players around you."
-        );
-    }
 }

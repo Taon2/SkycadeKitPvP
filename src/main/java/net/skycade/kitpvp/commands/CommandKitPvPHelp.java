@@ -1,38 +1,52 @@
 package net.skycade.kitpvp.commands;
 
-import com.google.common.collect.ImmutableList;
-import net.skycade.SkycadeCore.utility.command.SkycadeCommand;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.skycade.kitpvp.coreclasses.commands.Command;
+import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.kitpvp.kit.KitManager;
+import net.skycade.kitpvp.managers.PageManager;
+import org.bukkit.Bukkit;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
-import static net.skycade.kitpvp.Messages.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CommandKitPvPHelp extends SkycadeCommand {
+// Not well coded, improve if you have the time to.
+public class CommandKitPvPHelp extends Command<KitManager> {
 
-    public CommandKitPvPHelp() {
-        super("kitpvphelp", ImmutableList.of("kithelp", "kitpvpcommands", "kitcommands"));
+    private PageManager pageManager;
+
+    public CommandKitPvPHelp(KitManager module) {
+        super(module, "Get an overview of the KitPvP commands.", new Permission("kitpvp.default", PermissionDefault.TRUE), "kitpvphelp", "kithelp", "kitpvpcommands", "kitcommands");
+        Bukkit.getScheduler().runTaskLater(getModule().getKitPvP(),
+                () -> this.pageManager = new PageManager("KitPvP commands ", "/kitpvphelp ", getPageElements(), 9, 6)
+                , 100);
     }
 
     @Override
-    public void onCommand(CommandSender commandSender, String[] strings) {
-        commandSender.sendMessage(KITPVPHELP_TITLE + "");
-        commandSender.sendMessage(SOUP_USAGE + "" + ChatColor.WHITE + " - " + SOUP_DESCRIPTION);
-        commandSender.sendMessage(REFRESHKIT_USAGE + "" + ChatColor.WHITE + " - " + REFRESHKIT_DESCRIPTION);
-        commandSender.sendMessage(KIT_USAGE + "" + ChatColor.WHITE + " - " + KIT_DESCRIPTION);
-        commandSender.sendMessage(SHOP_USAGE + "" + ChatColor.WHITE + " - " + SHOP_DESCRIPTION);
-        commandSender.sendMessage(EVENTSHOP_USAGE + "" + ChatColor.WHITE + " - " + EVENTSHOP_DESCRIPTION);
-        commandSender.sendMessage(PRESTIGE_USAGE + "" + ChatColor.WHITE + " - " + PRESTIGE_DESCRIPTION);
-        commandSender.sendMessage(KITNAME_USAGE + "" + ChatColor.WHITE + " - " + KITNAME_DESCRIPTION);
-        commandSender.sendMessage(VIEWKIT_USAGE + "" + ChatColor.WHITE + " - " + VIEWKIT_DESCRIPTION);
-        commandSender.sendMessage(VIEWSTATS_USAGE + "" + ChatColor.WHITE + " - " + VIEWSTATS_DESCRIPTION);
-        commandSender.sendMessage(TRIGGEREVENT_USAGE + "" + ChatColor.WHITE + " - " + TRIGGEREVENT_DESCRIPTION);
-        commandSender.sendMessage(ECO_USAGE + "" + ChatColor.WHITE + " - " + ECO_DESCRIPTION);
-        commandSender.sendMessage(EVENTECO_USAGE + "" + ChatColor.WHITE + " - " + EVENTECO_DESCRIPTION);
-        commandSender.sendMessage(REFUNDKS_USAGE + "" + ChatColor.WHITE + " - " + REFUNDKS_DESCRIPTION);
-        commandSender.sendMessage(SETSTATS_USAGE + "" + ChatColor.WHITE + " - " + SETSTATS_DESCRIPTION);
-        commandSender.sendMessage(RESETSTATS_USAGE + "" + ChatColor.WHITE + " - " + RESETSTATS_DESCRIPTION);
-        commandSender.sendMessage(RESETGANGPOINTS_USAGE + "" + ChatColor.WHITE + " - " + RESETGANGPOINTS_DESCRIPTION);
-        commandSender.sendMessage(LOCK_UNLOCK_USAGE + "" + ChatColor.WHITE + " - " + LOCK_UNLOCK_DESCRIPTION);
-        commandSender.sendMessage(KITSUNLOCKED_USAGE + "" + ChatColor.WHITE + " - " + KITSUNLOCKED_DESCRIPTION);
+    public void execute(Member member, String aliasUsed, String... args) {
+        if (pageManager == null) {
+            member.message("Something went wrong.");
+            return;
+        }
+
+        int page = 1;
+        if (args.length > 0) {
+            if (!parseInt(member, args[0]))
+                return;
+            page = Integer.parseInt(args[0]);
+        }
+        pageManager.sendToPlayer(member.getPlayer(), page);
     }
+
+
+    private List<BaseComponent[]> getPageElements() {
+        List<BaseComponent[]> elements = new ArrayList<>();
+        for (Command command : getModule().getCommands())
+            elements.add(TextComponent.fromLegacyText("§a/" + command.getAliases()[0] + " " + command.getUsageToString() + "- §7" + command.getDescription().toLowerCase()));
+        return elements;
+    }
+
 }

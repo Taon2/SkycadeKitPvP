@@ -21,7 +21,7 @@ public class ItemProtUpgrade extends EventShopItem {
     private EventShopManager eventShopManager;
 
     public ItemProtUpgrade(EventShopManager eventShopManager) {
-        super(eventShopManager, ChatColor.DARK_RED + "Protection Upgrade", new ItemStack(Material.DIAMOND_CHESTPLATE), 25, 300);
+        super(eventShopManager, "§4Protection Upgrade", new ItemStack(Material.DIAMOND_CHESTPLATE), 50, 300);
         this.eventShopManager = eventShopManager;
     }
 

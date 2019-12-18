@@ -1,30 +1,26 @@
 package net.skycade.kitpvp.commands;
 
-import net.skycade.SkycadeCore.utility.command.SkycadeCommand;
-import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.coreclasses.commands.Command;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.events.DoubleCoinsEvent;
 import net.skycade.kitpvp.events.RandomEvent;
-import net.skycade.kitpvp.ui.EventShopMenu;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
+import org.bukkit.ChatColor;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
-import static net.skycade.kitpvp.Messages.CANNOT_USE;
+public class CommandEventShop extends Command<EventShopManager> {
 
-public class CommandEventShop extends SkycadeCommand {
-    public CommandEventShop() {
-        super("eventshop");
+    public CommandEventShop(EventShopManager eventShopManager) {
+        super(eventShopManager, "Opens the event shop GUI.", new Permission("kitpvp.default", PermissionDefault.TRUE), "eventshop");
     }
 
     @Override
-    public void onCommand(CommandSender commandSender, String[] strings) {
-        Member member = MemberManager.getInstance().getMember((Player) commandSender);
-
+    public void execute(Member member, String aliasUsed, String... args) {
         if (RandomEvent.getCurrent() == null || DoubleCoinsEvent.isActive()) {
-            new EventShopMenu(KitPvP.getInstance().getEventShopManager(), member).open(member.getPlayer());
+            getModule().getEventShopMenu().open(member);
         } else {
-            CANNOT_USE.msg(member.getPlayer(), "%thing%", "/eventshop", "%reason%", "during events");
+            member.getPlayer().sendMessage(ChatColor.RED + ("You cannot use /eventshop during events!"));
         }
     }
 }

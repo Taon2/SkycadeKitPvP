@@ -1,6 +1,6 @@
 package net.skycade.kitpvp.coreclasses.member;
 
-import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.coreclasses.commands.Module;
 import net.skycade.kitpvp.coreclasses.member.listeners.MemberJoinQuit;
 import net.skycade.kitpvp.coreclasses.member.listeners.MemberListeners;
 import net.skycade.kitpvp.stat.KitPvPDB;
@@ -12,15 +12,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class MemberManager {
+public class MemberManager extends Module {
 
     private static MemberManager instance;
 
     private final Map<UUID, Member> members = new HashMap<>();
 
     private MemberManager() {
-        Bukkit.getPluginManager().registerEvents(new MemberJoinQuit(this), KitPvP.getInstance());
-        Bukkit.getPluginManager().registerEvents(new MemberListeners(this), KitPvP.getInstance());
+        registerListener(new MemberJoinQuit(this));
+        registerListener(new MemberListeners(this));
     }
 
     public Map<UUID, Member> getMembers() {
@@ -48,10 +48,25 @@ public class MemberManager {
             return members.get(uuid);
         if (database) {
             Member member = KitPvPDB.getInstance().getMemberData(uuid);
-            return member;
+            if (member != null) return member;
+            else return null;
         }
         return null;
     }
+
+    /* public Member getMember(String name, boolean database) {
+        for (Member member : members.values())
+            if (member.getName().equalsIgnoreCase(name))
+                return member;
+        if (database) {
+            if (name.length() < 3 && !name.equalsIgnoreCase("G") && !name.equalsIgnoreCase("F")
+                    && !name.equalsIgnoreCase("8"))
+                return null;
+            UUID uuid = KitPvPDB.getInstance().getUUIDForName(name);
+            if (uuid == null) return null; else return new Member(uuid, name);
+        }
+        return null;
+    } */
 
     public Member getMember(String name) {
         for (Member member : members.values())
@@ -66,7 +81,8 @@ public class MemberManager {
         if (uuid == null) return null;
 
         Member member = KitPvPDB.getInstance().getMemberData(uuid);
-        return member;
+        if (member == null) return null;
+        else return member;
     }
 
     public void update(Member member) {
@@ -78,7 +94,7 @@ public class MemberManager {
             public void run() {
                 KitPvPDB.getInstance().setMemberData(member);
             }
-        }.runTaskAsynchronously(KitPvP.getInstance());
+        }.runTaskAsynchronously(getPlugin());
 
         if (unload) new BukkitRunnable() {
             @Override
@@ -87,7 +103,7 @@ public class MemberManager {
                 if (player == null || !player.isOnline())
                     members.remove(member.getUUID());
             }
-        }.runTaskLater(KitPvP.getInstance(), 2L);
+        }.runTaskLater(plugin, 2L);
     }
 
     public void onDisable() {

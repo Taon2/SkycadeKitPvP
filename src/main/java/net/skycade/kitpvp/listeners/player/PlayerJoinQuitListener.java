@@ -6,6 +6,7 @@ import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,8 +16,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import static net.skycade.kitpvp.Messages.ALL_KITS_UNLOCKED;
 
 
 public class PlayerJoinQuitListener implements Listener {
@@ -28,26 +27,22 @@ public class PlayerJoinQuitListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        event.setQuitMessage(null);
-        Player p = event.getPlayer();
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        e.setQuitMessage(null);
+        Player p = e.getPlayer();
 
         // Reset killstreak
         Member member = MemberManager.getInstance().getMember(p);
         if (member == null) return;
-        if (!plugin.getSpawnRegion().contains(p) && !member.getPlayer().hasPermission(new Permission("kitpvp.admin", PermissionDefault.OP)) && !KitPvP.getInstance().getEventShopManager().isKeepingKs(p))
-            plugin.getStats(p).setStreak(0);
-
-        plugin.getStats(p).getActiveKit().getKit().stopItemRunnables(p);
-        plugin.getStats(p).getActiveKit().getKit().cancelRunnables(p);
+        if (!plugin.getSpawnRegion().contains(p) && !member.getPlayer().hasPermission(new Permission("kitpvp.admin", PermissionDefault.OP)))
+            plugin.getStats(e.getPlayer()).setStreak(0);
 
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        event.setJoinMessage(null);
-
-        Player p = event.getPlayer();
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerJoin(PlayerJoinEvent e) {
+        e.setJoinMessage(null);
+        Player p = e.getPlayer();
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -55,30 +50,51 @@ public class PlayerJoinQuitListener implements Listener {
 
                 KitPvPStats stats = plugin.getStats(p);
 
-                // Gives every kit, only used during beta testing.
-//                KitPvP.getInstance().getKitManager().getKits().forEach((kitType, kit) -> {
-//                    if (kit.isEnabled())
-//                        stats.addKit(kitType);
-//                });
                 if (!stats.getActiveKit().getKit().isEnabled()) {
-                    stats.setActiveKit(KitType.CHANCE);
+                    stats.setActiveKit(KitType.DEFAULT);
                     stats.getActiveKit().getKit().giveSoup(p, 32);
                 }
 
                 if (plugin.isInSpawnArea(p)) {
-                    stats.getActiveKit().getKit().beginApplyKit(p);
+                    stats.getActiveKit().getKit().applyKit(p);
                     stats.getActiveKit().getKit().giveSoup(p, 32);
                 }
 
                 //Unlock KitMaster
                 if (KitPvP.getInstance().getAvailableKits() - 1 == stats.getKits().size()) {
-                    ALL_KITS_UNLOCKED.msg(p);
+                    p.sendMessage("§7You unlocked §aall §7the kits! You unlocked the §aKitMaster §7kit.");
                     stats.addKit(KitType.KITMASTER);
                 }
 
                 ScoreboardInfo.getInstance().updatePlayer(p);
                 p.teleport(KitPvP.getInstance().getSpawnLocation());
+
             }
         }.runTaskLater(KitPvP.getInstance(), 1L);
     }
+
+    @EventHandler
+    public void onFirstJoin(PlayerJoinEvent e) {
+        Player p = e.getPlayer();
+        if (p.hasPlayedBefore())
+            return;
+
+        sendDelayedMessage(p, 0, "Welcome to §aKitPvP§7!");
+        sendDelayedMessage(p, 3, "Type §a/kits §7to view your kits. You start off with three unlocked.");
+        sendDelayedMessage(p, 6, "You can purchase more kits through §a/shop §7using §acoins§7.");
+        sendDelayedMessage(p, 9, "You can earn §acoins §7from kills, assists, and events.");
+        sendDelayedMessage(p, 12, "New kits can also be unlocked by using the §acrate system (/crate)§7, this will require a §acrate key§7.");
+        sendDelayedMessage(p, 15, "You can get §akeys §7from §astore.skycade.net");
+        sendDelayedMessage(p, 18, "Some kits have a §aspecial ability§7, they can be activated by right clicking with your sword or by using a special item.");
+        sendDelayedMessage(p, 21, "Type §a/kitpvphelp §7for more kitpvp commands.");
+        sendDelayedMessage(p, 24, "Good luck on the battlefield " + p.getName() + "§7!");
+    }
+
+    private void sendDelayedMessage(Player p, int secondsDelay, String message) {
+        if (!p.isOnline())
+            return;
+        Bukkit.getScheduler().runTaskLater(plugin, () -> p.sendMessage("§7" + message), secondsDelay * 20);
+    }
+
+
 }
