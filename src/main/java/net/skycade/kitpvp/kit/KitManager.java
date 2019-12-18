@@ -14,13 +14,11 @@ public class KitManager {
     private final KitPvP plugin;
 
     private final Map<KitType, Kit> kits = new LinkedHashMap<>();
-    private final Map<UUID, Integer> signRefreshCooldown = new HashMap<>();
 
     public KitManager(KitPvP plugin) {
         this.plugin = plugin;
 
         registerKits();
-        startSignMapUpdate();
 
         new CommandEventShop();
         new CommandKit();
@@ -124,27 +122,8 @@ public class KitManager {
         Bukkit.getPluginManager().registerEvents(kit, plugin);
     }
 
-    private void startSignMapUpdate() {
-        Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            List<UUID> removeFromEntry = new ArrayList<>();
-            signRefreshCooldown.forEach((key, value) -> {
-                int cd = value;
-                cd--;
-                if (cd <= 0) {
-                    removeFromEntry.add(key);
-                }
-                signRefreshCooldown.replace(key, cd);
-            });
-            removeFromEntry.forEach(signRefreshCooldown::remove);
-        }, 20, 20);
-    }
-
     public Map<KitType, Kit> getKits() {
         return kits;
-    }
-
-    public Map<UUID, Integer> getSignMap() {
-        return signRefreshCooldown;
     }
 
     public KitPvP getKitPvP() {

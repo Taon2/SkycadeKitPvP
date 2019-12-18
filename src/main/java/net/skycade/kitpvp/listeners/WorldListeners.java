@@ -34,10 +34,10 @@ public class WorldListeners implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onWeatherChange(WeatherChangeEvent e) {
-        World w = e.getWorld();
+    public void onWeatherChange(WeatherChangeEvent event) {
+        World w = event.getWorld();
         if (!w.hasStorm())
-            e.setCancelled(true);
+            event.setCancelled(true);
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             if (w.hasStorm())
                 w.setStorm(false);
@@ -51,11 +51,11 @@ public class WorldListeners implements Listener {
     }
 
     @EventHandler
-    public void onEntityExplode(EntityExplodeEvent e) {
-        for (Entity en : e.getEntity().getNearbyEntities(4, 4, 4))
+    public void onEntityExplode(EntityExplodeEvent event) {
+        for (Entity en : event.getEntity().getNearbyEntities(4, 4, 4))
             if (en instanceof FallingBlock)
-                e.getEntity().remove();
-        e.setCancelled(true);
+                event.getEntity().remove();
+        event.setCancelled(true);
     }
 
     @EventHandler
@@ -73,16 +73,16 @@ public class WorldListeners implements Listener {
     }
 
     @EventHandler
-    private void onProjectileHit(final ProjectileHitEvent e) {
-        if (!(e.getEntity().getShooter() instanceof Player))
+    private void onProjectileHit(ProjectileHitEvent event) {
+        if (!(event.getEntity().getShooter() instanceof Player))
             return;
-        if (e.getEntityType() == EntityType.ARROW) {
-            Player shooter = (Player) e.getEntity().getShooter();
+        if (event.getEntityType() == EntityType.ARROW) {
+            Player shooter = (Player) event.getEntity().getShooter();
             // Must be run in a delayed task otherwise it won't be able to find the block
             Bukkit.getScheduler().scheduleSyncDelayedTask(KitPvP.getInstance(), () -> {
                 try {
 
-                    EntityArrow entityArrow = ((CraftArrow) e
+                    EntityArrow entityArrow = ((CraftArrow) event
                             .getEntity()).getHandle();
 
                     Field fieldX = EntityArrow.class
@@ -101,14 +101,14 @@ public class WorldListeners implements Listener {
                     int z = fieldZ.getInt(entityArrow);
 
                     if (y != -1) {
-                        Block block = e.getEntity().getWorld().getBlockAt(x, y, z);
+                        Block block = event.getEntity().getWorld().getBlockAt(x, y, z);
                         KitPvPStats stats = plugin.getStats(shooter);
                         Kit kit = null;
                         if (stats != null)
                             kit = stats.getActiveKit().getKit();
 
                         if (kit != null && kit.getKitType() == KitType.PYROMANCER)
-                            kit.onArrowLand(shooter, block, e);
+                            kit.onArrowLand(shooter, block, event);
                     }
 
                 } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {

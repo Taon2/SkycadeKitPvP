@@ -117,7 +117,6 @@ public class PlayerDamageListener implements Listener {
         diedStats.setDeaths(plugin.getStats(diedMem).getDeaths() + 1);
 
         died.getLocation().getWorld().playEffect(died.getLocation(), Effect.SMOKE, 1);
-        plugin.getKitManager().getSignMap().remove(died.getUniqueId());
 
         ScoreboardInfo.getInstance().updatePlayer(died);
 

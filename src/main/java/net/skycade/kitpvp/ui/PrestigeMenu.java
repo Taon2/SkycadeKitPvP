@@ -33,8 +33,8 @@ public class PrestigeMenu extends DynamicGui {
         KitPvPStats stats = plugin.getStats(member);
 
         prestigeManager.getPrestigeLevels().values().stream()
-                .skip((page - 1) * 36)
-                .limit(36)
+                .skip((page - 1) * 45)
+                .limit(45)
                 .forEach(prestigeLevel -> addItemInteraction(p -> {
                             ItemStack item = new ItemStack(Material.BEDROCK, 1);
 

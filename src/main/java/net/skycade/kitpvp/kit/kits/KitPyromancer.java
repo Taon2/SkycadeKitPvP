@@ -117,18 +117,18 @@ public class KitPyromancer extends Kit {
         p.launchProjectile(Fireball.class);
     }
 
-    public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
+    public void onArrowLaunch(Player shooter, ProjectileLaunchEvent event) {
         if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
-            e.setCancelled(true);
+            event.setCancelled(true);
         }
 
-        e.getEntity().setCustomName(shooter.getName());
-        e.getEntity().setCustomNameVisible(false);
-        arrowList.add((Arrow) e.getEntity());
+        event.getEntity().setCustomName(shooter.getName());
+        event.getEntity().setCustomNameVisible(false);
+        arrowList.add((Arrow) event.getEntity());
     }
 
-    public void onArrowLand(Player shooter, Block block, ProjectileHitEvent e) {
-        circle(e.getEntity().getLocation());
+    public void onArrowLand(Player shooter, Block block, ProjectileHitEvent event) {
+        circle(event.getEntity().getLocation());
     }
 
     private void circle(Location loc) {
