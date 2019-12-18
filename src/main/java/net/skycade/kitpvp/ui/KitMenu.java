@@ -8,7 +8,6 @@ import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import net.skycade.kitpvp.nms.ActionBarUtil;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Material;
@@ -89,13 +88,6 @@ public class KitMenu extends DynamicGui {
                         }
 
                         if (kitManager.getKitPvP().getSpawnRegion().contains(member.getPlayer())) {
-                            if (kitManager.getSignMap().containsKey(member.getUUID())) {
-                                ActionBarUtil.sendActionBarMessage(p, ON_COOLDOWN_NO_TIME.getMessage()
-                                                .replace("%thing%", "Kit refreshing"),
-                                        4, KitPvP.getInstance());
-                                p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
-                                return;
-                            }
                             KIT_EQUIPPED.msg(member.getPlayer(), "%kit%", kit.getName());
                             UtilPlayer.reset(member.getPlayer());
                             stats.getActiveKit().getKit().cancelRunnables(member.getPlayer());

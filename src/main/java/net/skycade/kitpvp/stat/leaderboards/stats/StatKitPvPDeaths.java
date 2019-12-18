@@ -27,7 +27,12 @@ public class StatKitPvPDeaths extends StatisticType<UUID, Integer> {
 
     @Override
     public Integer get(UUID s) {
-        return LeaderboardsCache.get(s).getDeaths();
+        Integer data = LeaderboardsCache.get(s).getDeaths();
+        if (data == null) {
+            return 0;
+        } else {
+            return data;
+        }
     }
 
     @Override
