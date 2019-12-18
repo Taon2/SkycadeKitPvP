@@ -27,7 +27,12 @@ public class StatKitPvPCoins extends StatisticType<UUID, Integer> {
 
     @Override
     public Integer get(UUID s) {
-        return LeaderboardsCache.get(s).getCoins();
+        Integer data = LeaderboardsCache.get(s).getCoins();
+        if (data == null) {
+            return 0;
+        } else {
+            return data;
+        }
     }
 
     @Override

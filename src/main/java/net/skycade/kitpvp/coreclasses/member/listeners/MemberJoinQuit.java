@@ -58,17 +58,16 @@ public class MemberJoinQuit implements Listener {
             }
             memberManager.getMembers().put(member.getUUID(), member);
 
-            // update the UUIDs when a player joins so that the stats includes them
-            StatKitPvPKills.getInstance().update(Collections.singletonList(member.getUUID()), true);
-            StatKitPvPCoins.getInstance().update(Collections.singletonList(member.getUUID()), true);
-            StatKitPvPDeaths.getInstance().update(Collections.singletonList(member.getUUID()), true);
-            StatKitPvPKillStreak.getInstance().update(Collections.singletonList(member.getUUID()), true);
         } catch (Exception a) {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "Sorry, your data was not loaded correctly! Please re-join!");
             KitPvP.getInstance().getLogger().log(Level.WARNING, "An error occurred while loading player's data.", a);
             memberManager.getMembers().remove(event.getUniqueId());
         }
-
+        // update the UUIDs when a player joins so that the stats includes them
+        StatKitPvPKills.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
+        StatKitPvPCoins.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
+        StatKitPvPDeaths.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
+        StatKitPvPKillStreak.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
     }
 
     @EventHandler

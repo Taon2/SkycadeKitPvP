@@ -304,7 +304,7 @@ public class Messages {
                 LOCK_UNLOCK_USAGE,
                 TRIGGEREVENT_DESCRIPTION,
                 ECO_DESCRIPTION,
-                EVENTECO_DESCRIPTION,
+                EVENTECO_PlaDESCRIPTION,
                 KITSUNLOCKED_DESCRIPTION,
                 REFUNDKS_DESCRIPTION,
                 SETSTATS_DESCRIPTION,
