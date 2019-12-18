@@ -2,15 +2,11 @@ package net.skycade.kitpvp.events;
 
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.bukkitevents.KitPvPEventStartEvent;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -33,8 +29,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
-
-import static net.skycade.kitpvp.Messages.*;
 
 public class KillTheKingEvent extends RandomEvent implements Listener {
     private UUID king = null;
@@ -81,11 +75,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
         begin = System.currentTimeMillis();
 
         Player kingPlayer = Bukkit.getPlayer(this.king);
-
-        KitPvPEventStartEvent eventStartEvent = new KitPvPEventStartEvent(kingPlayer);
-        Bukkit.getServer().getPluginManager().callEvent(eventStartEvent);
-
-        KILLTHEKING_START.broadcast("%player%", kingPlayer.getName());
+        Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "KILL THE KING! " + ChatColor.GREEN + kingPlayer.getName() + " is the King. Everyone attack them!");
         for(Player pl: Bukkit.getOnlinePlayers()){
             pl.playSound(pl.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
         }
@@ -120,22 +110,22 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                 }
 
                 if (inGame.isEmpty() || System.currentTimeMillis() - begin > 5 * 60 * 1000L) {
-                    KILLTHEKING_TOO_LONG.broadcast();
+                    Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The King took too long to kill.");
 
                     //Dish out event token rewards for participants
                     participated.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                         KitPvPStats stats = KitPvP.getInstance().getStats(player);
                         if (stats != null) {
-                            stats.giveEventTokens(participationAmount);
-                            KILLTHEKING_PARTICIPATE.msg(player, "%amount%", Integer.toString(participationAmount));
+                            stats.setEventCoins(stats.getEventCoins() + participationAmount);
+                            player.sendMessage(ChatColor.GREEN + "You have received " + participationAmount + " Event Tokens for participating!");
                         }
                     });
 
                     //Dish out event token rewards for the king
                     KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
                     if (kingStats != null) {
-                        kingStats.giveEventTokens(prizeAmount);
-                        KILLTHEKING_PARTICIPATE.msg(Bukkit.getPlayer(king), "%amount%", Integer.toString(participationAmount));
+                        kingStats.setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(king)).getEventCoins() + prizeAmount);
+                        Bukkit.getPlayer(king).sendMessage(ChatColor.GREEN + "You have received " + prizeAmount + " Event Tokens for participating!");
                     }
                     end();
                     cancel();
@@ -151,7 +141,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
     }
 
     @Override
-    public void end() {
+    public void end(){
         super.end();
 
         Player kingPlayer = Bukkit.getPlayer(this.king);
@@ -160,7 +150,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
         inGame = null;
         king = null;
 
-        KILLTHEKING_ENDED.broadcast();
+        Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "KILL THE KING ENDED!");
         if (kingPlayer == null) return;
 
 
@@ -175,19 +165,17 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
         KitPvPStats stats = KitPvP.getInstance().getStats(kingPlayer);
 
         stats.setActiveKit(initialKit);
-        stats.getActiveKit().getKit().beginApplyKit(kingPlayer);
+        stats.getActiveKit().getKit().applyKit(kingPlayer);
         stats.getActiveKit().getKit().giveSoup(kingPlayer, 32);
 
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerDeath(PlayerDeathEvent event) {
+    public void onPlayerDeath(PlayerDeathEvent e){
         if (begin == null) return;
 
-        Player died = event.getEntity();
-        if (this.king.equals(died.getUniqueId())) {
-            stop();
-
+        Player died = (Player) e.getEntity();
+        if (this.king.equals(died.getUniqueId())){
             Player killer = null;
             //try to get the killer
             try {
@@ -195,8 +183,8 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                 //Dish out event token rewards for killer
                 KitPvPStats killerStats = KitPvP.getInstance().getStats(killer);
                 if (killerStats != null) {
-                    killerStats.giveEventTokens(prizeAmount);
-                    KILLTHEKING_WON.msg(killer, "%amount%", Integer.toString(prizeAmount));
+                    killerStats.setEventCoins(KitPvP.getInstance().getStats(killer).getEventCoins() + prizeAmount);
+                    killer.sendMessage(ChatColor.GREEN + "You have killed the King! You have received " + prizeAmount + " Event Tokens for winning!");
                 }
 
                 //Dish out event token rewards for participants
@@ -205,25 +193,26 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                     if (!(player == finalKiller)) {
                         KitPvPStats stats = KitPvP.getInstance().getStats(player);
                         if (stats != null) {
-                            stats.giveEventTokens(participationAmount);
-                            KILLTHEKING_PARTICIPATE.msg(player, "%amount%", Integer.toString(participationAmount));
+                            stats.setEventCoins(stats.getEventCoins() + participationAmount);
+                            player.sendMessage(ChatColor.GREEN + "You have received " + participationAmount + " Event Tokens for participating!");
                         }
                     }
                 });
-            }
-            catch (Exception ignored) {}
 
-            //Dish out event token rewards for the king
-            KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
-            if (kingStats != null) {
-                kingStats.giveEventTokens(prizeAmount);
-                KILLTHEKING_PARTICIPATE.msg(Bukkit.getPlayer(king), "%amount%", Integer.toString(participationAmount));
+                //Dish out event token rewards for the king
+                KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
+                if (kingStats != null) {
+                    kingStats.setEventCoins(KitPvP.getInstance().getStats(Bukkit.getPlayer(king)).getEventCoins() + prizeAmount);
+                    Bukkit.getPlayer(king).sendMessage(ChatColor.GREEN + "You have received " + prizeAmount + " Event Tokens for participating!");
+                }
             }
-
+            catch (Exception ex){}
             if (killer != null)
-                KILLTHEKING_KILLED_BY.broadcast("%player%", killer.getName());
+                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + killer.getName() + ChatColor.GREEN + "" + ChatColor.BOLD + " has killed the King!");
             else
-                KILLTHEKING_KILLED.broadcast();
+                Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The King has been killed!");
+
+            stop();
         }
 
     }
@@ -244,47 +233,46 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
             player.getInventory().setLeggings(null);
             player.getInventory().setBoots(null);
 
-            KILLTHEKING_LOGGED_OUT.broadcast();
+            Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The King has logged out!");
             stop();
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onMoveEvent(PlayerMoveEvent event){
+    public void onMoveEvent(PlayerMoveEvent e){
         if (begin == null) return;
 
-        Player player = event.getPlayer();
+        Player player = e.getPlayer();
         if (this.king.equals(player.getUniqueId())){
             particleMoveEffect(player, ParticleEffect.CRIT, 1, 30);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerDamage(EntityDamageByEntityEvent event){
+    public void onPlayerDamage(EntityDamageByEntityEvent e){
         if (begin == null) return;
 
-        Player player = Bukkit.getPlayer(event.getEntity().getUniqueId());
-        if (player != null && this.king.equals(player.getUniqueId())){
-            participated.add(event.getDamager().getUniqueId());
+        Player player = Bukkit.getPlayer(e.getEntity().getUniqueId());
+        if (this.king.equals(player.getUniqueId())){
+            participated.add(e.getDamager().getUniqueId());
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerTeleport(PlayerTeleportEvent event){
-        if(KitPvP.getInstance().isInSpawnArea(event.getPlayer()) && event.getPlayer().getUniqueId().equals(this.king)){
-            KILLTHEKING_TO_SPAWN.broadcast();
+    public void onTeleport(PlayerTeleportEvent e){
+        if(KitPvP.getInstance().isInSpawnArea(e.getPlayer()) && e.getPlayer().getUniqueId().equals(this.king)){
+            Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The King has teleported to spawn.");
             stop();
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onInventoryClick(InventoryClickEvent event) {
+    public void onInventoryClick(InventoryClickEvent e) {
         if (begin == null) return;
 
         //stops king from removing their armor
-        if (this.king.equals(event.getWhoClicked().getUniqueId())) {
-            if (event.getSlotType() == InventoryType.SlotType.ARMOR) {
-                event.setCancelled(true);
+        if (this.king.equals(e.getWhoClicked().getUniqueId())) {
+            if (e.getSlotType() == InventoryType.SlotType.ARMOR) {
+                e.setCancelled(true);
             }
         }
     }
@@ -300,7 +288,8 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
         if (task != null) task.cancel();
         super.end();
 
-        KILLTHEKING_ENDED.broadcast();
+        Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "KILL THE KING ENDED!");
+
     }
 
     private void itemBuilder(){

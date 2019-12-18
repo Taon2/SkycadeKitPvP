@@ -5,89 +5,67 @@ import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class PlayerInteractListener implements Listener {
 
     private final KitPvP plugin;
+    private final List<UUID> soupChestCooldown = new ArrayList<>();
 
     public PlayerInteractListener(KitPvP plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEntityEvent event) {
-        if (!(event.getRightClicked() instanceof Player))
+    public void onPlayerInteract(PlayerInteractEntityEvent e) {
+        // (if (e.getHand().equals(EquipmentSlot.OFF_HAND)) return;
+        if (!(e.getRightClicked() instanceof Player))
             return;
-
-        if (plugin.isInSpawnArea(event.getPlayer()))
+        if (plugin.isInSpawnArea(e.getPlayer()))
             return;
-
-        plugin.getStats(event.getPlayer()).getActiveKit().getKit().onInteract(event.getPlayer(), (Player) event.getRightClicked(),
-                event.getPlayer().getInventory().getItemInHand());
+        plugin.getStats(e.getPlayer()).getActiveKit().getKit().onInteract(e.getPlayer(), (Player) e.getRightClicked(),
+                e.getPlayer().getInventory().getItemInHand());
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    public void onBlockPlace(BlockPlaceEvent event) {
-        if (event.getPlayer().getGameMode().equals(GameMode.CREATIVE))
+    @EventHandler
+    public void onNpcInteract(PlayerInteractEntityEvent e) {
+        if (e.getRightClicked().getCustomName() == null)
             return;
+        String name = e.getRightClicked().getCustomName();
+        Player p = e.getPlayer();
 
-        Bukkit.getLogger().info(event.getBlock().getType().toString());
-        if (KitPvP.getInstance().isInSpawnArea(event.getPlayer()) || event.getBlock().getRelative(BlockFace.UP).getType() == Material.WATER_LILY || event.getBlockReplacedState().getType() == Material.DOUBLE_PLANT) {
-            event.setCancelled(true);
-            return;
-        }
-
-        KitType type = plugin.getStats(event.getPlayer()).getActiveKit();
-        if (type == KitType.BUILDUHC || type == KitType.LICH)
-            type.getKit().onBlockPlace(event.getPlayer(), event.getBlock(), event.getBlockReplacedState());
-        else
-            event.setCancelled(true);
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    public void onBlockBreak(BlockBreakEvent event) {
-        if (event.getPlayer().getGameMode().equals(GameMode.CREATIVE))
-            return;
-
-        if (KitPvP.getInstance().isInSpawnArea(event.getPlayer())) {
-            event.setCancelled(true);
-            return;
-        }
-
-        event.setCancelled(true);
-        KitType.LICH.getKit().onBlockBreak(event.getPlayer(), event.getBlock());
+        if (name.equalsIgnoreCase("§5§lCrate"))
+            p.chat("/crate");
+        else if (name.equalsIgnoreCase("§b§lKits"))
+            p.chat("/kits");
+        else if (name.equalsIgnoreCase("§6§lShop"))
+            p.chat("/shop");
+        else if (name.equalsIgnoreCase("§a§lHelp"))
+            p.chat("/kitpvphelp");
+        else if (name.equalsIgnoreCase("§1§lAchievements"))
+            p.chat("/ach");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerRightClick(PlayerInteractEvent event) {
-        Player p = event.getPlayer();
-
-        if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && plugin.isInSpawnArea(p)) {
-            plugin.getStats(event.getPlayer()).getActiveKit().getKit().reimburseItem(event.getPlayer(), event.getItem());
+    public void onPlayerRightClick(PlayerInteractEvent e) {
+        Player p = e.getPlayer();
+        if (e.getItem() == null)
             return;
-        }
-
-        if (event.getItem() == null) {
-            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && plugin.getStats(p).getActiveKit() == KitType.HULK && !p.getGameMode().equals(GameMode.CREATIVE)) {
-                plugin.getStats(p).getActiveKit().getKit().onItemUse(p, new ItemStack(Material.AIR));
-            }
-            return;
-        }
-
-        if (event.getItem().getType() == Material.MUSHROOM_SOUP) {
+        if (e.getItem().getType() == Material.MUSHROOM_SOUP) {
             double maxHealth = p.getMaxHealth();
             if (p.getHealth() < maxHealth) {
                 if (p.getHealth() < maxHealth - 7) {
@@ -95,11 +73,12 @@ public class PlayerInteractListener implements Listener {
                 } else {
                     p.setHealth(maxHealth);
                 }
-                final int heldItemSlot = event.getPlayer().getInventory().getHeldItemSlot();
+                //e.getPlayer().getInventory().setItem(e.getPlayer().getInventory().getHeldItemSlot(), new ItemStack(Material.AIR, 1));
+                final int heldItemSlot = e.getPlayer().getInventory().getHeldItemSlot();
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        event.getPlayer().getInventory().clear(heldItemSlot);
+                        e.getPlayer().getInventory().clear(heldItemSlot);
                         p.updateInventory();
                         addBowl(p);
                     }
@@ -108,13 +87,26 @@ public class PlayerInteractListener implements Listener {
             }
             return;
         }
+        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (e.getClickedBlock().getType() == Material.CHEST) {
+                if (soupChestCooldown.contains(p.getUniqueId()))
+                    return;
+                e.setCancelled(true);
+                Inventory soupInv = Bukkit.createInventory(p, 45, "Soup");
+                for (int i = 0; i < soupInv.getSize(); i++)
+                    soupInv.addItem(plugin.getStats(p).getActiveKit() == KitType.POTIONMASTER ?
+                            new ItemStack(Material.POTION, 1, (short) 16421) : new ItemStack(Material.MUSHROOM_SOUP, 1));
 
-        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !p.getGameMode().equals(GameMode.CREATIVE) && !plugin.isInSpawnArea(p)) {
-            plugin.getStats(p).getActiveKit().getKit().onItemUse(p, event.getItem(), event.getClickedBlock());
+                p.openInventory(soupInv);
+
+                soupChestCooldown.add(p.getUniqueId());
+                Bukkit.getScheduler().runTaskLater(plugin, () -> soupChestCooldown.remove(p.getUniqueId()),
+                        KitPvP.getInstance().getConfig().getInt("chest-cooldown") * 20);
+                return;
+            }
         }
-
-        if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && !p.getGameMode().equals(GameMode.CREATIVE)) {
-            plugin.getStats(p).getActiveKit().getKit().onItemUse(p, event.getItem());
+        if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !p.getGameMode().equals(GameMode.CREATIVE) && !plugin.isInSpawnArea(p)) {
+            plugin.getStats(p).getActiveKit().getKit().onItemUse(p, e.getItem());
         }
     }
 
@@ -129,4 +121,10 @@ public class PlayerInteractListener implements Listener {
 
         p.updateInventory();
     }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        soupChestCooldown.remove(e.getPlayer().getUniqueId());
+    }
+
 }

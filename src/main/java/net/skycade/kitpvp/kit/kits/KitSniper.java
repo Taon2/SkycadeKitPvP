@@ -6,11 +6,9 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -25,88 +23,82 @@ import java.util.*;
 
 public class KitSniper extends Kit {
 
-    private ItemStack helmet;
-    private ItemStack chestplate;
-    private ItemStack leggings;
-    private ItemStack boots;
-    private ItemStack weapon;
-    private ItemStack bow;
-    private ItemStack arrows;
-
-    private int arrowCooldown = 1;
-    private int arrowStartAmount = 1;
-
+    private final List<UUID> bowCooldown = new ArrayList<>();
     private final Map<UUID, UUID> sniperPlayerHit = new HashMap<>();
     private final Map<UUID, Integer> sniperCombo = new HashMap<>();
 
-    private List<Arrow> arrowList = new ArrayList<>();
-
     public KitSniper(KitManager kitManager) {
-        super(kitManager, "Sniper", KitType.SNIPER, 38000, getLore());
+        super(kitManager, "Sniper", KitType.SNIPER, 41000, "Take time for your shots");
 
-        helmet = new ItemBuilder(
-                Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 9)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
-                .setColour(Color.fromRGB(0, 60, 0)).build();
-        chestplate = new ItemBuilder(
-                Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 9)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
-                .setColour(Color.fromRGB(0, 60, 0)).build();
-        leggings = new ItemBuilder(
-                Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
-                .setColour(Color.fromRGB(0, 60, 0)).build();
-        boots = new ItemBuilder(
-                Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
-                .setColour(Color.fromRGB(0, 60, 0)).build();
-        weapon = new ItemBuilder(
-                Material.WOOD_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 7)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 3).build();
-        bow = new ItemBuilder(
-                Material.BOW)
-                .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.ARROW_INFINITE, 1)
-                .addEnchantment(Enchantment.ARROW_KNOCKBACK, 1)
-                .addEnchantment(Enchantment.ARROW_DAMAGE, 3)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fire 1 arrow every " + arrowCooldown + " second.")
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Landing successive shots deal more damage.").build();
-        arrows = new ItemBuilder(
-                Material.ARROW, arrowStartAmount).build();
+        Map<String, Object> defaultsMap = new HashMap<>();
 
-        ItemStack icon = new ItemStack(Material.GHAST_TEAR);
-        setIcon(icon);
+        defaultsMap.put("kit.icon.material", "GHAST_TEAR");
+        defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 41000);
+
+        defaultsMap.put("inventory.sword.material", "WOOD_SWORD");
+        defaultsMap.put("inventory.sword.enchantments.durability", 5);
+        defaultsMap.put("inventory.bow.material", "BOW");
+        defaultsMap.put("inventory.bow.enchantments.durability", 5);
+        defaultsMap.put("inventory.bow.enchantments.arrow-infinite", 1);
+        defaultsMap.put("inventory.bow.enchantments.knockback", 1);
+        defaultsMap.put("inventory.bow.enchantments.arrow-damage", 3);
+
+        defaultsMap.put("armor.material", "LEATHER");
+        defaultsMap.put("armor.enchantments.durability", 5);
+        defaultsMap.put("armor.enchantments.protection", 2);
+
+        setConfigDefaults(defaultsMap);
+
+        if (getConfig().getString("kit.icon.material") != null) {
+            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+            } else {
+                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+            }
+        } else {
+            setIcon(new ItemStack(Material.DIRT));
+        }
+        setPrice(getConfig().getInt("kit.price"));
     }
 
     @Override
-    public void applyKit(Player p) {
-        p.getInventory().addItem(weapon);
-        p.getInventory().addItem(bow);
-        p.getInventory().setItem(27, arrows);
-        p.getInventory().setHelmet(helmet);
-        p.getInventory().setChestplate(chestplate);
-        p.getInventory().setLeggings(leggings);
-        p.getInventory().setBoots(boots);
+    public void applyKit(Player p, int level) {
+        p.getInventory().addItem(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability")).build());
+
+        p.getInventory().addItem(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("inventory.bow.material").toUpperCase()))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.bow.enchantments.durability"))
+                .addEnchantment(Enchantment.ARROW_INFINITE, getConfig().getInt("inventory.bow.enchantments.arrow-infinite"))
+                .addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.bow.enchantments.knockback"))
+                .addEnchantment(Enchantment.ARROW_DAMAGE, getConfig().getInt("inventory.bow.enchantments.arrow-damage")).build());
+
+        p.getInventory().addItem(new ItemBuilder(
+                Material.ARROW, 1).build());
+
+        p.getInventory().setArmorContents(getArmour(
+                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+                getConfig().getInt("armor.enchantments.durability"),
+                getConfig().getInt("armor.enchantments.protection"),
+                Color.fromBGR(0, 60, 0)));
     }
 
-    public void onArrowLaunch(Player shooter, ProjectileLaunchEvent event) {
-        if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
-            event.setCancelled(true);
+    public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
+        if (bowCooldown.contains(shooter.getUniqueId())) {
+            e.setCancelled(true);
+            return;
         }
-
-        event.getEntity().setCustomName(shooter.getName());
-        event.getEntity().setCustomNameVisible(false);
-        arrowList.add((Arrow) event.getEntity());
+        bowCooldown.add(shooter.getUniqueId());
+        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> bowCooldown.remove(shooter.getUniqueId()), 20);
     }
 
-    public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent event) {
-        if (UtilMath.getRandom(0, 100) < 3)
-            damagee.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 90, 0));
+    public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
+        int level = getLevel(shooter);
+        if (UtilMath.getRandom(0, 100) < level * 3)
+            damagee.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, level == 3 ? 120 : 90, 0));
 
         if (!sniperPlayerHit.containsKey(shooter.getUniqueId()))
             sniperPlayerHit.put(shooter.getUniqueId(), damagee.getUniqueId());
@@ -121,7 +113,7 @@ public class KitSniper extends Kit {
                 return;
             int combo = sniperCombo.get(shooter.getUniqueId());
             double increasedDamage = 1 + (combo < 10 ? combo * 0.05 : 0.5);
-            event.setDamage(event.getDamage() * increasedDamage);
+            e.setDamage(e.getDamage() * increasedDamage);
         } else {
             sniperCombo.put(shooter.getUniqueId(), 1);
             sniperPlayerHit.put(shooter.getUniqueId(), damagee.getUniqueId());
@@ -129,15 +121,16 @@ public class KitSniper extends Kit {
     }
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        sniperCombo.remove(event.getEntity().getUniqueId());
-        sniperPlayerHit.remove(event.getEntity().getUniqueId());
+    public void on(PlayerDeathEvent e) {
+        sniperCombo.remove(e.getEntity().getUniqueId());
+        sniperPlayerHit.remove(e.getEntity().getUniqueId());
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        sniperCombo.remove(event.getPlayer().getUniqueId());
-        sniperPlayerHit.remove(event.getPlayer().getUniqueId());
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        sniperCombo.remove(e.getPlayer().getUniqueId());
+        sniperPlayerHit.remove(e.getPlayer().getUniqueId());
+        bowCooldown.remove(e.getPlayer().getUniqueId());
     }
 
     private boolean hasArmor(Player p) {
@@ -148,27 +141,9 @@ public class KitSniper extends Kit {
         return false;
     }
 
-    public void removeSummon(int seconds, Player p) {
-        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
-            for (Arrow arrow : arrowList)
-                if (arrow.getCustomName().contains(p.getName())) {
-                    arrow.remove();
-                }
-        }, seconds * 20);
-    }
-
     @Override
-    public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
+    public List<String> getAbilityDesc() {
+        return Arrays.asList("§7Your arrows will deal more", "§7damage if you combo someone");
     }
 
-    public static List<String> getLore() {
-        return Arrays.asList(
-                ChatColor.GOLD + "" + ChatColor.BOLD + "Ranged Kit",
-                ChatColor.GRAY + "" + ChatColor.ITALIC + "Requires steady aim.",
-                "",
-                ChatColor.GRAY + "Arrows do more damage if",
-                ChatColor.GRAY + "you hit successive shots."
-        );
-    }
 }

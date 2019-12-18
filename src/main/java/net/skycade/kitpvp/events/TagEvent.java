@@ -2,7 +2,6 @@ package net.skycade.kitpvp.events;
 
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.bukkitevents.KitPvPEventStartEvent;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.*;
@@ -14,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -26,14 +26,10 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import static net.skycade.kitpvp.Messages.TAG_ENDED;
-import static net.skycade.kitpvp.Messages.TAG_START;
-
 public class TagEvent extends RandomEvent implements Listener {
 
     private UUID infected = null;
 
-    private static TagEvent instance;
     private Long begin = null;
     private List<UUID> inGame = null;
     private BukkitRunnable task;
@@ -45,7 +41,6 @@ public class TagEvent extends RandomEvent implements Listener {
 
     public TagEvent() {
         super();
-        instance = this;
         Bukkit.getServer().getPluginManager().registerEvents(this, KitPvP.getInstance());
     }
 
@@ -66,11 +61,7 @@ public class TagEvent extends RandomEvent implements Listener {
         begin = System.currentTimeMillis();
 
         Player infectedPlayer = Bukkit.getPlayer(this.infected);
-
-        KitPvPEventStartEvent eventStartEvent = new KitPvPEventStartEvent(infectedPlayer);
-        Bukkit.getServer().getPluginManager().callEvent(eventStartEvent);
-
-        TAG_START.broadcast("%player%", infectedPlayer.getName());
+        Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "INFECTION! " + ChatColor.GREEN + infectedPlayer.getName() + " is infected. Stay away from them for 5 minutes to get a coin bonus!");
         for(Player pl: Bukkit.getOnlinePlayers()){
             pl.playSound(pl.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
         }
@@ -151,9 +142,9 @@ public class TagEvent extends RandomEvent implements Listener {
             KitPvPStats stats = KitPvP.getInstance().getStats(player);
             if (stats == null) continue;
 
-            stats.giveCoins(100);
+            stats.setCoins(stats.getCoins() + 100);
 
-            stats.getActiveKit().getKit().beginApplyKit(player);
+            stats.getActiveKit().getKit().applyKit(player);
             stats.getActiveKit().getKit().giveSoup(player, 32);
 
             ScoreboardInfo.getInstance().updatePlayer(player);
@@ -165,8 +156,7 @@ public class TagEvent extends RandomEvent implements Listener {
         inGame = null;
         infected = null;
 
-        TAG_ENDED.broadcast();
-
+        Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "INFECTION ENDED!");
         if (infectedPlayer == null) return;
 
         infectedPlayer.getInventory().clear();
@@ -177,7 +167,7 @@ public class TagEvent extends RandomEvent implements Listener {
 
         KitPvPStats stats = KitPvP.getInstance().getStats(infectedPlayer);
 
-        stats.getActiveKit().getKit().beginApplyKit(infectedPlayer);
+        stats.getActiveKit().getKit().applyKit(infectedPlayer);
         stats.getActiveKit().getKit().giveSoup(infectedPlayer, 32);
 
     }
@@ -208,6 +198,13 @@ public class TagEvent extends RandomEvent implements Listener {
             player.getInventory().setBoots(null);
 
             stop();
+        }
+    }
+
+    public void commandListener(PlayerCommandPreprocessEvent event) {
+        if (event.getMessage().equals("refreshkit")){
+            event.getPlayer().sendMessage(ChatColor.RED + ("You cannot do refreshkit during Infection!"));
+            event.setCancelled(true);
         }
     }
 
@@ -243,11 +240,11 @@ public class TagEvent extends RandomEvent implements Listener {
                 damagee.getInventory().setBoots(null);
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(damagee);
-                stats.getActiveKit().getKit().beginApplyKit(damagee);
+                stats.getActiveKit().getKit().applyKit(damagee);
                 stats.getActiveKit().getKit().giveSoup(damagee, 32);
 
                 KitPvPStats damagerStats = KitPvP.getInstance().getStats(damager);
-                damagerStats.giveCoins(15);
+                damagerStats.setCoins(damagerStats.getCoins() + 15);
 
                 ScoreboardInfo.getInstance().updatePlayer(damager);
 
@@ -276,14 +273,7 @@ public class TagEvent extends RandomEvent implements Listener {
         if (task != null) task.cancel();
         super.end();
 
-        TAG_ENDED.broadcast();
-    }
+        Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "INFECTION ENDED!");
 
-    public static TagEvent getInstance() {
-        return instance;
-    }
-
-    public Long getBegin() {
-        return begin;
     }
 }

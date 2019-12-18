@@ -1,70 +1,60 @@
 package net.skycade.kitpvp.commands.staff;
 
-import net.skycade.SkycadeCore.utility.command.SkycadeCommand;
-import net.skycade.SkycadeCore.utility.command.addons.Permissible;
-import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
+import net.skycade.kitpvp.coreclasses.commands.Command;
+import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
-import java.util.Arrays;
-import java.util.Collections;
+public class CommandSetStats extends Command<KitManager> {
 
-import static net.skycade.kitpvp.Messages.*;
-
-@Permissible("kitpvp.admin")
-public class CommandSetStats extends SkycadeCommand {
-    public CommandSetStats() {
-        super("setstat", Arrays.asList("statset", "setstats", "statsset"));
+    public CommandSetStats(KitManager module) {
+        super(module, "Change stats for a player.", new Permission("kitpvp.admin", PermissionDefault.OP), "setstats", "setstat");
+        setUsage("<player>", "<stats>", "<amount>");
     }
 
     @Override
-    public void onCommand(CommandSender commandSender, String[] strings) {
-        if (strings.length < 3) {
-            SETSTATS_USAGE.msg(commandSender);
+    public void execute(Member member, String aliasUsed, String... args) {
+        if (!checkArgs(member, aliasUsed, args))
+            return;
+        if (!getPlayer(member, args[0]))
+            return;
+        if (!parseInt(member, args[2])) {
+            couldNotFind(member, "amount", args[2]);
             return;
         }
-        if (Bukkit.getPlayer(strings[0]) == null) {
-            COULDNT_FIND.msg(commandSender, "%type%", "player", "%thing%", strings[0]);
-            return;
-        }
+        int amount = Integer.parseInt(args[2]);
+        Player target = Bukkit.getPlayer(args[0]);
+        KitPvPStats stats = getModule().getKitPvP().getStats(target);
 
-        int amount;
-        try {
-            amount = Integer.parseInt(strings[2]);
-        } catch (NumberFormatException exception) {
-            COULDNT_FIND.msg(commandSender, "%type%", "number", "%thing%", strings[2]);
-            return;
-        }
-
-        Player target = Bukkit.getPlayer(strings[0]);
-        KitPvPStats stats = KitPvP.getInstance().getStats(target);
-
-        if (strings[1].equalsIgnoreCase("kills") || strings[1].equalsIgnoreCase("kill")) {
+        if (args[1].equalsIgnoreCase("kills") || args[1].equalsIgnoreCase("kill")) {
             stats.setKills(amount);
-            sendMsg("kills", commandSender, target, amount);
-        } else if (strings[1].equalsIgnoreCase("deaths")) {
+            sendMsg("kills", stats, member, target, amount);
+        } else if (args[1].equalsIgnoreCase("deaths")) {
             stats.setDeaths(amount);
-            sendMsg("deaths", commandSender, target, amount);
-        } else if (strings[1].equalsIgnoreCase("killstreak") || strings[1].equalsIgnoreCase("ks")) {
+            sendMsg("deaths", stats, member, target, amount);
+        } else if (args[1].equalsIgnoreCase("killstreak") || args[1].equalsIgnoreCase("ks")) {
             stats.setStreak(amount);
-            sendMsg("killstreak", commandSender, target, amount);
-        } else if (strings[1].equalsIgnoreCase("highestkillstreak") || strings[1].equalsIgnoreCase("highks") || strings[1].equalsIgnoreCase("highkillstreak") || strings[1].equalsIgnoreCase("highestks")) {
+            sendMsg("killstreak", stats, member, target, amount);
+        } else if (args[1].equalsIgnoreCase("highestkillstreak") || args[1].equalsIgnoreCase("highks") || args[1].equalsIgnoreCase("highkillstreak") || args[1].equalsIgnoreCase("highestks")) {
             stats.setHighestStreak(amount);
-            sendMsg("highestks", commandSender, target, amount);
-        } else if (strings[1].equalsIgnoreCase("assist") || strings[0].equalsIgnoreCase("assists")) {
+            sendMsg("highestks", stats, member, target, amount);
+        } else if (args[1].equalsIgnoreCase("assist") || args[0].equalsIgnoreCase("assists")) {
             stats.setAssists(amount);
-            sendMsg("assist", commandSender, target, amount);
+            sendMsg("assist", stats, member, target, amount);
+        } else if (args[1].equalsIgnoreCase("duel") || args[1].equalsIgnoreCase("duels")) {
+            stats.setDuels(amount);
+            sendMsg("duels", stats, member, target, amount);
         } else
-            COULDNT_FIND.msg(commandSender, "%type%", "stats", "%thing%", strings[1]);
-
-        ScoreboardInfo.getInstance().updatePlayer(target);
+            couldNotFind(member, "stats", args[1]);
     }
 
-    private void sendMsg(String stat, CommandSender commandSender, Player target, int amount) {
-        YOUR_STAT_SET.msg(target, "%stat%", stat, "%amount%", Integer.toString(amount));
-        STAT_SET.msg(commandSender, "%player%", target.getName(), "%stat%", stat, "%amount%", Integer.toString(amount));
+    private void sendMsg(String stat, KitPvPStats stats, Member member, Player target, int amount) {
+        target.sendMessage("§7Your " + stat + " has been set to " + amount + ".");
+        member.message(target.getName() + " " + stat + "  has been set to " + amount + ".");
     }
+
 }

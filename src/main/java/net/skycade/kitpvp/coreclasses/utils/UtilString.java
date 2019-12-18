@@ -23,7 +23,7 @@ public class UtilString {
     public static String capitaliseFirstCharacter(String string) {
         if (string == null || string.length() == 0)
             return string;
-        return string.substring(0, 1).toUpperCase() + string.substring(1);
+        return string.substring(0, 1).toUpperCase() + string.substring(1, string.length());
     }
 
     public static String serialiseList(List<String> l) {
@@ -67,7 +67,7 @@ public class UtilString {
     public static <T extends Enum<T>> T fromString(Class<T> enumeration, String name) {
         for (T value : enumeration.getEnumConstants())
             if (name.equalsIgnoreCase(value.name()))
-                return value;
+                return (T) value;
         throw new IllegalArgumentException("There is no value with name '" + name + " in Enum " + enumeration.getClass().getName());
     }
 

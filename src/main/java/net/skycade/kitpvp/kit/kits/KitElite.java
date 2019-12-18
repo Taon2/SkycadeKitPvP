@@ -1,11 +1,9 @@
 package net.skycade.kitpvp.kit.kits;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
-import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -14,84 +12,77 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.lang.Integer.parseInt;
 
 public class KitElite extends Kit {
 
-    private ItemStack helmet;
-    private ItemStack chestplate;
-    private ItemStack leggings;
-    private ItemStack boots;
-    private ItemStack weapon;
-
-    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
-
     public KitElite(KitManager kitManager) {
-        super(kitManager, "Elite", KitType.ELITE, 12000, getLore());
+        super(kitManager, "Elite", KitType.ELITE, 16000, "Speed is everything");
 
-        helmet = new ItemBuilder(
-                Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 13)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you strength.")
-                .setColour(Color.WHITE).build();
-        chestplate = new ItemBuilder(
-                Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 10)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you strength.")
-                .setColour(Color.BLUE).build();
-        leggings = new ItemBuilder(
-                Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 10)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you strength.")
-                .setColour(Color.BLUE).build();
-        boots = new ItemBuilder(
-                Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 10)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you strength.")
-                .setColour(Color.BLUE).build();
-        weapon = new ItemBuilder(
-                Material.DIAMOND_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 5).build();
+        Map<String, Object> defaultsMap = new HashMap<>();
 
-        ItemStack icon = new ItemBuilder(
-                Material.LEATHER_HELMET)
-                .setColour(Color.WHITE).build();
-        setIcon(icon);
+        defaultsMap.put("kit.icon.material", "LEATHER_HELMET");
+        defaultsMap.put("kit.icon.color", "BLACK");
+        defaultsMap.put("kit.price", 16000);
+
+        defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
+        defaultsMap.put("inventory.sword.enchantments.durability", 5);
+        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
+
+        defaultsMap.put("armor.material", "LEATHER");
+        defaultsMap.put("armor.enchantments.durability", 10);
+        defaultsMap.put("armor.enchantments.protection", 3);
+
+        defaultsMap.put("armor.helmet.material", "LEATHER");
+        defaultsMap.put("armor.helmet.enchantments.protection", 2);
+        defaultsMap.put("armor.helmet.enchantments.durability", 13);
+
+        defaultsMap.put("potions.pot1", "FAST_DIGGING:2");
+
+        setConfigDefaults(defaultsMap);
+
+        if (getConfig().getString("kit.icon.material") != null) {
+            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
+                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
+                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
+            } else {
+                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
+            }
+        } else {
+            setIcon(new ItemStack(Material.DIRT));
+        }
+        setPrice(getConfig().getInt("kit.price"));
     }
 
     @Override
-    public void applyKit(Player p) {
-        p.getInventory().addItem(weapon);
-        p.getInventory().setHelmet(helmet);
-        p.getInventory().setChestplate(chestplate);
-        p.getInventory().setLeggings(leggings);
-        p.getInventory().setBoots(boots);
+    public void applyKit(Player p, int level) {
+        p.getInventory().addItem(new ItemBuilder(
+                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
+                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
 
-        constantEffects.forEach((effect, amplifier) -> {
-            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
-        });
+        ItemStack[] armor = getArmour(
+                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
+                getConfig().getInt("armor.enchantments.durability"),
+                getConfig().getInt("armor.enchantments.protection"),
+                Color.BLUE);
+
+        armor[3] = new ItemBuilder(
+                Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.helmet.enchantments.protection"))
+                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments. durability"))
+                .setColour(Color.WHITE).build();
+
+        p.getInventory().setArmorContents(armor);
+
+        String[] pot1 = getConfig().getString("potions.pot1").split(":");
+        p.addPotionEffect(new PotionEffect(
+                PotionEffectType.getByName(pot1[0]),
+                Integer.MAX_VALUE,
+                parseInt(pot1[1])));
     }
 
-    public void onMove(Player p) {
-        if (UtilMath.getRandom(0, 100) <= 5)
-            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 30, 1));
-    }
-
-    @Override
-    public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
-    }
-
-    public static List<String> getLore() {
-        return Arrays.asList(
-                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
-                ChatColor.GRAY + "" + ChatColor.ITALIC + "Quite experienced.",
-                "",
-                ChatColor.GRAY + "Randomly gains small bursts of strength."
-        );
-    }
 }

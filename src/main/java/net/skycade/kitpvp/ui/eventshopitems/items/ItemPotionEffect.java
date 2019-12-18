@@ -20,7 +20,7 @@ public class ItemPotionEffect extends EventShopItem {
     private EventShopManager eventShopManager;
 
     public ItemPotionEffect(EventShopManager eventShopManager) {
-        super(eventShopManager, ChatColor.DARK_PURPLE + "Random Potion Upgrade", new ItemStack(Material.GLASS_BOTTLE), 10, 300);
+        super(eventShopManager, "§5Random Potion Upgrade", new ItemStack(Material.GLASS_BOTTLE), 50, 300);
         this.eventShopManager = eventShopManager;
     }
 
@@ -56,11 +56,8 @@ public class ItemPotionEffect extends EventShopItem {
     }
 
     private PotionEffectType getRandomEffect(Player p) {
-        this.yaml = eventShopManager.getYaml();
         int randomEffect = ThreadLocalRandom.current().nextInt(potionEffects.size());
         yaml.set((p.getUniqueId() + "." + "generatedPotionNum"), randomEffect);
-        eventShopManager.setYaml(yaml);
-        eventShopManager.save();
         return potionEffects.get(randomEffect);
     }
 

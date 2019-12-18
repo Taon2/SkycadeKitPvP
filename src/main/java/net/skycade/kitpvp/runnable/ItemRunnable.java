@@ -36,7 +36,7 @@ public class ItemRunnable {
             Integer finalSlot = null;
             for (Integer i = 0; i < inv.getSize(); i++)
                 if (inv.getItem(i) != null)
-                    if (inv.getItem(i).getType() == item.getType() && inv.getItem(i).getDurability() == item.getDurability()) {
+                    if (inv.getItem(i).getType() == item.getType()) {
                         amount += inv.getItem(i).getAmount();
                         if (amount <= inv.getMaxStackSize())
                             finalSlot = i;
@@ -44,8 +44,7 @@ public class ItemRunnable {
             if (finalSlot != null && amount > 0 && plugin.getStats(p).getActiveKit() == kit) {
                 ItemStack invItem = inv.getItem(finalSlot);
                 if (amount < maxAmount)
-                    invItem.setAmount(invItem.getAmount() + 1);
-                    //inv.setItem(finalSlot, new ItemStack(invItem.getType(), invItem.getAmount() + 1));
+                    inv.setItem(finalSlot, new ItemStack(invItem.getType(), invItem.getAmount() + 1));
             } else
                 p.getInventory().addItem(item);
             startRunnable();
@@ -59,4 +58,5 @@ public class ItemRunnable {
     public void stopRunnable() {
         stop = true;
     }
+
 }

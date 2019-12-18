@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.coreclasses.utils;
 
 import net.minecraft.server.v1_8_R3.Packet;
-import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.listeners.player.LastMoveListener;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -60,7 +59,7 @@ public class UtilPlayer {
         Set<Player> players = new HashSet<>();
 
         for (Player pl : Bukkit.getOnlinePlayers()) {
-            if (pl.getLocation().distanceSquared(loc) <= r * r && !VanishStatus.isVanished(pl.getUniqueId())) {
+            if (pl.getLocation().distanceSquared(loc) <= r * r) {
                 players.add(pl);
             }
         }

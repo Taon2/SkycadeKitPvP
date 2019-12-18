@@ -7,78 +7,63 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum KitType {
+
     ARCHER("archer"),
     ASSASSIN("assassin"),
     BARBARIAN("barbarian"),
-    BLACKSMITH("blacksmith"),
     BLADEMASTER("blademaster"),
-    BLOCKHUNT("blockhunt"),
     BOMBER("bomber"),
-    BUILDUHC("builduhc"),
     CAVEMAN("caveman"),
     CERBERUS("cerberus"),
     CHANCE("chance"),
+    CHRONOS("chronos"),
     COBRA("cobra"),
+    DEFAULT("default"),
     DUALBLADER("dualblader"),
     DUBSTEP("dubstep"),
     ELITE("elite"),
+    FIREARCHER("firearcher"),
+    FIREMAGE("firemage"),
     FISHERMAN("fisherman"),
     FROSTY("frosty"),
-    GAMBLER("gambler"),
     GANK("gank"),
-    GUARDIAN("guardian"),
+    GHOST("ghost"),
+    GOLEM("golem"),
     ENDERMAN("enderman"),
     HADES("hades"),
-    HULK("hulk"),
+    HUNTSMAN("huntsman"),
     HYDRA("hydra"),
     HYPER("hyper"),
     JESUS("jesus"),
     JUMPER("jumper"),
     KANGAROO("kangaroo"),
     KING("king"),
+    KITMASTER("kitmaster"),
     KNIGHT("knight"),
-    LICH("lich"),
-    MULTISHOT("multishot"),
+    LOVER("lover"),
+    MEDIC("medic"),
     MYSTIC("mystic"),
-    NECROMANCER("necromancer"),
-    PALADIN("paladin"),
+    NINJA("ninja"),
     PLUSH("plush"),
     POTIONMASTER("potionmaster"),
     PRICK("prick"),
-    PYROMANCER("pyromancer"),
     SHACO("shaco"),
     SHARINGAN("sharingan"),
-    SHROOM("shroom"),
     SNIPER("sniper"),
     SONIC("sonic"),
     SOULMASTER("soulmaster"),
-    TANK("tank"),
-    TELEPORTER("teleporter"),
-    TREEENT("treeent"),
-    WARRIOR("warrior"),
-    WITCHDOCTOR("witchdoctor"),
-    WITHER("wither"),
-    WOLFPACK("wolfpack"),
-    ZEUS("zeus"),
-    KITMASTER("kitmaster"),
-
-    //disabled
-    CHRONOS("chronos"),
-    DEFAULT("default"),
-    FIREARCHER("firearcher"),
-    FIREMAGE("firemage"),
-    GHOST("ghost"),
-    GOLEM("golem"),
-    HUNTSMAN("huntsman"),
-    LOVER("lover"),
-    MEDIC("medic"),
-    NINJA("ninja"),
     STRAFE("strafe"),
     SUPPORT("support"),
+    TANK("tank"),
+    TELEPORTER("teleporter"),
     TRIBESMAN("tribesman"),
     UNICORN("unicorn"),
     VAMPIRE("vampire"),
-    WIZARD("wizard");
+    WARRIOR("warrior"),
+    WITHER("wither"),
+    WIZARD("wizard"),
+    WOLFPACK("wolfpack"),
+    ZEUS("zeus");
 
     private final String alias;
 
@@ -122,7 +107,7 @@ public enum KitType {
         if (item == null || item.getItemMeta() == null || item.getItemMeta().getDisplayName() == null)
             return null;
         String name = item.getItemMeta().getDisplayName();
-        return KitType.getTypeFromString(name.substring(2));
+        return KitType.getTypeFromString(name.substring(2, name.length()));
     }
 
     public static KitType byAlias(String alias) {
