@@ -19,7 +19,7 @@ public class KitPvPKillPlayerEvent extends Event {
         return player;
     }
 
-    public KitType getUsedKitType() {
+    public KitType getKitType() {
         return usedKitType;
     }
 

@@ -44,7 +44,6 @@ public class PlayerInteractListener implements Listener {
         if (event.getPlayer().getGameMode().equals(GameMode.CREATIVE))
             return;
 
-        Bukkit.getLogger().info(event.getBlock().getType().toString());
         if (KitPvP.getInstance().isInSpawnArea(event.getPlayer()) || event.getBlock().getRelative(BlockFace.UP).getType() == Material.WATER_LILY || event.getBlockReplacedState().getType() == Material.DOUBLE_PLANT) {
             event.setCancelled(true);
             return;

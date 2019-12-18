@@ -404,7 +404,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
         refreshArmor(false);
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onKitPvPCoinsReward(KitPvPCoinsRewardEvent event) {
         if (lastEvent < System.currentTimeMillis() - 30 * 60 * 1000L) return;
         if (lastWinners.contains(event.getPlayer().getUniqueId())) {
