@@ -5,6 +5,7 @@ import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -14,67 +15,66 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static java.lang.Integer.parseInt;
+import java.util.*;
 
 public class KitCerberus extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+
+    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
+
     public KitCerberus(KitManager kitManager) {
-        super(kitManager, "Cerberus", KitType.CERBERUS, 14000, "Lava is his home");
+        super(kitManager, "Cerberus", KitType.CERBERUS, 29000, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.LEATHER_HELMET)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when in lava.")
+                .setColour(Color.ORANGE).build();
+        chestplate = new ItemBuilder(
+                Material.LEATHER_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when in lava.")
+                .setColour(Color.ORANGE).build();
+        leggings = new ItemBuilder(
+                Material.LEATHER_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when in lava.")
+                .setColour(Color.ORANGE).build();
+        boots = new ItemBuilder(
+                Material.LEATHER_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when in lava.")
+                .setColour(Color.ORANGE).build();
+        weapon = new ItemBuilder(
+                Material.IRON_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5).build();
 
-        defaultsMap.put("kit.icon.material", "LAVA_BUCKET");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 14000);
+        constantEffects.put(PotionEffectType.FIRE_RESISTANCE, 0);
 
-        defaultsMap.put("inventory.sword.material", "IRON_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
-
-        defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.durability", 12);
-        defaultsMap.put("armor.protection", 1);
-
-        defaultsMap.put("potions.pot1", "FIRE_RESISTANCE:0");
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.LAVA_BUCKET);
+        setIcon(icon);
     }
 
     @Override
-    public void applyKit(Player p, int level) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+    public void applyKit(Player p) {
+        p.getInventory().addItem(weapon);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
 
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.durability"),
-                getConfig().getInt("armor.protection"),
-                Color.ORANGE));
-
-        String[] pot1 = getConfig().getString("potions.pot1").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot1[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot1[1])));
+        constantEffects.forEach((effect, amplifier) -> {
+            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+        });
     }
 
     @Override
@@ -84,8 +84,8 @@ public class KitCerberus extends Kit {
         if (p.getLocation().getBlock().getType() == Material.LAVA || p.getLocation().getBlock().getType() == Material.STATIONARY_LAVA) {
             p.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
             p.removePotionEffect(PotionEffectType.SLOW);
-            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40 * 3, 1));
-            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40 * 3, 2));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 80, 0));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 2));
         }
     }
 
@@ -96,8 +96,16 @@ public class KitCerberus extends Kit {
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Get a strength buff when you're in lava.");
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }
 
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Enjoys the hot tub.",
+                "",
+                ChatColor.GRAY + "Becomes stronger when in lava."
+        );
+    }
 }

@@ -1,110 +1,156 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class KitTeleporter extends Kit {
 
-    private final List<Player> enderpearlCooldown = new ArrayList<>();
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+    private ItemStack pearls;
+
+    private int pearlRegenSpeed = 20;
+    private int pearlStartAmount = 5;
+    private int pearlMaxAmount = 8;
+
+    private List<EnderPearl> pearlList = new ArrayList<>();
 
     public KitTeleporter(KitManager kitManager) {
-        super(kitManager, "Teleporter", KitType.TELEPORTER, 32000, "Where did he go?");
+        super(kitManager, "Teleporter", KitType.TELEPORTER, 32000, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.IRON_HELMET).build();
+        chestplate = new ItemBuilder(
+                Material.CHAINMAIL_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+        leggings = new ItemBuilder(
+                Material.CHAINMAIL_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+        boots = new ItemBuilder(
+                Material.IRON_BOOTS).build();
+        weapon = new ItemBuilder(
+                Material.DIAMOND_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5).build();
+        pearls = new ItemBuilder(
+                Material.ENDER_PEARL, pearlStartAmount)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 ender pearl every " + pearlRegenSpeed + " seconds.").build();
 
-        defaultsMap.put("kit.icon.material", "ENDER_PEARL");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 32000);
-
-        defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
-
-        defaultsMap.put("inventory.ender-pearl.amount", 5);
-        defaultsMap.put("inventory.ender-pearl.regen-speed", 30);
-        defaultsMap.put("inventory.ender-pearl.max-amount", 8);
-
-        defaultsMap.put("armor.helmet.material", "IRON");
-        defaultsMap.put("armor.helmet.enchantments.protection", 0);
-
-        defaultsMap.put("armor.chestplate.material", "CHAINMAIL");
-        defaultsMap.put("armor.chestplate.enchantments.durability", 1);
-
-        defaultsMap.put("armor.leggings.material", "CHAINMAIL");
-        defaultsMap.put("armor.leggings.enchantments.durability", 1);
-
-        defaultsMap.put("armor.boots.material", "IRON");
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.ENDER_PORTAL_FRAME);
+        setIcon(icon);
     }
 
     @Override
-    public void applyKit(Player p, int level) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+    public void applyKit(Player p) {
+        p.getInventory().addItem(weapon);
+        p.getInventory().addItem(pearls);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
 
-        p.getInventory().addItem(new ItemBuilder(
-                Material.ENDER_PEARL, getConfig().getInt("inventory.ender-pearl.amount")).build());
+        startItemRunnable(p, pearlRegenSpeed, getPearl(1), pearlMaxAmount, KitType.TELEPORTER);
+    }
 
-        p.getInventory().setHelmet(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.helmet.enchantments.protection")).build());
+    public void onPearlLaunch(Player shooter, ProjectileLaunchEvent event) {
+        event.getEntity().setCustomName(shooter.getName());
+        event.getEntity().setCustomNameVisible(false);
 
-        p.getInventory().setChestplate(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.chestplate.material").toUpperCase() + "_CHESTPLATE"))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.chestplate.enchantments.durability")).build());
-
-        p.getInventory().setLeggings(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.leggings.material").toUpperCase() + "_LEGGINGS"))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.leggings.enchantments.durability")).build());
-
-        p.getInventory().setBoots(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS")).build());
-
-        startItemRunnable(p, getConfig().getInt("inventory.ender-pearl.regen-speed"), new ItemBuilder(
-                Material.ENDER_PEARL).build(), getConfig().getInt("inventory.ender-pearl.max-amount"), KitType.TELEPORTER);
+        pearlList.add((EnderPearl) event.getEntity());
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent e) {
-        Player player = e.getPlayer();
-        if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            if(player.getItemInHand().getType().equals(Material.ENDER_PEARL) && !addCooldown(e.getPlayer(), getName(), 10, true) || enderpearlCooldown.contains(e.getPlayer())) {
-                e.setCancelled(true);
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            if (player.getItemInHand().getType() == Material.ENDER_PEARL) {
+                if (!addCooldown(event.getPlayer(), getName(), 10, true) || frozenPlayers.containsKey(event.getPlayer().getUniqueId())) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                //For missions
+                KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(player, this.getKitType());
+                Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
             }
-            enderpearlCooldown.add(e.getPlayer());
-            Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> enderpearlCooldown.remove(e.getPlayer()), 10);
         }
     }
-    @Override
-    public List<String> getAbilityDesc() {
-        return Collections.singletonList("§7You will regain pearls overtime");
+
+    private ItemStack getPearl(int amount) {
+        ItemStack pearlRegen = new ItemStack(pearls);
+        pearlRegen.setAmount(amount);
+
+        return pearlRegen;
     }
 
+    @Override
+    public void reimburseItem(Player p, ItemStack item) {
+        if (item != null && item.getType() == getPearl(item.getAmount()).getType()) {
+            Inventory inv = p.getInventory();
+            int amount = 0;
+            ItemStack newItem = getPearl(1);
+
+            Integer finalSlot = null;
+            for (Integer i = 0; i < inv.getSize(); i++)
+                if (inv.getItem(i) != null)
+                    if (inv.getItem(i).getType() == newItem.getType()) {
+                        amount += inv.getItem(i).getAmount();
+                        if (amount <= inv.getMaxStackSize())
+                            finalSlot = i;
+                    }
+            if (finalSlot != null && amount > 0) {
+                ItemStack invItem = inv.getItem(finalSlot);
+                if (amount < pearlMaxAmount)
+                    inv.setItem(finalSlot, new ItemStack(invItem.getType(), invItem.getAmount() + 1));
+            } else
+                p.getInventory().addItem(newItem);
+        }
+    }
+
+    public void removeSummon(int seconds, Player p) {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+            for (EnderPearl pearl : pearlList)
+                if (pearl.getCustomName().contains(p.getName())) {
+                    pearl.remove();
+                }
+        }, seconds * 20);
+    }
+
+    @Override
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
+    }
+
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Poof!",
+                "",
+                ChatColor.GRAY + "Has ender pearls to teleport around."
+        );
+    }
 }

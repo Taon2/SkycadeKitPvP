@@ -1,10 +1,12 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -13,77 +15,89 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class KitKangaroo extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+
+    private int leapCooldown = 6;
+    private double leapYVelocity = 0.07;
+
     public KitKangaroo(KitManager kitManager) {
-        super(kitManager, "Kangaroo", KitType.KANGAROO, 35000, "Jump everywhere!");
+        super(kitManager, "Kangaroo", KitType.KANGAROO, 35000, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.LEATHER_HELMET)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.SILVER).build();
+        chestplate = new ItemBuilder(
+                Material.LEATHER_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.SILVER).build();
+        leggings = new ItemBuilder(
+                Material.LEATHER_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.SILVER).build();
+        boots = new ItemBuilder(
+                Material.LEATHER_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .setColour(Color.SILVER).build();
+        weapon = new ItemBuilder(
+                Material.GOLD_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + leapCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "makes you mega jump.").build();
 
-        defaultsMap.put("kit.icon.material", "POTION");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 35000);
-
-        defaultsMap.put("inventory.sword.material", "GOLD_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 10);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
-
-        defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 12);
-        defaultsMap.put("armor.enchantments.protection", 3);
-
-        defaultsMap.put("ability.leap-y-velocity", 0.07);
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.RABBIT_FOOT);
+        setIcon(icon);
     }
 
     @Override
-    public void applyKit(Player p, int level) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
-
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection"),
-                Color.SILVER));
+    public void applyKit(Player p) {
+        p.getInventory().addItem(weapon);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
     }
 
     @Override
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.GOLD_SWORD)
             return;
-        if (!addCooldown(p, getName(), 6, true))
+        if (!addCooldown(p, "Leap", leapCooldown, true))
             return;
-        /* if (getLevel(p) == 1)
-			p.setVelocity(new Vector(p.getLocation().getDirection().getX(), 0.15, p.getLocation().getDirection().getZ()).multiply(4));
-		else { */
-        p.setVelocity(new Vector(p.getLocation().getDirection().getX(), getConfig().getDouble("ability.leap-y-velocity"), p.getLocation().getDirection().getZ()).multiply(4));
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> p.setVelocity(new Vector(p.getLocation().getDirection().getX(), 0.15, p.getLocation().getDirection().getZ()).multiply(3)), 3);
-        // }
+
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
+        p.setVelocity(new Vector(p.getLocation().getDirection().getX(), leapYVelocity, p.getLocation().getDirection().getZ()).multiply(4));
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> p.setVelocity(new Vector(p.getLocation().getDirection().getX(), 0.15, p.getLocation().getDirection().getZ()).multiply(3)), 3);
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Use your sword to mega jump.");
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }
 
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "From down under.",
+                "",
+                ChatColor.GRAY + "Right clicking makes you a mega jump."
+        );
+    }
 }

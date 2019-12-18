@@ -1,40 +1,38 @@
 package net.skycade.kitpvp.stat;
 
+import net.brcdev.gangs.GangsPlusApi;
+import net.brcdev.gangs.gang.Gang;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class KitPvPStats {
 
-    private final Member member;
     private Integer lastStreak;
 
+    private UUID uuid;
+    private int prestigeLevel = 0;
     private int kills = 0;
     private int deaths = 0;
-    private int keys = KitPvP.getInstance().getConfig().getInt("start-keys");
-    private int duels = 0;
     private int coins = 0;
-    private int eventCoins = 0;
+    private int eventTokens = 0;
     private int streak = 0;
     private int highestStreak = 0;
     private int assists = 0;
-    private KitType activeKit = KitType.DEFAULT;
-    private KitType kitPreference = KitType.DEFAULT;
+    private KitType activeKit = KitType.CHANCE;
+    private KitType kitPreference = KitType.CHANCE;
     private Map<KitType, KitData> kits = new HashMap<>();
     private ArrayList<EventShopItem> upgrades = new ArrayList<>();
 
-
-    public KitPvPStats(Member member) {
-        this.member = member;
-
-        //Unlocked from the start:
-        KitType def = KitType.DEFAULT;
-        kits.put(def, new KitData(def));
+    public KitPvPStats(UUID uuid) {
+        //Unlocked from the start
+        this.uuid = uuid;
 
         for (String kitType : KitPvP.getInstance().getConfig().getStringList("start-kits")) {
             kits.put(KitType.byAlias(kitType), new KitData(KitType.byAlias(kitType)));
@@ -57,14 +55,6 @@ public class KitPvPStats {
         this.deaths = deaths;
     }
 
-    public int getDuels() {
-        return duels;
-    }
-
-    public void setDuels(int duels) {
-        this.duels = duels;
-    }
-
     public int getCoins() {
         return coins;
     }
@@ -73,12 +63,38 @@ public class KitPvPStats {
         this.coins = coins;
     }
 
-    public int getEventCoins() {
-        return eventCoins;
+    public void giveCoins(int coins) {
+        this.coins += coins;
+
+        //Adds the amount of coins to the gang points
+        Gang gang = GangsPlusApi.getPlayersGang(Bukkit.getPlayer(uuid));
+        if (gang != null)
+            KitPvP.getInstance().getGangPointsManager().addPoints(gang.getName(), coins);
     }
 
-    public void setEventCoins(int eventCoins) {
-        this.eventCoins = eventCoins;
+    public void takeCoins(int coins) {
+        this.coins -= coins;
+    }
+
+    public int getEventTokens() {
+        return eventTokens;
+    }
+
+    public void giveEventTokens(int eventTokens) {
+        this.eventTokens += eventTokens;
+
+        //Adds the amount of event tokens times 5 to the gang points
+        Gang gang = GangsPlusApi.getPlayersGang(Bukkit.getPlayer(uuid));
+        if (gang != null)
+            KitPvP.getInstance().getGangPointsManager().addPoints(gang.getName(), eventTokens * 200);
+    }
+
+    public void takeEventTokens(int eventTokens) {
+        this.eventTokens -= eventTokens;
+    }
+
+    public void setEventTokens(int newTokens) {
+        this.eventTokens = newTokens;
     }
 
     public int getStreak() {
@@ -91,7 +107,6 @@ public class KitPvPStats {
         this.streak = streak;
         if (streak > highestStreak) {
             highestStreak = streak;
-            //member.update();
         }
     }
 
@@ -101,14 +116,6 @@ public class KitPvPStats {
 
     public void setHighestStreak(int highestStreak) {
         this.highestStreak = highestStreak;
-    }
-
-    public int getCrateKeys() {
-        return keys;
-    }
-
-    public void setCrateKeys(int keys) {
-        this.keys = keys;
     }
 
     public int getAssists() {
@@ -150,10 +157,12 @@ public class KitPvPStats {
     }
 
     public void resetKits() {
-        KitType kit = KitType.DEFAULT;
-        Map<KitType, KitData> map = new HashMap<>();
-        map.put(kit, new KitData(kit));
-        kits = map;
+        kits.clear();
+
+        //Keep starting kits
+        for (String kitType : KitPvP.getInstance().getConfig().getStringList("start-kits")) {
+            kits.put(KitType.byAlias(kitType), new KitData(KitType.byAlias(kitType)));
+        }
     }
 
     public void removeKit(KitType type) {
@@ -174,4 +183,11 @@ public class KitPvPStats {
         return lastStreak;
     }
 
+    public int getPrestigeLevel() {
+        return prestigeLevel;
+    }
+
+    public void setPrestigeLevel(int prestigeLevel) {
+        this.prestigeLevel = prestigeLevel;
+    }
 }

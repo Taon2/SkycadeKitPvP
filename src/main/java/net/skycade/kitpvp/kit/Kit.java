@@ -3,53 +3,49 @@ package net.skycade.kitpvp.kit;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.PlayerInteractManager;
+import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
+import net.skycade.kitpvp.nms.ActionBarUtil;
 import net.skycade.kitpvp.runnable.ItemRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
+
+import static net.skycade.kitpvp.Messages.*;
 
 public abstract class Kit implements Listener {
 
-    private ConfigurationSection config = new YamlConfiguration();
     private final Map<UUID, List<Long>> cooldownDate = new HashMap<>();
     private final Map<UUID, List<String>> playerCooldown = new HashMap<>();
 
-    //For freeze
-    protected final Map<UUID, Location> lastLocation = new HashMap<>();
+    protected final Map<UUID, List<ItemRunnable>> playerItemRunnable = new HashMap<>();
 
-    protected final Map<UUID, ItemRunnable> playerItemRunnable = new HashMap<>();
-
-    protected final List<UUID> frozenPlayers = new ArrayList<>();
+    protected static final Map<UUID, Map<Location, Material>> frozenPlayers = new HashMap<>();
     protected final List<UUID> shacoHit = new ArrayList<>();
-
-    boolean freezeRunning = false;
 
     private static final CraftPlayer DUMMY_PLAYER = new CraftPlayer((CraftServer) Bukkit.getServer(),
             new EntityPlayer(((CraftServer) Bukkit.getServer()).getServer(),
@@ -61,19 +57,19 @@ public abstract class Kit implements Listener {
     private final KitType type;
     private int price;
     private final boolean enabled;
-    private final String[] description;
+    private final List<String> description;
 
     private ItemStack icon;
 
-    public Kit(KitManager kitManager, String name, KitType type, String... description) {
+    public Kit(KitManager kitManager, String name, KitType type, List<String> description) {
         this(kitManager, name, type, 0, description);
     }
 
-    public Kit(KitManager kitManager, String name, KitType type, int price, String... description) {
+    public Kit(KitManager kitManager, String name, KitType type, int price, List<String> description) {
         this(kitManager, name, type, price, true, description);
     }
 
-    public Kit(KitManager kitManager, String name, KitType type, int price, boolean enabled, String... description) {
+    public Kit(KitManager kitManager, String name, KitType type, int price, boolean enabled, List<String> description) {
         this.kitManager = kitManager;
         this.name = name;
         this.type = type;
@@ -82,17 +78,15 @@ public abstract class Kit implements Listener {
         this.description = description;
 }
 
-    public void applyKit(Player p) {
+    public void beginApplyKit(Player p) {
         if (p == null || !p.isOnline()) return;
         clearArmor(p);
         p.getInventory().clear();
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
-        applyKit(p, getLevel(p));
+        applyKit(p);
     }
 
-
-
-    public abstract void applyKit(Player p, int level);
+    public abstract void applyKit(Player p);
 
     public KitManager getKitManager() {
         return kitManager;
@@ -118,7 +112,7 @@ public abstract class Kit implements Listener {
         return enabled;
     }
 
-    public String[] getDescription() {
+    public List<String> getDescription() {
         return description;
     }
 
@@ -141,27 +135,26 @@ public abstract class Kit implements Listener {
         this.icon = new ItemStack(icon);
     }
 
-    public int getLevel(Player p) {
-        if (p.equals(DUMMY_PLAYER))
-            return 1;
-        try {
-            return KitPvP.getInstance().getStats(p).getKits().get(getKitType()).getLevel();
-        } catch (Exception e) {
-            return 1;
-        }
-    }
-
     public boolean isActive(Player p) {
         return KitPvP.getInstance().getStats(p).getActiveKit() == type;
     }
 
-    public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+    public void onDamageDealHit(EntityDamageByEntityEvent event, Player damager, Player damagee) {
     }
 
-    public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+    public void onDamageGetHit(EntityDamageByEntityEvent event, Player damager, Player damagee) {
     }
 
     public void onItemUse(Player p, ItemStack item) {
+    }
+
+    public void onItemUse(Player p, ItemStack item, Block clickedBlock) {
+    }
+
+    public void onBlockPlace(Player p, Block block, BlockState replaced) {
+    }
+
+    public void onBlockBreak(Player p, Block block) {
     }
 
     public void onInteract(Player p, Player target, ItemStack item) {
@@ -170,12 +163,41 @@ public abstract class Kit implements Listener {
     public void onMove(Player p) {
     }
 
-    public List<String> getAbilityDesc() {
-        return null;
+    public boolean onDeath(Player p) {
+        return true;
+    }
+
+    public void removeSummon(int seconds, Player p) {
+    }
+
+    public void onArrowLand(Player p, Block block, ProjectileHitEvent event) {
+    }
+
+    public void cancelRunnables(Player p) {
+    }
+
+    public void reimburseItem(Player p, ItemStack item){
     }
 
     protected boolean onCooldown(Player p, String ability) {
-        return playerCooldown.containsKey(p.getUniqueId()) && playerCooldown.get(p.getUniqueId()).contains(ability);
+        if (playerCooldown.containsKey(p.getUniqueId()) && playerCooldown.get(p.getUniqueId()).contains(ability)) {
+            if (cooldownDate.containsKey(p.getUniqueId())) {
+                long remainingSeconds = (cooldownDate.get(p.getUniqueId()).get(playerCooldown.get(p.getUniqueId()).indexOf(ability)) - new Date().getTime()) / 1000;
+
+                ActionBarUtil.sendActionBarMessage(p, ON_COOLDOWN.getMessage()
+                        .replace("%time%", CoreUtil.niceFormat((int) remainingSeconds))
+                        .replace("%thing%", ability),
+                        4, KitPvP.getInstance());
+                return true;
+            } else {
+                ActionBarUtil.sendActionBarMessage(p, ON_COOLDOWN_NO_TIME.getMessage()
+                                .replace("%thing%", ability),
+                        4, KitPvP.getInstance());
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected void removeCooldowns(Player p, String ability) {
@@ -185,11 +207,6 @@ public abstract class Kit implements Listener {
 
     public boolean addCooldown(Player p, String ability, int seconds, boolean message) {
         if (onCooldown(p, ability)) {
-            if (cooldownDate.containsKey(p.getUniqueId())) {
-                long remainingSeconds = (cooldownDate.get(p.getUniqueId()).get(playerCooldown.get(p.getUniqueId()).indexOf(ability)) - new Date().getTime()) / 1000;
-                p.sendMessage("§c" + ability + " is on cooldown, wait " + remainingSeconds + " seconds.");
-            } else
-                p.sendMessage("§c" + ability + " is on cooldown.");
             return false;
         }
         List<String> cooldowns = playerCooldown.get(p.getUniqueId()) == null ? new ArrayList<>() : playerCooldown.get(p.getUniqueId());
@@ -199,20 +216,22 @@ public abstract class Kit implements Listener {
         playerCooldown.put(p.getUniqueId(), cooldowns);
         cooldownDate.put(p.getUniqueId(), cooldownDates);
 
-        // From cooldown messsage
+        // Send cooldown message
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
             if (playerCooldown.get(p.getUniqueId()).contains(ability)){
                 if (message)
-                    p.sendMessage("§7You can now use §a" + ability + "§7.");
+                    ActionBarUtil.sendActionBarMessage(p, OFF_COOLDOWN.getMessage()
+                                    .replace("%thing%", ability),
+                            4, KitPvP.getInstance());
                 removeCooldowns(p, ability);
             }
         }, seconds * 20);
 
         // Show remaining seconds as level
-        p.setLevel(seconds + 1);
+        p.setLevel(seconds);
         new BukkitRunnable() {
             public void run() {
-                if (playerCooldown.get(p.getUniqueId()).contains(ability)) {
+                if (playerCooldown.get(p.getUniqueId()).contains(ability) && p.isOnline()) {
                     if (p.getLevel() > 0)
                         p.setLevel(p.getLevel() - 1);
                 } else {
@@ -232,21 +251,7 @@ public abstract class Kit implements Listener {
                 .contains(type);
     }
 
-    public ItemStack[] getArmour(Material mat, int durability, int protection) {
-        return getArmour(mat, durability, protection, null);
-    }
-
-    public ItemStack[] getArmour(Material mat, int durability, int protection, Color colour) {
-        String material = mat.toString().split("_")[0];
-        List<ItemStack> armour = new ArrayList<>();
-        for (String type : Arrays.asList("BOOTS", "LEGGINGS", "CHESTPLATE", "HELMET"))
-            armour.add(new ItemBuilder(Material.getMaterial(material + "_" + type)).setColour(colour)
-                    .addEnchantment(Enchantment.DURABILITY, durability)
-                    .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, protection).build());
-        return armour.toArray(new ItemStack[armour.size()]);
-    }
-
-    public void clearArmor(Player player){
+    private void clearArmor(Player player){
         player.getInventory().setHelmet(null);
         player.getInventory().setChestplate(null);
         player.getInventory().setLeggings(null);
@@ -255,13 +260,23 @@ public abstract class Kit implements Listener {
 
     public void giveSoup(Player p, int amount) {
         if (p == null || !p.isOnline()) return;
+        KitType activeKit = KitPvP.getInstance().getStats(p).getActiveKit();
+
         for (int x = 0; x < amount; x++) {
             if (p.getInventory().firstEmpty() == -1)
                 break;
-            p.getInventory().addItem(
-                    KitPvP.getInstance().getStats(p).getActiveKit() == KitType.POTIONMASTER
-                            ? new ItemStack(Material.POTION, 1, (short) 16421)
-                            : new ItemStack(Material.MUSHROOM_SOUP, 1));
+
+            if (activeKit == KitType.POTIONMASTER || activeKit == KitType.BUILDUHC || activeKit == KitType.WITCHDOCTOR) {
+                p.getInventory().addItem(new ItemStack(Material.POTION, 1, (short) 16421));
+            } else if (activeKit == KitType.HULK) {
+                p.getInventory().addItem(new ItemStack(Material.MUSHROOM_SOUP, 1));
+            } else {
+                p.getInventory().addItem(new ItemStack(Material.MUSHROOM_SOUP, 1));
+            }
+        }
+
+        if (activeKit == KitType.HULK) {
+            p.getInventory().setItem(0, null);
         }
     }
 
@@ -289,27 +304,76 @@ public abstract class Kit implements Listener {
     }
 
     protected void startItemRunnable(Player p, int seconds, ItemStack item, int maxAmount, KitType kitType) {
-        if (playerItemRunnable.containsKey(p.getUniqueId()))
-            playerItemRunnable.get(p.getUniqueId()).stopRunnable();
         ItemRunnable runnable = new ItemRunnable(KitPvP.getInstance(), seconds, p, item, maxAmount, kitType);
-        playerItemRunnable.put(p.getUniqueId(), runnable);
+        if (playerItemRunnable.containsKey(p.getUniqueId()))
+            playerItemRunnable.get(p.getUniqueId()).add(runnable);
+        else {
+            List<ItemRunnable> runnables = new ArrayList<>();
+            runnables.add(runnable);
+            playerItemRunnable.put(p.getUniqueId(), runnables);
+        }
+    }
+
+    public void stopItemRunnables(Player p) {
+        if (!playerItemRunnable.containsKey(p.getUniqueId()))
+            return;
+
+        playerItemRunnable.get(p.getUniqueId()).forEach(ItemRunnable::stopRunnable);
     }
 
     protected void freezePlayer(Player p, int sec) {
-        if (!freezeRunning) {
-            onFreezeMove();
+        frozenPlayers.remove(p.getUniqueId());
+
+        if (!p.isOnGround()) {
+            double y = Math.floor(p.getLocation().getY());
+            while (!p.isOnGround()) {
+                Location loc = p.getLocation();
+                loc.setY(y);
+                if (loc.getBlock().getType() == Material.AIR) {
+                    y--;
+                } else {
+                    p.teleport(new Location(loc.getWorld(), Math.floor(loc.getX()) + .5, y+1, Math.floor(loc.getZ()) + .5, loc.getYaw(), loc.getPitch()));
+                    break;
+                }
+            }
         }
 
-        frozenPlayers.remove(p.getUniqueId());
-        lastLocation.remove(p.getUniqueId());
+        Location loc = p.getLocation();
+        Material initialType = loc.getBlock().getType();
+        loc.getBlock().setType(Material.ICE);
 
-        frozenPlayers.add(p.getUniqueId());
-        lastLocation.put(p.getUniqueId(), p.getLocation());
+        Map<Location, Material> ice = new HashMap<>();
+        ice.put(loc, initialType);
+
+        frozenPlayers.put(p.getUniqueId(), ice);
+
+        p.teleport(new Location(loc.getWorld(), Math.floor(loc.getX()) + .5, loc.getY(), Math.floor(loc.getZ()) + .5, loc.getYaw(), loc.getPitch()));
+
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            loc.getBlock().setType(initialType);
             frozenPlayers.remove(p.getUniqueId());
-            p.sendMessage("§bYou are now unfrozen.");
-            lastLocation.remove(p);
+            YOURE_UNFROZEN.msg(p);
         }, sec * 20);
+    }
+
+    @EventHandler (ignoreCancelled = true, priority = EventPriority.LOWEST)
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        if (frozenPlayers.containsKey(event.getPlayer().getUniqueId())) {
+            frozenPlayers.get(event.getPlayer().getUniqueId()).forEach((location, material) -> {
+                location.getBlock().setType(material);
+            });
+
+            frozenPlayers.remove(event.getPlayer().getUniqueId());
+        }
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (frozenPlayers.containsKey(event.getPlayer().getUniqueId())) {
+            event.getTo().setX(event.getFrom().getX());
+            event.getTo().setY(event.getFrom().getY());
+            event.getTo().setZ(event.getFrom().getZ());
+        }
     }
 
     protected void particleMoveEffect(Player p, ParticleEffect effect, float radius, int particleAmount) {
@@ -352,124 +416,14 @@ public abstract class Kit implements Listener {
             effect.display(radius, radius, radius, i / 1000 < 0.2 ? 0.2F : i / particleAmount, 1, p.getLocation(), 40);
     }
 
-    private void onFreezeMove() {
-        freezeRunning = true;
-        Bukkit.getScheduler().runTaskTimer(KitPvP.getInstance(), () -> frozenPlayers.forEach(uuid -> {
-            Player p = Bukkit.getPlayer(uuid);
-            if (p != null) {
-                if (!lastLocation.containsKey(p.getUniqueId())) {
-                    if (p.getLocation().getBlock().getType() != Material.AIR)
-                        lastLocation.put(p.getUniqueId(), p.getLocation());
-                } else {
-                    if (lastLocation.get(p.getUniqueId()).distance(p.getLocation()) > 0.2) {
-                        final Vector dir = p.getLocation().getDirection();
-                        Location newLoc = lastLocation.get(p.getUniqueId());
-                        newLoc.setDirection(dir);
-                        p.teleport(newLoc);
-                    }
-
-                }
-            }
-        }), 10, 10);
-    }
-
     protected List<Player> getAllMovingPlayers() {
         return Bukkit.getOnlinePlayers().stream().filter(UtilPlayer::isMoving).collect(Collectors.toList());
     }
 
-    public int getLevelUpXp(Player p) {
-        return (getPrice() * getLevel(p) / 20) * KitPvP.getInstance().getConfig().getInt("required-xp-multiplier");
-    }
-
-    public void increaseXp(Player p, int xp) {
-        /*
-        KitPvPStats stats = kitManager.getKitPvP().getStats(p);
-
-        // KitMaster can't level up
-        if (stats.getActiveKit() == KitType.KITMASTER)
-            return;
-
-        KitData data = stats.getKits().get(stats.getActiveKit());
-        if (data == null || data.getLevel() >= 3)
-            return;
-        data.setXp(data.getXp() + xp);
-
-        // Level up
-        if (data.getXp() >= getLevelUpXp(p)) {
-            int difference = data.getXp() - getLevelUpXp(p) ;
-            data.setLevel(data.getLevel() + 1);
-            data.setXp(difference);
-            p.sendMessage("§7Your kit §alevel increased §7to " + data.getLevel() + "!");
-            applyKit(p);
-            stats.getActiveKit().getKit().giveSoup(p, 30);
-        } */ // no leveling up
-    }
-
     @EventHandler
-    public void onDeath(PlayerDeathEvent e) {
-        frozenPlayers.remove(e.getEntity().getUniqueId());
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        frozenPlayers.remove(event.getEntity().getUniqueId());
     }
 
-    @EventHandler
-    public void onQuit(PlayerQuitEvent e) {
-        frozenPlayers.remove(e.getPlayer().getUniqueId());
-
-    }
-
-    public ConfigurationSection getConfig() {
-        return config;
-    }
-
-    public void setConfigDefaults(Map<String, Object> defaultsMap) {
-        File configFile = new File(KitPvP.getInstance().getDataFolder(), "kits.yml");
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        ConfigurationSection kitSection = config.getConfigurationSection(getName());
-        if (kitSection == null) {
-            kitSection = new YamlConfiguration();
-            for (Map.Entry<String, Object> entry : defaultsMap.entrySet()) {
-                kitSection.set(entry.getKey(), entry.getValue());
-            }
-        }
-
-        if (defaultsMap != null) {
-            for (Map.Entry<String, Object> entry : defaultsMap.entrySet()) {
-                if (kitSection.get(entry.getKey(), null) == null) {
-                    kitSection.set(entry.getKey(), entry.getValue());
-                }
-            }
-        }
-        config.set(getName(), kitSection);
-        try {
-            config.save(configFile);
-        } catch (IOException e) {
-            KitPvP.getInstance().getLogger().log(Level.SEVERE, "An error occurred while trying to save kits.yml", e);
-        }
-        this.config = kitSection;
-    }
-
-    public void reloadConfig() {
-        setConfigDefaults(null);
-    }
-
-    public Color getColor(String paramString) {
-        if (paramString.equalsIgnoreCase("AQUA")) return Color.AQUA;
-        if (paramString.equalsIgnoreCase("BLACK")) return Color.BLACK;
-        if (paramString.equalsIgnoreCase("BLUE")) return Color.BLUE;
-        if (paramString.equalsIgnoreCase("FUCHSIA")) return Color.FUCHSIA;
-        if (paramString.equalsIgnoreCase("GRAY")) return Color.GRAY;
-        if (paramString.equalsIgnoreCase("GREEN")) return Color.GREEN;
-        if (paramString.equalsIgnoreCase("LIME")) return Color.LIME;
-        if (paramString.equalsIgnoreCase("MAROON")) return Color.MAROON;
-        if (paramString.equalsIgnoreCase("NAVY")) return Color.NAVY;
-        if (paramString.equalsIgnoreCase("OLIVE")) return Color.OLIVE;
-        if (paramString.equalsIgnoreCase("ORANGE")) return Color.ORANGE;
-        if (paramString.equalsIgnoreCase("PURPLE")) return Color.PURPLE;
-        if (paramString.equalsIgnoreCase("RED")) return Color.RED;
-        if (paramString.equalsIgnoreCase("SILVER")) return Color.SILVER;
-        if (paramString.equalsIgnoreCase("TEAL")) return Color.TEAL;
-        if (paramString.equalsIgnoreCase("WHITE")) return Color.WHITE;
-        if (paramString.equalsIgnoreCase("YELLOW")) return Color.YELLOW;
-        return null;
-    }
-
+    public abstract List<String> getHowToObtain();
 }

@@ -4,6 +4,7 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -17,83 +18,85 @@ import java.util.*;
 
 public class KitSharingan extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+
     public KitSharingan(KitManager kitManager) {
-        super(kitManager, "Sharingan", KitType.SHARINGAN, 40000, "His eyes are powerful");
-        setIcon(Material.EYE_OF_ENDER);
+        super(kitManager, "Sharingan", KitType.SHARINGAN, 40000, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.LEATHER_HELMET)
+                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Copies potion effects when hit.")
+                .setColour(Color.BLACK).build();
+        chestplate = new ItemBuilder(
+                Material.LEATHER_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Copies potion effects when hit.")
+                .setColour(Color.BLACK).build();
+        leggings = new ItemBuilder(
+                Material.LEATHER_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Copies potion effects when hit.")
+                .setColour(Color.BLACK).build();
+        boots = new ItemBuilder(
+                Material.LEATHER_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Copies potion effects when hit.")
+                .setColour(Color.BLACK).build();
+        weapon = new ItemBuilder(
+                Material.IRON_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5).build();
 
-        defaultsMap.put("kit.icon.material", "EYE_OF_ENDER");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 40000);
-
-        defaultsMap.put("inventory.sword.material", "IRON_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
-
-        defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 7);
-        defaultsMap.put("armor.enchantments.protection", 3);
-
-        defaultsMap.put("armor.boots.enchantments.protection", 4);
-        defaultsMap.put("armor.chestplate.enchantments.protection", 4);
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.EYE_OF_ENDER);
+        setIcon(icon);
     }
 
     @Override
-    public void applyKit(Player p, int level) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
-
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection"),
-                Color.BLACK));
-
-        p.getInventory().getArmorContents()[0]
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.boots.enchantments.protection"));
-        p.getInventory().getArmorContents()[2]
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.chestplate.enchantments.protection"));
+    public void applyKit(Player p) {
+        p.getInventory().addItem(weapon);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
     }
 
     @Override
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        int level = getLevel(damagee);
         Collection<PotionEffect> effects = damager.getActivePotionEffects();
 
         effects.forEach((eff) -> {
             if (eff.getDuration() > 1200 * 3)
-                damagee.addPotionEffect(new PotionEffect(eff.getType(), 1200 * 3, eff.getAmplifier()));
+                damagee.addPotionEffect(new PotionEffect(eff.getType(), 1800, eff.getAmplifier()));
             else
                 damagee.addPotionEffect(eff);
         });
         if (damagee.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE))
             damagee.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
 
-        for (PotionEffectType effect : Arrays.asList(PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HARM, PotionEffectType.POISON, PotionEffectType.SLOW, PotionEffectType.SLOW_DIGGING, PotionEffectType.WEAKNESS, PotionEffectType.WITHER))
+        for (PotionEffectType effect : Arrays.asList(PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HARM, PotionEffectType.POISON, PotionEffectType.SLOW, PotionEffectType.WEAKNESS, PotionEffectType.WITHER))
             if (damagee.hasPotionEffect(effect))
                 damagee.removePotionEffect(effect);
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Temporarily copy potion effects when you're getting hit.");
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }
 
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Giving you 'the look'.",
+                "",
+                ChatColor.GRAY + "Copies potion effects when hit."
+        );
+    }
 }

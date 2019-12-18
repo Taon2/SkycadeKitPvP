@@ -1,30 +1,38 @@
 package net.skycade.kitpvp.listeners.player;
 
+import net.minelink.ctplus.CombatTagPlus;
 import net.skycade.SkycadeCore.leveling.achievements.Achievement;
 import net.skycade.SkycadeCore.leveling.achievements.CoreAchievementEvent;
 import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.bukkitevents.KitPvPCoinsRewardEvent;
+import net.skycade.kitpvp.bukkitevents.KitPvPKillPlayerEvent;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
+import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.events.DoubleCoinsEvent;
-import net.skycade.kitpvp.events.KitPvPCoinsRewardEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.*;
+import net.skycade.kitpvp.kit.kits.disabled.KitFireArcher;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
+import org.bukkit.GameMode;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import static net.skycade.kitpvp.Messages.*;
 
 public class PlayerDamageListener implements Listener {
 
@@ -39,37 +47,37 @@ public class PlayerDamageListener implements Listener {
     }
 
     @EventHandler
-    public void onEntityDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player && e.getCause() == EntityDamageEvent.DamageCause.FALL)
-            e.setCancelled(true);
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.FALL)
+            event.setCancelled(true);
     }
 
     @EventHandler
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
-            if (plugin.getSpawnRegion().contains(e.getEntity().getLocation())) {
-                e.setCancelled(true);
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+            if (plugin.getSpawnRegion().contains(event.getEntity().getLocation())) {
+                event.setCancelled(true);
                 return;
             }
-            if (!(e.getEntity() instanceof Player))
+            if (!(event.getEntity() instanceof Player))
                 return;
-            Player damagee = (Player) e.getEntity();
+            Player damagee = (Player) event.getEntity();
             if (lastProjLaunch.containsKey(damagee)) {
-                addAssist(damagee, Bukkit.getPlayer(lastProjLaunch.get(damagee)), e.getDamage());
+                addAssist(damagee, Bukkit.getPlayer(lastProjLaunch.get(damagee)), event.getDamage());
                 lastProjLaunch.remove(damagee);
                 return;
             }
-            if (!(e.getDamager() instanceof Player))
+            if (!(event.getDamager() instanceof Player))
                 return;
             if (plugin.getStats(damagee).getActiveKit().getKit().getKitType() == KitType.SONIC)
                 ((KitSonic) plugin.getStats(damagee).getActiveKit().getKit()).disableSprint(damagee);
 
-            Player damager = (Player) e.getDamager();
+            Player damager = (Player) event.getDamager();
 
-            plugin.getStats(damager).getActiveKit().getKit().onDamageDealHit(e, damager, damagee);
-            plugin.getStats(damagee).getActiveKit().getKit().onDamageGetHit(e, damager, damagee);
+            plugin.getStats(damager).getActiveKit().getKit().onDamageDealHit(event, damager, damagee);
+            plugin.getStats(damagee).getActiveKit().getKit().onDamageGetHit(event, damager, damagee);
 
             if (!damager.equals(damagee))
-                addAssist(damagee, damager, e.getDamage());
+                addAssist(damagee, damager, event.getDamage());
     }
 
     @EventHandler
@@ -81,46 +89,39 @@ public class PlayerDamageListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    public void onPlayerDeath(PlayerDeathEvent e) {
-        e.getDrops().clear();
-        e.setDeathMessage("");
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        event.getDrops().clear();
+        event.setDeathMessage("");
 
-        //removes the wolves from the player before respawning, due to player teleporting back to wolves bug
-        Kit playerKit = plugin.getStats(MemberManager.getInstance().getMember(e.getEntity())).getActiveKit().getKit();
-        if (playerKit.getKitType() == KitType.WOLFPACK) {
-            ((KitWolfPack) playerKit).removeWolf(0, e.getEntity());
-        }
+        CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
 
-        if (e.getEntity().isOnline()) plugin.respawn(e.getEntity());
+        pl.getTagManager().untag(event.getEntity().getUniqueId());
 
-        Player died = e.getEntity();
+        boolean resetStats = plugin.getStats(event.getEntity()).getActiveKit().getKit().onDeath(event.getEntity());
+
+        //Removes the wolves from the player before respawning, due to player teleporting back to wolves bug
+        Kit playerKit = plugin.getStats(MemberManager.getInstance().getMember(event.getEntity())).getActiveKit().getKit();
+        playerKit.removeSummon(0, event.getEntity());
+        playerKit.cancelRunnables(event.getEntity());
+
+        if (event.getEntity().isOnline() && resetStats) respawn(event.getEntity());
+
+        Player died = event.getEntity();
         Member diedMem = MemberManager.getInstance().getMember(died);
         KitPvPStats diedStats = plugin.getStats(diedMem);
 
         // Increase highest killstreak
         int diedStreak = diedStats.getStreak();
 
-        // Give extra xp for a high ks.
-//        if (diedStreak > 5) {
-//            int rewardXp = 1;
-//            int streak = diedStreak;
-//            while (streak > 0) {
-//                rewardXp++;
-//                streak -= 5;
-//            }
-//            diedStats.getActiveKit().getKit().increaseXp(died, rewardXp);
-//        }
-
-        // Increase deaths and reset ks
+        //Increase deaths
         diedStats.setDeaths(plugin.getStats(diedMem).getDeaths() + 1);
-        diedStats.setStreak(0);
 
         died.getLocation().getWorld().playEffect(died.getLocation(), Effect.SMOKE, 1);
         plugin.getKitManager().getSignMap().remove(died.getUniqueId());
 
         ScoreboardInfo.getInstance().updatePlayer(died);
 
-        // Try to get the killer
+        //Try to get the killer
         Player killer = died.getKiller();
         if (killer == null && lastDamagerMap.get(died.getUniqueId()) != null) {
             String customName;
@@ -138,43 +139,21 @@ public class PlayerDamageListener implements Listener {
         diedMem.setLastKiller(killer.getUniqueId());
 
         killer.playSound(killer.getLocation(), "minecraft:entity.experience_orb.pickup", 1, 1);
-        diedMem.message("You got killed by " + killerMem.getName() + "§7.");
-        killerMem.message("You killed " + diedMem.getName() + "§7.");
+        KILLED_BY.msg(diedMem.getPlayer(), "%player%", killerMem.getName());
+        YOU_KILLED.msg(killerMem.getPlayer(), "%player%", diedMem.getName());
 
-        // The same player got killed multiple times
-        if (noKillRewards(killer, died))
-            return;
-        // On the same ip (anti alt boosting)
-//        if (killer.getAddress().getAddress().getHostAddress()
-//                .equals(diedMem.getPlayer().getAddress().getAddress().getHostAddress())) {
-//            killerMem.message("§7The player you killed is on the §asame ip address§7, you got no rewards.");
-//            return;
-//        }
-
-        // Bounties!
-        int bounty = 0;
-
-        int bountyLevel;
-        for (bountyLevel = diedStreak; bountyLevel > 0; --bountyLevel) {
-            bounty = KitPvP.getInstance().getConfig().getInt("bounties." + bountyLevel, 0);
-
-            if (bounty != 0) break;
-        }
-
-        if (bounty != 0) {
-            killerMem.message("§aYou got " + bounty + " extra coins as a reward for breaking " + diedMem.getName() + "'s killstreak!");
-        }
-
-        //Extra coins when a high ks gets broken
-        int killstreakCoins = diedStats.getStreak() >= 10 ? diedStats.getStreak() : 0;
-        if (diedStats.getStreak() >= 10)
-            killerMem.message("Killstreak broken, you got §a" + diedStats.getStreak() + " extra coins§7.");
-
+        //Update kills
         KitPvPStats stats = plugin.getStats(killerMem);
 
-        // Give rewards to the killer
         final int kills = stats.getKills() + 1;
         stats.setKills(kills);
+
+        if (resetStats)
+            diedStats.setStreak(0);
+
+        //For missions
+        KitPvPKillPlayerEvent killEvent = new KitPvPKillPlayerEvent(killer, stats.getActiveKit());
+        Bukkit.getServer().getPluginManager().callEvent(killEvent);
 
         Bukkit.getServer().getPluginManager().callEvent(new CoreAchievementEvent(killer, "kitpvpkills") {
             @Override
@@ -192,8 +171,12 @@ public class PlayerDamageListener implements Listener {
             }
         });
 
+        //Update ks
         final int streak = plugin.getStats(killer).getStreak() + 1;
         stats.setStreak(streak);
+
+        if (streak % 10 == 0)
+            HAS_KILLSTREAK.broadcast("%killer%", killer.getName(), "%ks%", Integer.toString(streak));
 
         Bukkit.getServer().getPluginManager().callEvent(new CoreAchievementEvent(killer, "kitpvpstreak") {
             @Override
@@ -202,6 +185,34 @@ public class PlayerDamageListener implements Listener {
             }
         });
 
+        //The same player got killed multiple times
+        if (noKillRewards(killer, died)) {
+            ScoreboardInfo.getInstance().updatePlayer(killer);
+            return;
+        }
+
+        //Give rewards to the killer
+        //Bounties!
+        int bounty = 0;
+
+        int bountyLevel;
+        for (bountyLevel = diedStreak; bountyLevel > 0; --bountyLevel) {
+            bounty = KitPvP.getInstance().getConfig().getInt("bounties." + bountyLevel, 0);
+
+            if (bounty != 0) break;
+        }
+
+        if (bounty != 0)
+            COLLECTED_BOUNTY.msg(killerMem.getPlayer(), "%amount%", Integer.toString(bounty), "%player%", diedMem.getName());
+
+        //Extra coins when a high ks gets broken
+        int killstreakCoins = diedStreak >= 10 ? diedStreak : 0;
+        if (diedStreak >= 10) {
+            YOU_BROKE_KILLSTREAK.msg(killerMem.getPlayer(), "%amount%", Integer.toString(diedStreak), "%player%", diedMem.getName());
+            BROKE_KILLSTREAK.broadcast("%killer%", killer.getName(), "%dead%", died.getName(), "%ks%", Integer.toString(diedStreak));
+        }
+
+        //Normal kill coins
         int base = KitPvP.getInstance().getConfig().getInt("kill-coins");
         int extra = (int) Math.ceil(base * Math.pow((100 + KitPvP.getInstance().getConfig().getInt("kill-bonus-percentage")) / ((double) 100), stats.getStreak() - 1)) + bounty;
 
@@ -211,18 +222,12 @@ public class PlayerDamageListener implements Listener {
         if (DoubleCoinsEvent.isActive())
             finalReward = finalReward * 2;
 
-        KitPvPCoinsRewardEvent event = new KitPvPCoinsRewardEvent(killer, finalReward);
-        Bukkit.getPluginManager().callEvent(event);
+        KitPvPCoinsRewardEvent coinsEvent = new KitPvPCoinsRewardEvent(killer, finalReward);
+        Bukkit.getPluginManager().callEvent(coinsEvent);
 
-        if (!event.isCancelled()) {
-            stats.setCoins(stats.getCoins() + event.getNewCoins());
+        if (!coinsEvent.isCancelled()) {
+            stats.giveCoins(coinsEvent.getNewCoins());
         }
-
-        // Increase kit xp depending on the kit and level of the player who died.
-        /*int rewardXp = (diedStats.getActiveKit().getKit().getPrice() / 2000) * diedStats.getKits().get(diedStats.getActiveKit()).getLevel();
-        if (rewardXp < 1)
-            rewardXp = 1;
-        stats.getActiveKit().getKit().increaseXp(killer, rewardXp);*/ // we're not using XP...
 
         checkAssist(died, killer);
 
@@ -230,49 +235,63 @@ public class PlayerDamageListener implements Listener {
     }
 
     @EventHandler
-    public void onProjectileLaunch(ProjectileLaunchEvent e) {
-        Projectile proj = e.getEntity();
+    public void onProjectileLaunch(ProjectileLaunchEvent event) {
+        Projectile proj = event.getEntity();
         if (!(proj.getShooter() instanceof Player))
             return;
         Player shooter = (Player) proj.getShooter();
+
         if (plugin.isInSpawnArea(shooter)) {
-            e.setCancelled(true);
+            event.setCancelled(true);
             return;
         }
+
         lastProjLaunch.put(proj, shooter.getUniqueId());
 
         Kit kit = plugin.getStats(shooter).getActiveKit().getKit();
 
         if (proj.getType() == EntityType.FISHING_HOOK) {
             if (kit.getKitType() == KitType.FISHERMAN)
-                ((KitFisherman) kit).onRodUse(shooter, e);
+                ((KitFisherman) kit).onRodUse(shooter, event);
         } else if (proj.getType() == EntityType.SNOWBALL) {
             if (kit.getKitType() == KitType.SHACO)
-                ((KitShaco) kit).onSnowballUse(shooter, e);
+                ((KitShaco) kit).onSnowballUse(shooter, event);
             else if (kit.getKitType() == KitType.FROSTY)
-                ((KitFrosty) kit).onSnowballUse(shooter, e);
+                ((KitFrosty) kit).onSnowballUse(shooter,event);
+            else if (kit.getKitType() == KitType.SHROOM)
+                ((KitShroom) kit).onSnowballUse(shooter,event);
+            else if (kit.getKitType() == KitType.NECROMANCER)
+                ((KitNecromancer) kit).onSnowballUse(shooter,event);
         } else if (proj.getType() == EntityType.ARROW) {
             if (kit.getKitType() == KitType.ARCHER)
-                ((KitArcher) kit).onArrowLaunch(shooter, e);
+                ((KitArcher) kit).onArrowLaunch(shooter, event);
             else if (kit.getKitType() == KitType.FIREARCHER)
-                ((KitFireArcher) kit).onArrowLaunch(shooter, e);
+                ((KitFireArcher) kit).onArrowLaunch(shooter, event);
             else if (kit.getKitType() == KitType.SNIPER)
-                ((KitSniper) kit).onArrowLaunch(shooter, e);
+                ((KitSniper) kit).onArrowLaunch(shooter, event);
+            else if (kit.getKitType() == KitType.MULTISHOT)
+                ((KitMultishot) kit).onArrowLaunch(shooter, event);
+            else if (kit.getKitType() == KitType.PYROMANCER)
+                ((KitPyromancer) kit).onArrowLaunch(shooter, event);
+            else if (kit.getKitType() == KitType.BUILDUHC)
+                ((KitBuildUHC) kit).onArrowLaunch(shooter, event);
+        } else if (proj.getType() == EntityType.ENDER_PEARL) {
+            if (kit.getKitType() == KitType.TELEPORTER)
+                ((KitTeleporter) kit).onPearlLaunch(shooter, event);
         }
-
     }
 
     @EventHandler
-    public void onProjectileHit(EntityDamageByEntityEvent e) {
-        if (!(e.getEntity() instanceof Player))
+    public void onProjectileHit(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player))
             return;
 
-        Player damagee = (Player) e.getEntity();
-        Entity damager = e.getDamager();
+        Player damagee = (Player) event.getEntity();
+        Entity damager = event.getDamager();
 
         if (damager.getCustomName() != null)
-            lastDamagerMap.put(damagee.getUniqueId(), e.getDamager());
-        if (!(e.getDamager() instanceof Projectile))
+            lastDamagerMap.put(damagee.getUniqueId(), event.getDamager());
+        if (!(event.getDamager() instanceof Projectile))
             return;
         Projectile proj = (Projectile) damager;
         if (!(proj.getShooter() instanceof Player))
@@ -283,7 +302,8 @@ public class PlayerDamageListener implements Listener {
 
         Kit damageeKit = plugin.getStats(damagee).getActiveKit().getKit();
         if (damageeKit.getKitType() == KitType.ENDERMAN) {
-            ((KitEnderman) damageeKit).onArrowHit(shooter, damagee, e);
+            ((KitEnderman) damageeKit).onArrowHit(shooter, damagee, event);
+            return;
         }
 
         Kit kit = plugin.getStats(shooter).getActiveKit().getKit();
@@ -291,15 +311,19 @@ public class PlayerDamageListener implements Listener {
             ((KitShaco) kit).onSnowballHit(shooter, damagee);
         else if (kit.getKitType() == KitType.FROSTY)
             ((KitFrosty) kit).onSnowballHit(shooter, damagee);
+        else if (kit.getKitType() == KitType.SHROOM)
+            ((KitShroom) kit).onSnowballHit(shooter, damagee);
+        else if (kit.getKitType() == KitType.NECROMANCER)
+            ((KitNecromancer) kit).onSnowballHit(shooter, damagee);
         else if (kit.getKitType() == KitType.ARCHER)
-            ((KitArcher) kit).onArrowHit(shooter, damagee, e);
+            ((KitArcher) kit).onArrowHit(shooter, damagee, event);
         else if (kit.getKitType() == KitType.FIREARCHER)
-            ((KitFireArcher) kit).onArrowHit(shooter, damagee, e);
+            ((KitFireArcher) kit).onArrowHit(shooter, damagee, event);
         else if (kit.getKitType() == KitType.SNIPER)
-            ((KitSniper) kit).onArrowHit(shooter, damagee, e);
+            ((KitSniper) kit).onArrowHit(shooter, damagee, event);
 
         if (!damager.equals(damagee))
-            addAssist(damagee, shooter, e.getDamage());
+            addAssist(damagee, shooter, event.getDamage());
     }
 
     private void addAssist(Player damaged, Player damager, double damage) {
@@ -339,7 +363,7 @@ public class PlayerDamageListener implements Listener {
             playerKilledMap.put(killed.getUniqueId(), amount);
             samePlayerKill.put(killer.getUniqueId(), playerKilledMap);
             if (amount > 3) {
-                killer.sendMessage("§7You killed the same player more than 3 times, §cno rewards §7rewarded.");
+                NO_REWARDS.msg(killer);
                 return true;
             }
         } else {
@@ -368,17 +392,10 @@ public class PlayerDamageListener implements Listener {
                     if (keyPlayer != killed && keyPlayer != killer) {
                         int assist = (int) (coins * percentage);
                         if (assist > 0) {
-                            keyPlayer.sendMessage("§7You got §6" + assist +
-                                    " §7coins for assisting to kill " + killed.getName() + "§7!");
-
-                            // Give xp reward
-                            KitPvPStats diedStats = plugin.getStats(killed);
-                            int rewardXp = ((diedStats.getActiveKit().getKit().getPrice() / 15000) * diedStats.getKits().get(diedStats.getActiveKit()).getLevel()) * (int) percentage;
-                            if (rewardXp > 0)
-                                plugin.getStats(keyPlayer).getActiveKit().getKit().increaseXp(keyPlayer, rewardXp);
+                            ASSIST_REWARD.msg(keyPlayer, "%amount%", Integer.toString(assist), "%player%", killed.getName());
                         }
 
-                        plugin.getStats(keyPlayer).setCoins(plugin.getStats(keyPlayer).getCoins() + assist);
+                        plugin.getStats(keyPlayer).giveCoins(assist);
                         plugin.getStats(keyPlayer).setAssists(plugin.getStats(keyPlayer).getAssists() + 1);
                     }
                 }
@@ -390,16 +407,48 @@ public class PlayerDamageListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        UUID uuid = e.getPlayer().getUniqueId();
-        Member member = MemberManager.getInstance().getMember(e.getPlayer().getUniqueId(), false);
-        if (member != null) {
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        UUID uuid = event.getPlayer().getUniqueId();
+        Member member = MemberManager.getInstance().getMember(event.getPlayer().getUniqueId(), false);
+
+        // Kills player if in combat and not in spawn
+        CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
+        if (member != null && !plugin.getSpawnRegion().contains(member.getPlayer()) && pl.getTagManager().isTagged(event.getPlayer().getUniqueId())) {
+            plugin.getStats(member).setDeaths(plugin.getStats(member.getPlayer()).getDeaths() + 1);
+
+            // Increases kills for last damager to the player logging out
+            Player attacker = Bukkit.getPlayer(lastDamagerMap.get(uuid).getCustomName());
+
+            if (attacker != null) {
+                Member lastDamager = MemberManager.getInstance().getMember(attacker.getUniqueId(), false);
+                plugin.getStats(lastDamager).setKills(plugin.getStats(lastDamager).getKills() + 1);
+                YOU_KILLED_LOGGED_OUT.msg(lastDamager.getPlayer());
+            }
+
             member.setLastKiller(null);
         }
+
         lastDamagerMap.remove(uuid);
         killAssist.remove(uuid);
         samePlayerKill.remove(uuid);
-        //plugin.getStats().remove(uuid); // todo: remove
     }
 
+    private void respawn(Player p) {
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> UtilPlayer.reset(p), 1);
+        p.setHealth(p.getMaxHealth());
+        p.setVelocity(new Vector(0, 0, 0));
+        p.setGameMode(GameMode.SURVIVAL);
+        p.teleport(KitPvP.getInstance().getSpawnLocation());
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), p::updateInventory, 10);
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> p.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
+        KitPvPStats stats = KitPvP.getInstance().getStats(p);
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            stats.getActiveKit().getKit().giveSoup(p, 32);
+        }, 5);
+        stats.applyKitPreference();
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            stats.getActiveKit().getKit().beginApplyKit(p);
+            KitPvP.getInstance().getEventShopManager().reapplyUpgrades(p);
+        }, 3);
+    }
 }

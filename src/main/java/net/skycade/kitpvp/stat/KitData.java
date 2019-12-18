@@ -11,27 +11,10 @@ public class KitData {
 
     public KitData(KitType kitType) {
         this(new HashMap<>());
-        setLevel(1);
     }
 
     public KitData(Map<String, Integer> map) {
         this.map = map;
-    }
-
-    public int getLevel() {
-        return getInt("level");
-    }
-
-    public void setLevel(int level) {
-        set("level", level);
-    }
-
-    public int getXp() {
-        return getInt("xp");
-    }
-
-    public void setXp(int xp) {
-        set("xp", xp);
     }
 
     private int getInt(String key) {

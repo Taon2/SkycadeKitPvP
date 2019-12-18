@@ -1,72 +1,100 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class KitKing extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+
+    private int golemCooldown = 35;
+    private List<IronGolem> golemList = new ArrayList<>();
+
     public KitKing(KitManager kitManager) {
-        super(kitManager, "King", KitType.KING, 50000, "Not afraid to show his shiny crown");
+        super(kitManager, "King", KitType.KING, 38000, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.GOLD_HELMET)
+                .addEnchantment(Enchantment.DURABILITY, 2).build();
+        chestplate = new ItemBuilder(
+                Material.IRON_CHESTPLATE).build();
+        leggings = new ItemBuilder(
+                Material.IRON_LEGGINGS).build();
+        boots = new ItemBuilder(
+                Material.IRON_BOOTS).build();
+        weapon = new ItemBuilder(
+                Material.IRON_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + golemCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "summons a golem to fight for you.").build();
 
-        defaultsMap.put("kit.icon.material", "GOLD_HELMET");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 50000);
-
-        defaultsMap.put("inventory.sword.material", "IRON_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
-
-        defaultsMap.put("armor.material", "IRON");
-        defaultsMap.put("armor.enchantments.durability", 0);
-        defaultsMap.put("armor.enchantments.protection", 0);
-
-        defaultsMap.put("armor.helmet.material", "GOLD");
-        defaultsMap.put("armor.helmet.enchantments.durability", 1);
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.GOLD_HELMET);
+        setIcon(icon);
     }
 
     @Override
-    public void applyKit(Player p, int level) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+    public void applyKit(Player p) {
+        p.getInventory().addItem(weapon);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
+    }
 
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection")));
+    @Override
+    public void onItemUse(Player p, ItemStack item) {
+        if (item.getType() != Material.IRON_SWORD)
+            return;
+        if (!addCooldown(p, "Summon Golem", golemCooldown, true))
+            return;
 
-        p.getInventory().setHelmet(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.helmet.material").toUpperCase() + "_HELMET"))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments.durability")).build());
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
+        IronGolem golem = (IronGolem) p.getWorld().spawnEntity(p.getLocation(), EntityType.IRON_GOLEM);
+        golem.setCustomName(p.getName() + " golem");
+        golem.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 2));
+
+        Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 5);
+        nearbyPlayers.remove(p);
+
+        if (!(nearbyPlayers.isEmpty()))
+            golem.setTarget(getClosestTarget(nearbyPlayers, p));
+
+        golemList.add(golem);
+
+        removeSummon(30, p);
+    }
+
+    public void removeSummon(int seconds, Player p) {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+            for (IronGolem golem : golemList)
+                if (golem.getCustomName().contains(p.getName())) {
+                    golem.remove();
+                }
+        }, seconds * 20);
     }
 
     @Override
@@ -75,33 +103,6 @@ public class KitKing extends Kit {
                 .filter(en -> en instanceof Golem && en.getCustomName().contains(damagee.getName()))
                 .collect(Collectors.toList());
         entities.forEach(golem -> ((Golem) golem).setTarget(damager));
-    }
-
-    @Override
-    public void onItemUse(Player p, ItemStack item) {
-        if (item.getType() != Material.IRON_SWORD)
-            return;
-        if (!addCooldown(p, getName(), 4 * 10, true))
-            return;
-        int level = getLevel(p);
-
-        IronGolem golem = (IronGolem) p.getWorld().spawnEntity(p.getLocation(), EntityType.IRON_GOLEM);
-        golem.setCustomName(p.getName() + " golem");
-
-		/* if (level < 3)
-            golem.setHealth(level == 1 ? golem.getMaxHealth() * 0.5 : golem.getMaxHealth() * 0.7); */
-
-        Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 5);
-        if (nearbyPlayers.contains(p))
-            nearbyPlayers.remove(p);
-
-        if (!(nearbyPlayers.isEmpty()))
-            golem.setTarget(getClosestTarget(nearbyPlayers, p));
-
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
-            if (!(golem.isDead()))
-                golem.remove();
-        }, 20 * 30);
     }
 
     private Player getClosestTarget(Set<Player> players, Player p) {
@@ -115,7 +116,17 @@ public class KitKing extends Kit {
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Use your sword to spawn a golem", "§7to fight for you");
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
+    }
+
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Bow down.",
+                "",
+                ChatColor.GRAY + "Right clicking spawns a golem",
+                ChatColor.GRAY + "to attack enemies for you."
+        );
     }
 }

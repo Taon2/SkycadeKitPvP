@@ -1,119 +1,178 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static net.skycade.kitpvp.Messages.YOURE_FROZEN;
 
 public class KitFrosty extends Kit {
 
-    private final List<Player> snowballCooldown = new ArrayList<>();
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+    private ItemStack snowball;
+
+    private int snowballCooldown = 5;
+    private int snowballStartAmount = 6;
+    private int snowballMaxAmount = 8;
+    private int snowballRegenSpeed = 20;
+
+    private List<Snowball> snowballList = new ArrayList<>();
 
     public KitFrosty(KitManager kitManager) {
-        super(kitManager, "Frosty", KitType.FROSTY, 15000, "Always ready for a snowball fight");
+        super(kitManager, "Frosty", KitType.FROSTY, 20000, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.JACK_O_LANTERN)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Takes extra damage from lava and fire.").build();
+        chestplate = new ItemBuilder(
+                Material.LEATHER_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Takes extra damage from lava and fire.")
+                .setColour(Color.fromRGB(200, 255, 255)).build();
+        leggings = new ItemBuilder(
+                Material.LEATHER_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Takes extra damage from lava and fire.")
+                .setColour(Color.fromRGB(200, 255, 255)).build();
+        boots = new ItemBuilder(
+                Material.LEATHER_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Takes extra damage from lava and fire.")
+                .setColour(Color.fromRGB(200, 255, 255)).build();
+        weapon = new ItemBuilder(
+                Material.IRON_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5).build();
+        snowball = new ItemBuilder(
+                Material.SNOW_BALL, snowballStartAmount)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Throwing a snowball every " + snowballCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "freezes the target in place.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 snowball every " + snowballRegenSpeed + " seconds.").build();
 
-        defaultsMap.put("kit.icon.material", "SNOW_BALL");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 15000);
-
-        defaultsMap.put("inventory.sword.material", "IRON_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
-
-        defaultsMap.put("inventory.snowball.amount", 6);
-        defaultsMap.put("inventory.snowball.max-amount", 8);
-
-        defaultsMap.put("armor.helmet.enchantments.durability", 2);
-
-        defaultsMap.put("armor.chestplate.material", "LEATHER");
-        defaultsMap.put("armor.chestplate.enchantments.durability", 12);
-        defaultsMap.put("armor.chestplate.enchantments.protection", 3);
-
-        defaultsMap.put("armor.leggings.material", "LEATHER");
-        defaultsMap.put("armor.leggings.enchantments.durability", 12);
-        defaultsMap.put("armor.leggings.enchantments.protection", 3);
-
-        defaultsMap.put("armor.boots.material", "LEATHER");
-        defaultsMap.put("armor.boots.enchantments.durability", 12);
-        defaultsMap.put("armor.boots.enchantments.protection", 3);
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.SNOW_BALL);
+        setIcon(icon);
     }
 
     @Override
-    public void applyKit(Player p, int level) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+    public void applyKit(Player p) {
+        p.getInventory().addItem(weapon);
+        p.getInventory().addItem(snowball);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
 
-        p.getInventory().addItem(new ItemBuilder(Material.SNOW_BALL, getConfig().getInt("inventory.snowball.amount")).build());
-
-        p.getInventory().setHelmet(new ItemBuilder(
-                Material.JACK_O_LANTERN)
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.helmet.enchantments.durability")).build());
-
-        p.getInventory().setChestplate(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.chestplate.material").toUpperCase() + "_CHESTPLATE"))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.chestplate.enchantments.durability"))
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.chestplate.enchantments.protection")).build());
-
-        p.getInventory().setLeggings(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.leggings.material").toUpperCase() + "_LEGGINGS"))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.leggings.enchantments.durability"))
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.leggings.enchantments.protection")).build());
-
-        p.getInventory().setBoots(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("armor.boots.material").toUpperCase() + "_BOOTS"))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.boots.enchantments.durability"))
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, getConfig().getInt("armor.boots.enchantments.protection")).build());
-
-        startItemRunnable(p, 20, new ItemBuilder(Material.SNOW_BALL).build(), getConfig().getInt("inventory.snowball.max-amount"), KitType.FROSTY);
+        startItemRunnable(p, snowballRegenSpeed, getSnowball(1), snowballMaxAmount, KitType.FROSTY);
     }
 
     public void onSnowballUse(Player shooter, ProjectileLaunchEvent e) {
-        if (!addCooldown(shooter, getName(), 10, true) || snowballCooldown.contains(shooter)) {
-            e.setCancelled(true);
-            ItemStack ball = (new ItemStack(Material.SNOW_BALL, 1));
-            ball.setItemMeta(shooter.getItemInHand().getItemMeta());
-            shooter.getInventory().addItem(ball);
-            return;
-        }
-        snowballCooldown.add(shooter);
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> snowballCooldown.remove(shooter), 10);
+        e.getEntity().setCustomName(shooter.getName());
+        e.getEntity().setCustomNameVisible(false);
+        snowballList.add((Snowball) e.getEntity());
+
         e.getEntity().setVelocity(e.getEntity().getVelocity().multiply(2));
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
-        damagee.sendMessage("§bYou got frozen.");
+        if (!addCooldown(shooter, "Frosty", snowballCooldown, true)) {
+            return;
+        }
+
+        KitPvPStats stats = KitPvP.getInstance().getStats(shooter);
+
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(shooter, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
+        YOURE_FROZEN.msg(damagee, "%player%", shooter.getName(), "%kit%", stats.getActiveKit().getKit().getName());
         freezePlayer(damagee, 5);
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Use your snowballs to freeze players", "§7you will regain them overtime");
+    public void onMove(Player p) {
+        if (p.getLocation().getBlock().getType() == Material.STATIONARY_LAVA || p.getLocation().getBlock().getType() == Material.LAVA || p.getLocation().getBlock().getType() == Material.FIRE) {
+            p.damage(1);
+        }
     }
 
+    private ItemStack getSnowball(int amount) {
+        ItemStack snowballRegen = new ItemStack(snowball);
+        snowballRegen.setAmount(amount);
+
+        return snowballRegen;
+    }
+
+    @Override
+    public void reimburseItem(Player p, ItemStack item) {
+        if (item != null && item.getType() == getSnowball(item.getAmount()).getType()) {
+            Inventory inv = p.getInventory();
+            int amount = 0;
+            ItemStack newItem = getSnowball(1);
+
+            Integer finalSlot = null;
+            for (Integer i = 0; i < inv.getSize(); i++)
+                if (inv.getItem(i) != null)
+                    if (inv.getItem(i).getType() == newItem.getType()) {
+                        amount += inv.getItem(i).getAmount();
+                        if (amount <= inv.getMaxStackSize())
+                            finalSlot = i;
+                    }
+            if (finalSlot != null && amount > 0) {
+                ItemStack invItem = inv.getItem(finalSlot);
+                if (amount < snowballMaxAmount)
+                    inv.setItem(finalSlot, new ItemStack(invItem.getType(), invItem.getAmount() + 1));
+            } else
+                p.getInventory().addItem(newItem);
+        }
+    }
+
+    public void removeSummon(int seconds, Player p) {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+            for (Snowball snowball : snowballList)
+                if (snowball.getCustomName().contains(p.getName())) {
+                    snowball.remove();
+                }
+        }, seconds * 20);
+    }
+
+    @Override
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
+    }
+
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "I'm melting!",
+                "",
+                ChatColor.GRAY + "Snowballs freeze players in place.",
+                ChatColor.GRAY + "Takes extra damage from lava and fire."
+        );
+    }
 }

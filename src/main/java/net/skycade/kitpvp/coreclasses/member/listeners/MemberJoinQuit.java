@@ -4,6 +4,10 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
+import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPCoins;
+import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPDeaths;
+import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPKillStreak;
+import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPKills;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +17,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -31,46 +36,47 @@ public class MemberJoinQuit implements Listener {
     }
 
     @EventHandler
-    public void on(AsyncPlayerPreLoginEvent e) {
+    public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         if (System.currentTimeMillis() - startup < 2000) {
-            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Server starting up...");
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Server starting up...");
             return;
         }
-        if (lastLogin.containsKey(e.getUniqueId())
-                && System.currentTimeMillis() - lastLogin.get(e.getUniqueId()) < 4000L) {
-            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Please wait before re-logging in");
+        if (lastLogin.containsKey(event.getUniqueId())
+                && System.currentTimeMillis() - lastLogin.get(event.getUniqueId()) < 4000L) {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Please wait before re-logging in");
             return;
         }
 
-        lastLogin.put(e.getUniqueId(), System.currentTimeMillis());
+        lastLogin.put(event.getUniqueId(), System.currentTimeMillis());
         Member member;
         try {
-            member = memberManager.getMember(e.getUniqueId(), true);
+            member = memberManager.getMember(event.getUniqueId(), true);
             if (member == null) {
-                member = new Member(e.getUniqueId(), e.getName());
+                member = new Member(event.getUniqueId(), event.getName());
             } else {
-                member.setName(e.getName());
-            /* List<String> previousNames = member.getPreviousNames();
-            if (!previousNames.contains(e.getName())) {
-                member.addPreviousName(e.getName());
-            } setName already handles this no? */
+                member.setName(event.getName());
             }
             memberManager.getMembers().put(member.getUUID(), member);
-        } catch (Exception a) {
-            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "Sorry, your data was not loaded correctly! Please re-join!");
-            KitPvP.getInstance().getLogger().log(Level.WARNING, "An error occurred while loading player's data.", a);
-            memberManager.getMembers().remove(e.getUniqueId());
-        }
 
+        } catch (Exception a) {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "Sorry, your data was not loaded correctly! Please re-join!");
+            KitPvP.getInstance().getLogger().log(Level.WARNING, "An error occurred while loading player's data.", a);
+            memberManager.getMembers().remove(event.getUniqueId());
+        }
+        // update the UUIDs when a player joins so that the stats includes them
+        StatKitPvPKills.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
+        StatKitPvPCoins.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
+        StatKitPvPDeaths.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
+        StatKitPvPKillStreak.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
     }
 
     @EventHandler
-    public void on(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player p = event.getPlayer();
         Member member = memberManager.getMember(p, true);
 
         if (member == null) {
-            e.getPlayer().kickPlayer("§cSorry, your data was not loaded correctly! Please re-join!");
+            event.getPlayer().kickPlayer("§cSorry, your data was not loaded correctly! Please re-join!");
             return;
         }
 
@@ -80,18 +86,15 @@ public class MemberJoinQuit implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void on(PlayerQuitEvent e) {
-        Member member = memberManager.getMember(e.getPlayer());
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Member member = memberManager.getMember(event.getPlayer());
 
-        UtilPlayer.removeAttachment(e.getPlayer());
+        UtilPlayer.removeAttachment(event.getPlayer());
 
         if (member != null) {
             MemberManager.getInstance().update(member, true);
-            /* Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () ->
-                memberManager.getMembers().remove(member.getUUID())
-            ); */
         } else
-            e.setQuitMessage(null);
+            event.setQuitMessage(null);
     }
 
 }

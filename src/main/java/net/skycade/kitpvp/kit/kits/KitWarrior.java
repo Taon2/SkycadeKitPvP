@@ -4,90 +4,79 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class KitWarrior extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+
+    private double damageMultiplier = 1.4;
+
     public KitWarrior(KitManager kitManager) {
-        super(kitManager, "Warrior", KitType.WARRIOR, 50000, "This warrior can survive a hit!");
+        super(kitManager, "Warrior", KitType.WARRIOR, 50000, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.DIAMOND_HELMET)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Damage you receive is multiplied by " + damageMultiplier + ".").build();
+        chestplate = new ItemBuilder(
+                Material.DIAMOND_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 1)
+                .addEnchantment(Enchantment.THORNS, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Damage you receive is multiplied by " + damageMultiplier + ".").build();
+        leggings = new ItemBuilder(
+                Material.DIAMOND_LEGGINGS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Damage you receive is multiplied by " + damageMultiplier + ".").build();
+        boots = new ItemBuilder(
+                Material.DIAMOND_BOOTS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Damage you receive is multiplied by " + damageMultiplier + ".").build();
+        weapon = new ItemBuilder(
+                Material.STONE_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
 
-        defaultsMap.put("kit.icon.material", "DIAMOND_CHESTPLATE");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 50000);
 
-        defaultsMap.put("inventory.sword.material", "STONE_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.knockback", 1);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 1);
-
-        defaultsMap.put("armor.material", "DIAMOND");
-        defaultsMap.put("armor.enchantments.durability", 0);
-        defaultsMap.put("armor.enchantments.protection", 0);
-
-        defaultsMap.put("armor.chestplate.enchantments.thorns", 1);
-        defaultsMap.put("armor.chestplate.enchantments.durability", 1);
-
-        defaultsMap.put("armor.helmet.lore", "§FDamage you receive is multiplied by");
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.DIAMOND_CHESTPLATE);
+        setIcon(icon);
     }
 
     @Override
-    public void applyKit(Player p, int level) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword.enchantments.knockback"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
-
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection")));
-
-        p.getInventory().getArmorContents()[2]
-                .addEnchantment(Enchantment.THORNS, getConfig().getInt("armor.chestplate.enchantments.thorns"));
-
-        p.getInventory().getArmorContents()[2]
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("armor.chestplate.enchantments.durability"));
-
-        p.getInventory().setHelmet(new ItemBuilder(p.getInventory().getArmorContents()[3])
-                .addLore(getConfig().getString("armor.helmet.lore") + " " + getDamageMultiplier(level)).build());
+    public void applyKit(Player p) {
+        p.getInventory().addItem(weapon);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
     }
 
     @Override
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        e.setDamage(e.getDamage() * getDamageMultiplier(3));
+        e.setDamage(e.getDamage() * damageMultiplier);
     }
 
-    private double getDamageMultiplier(int level) {
-        /* if (level == 1)
-			return 2;
-		else if (level == 2)
-			return 1.7;
-		else */
-        return 1.4;
+    @Override
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }
 
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.AQUA + "" + ChatColor.BOLD + "Defensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "A softie on the inside!",
+                "",
+                ChatColor.GRAY + "Strong, but takes 1.4x damage when hit."
+        );
+    }
 }

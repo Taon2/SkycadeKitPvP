@@ -6,150 +6,156 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
-import static java.lang.Integer.parseInt;
+import static net.skycade.kitpvp.Messages.*;
 
 public class KitArcher extends Kit {
 
-    private final List<UUID> bowCooldown = new ArrayList<>();
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+    private ItemStack bow;
+    private ItemStack arrows;
+
+    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
+
+    private int arrowCooldown = 1;
+    private int arrowRegenSpeed = 3;
+    private int arrowStartAmount = 16;
+    private int arrowMaxAmount = 16;
+
+    private List<Arrow> arrowList = new ArrayList<>();
 
     public KitArcher(KitManager kitManager) {
-        super(kitManager, "Archer", KitType.ARCHER, 8000, "Chance-based archer kit");
+        super(kitManager, "Archer", KitType.ARCHER, 0, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.LEATHER_HELMET)
+                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+        chestplate = new ItemBuilder(
+                Material.LEATHER_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+        leggings = new ItemBuilder(
+                Material.LEATHER_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+        boots = new ItemBuilder(
+                Material.LEATHER_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+        weapon = new ItemBuilder(
+                Material.STONE_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5).build();
+        bow = new ItemBuilder(
+                Material.BOW)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.ARROW_DAMAGE, 2)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fire 1 arrow every " + arrowCooldown + " second.").build();
+        arrows = new ItemBuilder(
+                Material.ARROW, arrowStartAmount)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 arrow every " + arrowRegenSpeed + " seconds.").build();
 
-        defaultsMap.put("kit.icon.material", "BOW");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 8000);
+        constantEffects.put(PotionEffectType.SPEED, 1);
 
-        defaultsMap.put("inventory.sword.material", "STONE_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
-        defaultsMap.put("inventory.bow.enchantments.durability", 5);
-        defaultsMap.put("inventory.bow.enchantments.arrow-damage", 1);
-        defaultsMap.put("inventory.armour.type", "LEATHER");
-        defaultsMap.put("inventory.armour.durability", 5);
-        defaultsMap.put("inventory.armour.protection", 2);
-        defaultsMap.put("inventory.arrow.amount", 16);
-        defaultsMap.put("inventory.arrow.regen-speed", 3);
-        defaultsMap.put("inventory.arrow.max-amount", 64);
-
-        defaultsMap.put("potions.pot1", "SPEED:1");
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.BOW);
+        setIcon(icon);
     }
 
     @Override
-    public void applyKit(Player p, int level) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+    public void applyKit(Player p) {
+        p.getInventory().addItem(weapon);
+        p.getInventory().addItem(bow);
+        p.getInventory().setItem(27, arrows);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
 
-        p.getInventory().addItem(new ItemBuilder(
-                Material.BOW)
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.bow.enchantments.durability"))
-                .addEnchantment(Enchantment.ARROW_DAMAGE, getConfig().getInt("inventory.bow.enchantments.arrow-damage")).build());
+        constantEffects.forEach((effect, amplifier) -> {
+            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+        });
 
-        p.getInventory().addItem(new ItemBuilder(
-                Material.ARROW, getConfig().getInt("inventory.arrow.amount")).build());
-
-        p.getInventory().setArmorContents(getArmour(Material.getMaterial(
-                getConfig().getString("inventory.armour.type") + "_HELMET"),
-                getConfig().getInt("inventory.armour.durability"),
-                getConfig().getInt("inventory.armour.protection")));
-
-        String[] pot1 = getConfig().getString("potions.pot1").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot1[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot1[1])));
-
-        startItemRunnable(p, getConfig().getInt("inventory.arrow.regen-speed"), new ItemBuilder(
-                Material.ARROW).build(), getConfig().getInt("inventory.arrow.max-amount"), KitType.ARCHER);
+        startItemRunnable(p, arrowRegenSpeed, getArrows(1), arrowMaxAmount, KitType.ARCHER);
     }
 
     public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
-        if (bowCooldown.contains(shooter.getUniqueId())) {
+        if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
             e.setCancelled(true);
-            return;
         }
-        bowCooldown.add(shooter.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> bowCooldown.remove(shooter.getUniqueId()), 20);
+
+        e.getEntity().setCustomName(shooter.getName());
+        e.getEntity().setCustomNameVisible(false);
+        arrowList.add((Arrow) e.getEntity());
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
-        int level = getLevel(shooter);
-
-		/* if (level == 1)
-			archerChanceEffects(shooter, damagee, e, 30, 30, 20, 20, 10, 5);
-		else if (level == 2) 
-			archerChanceEffects(shooter, damagee, e, 40, 40, 30, 20, 10, 7);
-		else */
-        archerChanceEffects(shooter, damagee, e, 60, 50, 30, 30, 20);
+        archerChanceEffects(shooter, damagee, e, 60, 50, 30,20);
     }
 
-    private void archerChanceEffects(Player archer, Player target, EntityDamageByEntityEvent e, int regainHealth, int doubleDamage, int slowEffect, int miningEffect, int blindEffect) {
-        int randomNumber = UtilMath.getRandom(0, 1000);
+    private void archerChanceEffects(Player archer, Player target, EntityDamageByEntityEvent e, int regainHealth, int doubleDamage, int slowEffect, int blindEffect) {
+        int randomNumber = UtilMath.getRandom(0, 700);
         if (randomNumber <= regainHealth) {
             archer.setHealth(archer.getMaxHealth());
-            archer.sendMessage("§cHealth boost!");
+            HEALTH_BOOST.msg(archer);
         } else if (randomNumber <= regainHealth + doubleDamage) {
-            archer.sendMessage("§eDouble damage!");
+            DOUBLE_DAMAGE.msg(archer);
             e.setDamage(e.getDamage() * 2);
-            target.sendMessage("§e" + archer.getName() + " got double damage on you");
+            DOUBLE_DAMAGE_YOU.msg(target, "%player%", archer.getName());
         } else if (randomNumber <= regainHealth + doubleDamage + slowEffect) {
-            archer.sendMessage("§0Target is slowed");
+            TARGET_SLOWED.msg(archer);
             target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 5, 0));
-            target.sendMessage("§0" + archer.getName() + " slowed you");
-        } else if (randomNumber <= regainHealth + doubleDamage + slowEffect + miningEffect) {
-            archer.sendMessage("§7Target attack speed lowered");
-            target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 10, 1));
-            target.sendMessage("§7" + archer.getName() + " lowered your attack speed");
-        } else if (randomNumber <= regainHealth + doubleDamage + slowEffect + miningEffect + blindEffect) {
-            archer.sendMessage("§5Target blinded");
+            YOURE_SLOWED.msg(target, "%player%", archer.getName());
+        } else if (randomNumber <= regainHealth + doubleDamage + slowEffect + blindEffect) {
+            TARGET_BLINDED.msg(archer);
             target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 6 * 20, 0));
-            target.sendMessage("§5You got blinded by " + archer.getName());
-        } /* else if (randomNumber <= regainHealth + doubleDamage + slowEffect + miningEffect + blindEffect + instaChance) {
-			archer.sendMessage("§4Triple damage!");
-			target.sendMessage("§7" + archer.getName() + " got triple damage on you");
-			e.setDamage(e.getDamage() * 3);
-			ParticleEffect.EXPLOSION_NORMAL.display(0, 0, 0, 0, 1, target.getLocation(), 20);
-		}*/
+            YOURE_BLINDED.msg(target, "%player%", archer.getName());
+        }
+    }
+
+    private ItemStack getArrows(int amount) {
+        ItemStack arrowRegen = new ItemStack(arrows);
+        arrowRegen.setAmount(amount);
+
+        return arrowRegen;
+    }
+
+    public void removeSummon(int seconds, Player p) {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+            for (Arrow arrow : arrowList)
+                if (arrow.getCustomName().contains(p.getName())) {
+                    arrow.remove();
+                }
+        }, seconds * 20);
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Arrows have a chance to", "§7give effects to your target.");
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "A default kit.");
     }
 
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        bowCooldown.remove(e.getPlayer().getUniqueId());
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.GOLD + "" + ChatColor.BOLD + "Ranged Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Aim for the knees!",
+                "",
+                ChatColor.GRAY + "Arrows have a chance to",
+                ChatColor.GRAY + "give effects to your target."
+        );
     }
-
 }

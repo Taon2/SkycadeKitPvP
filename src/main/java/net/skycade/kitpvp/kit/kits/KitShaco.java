@@ -1,88 +1,102 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
+import static net.skycade.kitpvp.Messages.*;
+
 public class KitShaco extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+    private ItemStack snowball;
+
+    private int snowballCooldown = 5;
+    private int snowballStartAmount = 6;
+    private int snowballMaxAmount = 8;
+    private int snowballRegenSpeed = 20;
+
+    private List<Snowball> snowballList = new ArrayList<>();
+
+    private double backstabMultiplier = 1.2;
+
+    private int invisibilityCooldown = 20;
+    private int invisibilityLength = 8;
+
     private final Map<UUID, ItemStack[]> shacoArmor = new HashMap<>();
-    private final List<UUID> snowballCooldown = new ArrayList<>();
 
     public KitShaco(KitManager kitManager) {
-        super(kitManager, "Shaco", KitType.SHACO, 42000, "Now you see me, now you don't");
+        super(kitManager, "Shaco", KitType.SHACO, 0, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.LEATHER_HELMET)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .setColour(Color.BLACK).build();
+        chestplate = new ItemBuilder(
+                Material.LEATHER_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .setColour(Color.BLACK).build();
+        leggings = new ItemBuilder(
+                Material.LEATHER_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .setColour(Color.BLACK).build();
+        boots = new ItemBuilder(
+                Material.LEATHER_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .setColour(Color.BLACK).build();
+        weapon = new ItemBuilder(
+                Material.IRON_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + invisibilityCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "makes you invisible for " + invisibilityLength + " seconds.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Hits from behind deal more damage while invisible .").build();
+        snowball = new ItemBuilder(
+                Material.SNOW_BALL, snowballStartAmount)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Throwing a snowball every " + snowballCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "makes you switch locations with your target,")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "or teleport you behind your target while invisible.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 snowball every " + snowballRegenSpeed + " seconds.").build();
 
-        defaultsMap.put("kit.icon.material", "FERMENTED_SPIDER_EYE");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 42000);
-
-        defaultsMap.put("inventory.sword.material", "IRON_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 2);
-
-        defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 12);
-        defaultsMap.put("armor.enchantments.protection", 1);
-
-        defaultsMap.put("inventory.snowball.amount", 5);
-        defaultsMap.put("inventory.snowball.regen-speed", 10);
-        defaultsMap.put("inventory.snowball.max-amount", 8);
-
-        defaultsMap.put("damage.backstab-multiplier", 1.2);
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.FERMENTED_SPIDER_EYE);
+        setIcon(icon);
     }
 
     @Override
-    public void applyKit(Player p, int level) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+    public void applyKit(Player p) {
+        p.getInventory().addItem(weapon);
+        p.getInventory().addItem(snowball);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
 
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection"),
-                Color.BLACK));
-
-        p.getInventory().addItem(new ItemBuilder(
-                Material.SNOW_BALL, getConfig().getInt("inventory.snowball.amount")).build());
-
-        startItemRunnable(p, getConfig().getInt("inventory.snowball.regen-speed"), new ItemBuilder(
-                Material.SNOW_BALL).build(), getConfig().getInt("inventory.snowball.max-amount"), KitType.SHACO);
+        startItemRunnable(p, snowballRegenSpeed, getSnowball(1), snowballMaxAmount, KitType.SHACO);
     }
-
 
     @Override
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
@@ -93,8 +107,8 @@ public class KitShaco extends Kit {
 
         if (diffX > 0 && diffX < 1 || diffX < 0 && diffX > -1) {
             if (diffZ > 0 && diffZ < 1 || diffZ < 0 && diffZ > -1) {
-                damagee.sendMessage("§7You got backstabbed");
-                e.setDamage(e.getDamage() * getConfig().getDouble("damage.backstab-multiplier"));
+                BACKSTABBED.msg(damagee);
+                e.setDamage(e.getDamage() * backstabMultiplier);
             }
         }
     }
@@ -103,47 +117,45 @@ public class KitShaco extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        int level = getLevel(p);
-        if (!addCooldown(p, "Invisibility", 30, true))
+        if (!addCooldown(p, "Invisibility", invisibilityCooldown, true))
             return;
-        p.sendMessage("§fPoof!");
-        p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1));
+
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
+        POOF.msg(p);
+        p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 160, 1));
 
         shacoArmor.put(p.getUniqueId(), p.getInventory().getArmorContents());
         p.getInventory().setArmorContents(null);
-        p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 200, 0));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, invisibilityLength * 20, 0));
 
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
             if (shacoArmor.containsKey(p.getUniqueId())) {
                 p.getInventory().setArmorContents(shacoArmor.get(p.getUniqueId()));
                 shacoArmor.remove(p.getUniqueId());
             }
-        }, 200);
+        }, 160);
     }
 
-    public void onSnowballUse(Player p, ProjectileLaunchEvent e) {
-        if (!addCooldown(p, "Switch Locations", 10, true) || snowballCooldown.contains(p.getUniqueId())) {
-            e.setCancelled(true);
-            ItemStack ball = (new ItemStack(Material.SNOW_BALL, 1));
-            ball.setItemMeta(p.getItemInHand().getItemMeta());
-            p.getInventory().addItem(ball);
-            return;
-        }
-        snowballCooldown.add(p.getUniqueId());
-        /* ItemStack mainHand = p.getInventory().getItemInMainHand();
-		ItemStack offHand = p.getInventory().getItemInOffHand();
-		if (mainHand.getType().equals(Material.SNOW_BALL))
-			p.getInventory().getItemInMainHand().setAmount(p.getInventory().getItemInMainHand().getAmount() + 1);
-		else if (offHand.getType().equals(Material.SNOW_BALL))
-			p.getInventory().getItemInOffHand().setAmount(p.getInventory().getItemInOffHand().getAmount() + 1);
-		else
-			p.getInventory().addItem(new ItemStack(Material.SNOW_BALL, 1));
-		p.updateInventory(); */
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> snowballCooldown.remove(p.getUniqueId()), 10);
+    public void onSnowballUse(Player shooter, ProjectileLaunchEvent e) {
+        e.getEntity().setCustomName(shooter.getName());
+        e.getEntity().setCustomNameVisible(false);
+        snowballList.add((Snowball) e.getEntity());
+
         e.getEntity().setVelocity(e.getEntity().getVelocity().multiply(2.5D));
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
+        if (!addCooldown(shooter, "Switch Locations", snowballCooldown, true) || frozenPlayers.containsKey(shooter.getUniqueId()) || frozenPlayers.containsKey(damagee.getUniqueId())) {
+            return;
+        }
+
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(shooter, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
         if (shooter.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
             teleportBehindPlayer(shooter, damagee.getLocation());
         } else {
@@ -151,23 +163,74 @@ public class KitShaco extends Kit {
             Location damageeLoc = damagee.getLocation();
             damagee.teleport(shooterLoc);
             shooter.teleport(damageeLoc);
-            shooter.sendMessage("§9Positions switched!");
-            damagee.sendMessage("§9Positions switched!");
+            POSITIONS_SWITCHED.msg(shooter);
+            POSITIONS_SWITCHED.msg(damagee);
         }
         damagee.damage(8, shooter);
         shacoHit.add(damagee.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getPlugin(), () -> shacoHit.remove(damagee.getUniqueId()), 5 * 20);
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> shacoHit.remove(damagee.getUniqueId()), 5 * 20);
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         shacoArmor.remove(e.getPlayer().getUniqueId());
-        snowballCooldown.remove(e.getPlayer().getUniqueId());
+    }
+
+    private ItemStack getSnowball(int amount) {
+        ItemStack snowballRegen = new ItemStack(snowball);
+        snowballRegen.setAmount(amount);
+
+        return snowballRegen;
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7Use the snowballs to switch positions", "§7use your sword to become invisible.", "§7Hitting someone with a snowball while invisible", "§7will teleport you behind the target");
+    public void reimburseItem(Player p, ItemStack item) {
+        if (item != null && item.getType() == getSnowball(item.getAmount()).getType()) {
+            Inventory inv = p.getInventory();
+            int amount = 0;
+            ItemStack newItem = getSnowball(1);
+
+            Integer finalSlot = null;
+            for (Integer i = 0; i < inv.getSize(); i++)
+                if (inv.getItem(i) != null)
+                    if (inv.getItem(i).getType() == newItem.getType()) {
+                        amount += inv.getItem(i).getAmount();
+                        if (amount <= inv.getMaxStackSize())
+                            finalSlot = i;
+                    }
+            if (finalSlot != null && amount > 0) {
+                ItemStack invItem = inv.getItem(finalSlot);
+                if (amount < snowballMaxAmount)
+                    inv.setItem(finalSlot, new ItemStack(invItem.getType(), invItem.getAmount() + 1));
+            } else
+                p.getInventory().addItem(newItem);
+        }
     }
 
+    public void removeSummon(int seconds, Player p) {
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+            for (Snowball snowball : snowballList)
+                if (snowball.getCustomName().contains(p.getName())) {
+                    snowball.remove();
+                }
+        }, seconds * 20);
+    }
+
+    @Override
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /eventshop!");
+    }
+
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Now you see me, now you don't.",
+                "",
+                ChatColor.GRAY + "Use snowballs to switch positions.",
+                ChatColor.GRAY + "Right click your sword to become invisible.",
+                ChatColor.GRAY + "Using snowballs while invisible",
+                ChatColor.GRAY + "teleports you behind your enemy.",
+                ChatColor.GRAY + "Hits from behind deal more damage when invisible."
+        );
+    }
 }

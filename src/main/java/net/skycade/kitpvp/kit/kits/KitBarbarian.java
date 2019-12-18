@@ -6,6 +6,7 @@ import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -16,63 +17,51 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class KitBarbarian extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+
     public KitBarbarian(KitManager kitManager) {
-        super(kitManager, "Barbarian", KitType.BARBARIAN, 7500, "RAWR!");
+        super(kitManager, "Barbarian", KitType.BARBARIAN, 12000, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.IRON_HELMET)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when hit by enemies.").build();
+        chestplate = new ItemBuilder(
+                Material.IRON_CHESTPLATE)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when hit by enemies.").build();
+        leggings = new ItemBuilder(
+                Material.IRON_LEGGINGS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when hit by enemies.").build();
+        boots = new ItemBuilder(
+                Material.IRON_BOOTS)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when hit by enemies.").build();
+        weapon = new ItemBuilder(
+                Material.IRON_AXE)
+                .addEnchantment(Enchantment.DURABILITY, 5).build();
 
-        defaultsMap.put("kit.icon.material", "IRON_AXE");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 7500);
-
-        defaultsMap.put("inventory.axe.material", "IRON_AXE");
-        defaultsMap.put("inventory.axe.enchantments.durability", 5);
-        defaultsMap.put("inventory.armour.type", "IRON");
-        defaultsMap.put("inventory.armour.durability", 0);
-        defaultsMap.put("inventory.armour.protection", 0);
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.IRON_AXE);
+        setIcon(icon);
     }
 
     @Override
-    public void applyKit(Player p, int level) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.axe.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.axe.enchantments.durability")).build());
-
-        ItemStack[] armor = getArmour(Material.getMaterial(
-                getConfig().getString("inventory.armour.type") + "_HELMET"),
-                getConfig().getInt("inventory.armour.durability"),
-                getConfig().getInt("inventory.armour.protection"));
-
-        p.getInventory().setArmorContents(armor);
+    public void applyKit(Player p) {
+        p.getInventory().addItem(weapon);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
     }
 
     @Override
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        if (getLevel(damagee) == 1)
-            return;
-        int chance = getLevel(damagee) * 2;
-        if (UtilMath.getRandom(0, 100) <= chance) {
+        if (UtilMath.getRandom(0, 100) <= 2) {
             if (damagee.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE))
                 damagee.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
             damagee.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 0));
@@ -83,8 +72,16 @@ public class KitBarbarian extends Kit {
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7You got a chance to gain", "§7strength when you're getting hit.");
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }
 
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Full of bloodlust and rage.",
+                "",
+                ChatColor.GRAY + "A chance to gain strength when hit."
+        );
+    }
 }

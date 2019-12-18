@@ -1,35 +1,37 @@
 package net.skycade.kitpvp.commands;
 
+import net.skycade.SkycadeCore.utility.command.SkycadeCommand;
 import net.skycade.SkycadeCore.vanish.VanishStatus;
-import net.skycade.kitpvp.coreclasses.commands.Command;
-import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.kit.KitManager;
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 
-public class CommandKitName extends Command<KitManager> {
+import static net.skycade.kitpvp.Messages.*;
 
-    public CommandKitName(KitManager module) {
-        super(module, "Get the kitname from a player", new Permission("kitpvp.default", PermissionDefault.TRUE), "kitname");
-        setUsage("<player>");
+public class CommandKitName extends SkycadeCommand {
+    public CommandKitName() {
+        super("kitname");
     }
 
     @Override
-    public void execute(Member member, String aliasUsed, String... args) {
-        if (!checkArgs(member, aliasUsed, args, 1))
-            return;
-        if (!getPlayer(member, args[0]))
-            return;
-        Player target = Bukkit.getPlayer(args[0]);
-        if (VanishStatus.isVanished(target.getUniqueId())) {
-            member.message("&7Could not find Player '§e" + target.getName() + "&7'.");
+    public void onCommand(CommandSender commandSender, String[] strings) {
+        if (strings.length < 1) {
+            RESETSTATS_USAGE.msg(commandSender);
             return;
         }
-        KitPvPStats stats = getModule().getKitPvP().getStats(target);
-        member.message("§a" + target.getName() + "§7 is using the §a" + stats.getActiveKit().getKit().getName() + "§7 kit.");
-    }
+        if (Bukkit.getPlayer(strings[0]) == null) {
+            COULDNT_FIND.msg(commandSender, "%type%", "player", "%thing%", strings[0]);
+            return;
+        }
 
+        Player target = Bukkit.getPlayer(strings[0]);
+        if (VanishStatus.isVanished(target.getUniqueId())) {
+            COULDNT_FIND.msg(commandSender, "%type%", "player", "%thing%", strings[0]);
+            return;
+        }
+        KitPvPStats stats = KitPvP.getInstance().getStats(target);
+        USING_KIT.msg(commandSender, "%player%", target.getName(), "%kitname%", stats.getActiveKit().getKit().getName());
+    }
 }

@@ -5,6 +5,7 @@ import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -12,71 +13,67 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.lang.Integer.parseInt;
+import java.util.*;
 
 public class KitDubstep extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+
     public KitDubstep(KitManager kitManager) {
-        super(kitManager, "Dubstep", KitType.DUBSTEP, 7000, "Woop Woop Woop Womp!");
-        setIcon(new ItemStack(Material.GLOWSTONE));
+        super(kitManager, "Dubstep", KitType.DUBSTEP, 0, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.IRON_HELMET)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
+        chestplate = new ItemBuilder(
+                Material.IRON_CHESTPLATE)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
+        leggings = new ItemBuilder(
+                Material.GOLD_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
+        boots = new ItemBuilder(
+                Material.GOLD_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
+        weapon = new ItemBuilder(
+                Material.DIAMOND_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
 
-        defaultsMap.put("kit.icon.material", "GLOWSTONE");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 7000);
-
-        defaultsMap.put("inventory.sword.material", "DIAMOND_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 1);
-
-        defaultsMap.put("armor.material", "IRON");
-        defaultsMap.put("armor.enchantments.durability", 0);
-        defaultsMap.put("armor.enchantments.protection", 0);
-
-        defaultsMap.put("potions.pot1", "SLOW_DIGGING:3");
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.RECORD_4);
+        setIcon(icon);
     }
 
     @Override
-    public void applyKit(Player p, int level) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
-
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection")));
-
-        String[] pot1 = getConfig().getString("potions.pot1").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot1[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot1[1])));
+    public void applyKit(Player p) {
+        p.getInventory().addItem(weapon);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
     }
 
     public void onMove(Player p) {
-        int level = getLevel(p);
         if (UtilMath.getRandom(0, 100) <= 5)
-            p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 3));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 50, 3));
     }
 
+    @Override
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 50!");
+    }
+
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.AQUA + "" + ChatColor.BOLD + "Defensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Drop the bass.",
+                "",
+                ChatColor.GRAY + "Randomly gains damage resistance."
+        );
+    }
 }

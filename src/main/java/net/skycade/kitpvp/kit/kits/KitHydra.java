@@ -5,6 +5,7 @@ import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -14,69 +15,67 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static java.lang.Integer.parseInt;
+import java.util.*;
 
 public class KitHydra extends Kit {
 
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+    private ItemStack weapon;
+
+    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
+
     public KitHydra(KitManager kitManager) {
-        super(kitManager, "Hydra", KitType.HYDRA, 20000, "Wanna go for a swim?");
+        super(kitManager, "Hydra", KitType.HYDRA, 29000, getLore());
 
-        Map<String, Object> defaultsMap = new HashMap<>();
+        helmet = new ItemBuilder(
+                Material.LEATHER_HELMET)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when in water.")
+                .setColour(Color.BLUE).build();
+        chestplate = new ItemBuilder(
+                Material.LEATHER_CHESTPLATE)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when in water.")
+                .setColour(Color.BLUE).build();
+        leggings = new ItemBuilder(
+                Material.LEATHER_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when in water.")
+                .setColour(Color.BLUE).build();
+        boots = new ItemBuilder(
+                Material.LEATHER_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when in water.")
+                .setColour(Color.BLUE).build();
+        weapon = new ItemBuilder(
+                Material.IRON_SWORD)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.KNOCKBACK, 1).build();
 
-        defaultsMap.put("kit.icon.material", "WATER_BUCKET");
-        defaultsMap.put("kit.icon.color", "BLACK");
-        defaultsMap.put("kit.price", 20000);
+        constantEffects.put(PotionEffectType.WATER_BREATHING, 0);
 
-        defaultsMap.put("inventory.sword.material", "IRON_SWORD");
-        defaultsMap.put("inventory.sword.enchantments.durability", 5);
-        defaultsMap.put("inventory.sword.enchantments.knockback", 1);
-        defaultsMap.put("inventory.sword.enchantments.damage-all", 0);
-
-        defaultsMap.put("armor.material", "LEATHER");
-        defaultsMap.put("armor.enchantments.durability", 12);
-        defaultsMap.put("armor.enchantments.protection", 1);
-
-        defaultsMap.put("potions.pot1", "WATER_BREATHING:0");
-
-        setConfigDefaults(defaultsMap);
-
-        if (getConfig().getString("kit.icon.material") != null) {
-            if (getConfig().getString("kit.icon.material").contains("LEATHER")) {
-                setIcon(new ItemBuilder(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase()))
-                        .setColour(getColor(getConfig().getString("kit.icon.color"))).build());
-            } else {
-                setIcon(new ItemStack(Material.getMaterial(getConfig().getString("kit.icon.material").toUpperCase())));
-            }
-        } else {
-            setIcon(new ItemStack(Material.DIRT));
-        }
-        setPrice(getConfig().getInt("kit.price"));
+        ItemStack icon = new ItemStack(Material.WATER_BUCKET);
+        setIcon(icon);
     }
 
     @Override
-    public void applyKit(Player p, int level) {
-        p.getInventory().addItem(new ItemBuilder(
-                Material.getMaterial(getConfig().getString("inventory.sword.material").toUpperCase()))
-                .addEnchantment(Enchantment.DURABILITY, getConfig().getInt("inventory.sword.enchantments.durability"))
-                .addEnchantment(Enchantment.KNOCKBACK, getConfig().getInt("inventory.sword.enchantments.knockback"))
-                .addEnchantment(Enchantment.DAMAGE_ALL, getConfig().getInt("inventory.sword.enchantments.damage-all")).build());
+    public void applyKit(Player p) {
+        p.getInventory().addItem(weapon);
+        p.getInventory().setHelmet(helmet);
+        p.getInventory().setChestplate(chestplate);
+        p.getInventory().setLeggings(leggings);
+        p.getInventory().setBoots(boots);
 
-        p.getInventory().setArmorContents(getArmour(
-                Material.getMaterial(getConfig().getString("armor.material").toUpperCase() + "_HELMET"),
-                getConfig().getInt("armor.enchantments.durability"),
-                getConfig().getInt("armor.enchantments.protection"),
-                Color.BLUE));
-
-        String[] pot1 = getConfig().getString("potions.pot1").split(":");
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.getByName(pot1[0]),
-                Integer.MAX_VALUE,
-                parseInt(pot1[1])));
+        constantEffects.forEach((effect, amplifier) -> {
+            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+        });
     }
 
     @Override
@@ -86,8 +85,8 @@ public class KitHydra extends Kit {
         if (p.getLocation().getBlock().getType() == Material.WATER || p.getLocation().getBlock().getType() == Material.STATIONARY_WATER) {
             p.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
             p.removePotionEffect(PotionEffectType.SLOW);
-            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40 * 3, 1));
-            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40 * 3, 2));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 80, 0));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 2));
         }
     }
 
@@ -98,8 +97,16 @@ public class KitHydra extends Kit {
     }
 
     @Override
-    public List<String> getAbilityDesc() {
-        return Arrays.asList("§7You will get a strength buff", "§7when you're in water");
+    public List<String> getHowToObtain() {
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }
 
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Likes bubble baths.",
+                "",
+                ChatColor.GRAY + "Becomes stronger when in water."
+        );
+    }
 }
