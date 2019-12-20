@@ -92,12 +92,12 @@ public class KitHuntsman extends Kit implements Listener {
     }
 
     @Override
-    public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+    public void onDamageDealHit(EntityDamageByEntityEvent event, Player damager, Player damagee) {
         if (!huntsmanActiveBleed.contains(damager.getUniqueId()))
             return;
         if (bleeding.contains(damagee.getUniqueId()))
             return;
-        startBleed(damager, (Player) e.getEntity(), 4);
+        startBleed(damager, (Player) event.getEntity(), 4);
         bleeding.add(damagee.getUniqueId());
     }
 
@@ -117,9 +117,9 @@ public class KitHuntsman extends Kit implements Listener {
     }
 
     @EventHandler
-    public void on(PlayerQuitEvent e) {
-        huntsmanActiveBleed.remove(e.getPlayer().getUniqueId());
-        bleeding.remove(e.getPlayer().getUniqueId());
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        huntsmanActiveBleed.remove(event.getPlayer().getUniqueId());
+        bleeding.remove(event.getPlayer().getUniqueId());
     }
 
     @Override

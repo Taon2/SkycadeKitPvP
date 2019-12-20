@@ -3,6 +3,7 @@ package net.skycade.kitpvp.listeners.player;
 import net.brcdev.gangs.GangsPlusApi;
 import net.brcdev.gangs.gang.Gang;
 import net.minelink.ctplus.CombatTagPlus;
+import net.skycade.SkycadeCore.utility.TeleportUtil;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPKillstreakChange;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
@@ -30,9 +31,6 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class PlayerListeners implements Listener {
 
@@ -82,7 +80,7 @@ public class PlayerListeners implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
 
-        if (plugin.getSpawnLocation().equals(event.getTo()) && !plugin.isInSpawnArea(event.getPlayer()) && pl.getTagManager().isTagged(event.getPlayer().getUniqueId())) {
+        if (TeleportUtil.getSpawn().equals(event.getTo()) && !plugin.isInSpawnArea(event.getPlayer()) && pl.getTagManager().isTagged(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
             return;
         }
@@ -119,17 +117,6 @@ public class PlayerListeners implements Listener {
         resetKitAndKS(event.getPlayer());
     }
 
-    private static List<Integer> bannedSlots;
-
-    static {
-        bannedSlots = Arrays.asList(
-                80,
-                81,
-                82,
-                83
-        );
-    }
-
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onInventoryClick(InventoryClickEvent event) {
         if ((event.getClickedInventory() != null
@@ -138,10 +125,6 @@ public class PlayerListeners implements Listener {
                 && event.getInventory().getType() != InventoryType.CRAFTING)
                 || event.getSlotType() == InventoryType.SlotType.CRAFTING)
             event.setCancelled(true);
-
-        if (event.getWhoClicked().getOpenInventory().getTopInventory().getContents().length > 0) {
-
-        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)

@@ -137,6 +137,8 @@ public class CaptureTheFlagFlagListener implements Listener {
     }
 
     public void clearFlagCarrier() {
+        if (flagCarrier == null) return;
+
         flagCarrier.removePotionEffect(PotionEffectType.SLOW);
         captureTheFlagEvent.refreshArmor(flagCarrier, false);
         lastCarrier = flagCarrier;

@@ -48,7 +48,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
     private Long lastEvent = -1L;
     private BukkitRunnable actionBarTask;
     private ScoreboardManager.QueuedDisplay queuedDisplay;
-    private boolean suddenDeath = false;
+    private boolean overtime = false;
 
     CaptureTheFlagEvent() {
         super();
@@ -172,9 +172,9 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
                 }
                 if (System.currentTimeMillis() - begin > 5 * 60 * 1000L) {
                     if (team1Points == team2Points) {
-                        if (!suddenDeath) {
-                            CAPTURETHEFLAG_SUDDEN_DEATH.broadcast();
-                            suddenDeath = true;
+                        if (!overtime) {
+                            CAPTURETHEFLAG_OVERTIME.broadcast();
+                            overtime = true;
                         }
                     } else {
                         end();
@@ -236,7 +236,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
             d.setScore("carrier", ChatColor.GRAY + "Carrier: " + ChatColor.GRAY + "None", --i);
             d.setScore("location", ChatColor.GRAY + "Flag location: " + ChatColor.YELLOW + "(" + x + " X, " + z + " Z)", --i);
             d.setScore("blank" + i, "  ", --i);
-            d.setScore("timeleft", ChatColor.GRAY + "Time left: " + ChatColor.YELLOW + CoreUtil.niceFormat(sec, true), --i);
+            d.setScore("timeleft", ChatColor.GRAY + "Time left: " + ChatColor.YELLOW + (overtime ? "OVERTIME" : CoreUtil.niceFormat(sec, true)), --i);
             d.setScore("blank" + i, "   ", --i);
             d.setScore("points", ChatColor.GRAY + "Flag Captures", --i);
             d.setScore("team1", ChatColor.RED + "" + ChatColor.BOLD + "RED" + ": " + ChatColor.GOLD + team1Points, --i);

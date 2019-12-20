@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.listeners.player;
 
+import net.skycade.SkycadeCore.utility.TeleportUtil;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
@@ -77,7 +78,7 @@ public class PlayerJoinQuitListener implements Listener {
                 }
 
                 ScoreboardInfo.getInstance().updatePlayer(p);
-                p.teleport(KitPvP.getInstance().getSpawnLocation());
+                p.teleport(TeleportUtil.getSpawn());
             }
         }.runTaskLater(KitPvP.getInstance(), 1L);
     }

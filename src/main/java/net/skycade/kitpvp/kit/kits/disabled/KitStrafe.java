@@ -59,7 +59,7 @@ public class KitStrafe extends Kit {
     }
 
     @Override
-    public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+    public void onDamageDealHit(EntityDamageByEntityEvent event, Player damager, Player damagee) {
         if (!comboMap.containsKey(damager.getUniqueId())) {
             comboMap.put(damager.getUniqueId(), 1);
             return;
@@ -74,11 +74,11 @@ public class KitStrafe extends Kit {
             dmgInc += 0.1;
             combo -= 3;
         }
-        e.setDamage(e.getDamage() * (Math.min(dmgInc, 1.5)));
+        event.setDamage(event.getDamage() * (Math.min(dmgInc, 1.5)));
     }
 
     @Override
-    public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+    public void onDamageGetHit(EntityDamageByEntityEvent event, Player damager, Player damagee) {
         comboMap.remove(damagee.getUniqueId());
     }
 
@@ -88,8 +88,8 @@ public class KitStrafe extends Kit {
     }
 
     @EventHandler
-    public void on(PlayerQuitEvent e) {
-        comboMap.remove(e.getPlayer().getUniqueId());
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        comboMap.remove(event.getPlayer().getUniqueId());
     }
 
     @Override

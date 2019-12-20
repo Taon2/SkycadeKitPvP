@@ -3,6 +3,7 @@ package net.skycade.kitpvp.listeners.player;
 import net.minelink.ctplus.CombatTagPlus;
 import net.skycade.SkycadeCore.leveling.achievements.Achievement;
 import net.skycade.SkycadeCore.leveling.achievements.CoreAchievementEvent;
+import net.skycade.SkycadeCore.utility.TeleportUtil;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPCoinsRewardEvent;
 import net.skycade.kitpvp.bukkitevents.KitPvPKillPlayerEvent;
@@ -58,16 +59,20 @@ public class PlayerDamageListener implements Listener {
                 event.setCancelled(true);
                 return;
             }
+
             if (!(event.getEntity() instanceof Player))
                 return;
+
             Player damagee = (Player) event.getEntity();
             if (lastProjLaunch.containsKey(damagee)) {
                 addAssist(damagee, Bukkit.getPlayer(lastProjLaunch.get(damagee)), event.getDamage());
                 lastProjLaunch.remove(damagee);
                 return;
             }
+
             if (!(event.getDamager() instanceof Player))
                 return;
+
             if (plugin.getStats(damagee).getActiveKit().getKit().getKitType() == KitType.SONIC)
                 ((KitSonic) plugin.getStats(damagee).getActiveKit().getKit()).disableSprint(damagee);
 
@@ -75,6 +80,8 @@ public class PlayerDamageListener implements Listener {
 
             plugin.getStats(damager).getActiveKit().getKit().onDamageDealHit(event, damager, damagee);
             plugin.getStats(damagee).getActiveKit().getKit().onDamageGetHit(event, damager, damagee);
+
+            lastDamagerMap.put(damagee.getUniqueId(), event.getDamager());
 
             if (!damager.equals(damagee))
                 addAssist(damagee, damager, event.getDamage());
@@ -412,16 +419,25 @@ public class PlayerDamageListener implements Listener {
 
         // Kills player if in combat and not in spawn
         CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
-        if (member != null && !plugin.getSpawnRegion().contains(member.getPlayer()) && pl.getTagManager().isTagged(event.getPlayer().getUniqueId())) {
+        if (member != null && !plugin.getSpawnRegion().contains(member.getPlayer()) && pl.getTagManager().isTagged(uuid)) {
             plugin.getStats(member).setDeaths(plugin.getStats(member.getPlayer()).getDeaths() + 1);
 
+            // Checks to see which player really logged out
+            UUID notQuitter;
+            if (pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getAttackerId().equals(uuid)) {
+                notQuitter = pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getVictimId();
+            } else {
+                notQuitter = pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getAttackerId();
+            }
+
             // Increases kills for last damager to the player logging out
-            Player attacker = Bukkit.getPlayer(lastDamagerMap.get(uuid).getCustomName());
+            Player attacker = Bukkit.getPlayer(notQuitter);
 
             if (attacker != null) {
                 Member lastDamager = MemberManager.getInstance().getMember(attacker.getUniqueId(), false);
                 plugin.getStats(lastDamager).setKills(plugin.getStats(lastDamager).getKills() + 1);
-                YOU_KILLED_LOGGED_OUT.msg(lastDamager.getPlayer());
+                YOU_KILLED_LOGGED_OUT.msg(lastDamager.getPlayer(), "%player%", member.getName());
+                ScoreboardInfo.getInstance().updatePlayer(attacker);
             }
 
             member.setLastKiller(null);
@@ -437,7 +453,7 @@ public class PlayerDamageListener implements Listener {
         p.setHealth(p.getMaxHealth());
         p.setVelocity(new Vector(0, 0, 0));
         p.setGameMode(GameMode.SURVIVAL);
-        p.teleport(KitPvP.getInstance().getSpawnLocation());
+        p.teleport(TeleportUtil.getSpawn());
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), p::updateInventory, 10);
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> p.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
         KitPvPStats stats = KitPvP.getInstance().getStats(p);

@@ -29,7 +29,12 @@ public class StatGangsPoints extends StatisticType<String, Integer> {
 
     @Override
     public Integer get(String s) {
-        return KitPvP.getInstance().getGangPointsManager().getPoints(s);
+        Integer points = KitPvP.getInstance().getGangPointsManager().getPoints(s);
+        if (points == null) {
+            return 0;
+        } else {
+            return points;
+        }
     }
 
     @Override

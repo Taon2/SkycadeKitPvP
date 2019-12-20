@@ -110,21 +110,21 @@ public class KitFireArcher extends Kit {
     }
 
 
-    public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
+    public void onArrowLaunch(Player shooter, ProjectileLaunchEvent event) {
         if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
-            e.setCancelled(true);
+            event.setCancelled(true);
         }
     }
 
-    public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
+    public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent event) {
         if (UtilMath.getRandom(0, 100) <= 3)
             damagee.setFireTicks(100);
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        bowCooldown.remove(e.getPlayer().getUniqueId());
-        flameCooldown.remove(e.getPlayer().getUniqueId());
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        bowCooldown.remove(event.getPlayer().getUniqueId());
+        flameCooldown.remove(event.getPlayer().getUniqueId());
     }
 
     @Override

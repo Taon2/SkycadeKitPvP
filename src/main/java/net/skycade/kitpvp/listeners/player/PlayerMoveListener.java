@@ -53,7 +53,7 @@ public class PlayerMoveListener implements Listener {
                     Location teleport = teleports.get(ThreadLocalRandom.current().nextInt(0, teleports.size()));
                     teleporting.put(p.getUniqueId(), teleport);
 
-                    p.playSound(p.getLocation(), Sound.PORTAL_TRAVEL, 1f, 1f);
+                    p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                     p.setGameMode(GameMode.SPECTATOR);
                     p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 2));
 
@@ -74,6 +74,7 @@ public class PlayerMoveListener implements Listener {
                                 p.setVelocity(dir.multiply(0));
                                 p.removePotionEffect(PotionEffectType.BLINDNESS);
                                 p.setGameMode(GameMode.SURVIVAL);
+                                p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                                 teleporting.remove(p.getUniqueId());
                                 this.cancel();
                             }

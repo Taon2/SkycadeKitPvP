@@ -99,7 +99,7 @@ public class KitShaco extends Kit {
     }
 
     @Override
-    public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+    public void onDamageDealHit(EntityDamageByEntityEvent event, Player damager, Player damagee) {
         if (!(damager.hasPotionEffect(PotionEffectType.INVISIBILITY)))
             return;
         double diffX = damager.getLocation().getDirection().getX() - damagee.getLocation().getDirection().getX();
@@ -108,7 +108,7 @@ public class KitShaco extends Kit {
         if (diffX > 0 && diffX < 1 || diffX < 0 && diffX > -1) {
             if (diffZ > 0 && diffZ < 1 || diffZ < 0 && diffZ > -1) {
                 BACKSTABBED.msg(damagee);
-                e.setDamage(e.getDamage() * backstabMultiplier);
+                event.setDamage(event.getDamage() * backstabMultiplier);
             }
         }
     }
@@ -139,12 +139,12 @@ public class KitShaco extends Kit {
         }, 160);
     }
 
-    public void onSnowballUse(Player shooter, ProjectileLaunchEvent e) {
-        e.getEntity().setCustomName(shooter.getName());
-        e.getEntity().setCustomNameVisible(false);
-        snowballList.add((Snowball) e.getEntity());
+    public void onSnowballUse(Player shooter, ProjectileLaunchEvent event) {
+        event.getEntity().setCustomName(shooter.getName());
+        event.getEntity().setCustomNameVisible(false);
+        snowballList.add((Snowball) event.getEntity());
 
-        e.getEntity().setVelocity(e.getEntity().getVelocity().multiply(2.5D));
+        event.getEntity().setVelocity(event.getEntity().getVelocity().multiply(2.5D));
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
@@ -172,8 +172,8 @@ public class KitShaco extends Kit {
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        shacoArmor.remove(e.getPlayer().getUniqueId());
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        shacoArmor.remove(event.getPlayer().getUniqueId());
     }
 
     private ItemStack getSnowball(int amount) {

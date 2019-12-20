@@ -139,7 +139,7 @@ public class Messages {
     public static final Localization.Message CAPTURETHEFLAG_WINNER = new Localization.Message("event.capturetheflag.winner", "&aTeam %team% &awins, and gets &6&l2x coins &afor the next &630 minutes&a. &lCongratulations!");
     public static final Localization.Message CAPTURETHEFLAG_PARTICIPATE = new Localization.Message("event.capturetheflag-participate", "&7You have received &a%amount% &7Event Tokens for participating!");
     public static final Localization.Message CAPTURETHEFLAG_WON = new Localization.Message("event.capturetheflag-won", "&7You have received &a%amount% &7Event Tokens for winning!");
-    public static final Localization.Message CAPTURETHEFLAG_SUDDEN_DEATH = new Localization.Message("event.capturetheflag-sudden-death", "&a&lSUDDEN DEATH! &7The scores are tied! Next flag capture wins!");
+    public static final Localization.Message CAPTURETHEFLAG_OVERTIME = new Localization.Message("event.capturetheflag-overtime", "&a&lOVERTIME! &7The scores are tied! Next flag capture wins!");
 
     //KitPvP Kill Messages
     public static final Localization.Message NO_REWARDS = new Localization.Message("kill.no-rewards", "&7You killed the same player more than 3 times, &cno rewards &7rewarded.");
@@ -350,7 +350,7 @@ public class Messages {
                 RESETGANGPOINTS_DESCRIPTION,
                 GANG_POINTS_RESET,
                 YOU_KILLED_LOGGED_OUT,
-                CAPTURETHEFLAG_SUDDEN_DEATH
+                CAPTURETHEFLAG_OVERTIME
         );
     }
 }

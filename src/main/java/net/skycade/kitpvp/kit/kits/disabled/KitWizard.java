@@ -158,8 +158,8 @@ public class KitWizard extends Kit {
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        lastWizardLoc.remove(e.getPlayer().getUniqueId());
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        lastWizardLoc.remove(event.getPlayer().getUniqueId());
     }
 
     @Override

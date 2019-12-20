@@ -108,8 +108,8 @@ public class KitSonic extends Kit {
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        UUID uuid = e.getPlayer().getUniqueId();
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        UUID uuid = event.getPlayer().getUniqueId();
         sprinting.remove(uuid);
     }
 

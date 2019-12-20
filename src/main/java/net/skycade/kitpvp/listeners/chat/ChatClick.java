@@ -62,13 +62,13 @@ public class ChatClick implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void on(PlayerCommandPreprocessEvent e) {
-        UUID uuid = e.getPlayer().getUniqueId();
+    public void on(PlayerCommandPreprocessEvent event) {
+        UUID uuid = event.getPlayer().getUniqueId();
 
-        String message = e.getMessage().substring(1);
+        String message = event.getMessage().substring(1);
         if (!message.startsWith(PREFIX))
             return;
-        e.setCancelled(true);
+        event.setCancelled(true);
 
         message = message.substring(PREFIX.length()).trim();
 
@@ -87,8 +87,8 @@ public class ChatClick implements Listener {
     }
 
     @EventHandler
-    public void on(PlayerQuitEvent e) {
-        chatClicks.remove(e.getPlayer().getUniqueId());
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        chatClicks.remove(event.getPlayer().getUniqueId());
     }
 
     public String registerClick(Player p, Consumer<Player> onClick) {

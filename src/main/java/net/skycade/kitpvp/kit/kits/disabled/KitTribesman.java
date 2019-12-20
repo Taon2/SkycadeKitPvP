@@ -73,11 +73,11 @@ public class KitTribesman extends Kit {
     }
 
     @Override
-    public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+    public void onDamageGetHit(EntityDamageByEntityEvent event, Player damager, Player damagee) {
         if (tribesCd.contains(damagee.getUniqueId()))
             return;
 
-        if (e.getFinalDamage() >= 4) {
+        if (event.getFinalDamage() >= 4) {
             tribesEffect(damagee, 6 + 2 * 3);
             tribesCd.add(damagee.getUniqueId());
             Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> tribesCd.remove(damagee.getUniqueId()), 220 - (3 * 20));
@@ -93,8 +93,8 @@ public class KitTribesman extends Kit {
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        tribesCd.remove(e.getPlayer().getUniqueId());
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        tribesCd.remove(event.getPlayer().getUniqueId());
     }
 
     @Override
