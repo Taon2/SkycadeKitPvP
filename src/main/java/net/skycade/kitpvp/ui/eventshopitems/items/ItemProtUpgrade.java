@@ -9,6 +9,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +22,7 @@ public class ItemProtUpgrade extends EventShopItem {
     private EventShopManager eventShopManager;
 
     public ItemProtUpgrade(EventShopManager eventShopManager) {
-        super(eventShopManager, ChatColor.DARK_RED + "Protection Upgrade", new ItemStack(Material.DIAMOND_CHESTPLATE), 25, 300);
+        super(eventShopManager, "Protection Upgrade", new ItemStack(Material.DIAMOND_CHESTPLATE), 25, 300, true);
         this.eventShopManager = eventShopManager;
     }
 
@@ -38,8 +39,10 @@ public class ItemProtUpgrade extends EventShopItem {
 
     public void giveReward(Player p) {
         this.yaml = eventShopManager.getYaml();
-        Inventory inv = p.getInventory();
+        PlayerInventory inv = p.getInventory();
         int randomSlot = getRandomNum(p);
+
+        if (inv.getArmorContents().length == 0) return;
 
         if (inv.getItem(randomSlot) != null) {
             Map<Enchantment, Integer> item = inv.getItem(randomSlot).getEnchantments();
@@ -85,11 +88,9 @@ public class ItemProtUpgrade extends EventShopItem {
 
     public List<String> getDescription() {
         return Arrays.asList(
-                ChatColor.WHITE + "Upgrade the protections on one",
-                ChatColor.WHITE + "piece of armor by one level.",
-                ChatColor.GOLD + "Price: " + ChatColor.WHITE + getPrice() + " Tokens.",
-                ChatColor.GOLD + "Duration: " + ChatColor.WHITE + getDuration()/60 + " Minutes.", "",
-                ChatColor.GRAY + "Click to buy this upgrade."
+                ChatColor.GRAY + "",
+                ChatColor.GRAY + "Upgrade the protections on one",
+                ChatColor.GRAY + "piece of armor by one level."
         );
     }
 }

@@ -20,7 +20,7 @@ public class ItemPotionEffect extends EventShopItem {
     private EventShopManager eventShopManager;
 
     public ItemPotionEffect(EventShopManager eventShopManager) {
-        super(eventShopManager, ChatColor.DARK_PURPLE + "Random Potion Upgrade", new ItemStack(Material.GLASS_BOTTLE), 10, 300);
+        super(eventShopManager, "Random Potion Upgrade", new ItemStack(Material.GLASS_BOTTLE), 10, 300, true);
         this.eventShopManager = eventShopManager;
     }
 
@@ -66,11 +66,9 @@ public class ItemPotionEffect extends EventShopItem {
 
     public List<String> getDescription() {
         return Arrays.asList(
-                ChatColor.WHITE + "Receive a random beneficial",
-                ChatColor.WHITE + "potion effect.",
-                ChatColor.GOLD + "Price: " + ChatColor.WHITE + getPrice() + " Tokens.",
-                ChatColor.GOLD + "Duration: " + ChatColor.WHITE + getDuration()/60 + " Minutes.", "",
-                ChatColor.GRAY + "Click to buy this upgrade."
+                ChatColor.GRAY + "",
+                ChatColor.GRAY + "Receive a random beneficial",
+                ChatColor.GRAY + "potion effect."
         );
     }
 

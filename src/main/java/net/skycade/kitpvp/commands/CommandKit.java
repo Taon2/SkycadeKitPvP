@@ -125,13 +125,18 @@ public class CommandKit extends SkycadeCommand {
 
             if (strings[1].equalsIgnoreCase("all")) {
                 stats.resetKits();
-                KIT_LOCKED.msg(commandSender, "%player%", target.getName(), "%kit%", "Every kit");
+                KIT_LOCKED.msg(commandSender, "%player%", target.getName(), "%kit%", "every kit");
                 return;
             }
             Kit kit = getKit(strings[1], member);
             if (kit == null)
                 return;
             stats.removeKit(kit.getKitType());
+
+            if (stats.getActiveKit().equals(kit.getKitType())) {
+                stats.setKitPreference(KitType.CHANCE);
+                stats.applyKitPreference();
+            }
 
             KIT_LOCKED.msg(commandSender, "%player%", target.getName(), "%kit%", kit.getName());
             YOUR_KIT_LOCKED.msg(target, "%kit%", kit.getName());

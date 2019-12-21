@@ -19,7 +19,7 @@ public class ItemCoinBoost extends EventShopItem {
     private EventShopManager eventShopManager;
 
     public ItemCoinBoost(EventShopManager eventShopManager) {
-        super(eventShopManager, ChatColor.GOLD + "Double Coins Upgrade", new ItemStack(Material.DOUBLE_PLANT, 1, (short) 0), 50, 600);
+        super(eventShopManager, "Double Coins Upgrade", new ItemStack(Material.DOUBLE_PLANT, 1, (short) 0), 50, 600, true);
         this.eventShopManager = eventShopManager;
     }
 
@@ -44,11 +44,9 @@ public class ItemCoinBoost extends EventShopItem {
 
     public List<String> getDescription() {
         return Arrays.asList(
-                ChatColor.WHITE + "Receive double the coins",
-                ChatColor.WHITE + "gained from killing players.",
-                ChatColor.GOLD + "Price: " + ChatColor.WHITE + getPrice() + " Tokens.",
-                ChatColor.GOLD + "Duration: " + ChatColor.WHITE + getDuration()/60 + " Minutes.", "",
-                ChatColor.GRAY + "Click to buy this upgrade."
+                ChatColor.GRAY + "",
+                ChatColor.GRAY + "Receive double the coins",
+                ChatColor.GRAY + "gained from killing players."
         );
     }
 }

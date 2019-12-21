@@ -80,4 +80,12 @@ public class Member {
     public void setLastKiller(UUID lastKiller) {
         this.lastKiller = lastKiller;
     }
+
+    public boolean hasSoupDiscount() {
+        return KitPvP.getInstance().getEventShopManager().isActive(getPlayer(), KitPvP.getInstance().getEventShopManager().getTypeFromString("Permanently Reduce Soup Price"));
+    }
+
+    public boolean hasRefreshKitCooldownReduction() {
+        return KitPvP.getInstance().getEventShopManager().isActive(getPlayer(), KitPvP.getInstance().getEventShopManager().getTypeFromString("Permanently Reduce RefreshKit Cooldown"));
+    }
 }

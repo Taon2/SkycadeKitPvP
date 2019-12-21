@@ -1,10 +1,7 @@
 package net.skycade.kitpvp.ui.eventshopitems;
 
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.ui.eventshopitems.items.ItemCoinBoost;
-import net.skycade.kitpvp.ui.eventshopitems.items.ItemKeepKillstreak;
-import net.skycade.kitpvp.ui.eventshopitems.items.ItemPotionEffect;
-import net.skycade.kitpvp.ui.eventshopitems.items.ItemProtUpgrade;
+import net.skycade.kitpvp.ui.eventshopitems.items.*;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -20,10 +17,12 @@ public class EventShopManager {
     private File file;
     private YamlConfiguration yaml;
     private final KitPvP plugin;
+    private static EventShopManager instance;
     private final Map<String, EventShopItem> eventShopItems = new LinkedHashMap<>();
 
     public EventShopManager (KitPvP plugin) {
         this.plugin = plugin;
+        instance = this;
 
         configManager();
 
@@ -35,6 +34,11 @@ public class EventShopManager {
         registerEventShopItem(new ItemKeepKillstreak(this));
         registerEventShopItem(new ItemPotionEffect(this));
         registerEventShopItem(new ItemProtUpgrade(this));
+        registerEventShopItem(new ItemShacoKit(this));
+        registerEventShopItem(new ItemBuildUHCKit(this));
+        registerEventShopItem(new ItemSoulMasterKit(this));
+        registerEventShopItem(new ItemRefreshKitCooldown(this));
+        registerEventShopItem(new ItemSoupCost(this));
     }
 
     private void registerEventShopItem(EventShopItem item) {
@@ -52,7 +56,7 @@ public class EventShopManager {
         return plugin;
     }
 
-    public EventShopItem getTypeFromString (String name) {
+    public EventShopItem getTypeFromString(String name) {
         if (eventShopItems.containsKey(name))
             return eventShopItems.get(name);
         return null;
@@ -60,10 +64,16 @@ public class EventShopManager {
 
     public void reapplyUpgrades(Player p) {
         eventShopItems.forEach((key, item) -> {
-            if (yaml.contains(p.getUniqueId().toString()) && yaml.contains(p.getUniqueId().toString() + "." + item.getName()) && (System.currentTimeMillis() - yaml.getLong(p.getUniqueId().toString() + "." + item.getName())) / 1000L < item.getDuration()) {
+            if (isActive(p, item)) {
                 item.reapplyReward(p);
             }
         });
+    }
+
+    public boolean isActive(Player p, EventShopItem item) {
+        return yaml.contains(p.getUniqueId().toString())
+                && yaml.contains(p.getUniqueId().toString() + "." + item.getName())
+                && ((System.currentTimeMillis() - yaml.getLong(p.getUniqueId().toString() + "." + item.getName())) / 1000L < item.getDuration() || !item.isRepeatable());
     }
 
     public boolean isKeepingKs(Player p) {
@@ -72,9 +82,7 @@ public class EventShopManager {
             String key = entry.getKey();
             EventShopItem item = entry.getValue();
             if (key.contains("Killstreak")) {
-                keepKs = getYaml().contains(p.getUniqueId().toString()) &&
-                        getYaml().contains(p.getUniqueId().toString() + "." + item.getName()) &&
-                        getYaml().getBoolean(p.getUniqueId().toString() + "." + item.getName());
+                keepKs = isActive(p, item);
             }
         }
 
@@ -107,5 +115,11 @@ public class EventShopManager {
         } catch (IOException e) {
             plugin.getLogger().log(Level.SEVERE, "Couldn't save purchasedupgrades yaml file.", e);
         }
+    }
+
+    public static EventShopManager getInstance() {
+        if (instance == null)
+            instance = new EventShopManager(KitPvP.getInstance());
+        return instance;
     }
 }

@@ -14,13 +14,15 @@ public abstract class EventShopItem implements Listener {
     private ItemStack icon;
     private int price;
     private int duration;
+    private boolean repeatable;
 
-    public EventShopItem(EventShopManager eventShopManager, String name, ItemStack icon, int price, int duration) {
+    public EventShopItem(EventShopManager eventShopManager, String name, ItemStack icon, int price, int duration, boolean repeatable) {
         this.eventShopManager = eventShopManager;
         this.name = name;
         this.icon = icon;
         this.price = price;
         this.duration = duration;
+        this.repeatable = repeatable;
     }
 
     public EventShopManager getEventShopManager() {
@@ -33,10 +35,6 @@ public abstract class EventShopItem implements Listener {
 
     public int getPrice() {
         return price;
-    }
-
-    public void setPrice(int value) {
-        this.price = value;
     }
 
     public int getDuration() {
@@ -64,4 +62,8 @@ public abstract class EventShopItem implements Listener {
     public abstract void reapplyReward(Player p);
 
     public abstract List<String> getDescription();
+
+    public boolean isRepeatable() {
+        return repeatable;
+    }
 }

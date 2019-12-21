@@ -163,6 +163,9 @@ public class KitPvPStats {
         for (String kitType : KitPvP.getInstance().getConfig().getStringList("start-kits")) {
             kits.put(KitType.byAlias(kitType), new KitData(KitType.byAlias(kitType)));
         }
+
+        setKitPreference(KitType.CHANCE);
+        applyKitPreference();
     }
 
     public void removeKit(KitType type) {

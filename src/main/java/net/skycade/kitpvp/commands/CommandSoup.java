@@ -61,17 +61,23 @@ public class CommandSoup extends SkycadeCommand {
 
         KitPvPStats stats = KitPvP.getInstance().getStats(member);
         int coins = stats.getCoins();
-        if (coins - COST < 0) {
+
+        // Applies soup cost reduction upgrade
+        int cost = COST;
+        if (member.hasSoupDiscount())
+            cost = 50;
+
+        if (coins - cost < 0) {
             NOT_ENOUGH.msg(member.getPlayer(), "%thing%", "coins");
             return;
         }
 
         stats.getActiveKit().getKit().giveSoup(member.getPlayer(), 30);
-        stats.takeCoins(COST);
+        stats.takeCoins(cost);
 
         ScoreboardInfo.getInstance().updatePlayer(member.getPlayer());
 
         lastSoup.put(member.getUUID(), now);
-        YOU_PURCHASED.msg(member.getPlayer(), "%thing%", "soup", "%amount%", Integer.toString(COST), "%currency%", "coins");
+        YOU_PURCHASED.msg(member.getPlayer(), "%thing%", "soup", "%amount%", Integer.toString(cost), "%currency%", "coins");
     }
 }

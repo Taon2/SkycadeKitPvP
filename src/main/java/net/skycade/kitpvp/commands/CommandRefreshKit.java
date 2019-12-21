@@ -62,6 +62,11 @@ public class CommandRefreshKit extends SkycadeCommand {
 
         long now = System.currentTimeMillis();
 
+        // Applies cooldown reduction upgrade
+        int cooldown = COOLDOWN;
+        if (member.hasRefreshKitCooldownReduction())
+            cooldown = 5400;
+
         try {
             lastRefresh.put(member.getUUID(), yaml.getLong("current-refreshkit-cooldowns." + member.getUUID()));
         } catch (Exception ignored) {}
@@ -69,9 +74,9 @@ public class CommandRefreshKit extends SkycadeCommand {
         if (lastRefresh.containsKey(member.getUUID())) {
             long diff = (now - lastRefresh.get(member.getUUID())) / 1000L;
 
-            if (diff < COOLDOWN) {
+            if (diff < cooldown) {
                 ActionBarUtil.sendActionBarMessage(member.getPlayer(), ON_COOLDOWN.getMessage()
-                                .replace("%time%", CoreUtil.niceFormat(COOLDOWN - ((Long) diff).intValue()))
+                                .replace("%time%", CoreUtil.niceFormat(cooldown - ((Long) diff).intValue()))
                                 .replace("%thing%", "/refreshkit"),
                         4, KitPvP.getInstance());
                 return;

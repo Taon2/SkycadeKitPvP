@@ -23,7 +23,7 @@ public class ItemKeepKillstreak extends EventShopItem {
     private EventShopManager eventShopManager;
 
     public ItemKeepKillstreak(EventShopManager eventShopManager) {
-        super(eventShopManager, ChatColor.RED + "Keep Killstreak", new ItemStack(Material.DIAMOND_SWORD), 100, 0);
+        super(eventShopManager, "Keep Killstreak", new ItemStack(Material.DIAMOND_SWORD), 100, 0, true);
         this.eventShopManager = eventShopManager;
     }
 
@@ -70,10 +70,9 @@ public class ItemKeepKillstreak extends EventShopItem {
     @Override
     public List<String> getDescription() {
         return Arrays.asList(
-                ChatColor.WHITE + "Keep your Killstreak",
-                ChatColor.WHITE + "through your next death.",
-                ChatColor.GOLD + "Price: " + ChatColor.WHITE + getPrice() + " Tokens.",
-                ChatColor.GRAY + "Click to buy this upgrade."
+                ChatColor.GRAY + "",
+                ChatColor.GRAY + "Keep your Killstreak",
+                ChatColor.GRAY + "through your next death."
         );
     }
 }
