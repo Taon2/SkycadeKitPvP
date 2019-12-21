@@ -33,7 +33,8 @@ public class EventShopMenu extends DynamicGui {
                     ArrayList<String> lore = new ArrayList<>(eventShopItem.getDescription());
 
                     lore.add("");
-                    lore.add(ChatColor.GOLD + "Cost: " + ChatColor.WHITE + eventShopItem.getPrice() + " Event Tokens");
+                    if (eventShopItem.getPrice() > 0)
+                        lore.add(ChatColor.GOLD + "Cost: " + ChatColor.WHITE + eventShopItem.getPrice() + " Event Tokens");
                     if (eventShopItem.getDuration() > 0)
                         lore.add(ChatColor.GOLD + "Duration: " + ChatColor.WHITE + CoreUtil.niceFormat(eventShopItem.getDuration()));
                     if (eventShopManager.isActive(p, eventShopItem))

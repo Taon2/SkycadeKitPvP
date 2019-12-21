@@ -39,6 +39,7 @@ public class EventShopManager {
         registerEventShopItem(new ItemSoulMasterKit(this));
         registerEventShopItem(new ItemRefreshKitCooldown(this));
         registerEventShopItem(new ItemSoupCost(this));
+        registerEventShopItem(new ItemKitCrateKeyTransfer(this));
     }
 
     private void registerEventShopItem(EventShopItem item) {

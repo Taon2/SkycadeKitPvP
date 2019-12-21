@@ -131,6 +131,13 @@
       <scope>system</scope>
       <systemPath>${basedir}/dependencies/SkycadeKoth-1.0.3.jar</systemPath>
     </dependency>
+    <dependency>
+      <groupId>net.skycade</groupId>
+      <artifactId>SkycadeCrates</artifactId>
+      <version>1.5.0-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/dependencies/SkycadeCrates-1.5.0-SNAPSHOT.jar</systemPath>
+    </dependency>
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -47,9 +47,9 @@ public class PrestigeMenu extends DynamicGui {
 
                             List<String> lore = new ArrayList<>();
                             if (stats.getPrestigeLevel() >= prestigeLevel.getLevel())
-                                lore.add(ChatColor.GREEN + "UNLOCKED!");
+                                lore.add(ChatColor.GREEN + "" + ChatColor.BOLD + "UNLOCKED!");
                             else
-                                lore.add(ChatColor.RED + "LOCKED!");
+                                lore.add(ChatColor.RED + "" + ChatColor.BOLD + "LOCKED!");
 
                             lore.add("");
                             lore.add(ChatColor.GOLD + "Cost: " + ChatColor.WHITE + prestigeLevel.getCost() + " Coins");
