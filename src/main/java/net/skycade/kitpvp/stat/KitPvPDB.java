@@ -33,11 +33,12 @@ public class KitPvPDB {
     }
 
     public Member getMemberData(UUID uuid) {
-        String sql = "SELECT * FROM " + kitPvPTable + " WHERE UUID = ?";
+        String sql = "SELECT * FROM " + kitPvPTable + " WHERE UUID = ? AND Season = ?";
         Member member;
         try (Connection connection = CoreSettings.getInstance().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, uuid.toString());
+                statement.setString(2, CoreSettings.getInstance().getSeason());
                 statement.executeQuery();
                 ResultSet result = statement.getResultSet();
                 if (!result.next()) return null;
@@ -75,9 +76,13 @@ public class KitPvPDB {
 
     public List<UUID> getAllUUIDs() {
         List<UUID> uuidList = new ArrayList<>();
+        String sql = "SELECT UUID FROM " + kitPvPTable + " WHERE Season = ?";
+
         try (Connection connection = CoreSettings.getInstance().getConnection()) {
-            try (Statement statement = connection.createStatement()) {
-                ResultSet resultSet = statement.executeQuery("SELECT UUID FROM " + kitPvPTable);
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, CoreSettings.getInstance().getSeason());
+                statement.executeQuery();
+                ResultSet resultSet = statement.getResultSet();
                 while (resultSet.next()) {
                     String uuidString = resultSet.getString("UUID");
                     uuidList.add(UUID.fromString(uuidString));
@@ -111,13 +116,17 @@ public class KitPvPDB {
     }
 
     public Map<String, Object> getHighestKs() {
+        String sql = "SELECT UUID, HighestStreak FROM " + kitPvPTable + " ORDER BY HighestStreak * 1 DESC LIMIT 0, 1 WHERE Season = ?";
+
         try (Connection connection = CoreSettings.getInstance().getConnection()) {
-            try (Statement statement = connection.createStatement()) {
-                ResultSet results = statement.executeQuery("SELECT UUID, HighestStreak FROM " + kitPvPTable + " ORDER BY HighestStreak * 1 DESC LIMIT 0, 1");
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, CoreSettings.getInstance().getSeason());
+                statement.executeQuery();
+                ResultSet resultSet = statement.getResultSet();
                 Map<String, Object> map = new HashMap<>();
-                if (results.next()) {
-                    map.put("uuid", results.getString("UUID"));
-                    map.put("score", results.getInt("HighestStreak"));
+                if (resultSet.next()) {
+                    map.put("uuid", resultSet.getString("UUID"));
+                    map.put("score", resultSet.getInt("HighestStreak"));
                 }
                 return map;
             }
@@ -128,7 +137,7 @@ public class KitPvPDB {
 
     private synchronized void executeUpdate(Member member) {
         try (Connection connection = CoreSettings.getInstance().getConnection()) {
-            String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, EventCoins, Assists, ChosenKit, PrestigeLevel) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?, ?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), Coins = VALUES(Coins), EventCoins = VALUES(EventCoins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), PrestigeLevel = VALUES(PrestigeLevel)";
+            String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, EventCoins, Assists, ChosenKit, PrestigeLevel, Season) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?, ?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), Coins = VALUES(Coins), EventCoins = VALUES(EventCoins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), PrestigeLevel = VALUES(PrestigeLevel), Season = VALUES(Season)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 KitPvPStats stats = KitPvP.getInstance().getStats(member);
                 statement.setString(1, member.getUUID().toString());
@@ -155,6 +164,7 @@ public class KitPvPDB {
                 statement.setInt(11, stats.getAssists());
                 statement.setString(12, stats.getKitPreference().name());
                 statement.setInt(13, stats.getPrestigeLevel());
+                statement.setString(14, CoreSettings.getInstance().getSeason());
 
                 statement.executeUpdate();
             }
