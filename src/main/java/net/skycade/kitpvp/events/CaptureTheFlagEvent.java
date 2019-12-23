@@ -172,9 +172,15 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
                 }
                 if (System.currentTimeMillis() - begin > 5 * 60 * 1000L) {
                     if (team1Points == team2Points) {
+                        int sec = ((Long) (5 * 60 - (System.currentTimeMillis() - begin) / 1000L)).intValue();
+
                         if (!overtime) {
                             CAPTURETHEFLAG_OVERTIME.broadcast();
                             overtime = true;
+                        } else if (sec < -300) {
+                            CAPTURETHEFLAG_TOO_LONG.broadcast();
+                            end();
+                            cancel();
                         }
                     } else {
                         end();
