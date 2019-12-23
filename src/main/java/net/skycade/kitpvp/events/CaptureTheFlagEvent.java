@@ -213,7 +213,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
 
                 ScoreboardManager.getInstance().updateScores("carrier", p -> ChatColor.GRAY + "Carrier: " + chatColor + (CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() == null ? "None" : CaptureTheFlagFlagListener.getInstance().getCurrentCarrier().getName()));
                 ScoreboardManager.getInstance().updateScores("location", p -> ChatColor.GRAY + "Flag location: " + ChatColor.YELLOW + "(" + x + " X, " + z + " Z)");
-                ScoreboardManager.getInstance().updateScores("timeleft", p -> ChatColor.GRAY + "Time left: " + ChatColor.YELLOW + CoreUtil.niceFormat(sec, true));
+                ScoreboardManager.getInstance().updateScores("timeleft", p -> ChatColor.GRAY + "Time left: " + ChatColor.YELLOW + (overtime ? "OVERTIME" : CoreUtil.niceFormat(sec, true)));
                 ScoreboardManager.getInstance().updateScores("team1", p -> ChatColor.RED + "" + ChatColor.BOLD + "RED" + ": " + ChatColor.GOLD + team1Points);
                 ScoreboardManager.getInstance().updateScores("team2", p -> ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE" + ": " + ChatColor.GOLD + team2Points);
             }
