@@ -333,8 +333,6 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
     public void end() {
         super.end();
 
-        begin = null;
-
         CaptureTheFlagFlagListener.getInstance().removeBanner();
         CaptureTheFlagFlagListener.getInstance().clearFlagCarrier();
 
@@ -406,6 +404,8 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
         if (task != null) task.cancel();
         if (actionBarTask != null) actionBarTask.cancel();
         if (queuedDisplay != null) queuedDisplay.remove();
+
+        overtime = false;
 
         refreshArmor(false);
     }
