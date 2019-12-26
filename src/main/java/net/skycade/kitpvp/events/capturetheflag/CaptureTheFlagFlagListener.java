@@ -43,6 +43,8 @@ public class CaptureTheFlagFlagListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
+        if (event.getFrom().getBlock().equals(event.getTo().getBlock())) return;
+
         if (captureTheFlagEvent.getBegin() == null) return;
 
         Player p = event.getPlayer();
@@ -73,6 +75,9 @@ public class CaptureTheFlagFlagListener implements Listener {
             clearFlagCarrier();
             spawnBanner();
         }
+
+        if (flagCarrier != null)
+            captureTheFlagEvent.refreshArmor(flagCarrier, true);
     }
 
     @EventHandler

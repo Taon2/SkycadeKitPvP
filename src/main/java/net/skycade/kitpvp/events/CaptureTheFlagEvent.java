@@ -213,7 +213,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
                     ActionBarAPI.sendActionBar(player,
                             ChatColor.GREEN +
                                     "You are on team " + (red ? ChatColor.RED + "" + ChatColor.BOLD + "RED" : ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE") + ChatColor.GREEN + "!" + ChatColor.WHITE + " - " +
-                                    (overtime ? "OVERTIME" : CoreUtil.niceFormat(sec, true)));
+                                    ChatColor.YELLOW + (overtime ? "OVERTIME" : CoreUtil.niceFormat(sec, true)));
                 }
 
                 Location flagLocation = listener.getCurrentFlagLocation();
