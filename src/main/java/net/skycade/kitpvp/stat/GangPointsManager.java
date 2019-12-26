@@ -2,6 +2,8 @@ package net.skycade.kitpvp.stat;
 
 import net.skycade.SkycadeCore.CoreSettings;
 import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.stat.leaderboards.stats.StatGangsPoints;
+import net.skycade.skycadeleaderboards.SkycadeLeaderboards;
 import org.bukkit.Bukkit;
 
 import java.sql.Connection;
@@ -34,6 +36,10 @@ public class GangPointsManager {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
+            // load gang points stat here so it doesn't register 0 all the time
+            SkycadeLeaderboards.getAPI().register(KitPvP.getInstance().getName(), StatGangsPoints.getInstance());
+
         });
     }
 

@@ -182,7 +182,7 @@ public class KitPvP extends SkycadePlugin {
             SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPKills.getInstance());
             SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPCoins.getInstance());
             SkycadeLeaderboards.getAPI().register(this.getName(), StatGangsKills.getInstance());
-            SkycadeLeaderboards.getAPI().register(this.getName(), StatGangsPoints.getInstance());
+            // >> register gang points later so the points load first and we don't get a 0 val
             SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPKillStreak.getInstance());
             SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPDeaths.getInstance());
         }
