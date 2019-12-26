@@ -73,6 +73,9 @@ public class CaptureTheFlagFlagListener implements Listener {
             clearFlagCarrier();
             spawnBanner();
         }
+
+        if (flagCarrier != null)
+            captureTheFlagEvent.refreshArmor(flagCarrier, true);
     }
 
     @EventHandler

@@ -55,7 +55,7 @@ public class PrestigeMenu extends DynamicGui {
                             lore.add(ChatColor.GOLD + "Cost: " + ChatColor.WHITE + prestigeLevel.getCost() + " Coins");
                             lore.add(ChatColor.GOLD + "Rewards: ");
                             prestigeLevel.getRewardDesc().forEach(line -> {
-                                lore.add(ChatColor.WHITE + line);
+                                lore.add(ChatColor.WHITE + ChatColor.translateAlternateColorCodes('&', line));
                             });
                             meta.setLore(lore);
 

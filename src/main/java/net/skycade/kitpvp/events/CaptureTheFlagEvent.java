@@ -73,6 +73,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
     private int team2Points = 0;
 
     private Long begin = null;
+    private Long length = 5 * 120 * 1000L;
 
     private static final ItemStack BANNER1;
     private static final ItemStack BANNER2;
@@ -180,9 +181,9 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
                     cancel();
                     return;
                 }
-                if (System.currentTimeMillis() - begin > 5 * 60 * 1000L) {
+                if (System.currentTimeMillis() - begin > length) {
                     if (team1Points == team2Points) {
-                        int sec = ((Long) (5 * 60 - (System.currentTimeMillis() - begin) / 1000L)).intValue();
+                        int sec = ((Long) (length - (System.currentTimeMillis() - begin))).intValue();
 
                         if (!overtime) {
                             CAPTURETHEFLAG_OVERTIME.broadcast();
@@ -205,7 +206,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
             @Override
             public void run() {
                 if (begin == null || begin > System.currentTimeMillis()) return;
-                int sec = ((Long) (5 * 60 - (System.currentTimeMillis() - begin) / 1000L)).intValue();
+                int sec = ((Long) (length - (System.currentTimeMillis() - begin))).intValue();
 
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     boolean red = team1.contains(player.getUniqueId());
@@ -283,7 +284,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
             int z = flagLocation.getBlockZ();
 
             int i = 12;
-            int sec = ((Long) (5 * 60 - (System.currentTimeMillis() - begin) / 1000L)).intValue();
+            int sec = ((Long) (length - (System.currentTimeMillis() - begin))).intValue();
             d.setTitle(GREEN + "" + BOLD + "Capture The Flag");
             d.setScore("blank" + i, " ", --i);
             d.setScore("your", GRAY + "Your team: " + (team2.contains(p.getUniqueId()) ?

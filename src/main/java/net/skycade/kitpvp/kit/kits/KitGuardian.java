@@ -114,18 +114,20 @@ public class KitGuardian extends Kit {
 
         int damageRunnable = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(KitPvP.getInstance(), new BukkitRunnable() {
             public void run() {
-                Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 6);
-                nearbyPlayers.remove(p);
+                if (!getKitManager().getKitPvP().isInSpawnArea(p)) {
+                    Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 6);
+                    nearbyPlayers.remove(p);
 
-                if (!(nearbyPlayers.isEmpty())) {
-                    Player target = getClosestTarget(nearbyPlayers, p);
+                    if (!(nearbyPlayers.isEmpty())) {
+                        Player target = getClosestTarget(nearbyPlayers, p);
 
-                    if (target == null || areBlocksInWay(p.getLocation().add(0, 1, 0), target.getLocation().add(0, 1, 0))) {
-                        return;
-                    }
+                        if (target == null || areBlocksInWay(p.getLocation().add(0, 1, 0), target.getLocation().add(0, 1, 0))) {
+                            return;
+                        }
 
-                    if (beam.isViewing(target) && target != p) {
-                        target.damage(4);
+                        if (beam.isViewing(target) && target != p) {
+                            target.damage(4);
+                        }
                     }
                 }
             }

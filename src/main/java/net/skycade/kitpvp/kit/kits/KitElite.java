@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
-import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
@@ -10,6 +9,8 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -76,9 +77,12 @@ public class KitElite extends Kit {
         });
     }
 
-    public void onMove(Player p) {
-        if (UtilMath.getRandom(0, 100) <= 5)
-            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 30, 1));
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity().getKiller();
+
+        if (player != null)
+            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40, 0));
     }
 
     @Override
@@ -91,7 +95,7 @@ public class KitElite extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Quite experienced.",
                 "",
-                ChatColor.GRAY + "Randomly gains small bursts of strength."
+                ChatColor.GRAY + "Gains strength when you kill a player."
         );
     }
 }
