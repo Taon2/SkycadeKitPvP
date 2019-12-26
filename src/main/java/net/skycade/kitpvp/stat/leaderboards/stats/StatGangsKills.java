@@ -29,7 +29,12 @@ public class StatGangsKills extends StatisticType<String, Integer> {
 
     @Override
     public Integer get(String s) {
-        return GangsPlugin.getInstance().gangManager.getGang(s).getKills();
+        Integer data = GangsPlugin.getInstance().gangManager.getGang(s).getKills();
+        if (data == null) {
+            return 0;
+        } else {
+            return data;
+        }
     }
 
     @Override
