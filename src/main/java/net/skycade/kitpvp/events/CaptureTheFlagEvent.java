@@ -12,12 +12,10 @@ import net.skycade.kitpvp.bukkitevents.KitPvPEventStartEvent;
 import net.skycade.kitpvp.events.capturetheflag.CaptureTheFlagFlagListener;
 import net.skycade.kitpvp.events.capturetheflag.CaptureTheFlagStartDelay;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
+import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -28,12 +26,20 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+import us.myles.ViaVersion.api.Via;
+import us.myles.ViaVersion.api.ViaAPI;
+import us.myles.ViaVersion.api.boss.BossBar;
+import us.myles.ViaVersion.api.boss.BossColor;
+import us.myles.ViaVersion.api.boss.BossStyle;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static net.skycade.kitpvp.Messages.*;
+import static org.bukkit.ChatColor.*;
+import static org.bukkit.ChatColor.RED;
 
 public class CaptureTheFlagEvent extends RandomEvent implements Listener {
 
@@ -47,6 +53,8 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
     private List<UUID> lastWinners = new ArrayList<>();
     private Long lastEvent = -1L;
     private BukkitRunnable actionBarTask;
+    private BukkitRunnable bossBarTask;
+
     private ScoreboardManager.QueuedDisplay queuedDisplay;
     private boolean overtime = false;
 
@@ -150,16 +158,18 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
 
         CAPTURETHEFLAG_START.broadcast();
 
-        CaptureTheFlagFlagListener.getInstance().spawnBanner();
+        final CaptureTheFlagFlagListener listener = CaptureTheFlagFlagListener.getInstance();
+
+        listener.spawnBanner();
 
         Bukkit.getOnlinePlayers().forEach(player -> {
             KitPvPEventStartEvent eventStartEvent = new KitPvPEventStartEvent(player);
             Bukkit.getServer().getPluginManager().callEvent(eventStartEvent);
 
             if (team1.contains(player.getUniqueId())) {
-                CAPTURETHEFLAG_TEAM.msg(player, "%team%", ChatColor.RED + "" + ChatColor.BOLD + "RED");
+                CAPTURETHEFLAG_TEAM.msg(player, "%team%", RED + "" + BOLD + "RED");
             } else {
-                CAPTURETHEFLAG_TEAM.msg(player, "%team%", ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE");
+                CAPTURETHEFLAG_TEAM.msg(player, "%team%", BLUE + "" + BOLD + "BLUE");
             }
         });
 
@@ -194,53 +204,97 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     boolean red = team1.contains(player.getUniqueId());
                     ActionBarAPI.sendActionBar(player,
-                            ChatColor.GREEN +
-                                    "You are on team " + (red ? ChatColor.RED + "" + ChatColor.BOLD + "RED" : ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE") + ChatColor.GREEN + "!" + ChatColor.WHITE + " - " +
-                    ChatColor.GOLD + CoreUtil.niceFormat(sec, true));
+                            GREEN +
+                                    "You are on team " + (red ? RED + "" + BOLD + "RED" : BLUE + "" + BOLD + "BLUE") +
+                                    GREEN + "!" + WHITE + " - " +
+                                    GOLD + CoreUtil.niceFormat(sec, true)
+                    );
                 }
 
-                int x = (int) (CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() == null ?
-                        CaptureTheFlagFlagListener.getInstance().getCurrentFlagLocation().getX() :
-                        CaptureTheFlagFlagListener.getInstance().getCurrentCarrier().getLocation().getX());
-                int z = (int) (CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() == null ?
-                        CaptureTheFlagFlagListener.getInstance().getCurrentFlagLocation().getZ() :
-                        CaptureTheFlagFlagListener.getInstance().getCurrentCarrier().getLocation().getZ());
-                ChatColor chatColor = (CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() == null ?
-                        ChatColor.GRAY :
-                        isTeamRed(CaptureTheFlagFlagListener.getInstance().getCurrentCarrier()) ?
-                            ChatColor.RED :
-                            ChatColor.BLUE);
+                Location flagLocation = listener.getCurrentFlagLocation();
 
-                ScoreboardManager.getInstance().updateScores("carrier", p -> ChatColor.GRAY + "Carrier: " + chatColor + (CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() == null ? "None" : CaptureTheFlagFlagListener.getInstance().getCurrentCarrier().getName()));
-                ScoreboardManager.getInstance().updateScores("location", p -> ChatColor.GRAY + "Flag location: " + ChatColor.YELLOW + "(" + x + " X, " + z + " Z)");
-                ScoreboardManager.getInstance().updateScores("timeleft", p -> ChatColor.GRAY + "Time left: " + ChatColor.YELLOW + CoreUtil.niceFormat(sec, true));
-                ScoreboardManager.getInstance().updateScores("team1", p -> ChatColor.RED + "" + ChatColor.BOLD + "RED" + ": " + ChatColor.GOLD + team1Points);
-                ScoreboardManager.getInstance().updateScores("team2", p -> ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE" + ": " + ChatColor.GOLD + team2Points);
+                int x = flagLocation.getBlockX();
+                int z = flagLocation.getBlockZ();
+                ChatColor chatColor = (listener.getCurrentCarrier() == null ?
+                        GRAY :
+                        isTeamRed(listener.getCurrentCarrier()) ?
+                                RED :
+                                BLUE);
+
+                ScoreboardManager.getInstance().updateScores("carrier", p -> GRAY + "Carrier: " + chatColor +
+                        (listener.getCurrentCarrier() == null ? "None" : listener.getCurrentCarrier().getName()));
+                ScoreboardManager.getInstance().updateScores("location", p -> GRAY + "Flag location: " + YELLOW + "(" + x + " X, " + z + " Z)");
+                ScoreboardManager.getInstance().updateScores("timeleft", p -> GRAY + "Time left: " + YELLOW + CoreUtil.niceFormat(sec, true));
+                ScoreboardManager.getInstance().updateScores("team1", p -> RED + "" + BOLD + "RED" + ": " + GOLD + team1Points);
+                ScoreboardManager.getInstance().updateScores("team2", p -> BLUE + "" + BOLD + "BLUE" + ": " + GOLD + team2Points);
             }
         };
         actionBarTask.runTaskTimer(KitPvP.getInstance(), 20L, 20L);
 
+        ViaAPI api = Via.getAPI();
+        bossBarTask = new BukkitRunnable() {
+            private Map<UUID, BossBar> bossBars = new HashMap<>();
+
+            @Override
+            public void run() {
+                org.bukkit.util.Vector flagVector = listener.getCurrentFlagLocation().toVector();
+
+                flagVector.setY(0);
+
+                int chars = 30;
+
+                for (Player viewer : Bukkit.getOnlinePlayers()) {
+                    org.bukkit.util.Vector vector = viewer.getLocation().toVector();
+                    Vector delta = flagVector.clone().subtract(vector);
+                    float rel = ((Double) Math.atan2(delta.getX(), delta.getZ())).floatValue();
+
+                    float act = (viewer.getLocation().getYaw() + rel * 180 / ((Double) Math.PI).floatValue()) % 360;
+                    if (act < -180) act += 360.;
+                    if (act > 180) act -= 360.;
+
+                    int pos = Math.round((-act + 180) / 360.f * chars);
+
+                    String title = Strings.repeat('\u220E', pos) + " " + Strings.repeat('\u220E', chars - pos);
+                    bossBars.computeIfAbsent(viewer.getUniqueId(), u -> api.createBossBar(title, BossColor.YELLOW, BossStyle.SOLID)
+                            .addPlayer(viewer.getUniqueId())
+                            .setHealth(1f)
+                            .show()).setTitle(title);
+
+                }
+            }
+
+            @Override
+            public synchronized void cancel() throws IllegalStateException {
+                super.cancel();
+                bossBars.forEach((key, value) -> value.removePlayer(key).hide());
+                bossBars.clear();
+            }
+        };
+        bossBarTask.runTaskTimer(KitPvP.getInstance(), 2L, 2L);
+
         queuedDisplay = ScoreboardManager.getInstance().addQueuedDisplay((p, d) -> {
-            int x = (int) (CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() == null ? CaptureTheFlagFlagListener.getInstance().getCurrentFlagLocation().getX() : CaptureTheFlagFlagListener.getInstance().getCurrentCarrier().getLocation().getX());
-            int z = (int) (CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() == null ? CaptureTheFlagFlagListener.getInstance().getCurrentFlagLocation().getZ() : CaptureTheFlagFlagListener.getInstance().getCurrentCarrier().getLocation().getZ());
+            Location flagLocation = listener.getCurrentFlagLocation();
+
+            int x = flagLocation.getBlockX();
+            int z = flagLocation.getBlockZ();
 
             int i = 12;
             int sec = ((Long) (5 * 60 - (System.currentTimeMillis() - begin) / 1000L)).intValue();
-            d.setTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "Capture The Flag");
+            d.setTitle(GREEN + "" + BOLD + "Capture The Flag");
             d.setScore("blank" + i, " ", --i);
-            d.setScore("your", ChatColor.GRAY + "Your team: " + (team2.contains(p.getUniqueId()) ?
-                    ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE" :
-                    ChatColor.RED + "" + ChatColor.BOLD + "RED"
+            d.setScore("your", GRAY + "Your team: " + (team2.contains(p.getUniqueId()) ?
+                    BLUE + "" + BOLD + "BLUE" :
+                    RED + "" + BOLD + "RED"
             ), --i);
             d.setScore("blank" + i, "  ", --i);
-            d.setScore("carrier", ChatColor.GRAY + "Carrier: " + ChatColor.GRAY + "None", --i);
-            d.setScore("location", ChatColor.GRAY + "Flag location: " + ChatColor.YELLOW + "(" + x + " X, " + z + " Z)", --i);
+            d.setScore("carrier", GRAY + "Carrier: " + GRAY + "None", --i);
+            d.setScore("location", GRAY + "Flag location: " + YELLOW + "(" + x + " X, " + z + " Z)", --i);
             d.setScore("blank" + i, "  ", --i);
-            d.setScore("timeleft", ChatColor.GRAY + "Time left: " + ChatColor.YELLOW + (overtime ? "OVERTIME" : CoreUtil.niceFormat(sec, true)), --i);
+            d.setScore("timeleft", GRAY + "Time left: " + YELLOW + (overtime ? "OVERTIME" : CoreUtil.niceFormat(sec, true)), --i);
             d.setScore("blank" + i, "   ", --i);
-            d.setScore("points", ChatColor.GRAY + "Flag Captures", --i);
-            d.setScore("team1", ChatColor.RED + "" + ChatColor.BOLD + "RED" + ": " + ChatColor.GOLD + team1Points, --i);
-            d.setScore("team2", ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE" + ": " + ChatColor.GOLD + team2Points, --i);
+            d.setScore("points", GRAY + "Flag Captures", --i);
+            d.setScore("team1", RED + "" + BOLD + "RED" + ": " + GOLD + team1Points, --i);
+            d.setScore("team2", BLUE + "" + BOLD + "BLUE" + ": " + GOLD + team2Points, --i);
         }, 2);
     }
 
@@ -316,9 +370,9 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
 
         if (begin <= System.currentTimeMillis()) {
             if (team1.contains(player.getUniqueId())) {
-                CAPTURETHEFLAG_TEAM.msg(player, "%team%", ChatColor.RED + "" + ChatColor.BOLD + "RED");
+                CAPTURETHEFLAG_TEAM.msg(player, "%team%", RED + "" + BOLD + "RED");
             } else {
-                CAPTURETHEFLAG_TEAM.msg(player, "%team%", ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE");
+                CAPTURETHEFLAG_TEAM.msg(player, "%team%", BLUE + "" + BOLD + "BLUE");
             }
         }
     }
@@ -356,7 +410,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
                 }
             });
         } else if (team1Points > team2Points) {
-            CAPTURETHEFLAG_WINNER.broadcast("%team%", ChatColor.translateAlternateColorCodes('&', "&c&lRED"));
+            CAPTURETHEFLAG_WINNER.broadcast("%team%", translateAlternateColorCodes('&', "&c&lRED"));
             team1.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
                 if (stats != null) {
@@ -373,7 +427,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
             });
             lastWinners.addAll(team1);
         } else {
-            CAPTURETHEFLAG_WINNER.broadcast("%team%", ChatColor.translateAlternateColorCodes('&', "&9&lBLUE"));
+            CAPTURETHEFLAG_WINNER.broadcast("%team%", translateAlternateColorCodes('&', "&9&lBLUE"));
             team2.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> {
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
                 if (stats != null) {
@@ -399,6 +453,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
 
         if (task != null) task.cancel();
         if (actionBarTask != null) actionBarTask.cancel();
+        if (bossBarTask != null) bossBarTask.cancel();
         if (queuedDisplay != null) queuedDisplay.remove();
 
         refreshArmor(false);

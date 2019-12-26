@@ -165,7 +165,11 @@ public class CaptureTheFlagFlagListener implements Listener {
     }
 
     public Location getCurrentFlagLocation() {
-        return bannerCurrentLocation;
+        if (flagCarrier == null) {
+            return bannerCurrentLocation;
+        } else {
+            return flagCarrier.getLocation();
+        }
     }
 
     private void load() {
