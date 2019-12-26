@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -48,6 +49,7 @@ public class PlayerMoveListener implements Listener {
         Bukkit.getOnlinePlayers().stream()
                 .filter(p -> (p.getLocation().getBlock().getType() == Material.GOLD_PLATE)
                         && UtilPlayer.isMoving(p)
+                        && p.getGameMode() == GameMode.SURVIVAL
                         && !teleporting.containsKey(p.getUniqueId())).collect(Collectors.toList())
                 .forEach(p -> {
                     Location teleport = teleports.get(ThreadLocalRandom.current().nextInt(0, teleports.size()));
@@ -92,6 +94,15 @@ public class PlayerMoveListener implements Listener {
             p.removePotionEffect(PotionEffectType.BLINDNESS);
             p.setGameMode(GameMode.SURVIVAL);
             teleporting.remove(p.getUniqueId());
+        }
+    }
+
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        // Stops spectators from teleporting
+        if (teleporting.containsKey(event.getPlayer().getUniqueId())) {
+            event.setCancelled(true);
+            event.getPlayer().setSpectatorTarget(null);
         }
     }
 }

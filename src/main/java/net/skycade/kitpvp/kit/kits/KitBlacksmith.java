@@ -7,6 +7,7 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
@@ -143,11 +144,12 @@ public class KitBlacksmith extends Kit {
 
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
-        if (event.getEntity() instanceof FallingBlock) {
-            Location loc = event.getBlock().getLocation();
+        if (event.getEntity() instanceof FallingBlock && event.getEntity().isOnGround()) {
+            Block block = event.getBlock();
+            Material initialMaterial = block.getType();
 
             Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-                loc.getBlock().setType(Material.AIR);
+                block.setType(initialMaterial);
             }, 40);
         }
     }

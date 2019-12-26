@@ -183,7 +183,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
                 }
                 if (System.currentTimeMillis() - begin > length) {
                     if (team1Points == team2Points) {
-                        int sec = ((Long) (length - (System.currentTimeMillis() - begin))).intValue();
+                        int sec = ((Long) ((length - (System.currentTimeMillis() - begin)) / 1000L)).intValue();
 
                         if (!overtime) {
                             CAPTURETHEFLAG_OVERTIME.broadcast();
@@ -206,7 +206,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
             @Override
             public void run() {
                 if (begin == null || begin > System.currentTimeMillis()) return;
-                int sec = ((Long) (length - (System.currentTimeMillis() - begin))).intValue();
+                int sec = ((Long) ((length - (System.currentTimeMillis() - begin)) / 1000L)).intValue();
 
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     boolean red = team1.contains(player.getUniqueId());
@@ -242,6 +242,18 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
 
             @Override
             public void run() {
+                BossColor bossColor = (listener.getCurrentCarrier() == null ?
+                        BossColor.WHITE :
+                        isTeamRed(listener.getCurrentCarrier()) ?
+                                BossColor.RED :
+                                BossColor.BLUE);
+
+                ChatColor chatColor = (listener.getCurrentCarrier() == null ?
+                        WHITE :
+                        isTeamRed(listener.getCurrentCarrier()) ?
+                                RED :
+                                BLUE);
+
                 org.bukkit.util.Vector flagVector = listener.getCurrentFlagLocation().toVector();
 
                 flagVector.setY(0);
@@ -259,11 +271,11 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
 
                     int pos = Math.round((-act + 180) / 360.f * chars);
 
-                    String title = Strings.repeat('\u220E', pos) + " " + Strings.repeat('\u220E', chars - pos);
-                    bossBars.computeIfAbsent(viewer.getUniqueId(), u -> api.createBossBar(title, BossColor.YELLOW, BossStyle.SOLID)
+                    String title = GRAY + Strings.repeat('\u002D', pos) + chatColor + "" + BOLD + " \u2691 " + GRAY + Strings.repeat('\u002D', chars - pos);
+                    bossBars.computeIfAbsent(viewer.getUniqueId(), u -> api.createBossBar(title, bossColor, BossStyle.SOLID)
                             .addPlayer(viewer.getUniqueId())
                             .setHealth(1f)
-                            .show()).setTitle(title);
+                            .show()).setTitle(title).setColor(bossColor);
 
                 }
             }
@@ -284,7 +296,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
             int z = flagLocation.getBlockZ();
 
             int i = 12;
-            int sec = ((Long) (length - (System.currentTimeMillis() - begin))).intValue();
+            int sec = ((Long) ((length - (System.currentTimeMillis() - begin)) / 1000L)).intValue();
             d.setTitle(GREEN + "" + BOLD + "Capture The Flag");
             d.setScore("blank" + i, " ", --i);
             d.setScore("your", GRAY + "Your team: " + (team2.contains(p.getUniqueId()) ?
