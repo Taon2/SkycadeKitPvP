@@ -14,18 +14,18 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.List;
 
-public class ItemSoulMasterKit extends EventShopItem {
+public class ItemZeusKit extends EventShopItem {
 
     private EventShopManager eventShopManager;
 
-    public ItemSoulMasterKit(EventShopManager eventShopManager) {
-        super(eventShopManager, "SoulMaster Kit", new ItemStack(Material.SOUL_SAND, 1, (short) 0), 250, 0, false);
+    public ItemZeusKit(EventShopManager eventShopManager) {
+        super(eventShopManager, "Zeus Kit", new ItemStack(Material.BLAZE_ROD, 1, (short) 0), 250, 0, false);
         this.eventShopManager = eventShopManager;
     }
 
     public void giveReward(Player p) {
         KitPvPStats stats = KitPvP.getInstance().getStats(p);
-        stats.addKit(KitType.SOULMASTER);
+        stats.addKit(KitType.ZEUS);
 
         YamlConfiguration yaml = eventShopManager.getYaml();
         long now = System.currentTimeMillis();
@@ -40,7 +40,7 @@ public class ItemSoulMasterKit extends EventShopItem {
     public List<String> getDescription() {
         return Arrays.asList(
                 ChatColor.GRAY + "",
-                ChatColor.GRAY + "Unlock kit SoulMaster."
+                ChatColor.GRAY + "Unlock kit Zeus."
         );
     }
 }

@@ -182,9 +182,15 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
                 }
                 if (System.currentTimeMillis() - begin > 5 * 60 * 1000L) {
                     if (team1Points == team2Points) {
+                        int sec = ((Long) (5 * 60 - (System.currentTimeMillis() - begin) / 1000L)).intValue();
+
                         if (!overtime) {
                             CAPTURETHEFLAG_OVERTIME.broadcast();
                             overtime = true;
+                        } else if (sec < -300) {
+                            CAPTURETHEFLAG_TOO_LONG.broadcast();
+                            end();
+                            cancel();
                         }
                     } else {
                         end();
@@ -204,11 +210,9 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     boolean red = team1.contains(player.getUniqueId());
                     ActionBarAPI.sendActionBar(player,
-                            GREEN +
-                                    "You are on team " + (red ? RED + "" + BOLD + "RED" : BLUE + "" + BOLD + "BLUE") +
-                                    GREEN + "!" + WHITE + " - " +
-                                    GOLD + CoreUtil.niceFormat(sec, true)
-                    );
+                            ChatColor.GREEN +
+                                    "You are on team " + (red ? ChatColor.RED + "" + ChatColor.BOLD + "RED" : ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE") + ChatColor.GREEN + "!" + ChatColor.WHITE + " - " +
+                                    (overtime ? "OVERTIME" : CoreUtil.niceFormat(sec, true)));
                 }
 
                 Location flagLocation = listener.getCurrentFlagLocation();
@@ -224,7 +228,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
                 ScoreboardManager.getInstance().updateScores("carrier", p -> GRAY + "Carrier: " + chatColor +
                         (listener.getCurrentCarrier() == null ? "None" : listener.getCurrentCarrier().getName()));
                 ScoreboardManager.getInstance().updateScores("location", p -> GRAY + "Flag location: " + YELLOW + "(" + x + " X, " + z + " Z)");
-                ScoreboardManager.getInstance().updateScores("timeleft", p -> GRAY + "Time left: " + YELLOW + CoreUtil.niceFormat(sec, true));
+                ScoreboardManager.getInstance().updateScores("timeleft", p -> GRAY + "Time left: " + YELLOW + (overtime ? "OVERTIME" : CoreUtil.niceFormat(sec, true)));
                 ScoreboardManager.getInstance().updateScores("team1", p -> RED + "" + BOLD + "RED" + ": " + GOLD + team1Points);
                 ScoreboardManager.getInstance().updateScores("team2", p -> BLUE + "" + BOLD + "BLUE" + ": " + GOLD + team2Points);
             }
@@ -381,8 +385,6 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
     public void end() {
         super.end();
 
-        begin = null;
-
         CaptureTheFlagFlagListener.getInstance().removeBanner();
         CaptureTheFlagFlagListener.getInstance().clearFlagCarrier();
 
@@ -455,6 +457,8 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
         if (actionBarTask != null) actionBarTask.cancel();
         if (bossBarTask != null) bossBarTask.cancel();
         if (queuedDisplay != null) queuedDisplay.remove();
+
+        overtime = false;
 
         refreshArmor(false);
     }

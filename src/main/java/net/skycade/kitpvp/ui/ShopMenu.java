@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static net.skycade.kitpvp.Messages.ALREADY_UNLOCKED;
 import static net.skycade.kitpvp.Messages.NOT_ENOUGH_CURRENCY;
@@ -26,16 +27,24 @@ public class ShopMenu extends DynamicGui {
         super(ChatColor.GOLD + "" + ChatColor.BOLD + "Shop", 6);
 
         KitPvPStats stats = kitManager.getKitPvP().getStats(member);
-        List<KitType> kits = KitPvP.getInstance().getKitPvPDocManager().getCurrentKits();
+        Map<KitType, Kit> kits = KitPvP.getInstance().getKitManager().getKits();
 
-        for (KitType kitType : kits) {
-            Kit kit = kitType.getKit();
+        List<KitType> toRemove = new ArrayList<>();
+        kits.forEach((kitType, kit) -> {
+            if (!kit.isEnabled()) {
+                toRemove.add(kitType);
+            }
+        });
+
+        toRemove.forEach(kits::remove);
+
+        for (Kit kit : kits.values()) {
             if (kit.getPrice() == 0) continue;
 
             addItemInteraction(p -> {
                         ItemStack item = new ItemStack(kit.getIcon());
 
-                        if (stats.hasKit(kitType))
+                        if (stats.hasKit(kit.getKitType()))
                             item.setType(Material.BEDROCK);
 
                         ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
@@ -45,7 +54,7 @@ public class ShopMenu extends DynamicGui {
                         List<String> lore = new ArrayList<>(kit.getDescription());
                         lore.add("");
                         lore.add(ChatColor.GOLD + "Cost: " + ChatColor.WHITE + kit.getPrice() + " Coins");
-                        if (stats.hasKit(kitType))
+                        if (stats.hasKit(kit.getKitType()))
                             lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "You already own this kit!");
                         else
                             lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Click to purchase!");
@@ -56,19 +65,19 @@ public class ShopMenu extends DynamicGui {
                         return item;
                     },
                     (p, ev) -> {
-                        if (stats.hasKit(kitType)) {
-                            ALREADY_UNLOCKED.msg(member.getPlayer(), "%thing%", "kit " + kitType.getKit().getName());
+                        if (stats.hasKit(kit.getKitType())) {
+                            ALREADY_UNLOCKED.msg(member.getPlayer(), "%thing%", "kit " + kit.getName());
                             p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                             return;
                         }
 
-                        if (stats.getCoins() - kitType.getKit().getPrice() < 0) {
-                            NOT_ENOUGH_CURRENCY.msg(p, "%currency%", "coins", "%thing%", "kit " + kitType.getKit().getName());
+                        if (stats.getCoins() - kit.getPrice() < 0) {
+                            NOT_ENOUGH_CURRENCY.msg(p, "%currency%", "coins", "%thing%", "kit " + kit.getName());
                             p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                             return;
                         }
 
-                        new ConfirmMenu(kitManager, member, kitType).open(p);
+                        new ConfirmMenu(kitManager, member, kit.getKitType()).open(p);
                     });
         }
     }

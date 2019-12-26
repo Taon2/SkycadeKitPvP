@@ -157,6 +157,11 @@ public class KitPvPStats {
     }
 
     public void resetKits() {
+        kits.keySet().forEach(kit -> {
+            String nodeCommand = "addtempperm %player% skycade.crates.reward." + kit.name().toLowerCase() + " false";
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), nodeCommand);
+        });
+
         kits.clear();
 
         //Keep starting kits
@@ -168,8 +173,11 @@ public class KitPvPStats {
         applyKitPreference();
     }
 
-    public void removeKit(KitType type) {
-        kits.remove(type);
+    public void removeKit(KitType kit) {
+        kits.remove(kit);
+
+        String nodeCommand = "addtempperm %player% skycade.crates.reward." + kit.name().toLowerCase() + " false";
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), nodeCommand);
     }
 
     public boolean hasKit(KitType kit) {
@@ -180,6 +188,9 @@ public class KitPvPStats {
         if (getKits().containsKey(kit))
             return;
         kits.put(kit, new KitData(kit));
+
+        String nodeCommand = "addtempperm %player% skycade.crates.reward." + kit.name().toLowerCase() + " true";
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), nodeCommand);
     }
 
     public Integer getLastStreak() {
