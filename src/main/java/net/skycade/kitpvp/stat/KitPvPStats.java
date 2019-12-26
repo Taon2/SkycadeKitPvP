@@ -158,7 +158,7 @@ public class KitPvPStats {
 
     public void resetKits() {
         kits.keySet().forEach(kit -> {
-            String nodeCommand = "addtempperm %player% skycade.crates.reward." + kit.name().toLowerCase() + " false";
+            String nodeCommand = "addtempperm " + uuid + " skycade.crates.reward." + kit.name().toLowerCase() + " false";
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), nodeCommand);
         });
 
@@ -176,7 +176,7 @@ public class KitPvPStats {
     public void removeKit(KitType kit) {
         kits.remove(kit);
 
-        String nodeCommand = "addtempperm %player% skycade.crates.reward." + kit.name().toLowerCase() + " false";
+        String nodeCommand = "addtempperm " + uuid + " skycade.crates.reward." + kit.name().toLowerCase() + " false";
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), nodeCommand);
     }
 
@@ -189,7 +189,7 @@ public class KitPvPStats {
             return;
         kits.put(kit, new KitData(kit));
 
-        String nodeCommand = "addtempperm %player% skycade.crates.reward." + kit.name().toLowerCase() + " true";
+        String nodeCommand = "addtempperm " + uuid + " skycade.crates.reward." + kit.name().toLowerCase() + " true";
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), nodeCommand);
     }
 
