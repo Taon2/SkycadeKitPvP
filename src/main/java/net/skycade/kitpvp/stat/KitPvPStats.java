@@ -6,6 +6,7 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
 import org.bukkit.Bukkit;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -189,8 +190,18 @@ public class KitPvPStats {
             return;
         kits.put(kit, new KitData(kit));
 
-        String nodeCommand = "addtempperm " + uuid + " skycade.crates.reward." + kit.name().toLowerCase() + " true";
-        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), nodeCommand);
+        boolean hasPermission = false;
+        // Checks all active permissions to see if the player has the reward node
+        for (PermissionAttachmentInfo permission : Bukkit.getPlayer(uuid).getEffectivePermissions()) {
+            if (permission.getPermission().contains("skycade.crates.reward." + kit.name().toLowerCase()))
+                hasPermission = true;
+        }
+
+        // Stops from being applied if already applied
+        if (!hasPermission) {
+            String nodeCommand = "addtempperm " + uuid + " skycade.crates.reward." + kit.name().toLowerCase() + " true";
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), nodeCommand);
+        }
     }
 
     public Integer getLastStreak() {

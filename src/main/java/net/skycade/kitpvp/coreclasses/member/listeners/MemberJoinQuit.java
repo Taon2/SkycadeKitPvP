@@ -70,7 +70,7 @@ public class MemberJoinQuit implements Listener {
         StatKitPvPKillStreak.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
     }
 
-    @EventHandler
+    @EventHandler (ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
         Member member = memberManager.getMember(p, true);
