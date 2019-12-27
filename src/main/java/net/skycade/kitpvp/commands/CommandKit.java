@@ -84,6 +84,7 @@ public class CommandKit extends SkycadeCommand {
                     YOUR_KIT_UNLOCKED.msg(target, "%kit%", "Every kit");
                 return;
             }
+
             Kit kit = getKit(strings[1], member);
             if (kit == null)
                 return;
@@ -148,7 +149,7 @@ public class CommandKit extends SkycadeCommand {
     private Kit getKit(String name, Member member) {
         Kit kit = null;
         for (Map.Entry<KitType, Kit> entry : KitPvP.getInstance().getKitManager().getKits().entrySet())
-            if (entry.getValue().getName().equalsIgnoreCase(name))
+            if (entry.getKey().name().equalsIgnoreCase(name))
                 kit = entry.getValue();
         if (kit == null) {
             COULDNT_FIND.msg(member.getPlayer(), "%type%", "kit", "%thing%", name);
