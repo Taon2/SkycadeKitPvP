@@ -6,7 +6,6 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
 import org.bukkit.Bukkit;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -192,9 +191,9 @@ public class KitPvPStats {
 
         boolean hasPermission = false;
         // Checks all active permissions to see if the player has the reward node
-        for (PermissionAttachmentInfo permission : Bukkit.getPlayer(uuid).getEffectivePermissions()) {
-            if (permission.getPermission().contains("skycade.crates.reward." + kit.name().toLowerCase()))
-                hasPermission = true;
+        if (Bukkit.getPlayer(uuid).hasPermission("skycade.crates.reward." + kit.name().toLowerCase())) {
+            Bukkit.getLogger().info("has");
+            hasPermission = true;
         }
 
         // Stops from being applied if already applied
