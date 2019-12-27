@@ -192,7 +192,6 @@ public class KitPvPStats {
         boolean hasPermission = false;
         // Checks all active permissions to see if the player has the reward node
         if (Bukkit.getPlayer(uuid).hasPermission("skycade.crates.reward." + kit.name().toLowerCase())) {
-            Bukkit.getLogger().info("has");
             hasPermission = true;
         }
 
