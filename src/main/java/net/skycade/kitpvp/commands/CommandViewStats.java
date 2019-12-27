@@ -48,7 +48,7 @@ public class CommandViewStats extends SkycadeCommand {
                 "%gang%", gangName,
                 "%deaths%", Integer.toString(stats.getDeaths()),
                 "%kills%", Integer.toString(stats.getKills()),
-                "%kdr%", Double.toString(UtilMath.getKDR(member.getKills(), member.getDeaths())),
+                "%kdr%", Double.toString(UtilMath.getKDR(stats.getKills(), stats.getDeaths())),
                 "%assists%", Integer.toString(stats.getAssists()),
                 "%currentkillstreak%", Integer.toString(stats.getStreak()),
                 "%highestkillstreak%", Integer.toString(stats.getHighestStreak()),

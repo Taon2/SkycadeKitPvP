@@ -53,8 +53,7 @@ public class KitPvPDB {
                     JSONObject kitsJson = (JSONObject) new JSONParser().parse(result.getString("Kits"));
                     for (Object o : kitsJson.keySet()) {
                         KitType type = KitType.valueOf((String) o);
-                        KitData kitData = new KitData(type);
-                        stats.getKits().put(type, kitData);
+                        stats.addKit(type);
                     }
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
