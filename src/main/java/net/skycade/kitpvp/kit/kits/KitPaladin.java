@@ -72,7 +72,7 @@ public class KitPaladin extends Kit {
         Gang gang = GangsPlusApi.getPlayersGang(p);
 
         targetPlayers.forEach(target -> {
-            if (gang.getOnlineMembers().contains(target))
+            if (gang != null && gang.getOnlineMembers().contains(target))
                 target.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 200, 1));
         });
     }
