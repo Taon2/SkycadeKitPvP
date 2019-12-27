@@ -68,7 +68,7 @@ public class GangPointsManager {
     }
 
     public Integer getPoints(String gangName) {
-        return points.get(gangName);
+        return (points.get(gangName) / 100);
     }
 
     public void setPoints(String gangName, int amount) {

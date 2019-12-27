@@ -83,7 +83,7 @@ public class KitPvPStats {
     public void giveEventTokens(int eventTokens) {
         this.eventTokens += eventTokens;
 
-        //Adds the amount of event tokens times 5 to the gang points
+        //Adds the amount of event tokens times 200 to the gang points
         Gang gang = GangsPlusApi.getPlayersGang(Bukkit.getPlayer(uuid));
         if (gang != null)
             KitPvP.getInstance().getGangPointsManager().addPoints(gang.getName(), eventTokens * 200);
