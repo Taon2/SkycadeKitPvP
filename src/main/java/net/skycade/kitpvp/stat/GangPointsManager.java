@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class GangPointsManager {
     private Map<String, Integer> points = new HashMap<>();
@@ -67,8 +68,15 @@ public class GangPointsManager {
         return points;
     }
 
+    public Set<String> getAllGangNames() {
+        return points.keySet();
+    }
+
     public Integer getPoints(String gangName) {
-        return (points.get(gangName) / 100);
+        if (!points.containsKey(gangName))
+            return 0;
+        else
+            return (points.get(gangName) / 100);
     }
 
     public void setPoints(String gangName, int amount) {

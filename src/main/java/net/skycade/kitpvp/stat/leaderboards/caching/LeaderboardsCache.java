@@ -5,8 +5,13 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import net.skycade.SkycadeCore.CoreSettings;
 import net.skycade.SkycadeCore.utility.MojangUtil;
+import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.stat.KitPvPDB;
+import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.stat.leaderboards.member.StatsMember;
+import org.bukkit.Bukkit;
 
 import javax.annotation.Nonnull;
 import java.sql.Connection;
@@ -21,27 +26,48 @@ public class LeaderboardsCache {
     public static LoadingCache<UUID, StatsMember> memberCache = CacheBuilder.newBuilder().build(new CacheLoader<UUID, StatsMember>() {
         @Override
         public StatsMember load(@Nonnull UUID key) {
-            MojangUtil.PlayerData data = MojangUtil.get(key);
-            String name = data == null ? "unknown" : data.getName();
-            StatsMember member = new StatsMember(key, name);
-            try (Connection connection = CoreSettings.getInstance().getConnection()) {
-                String sql = "SELECT Kills, Coins, Deaths, HighestStreak FROM " + KitPvPDB.kitPvPTable + " WHERE UUID = ?";
-                try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                    statement.setString(1, key.toString());
-                    ResultSet result = statement.executeQuery();
-                    while (result.next()) {
-                        Integer kills = result.getInt("Kills");
-                        Integer highestKills  = result.getInt("HighestStreak");
-                        Integer deaths  = result.getInt("Deaths");
-                        Integer coins  = result.getInt("Coins");
-                        member.setKills(kills);
-                        member.setHighestStreak(highestKills);
-                        member.setDeaths(deaths);
-                        member.setCoins(coins);
+            StatsMember member;
+
+            if (Bukkit.getOfflinePlayer(key).isOnline()) {
+                Member kitpvpMember = MemberManager.getInstance().getMember(key);
+                KitPvPStats stats = KitPvP.getInstance().getStats(kitpvpMember);
+
+                // Creates member
+                member = new StatsMember(key, kitpvpMember.getName());
+
+                // Loads information from online player if player is online
+                member.setKills(stats.getKills());
+                member.setHighestStreak(stats.getHighestStreak());
+                member.setDeaths(stats.getDeaths());
+                member.setCoins(stats.getCoins());
+            } else {
+                MojangUtil.PlayerData data = MojangUtil.get(key);
+                String name = data == null ? "unknown" : data.getName();
+
+                // Creates member
+                member = new StatsMember(key, name);
+
+                // Loads information from database if uuid is offline
+                try (Connection connection = CoreSettings.getInstance().getConnection()) {
+                    String sql = "SELECT Kills, Coins, Deaths, HighestStreak FROM " + KitPvPDB.kitPvPTable + " WHERE UUID = ? AND Season = ?";
+                    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                        statement.setString(1, key.toString());
+                        statement.setString(2, CoreSettings.getInstance().getSeason());
+                        ResultSet result = statement.executeQuery();
+                        while (result.next()) {
+                            Integer kills = result.getInt("Kills");
+                            Integer highestKills = result.getInt("HighestStreak");
+                            Integer deaths = result.getInt("Deaths");
+                            Integer coins = result.getInt("Coins");
+                            member.setKills(kills);
+                            member.setHighestStreak(highestKills);
+                            member.setDeaths(deaths);
+                            member.setCoins(coins);
+                        }
                     }
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
             return member;
         }

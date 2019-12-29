@@ -60,7 +60,7 @@ public class UtilPlayer {
         Set<Player> players = new HashSet<>();
 
         for (Player pl : Bukkit.getOnlinePlayers()) {
-            if (pl.getLocation().distanceSquared(loc) <= r * r && !VanishStatus.isVanished(pl.getUniqueId())) {
+            if (pl.getLocation().distanceSquared(loc) <= r * r && !VanishStatus.isVanished(pl.getUniqueId()) && pl.getGameMode() == GameMode.SURVIVAL) {
                 players.add(pl);
             }
         }

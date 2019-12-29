@@ -9,8 +9,6 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -77,12 +75,12 @@ public class KitElite extends Kit {
         });
     }
 
-    @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity().getKiller();
+    @Override
+    public boolean onDeath(Player p) {
+        if (p != null)
+            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 80, 1));
 
-        if (player != null)
-            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40, 0));
+        return true;
     }
 
     @Override

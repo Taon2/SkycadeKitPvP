@@ -53,7 +53,7 @@ public class KitPvP extends SkycadePlugin {
     private void defaults() {
         Map<String, Object> defaults = new TreeMap<>();
 
-        defaults.put("update-delay", 6000);
+        defaults.put("update-delay", 2400);
         defaults.put("database.kitpvp-table", "skycade_kitpvp_members");
         defaults.put("database.kitpvp-prestige-levels", "skycade_kitpvp_prestige_levels");
 

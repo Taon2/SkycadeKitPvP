@@ -85,6 +85,8 @@ public class KitKnight extends Kit {
 
         Set<Player> nearby = UtilPlayer.getNearbyPlayers(p.getLocation(), 8);
 
+        if (gang == null) return;
+
         gang.getOnlineMembers().forEach(member -> {
             if (nearby.contains(member)) {
                 KitPvPStats stats = KitPvP.getInstance().getStats(member);
@@ -114,6 +116,7 @@ public class KitKnight extends Kit {
         horse.setStyle(Horse.Style.WHITE);
         horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
         horse.getInventory().setArmor(new ItemStack(Material.GOLD_BARDING));
+        horse.setMaxHealth(30);
         horse.setHealth(horse.getMaxHealth());
 
         horses.put(p.getUniqueId(), horse);
@@ -123,26 +126,33 @@ public class KitKnight extends Kit {
     public void onExit(VehicleExitEvent event) {
         if (horses.containsKey(event.getExited().getUniqueId())) {
             horses.get(event.getExited().getUniqueId()).remove();
-            horses.remove(event.getExited().getUniqueId());
+            if (horses.get(event.getExited().getUniqueId()) != null)
+                horses.remove(event.getExited().getUniqueId());
         }
     }
 
     @Override
     public boolean onDeath(Player p) {
         if (horses.containsKey(p.getUniqueId())) {
-            p.getVehicle().eject();
-            horses.get(p.getUniqueId()).remove();
+            if (p.getVehicle() != null)
+                p.getVehicle().eject();
+            if (horses.get(p.getUniqueId()) != null)
+                horses.get(p.getUniqueId()).remove();
             horses.remove(p.getUniqueId());
         }
 
         return true;
     }
 
+    //todo listen for horse death and remove from list
+
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         if (horses.containsKey(event.getPlayer().getUniqueId())) {
-            event.getPlayer().getVehicle().eject();
-            horses.get(event.getPlayer().getUniqueId()).remove();
+            if (event.getPlayer().getVehicle() != null)
+                event.getPlayer().getVehicle().eject();
+            if (horses.get(event.getPlayer().getUniqueId()) != null)
+                horses.get(event.getPlayer().getUniqueId()).remove();
             horses.remove(event.getPlayer().getUniqueId());
         }
     }

@@ -4,6 +4,7 @@ import net.brcdev.gangs.GangsPlusApi;
 import net.brcdev.gangs.gang.Gang;
 import net.md_5.bungee.api.ChatColor;
 import net.skycade.SkycadeCore.utility.command.SkycadeCommand;
+import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
@@ -30,7 +31,7 @@ public class CommandViewStats extends SkycadeCommand {
             VIEWSTATS_USAGE.msg(commandSender);
             return;
         }
-        if (Bukkit.getPlayer(strings[0]) == null) {
+        if (Bukkit.getPlayer(strings[0]) == null || VanishStatus.isVanished(Bukkit.getPlayer(strings[0]).getUniqueId())) {
             COULDNT_FIND.msg(commandSender, "%type%", "player", "%thing%", strings[0]);
             return;
         }

@@ -2,7 +2,6 @@ package net.skycade.kitpvp.listeners.player;
 
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -28,7 +27,7 @@ public class PlayerInteractListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEntityEvent event) {
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         if (!(event.getRightClicked() instanceof Player))
             return;
 
@@ -70,8 +69,8 @@ public class PlayerInteractListener implements Listener {
         KitType.LICH.getKit().onBlockBreak(event.getPlayer(), event.getBlock());
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerRightClick(PlayerInteractEvent event) {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerInteract(PlayerInteractEvent event) {
         Player p = event.getPlayer();
 
         if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && plugin.isInSpawnArea(p)) {

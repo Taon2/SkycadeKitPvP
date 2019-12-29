@@ -70,9 +70,9 @@ public class PlayerMoveListener implements Listener {
                             org.bukkit.util.Vector target = teleport.toVector();
                             Vector dir = target.subtract(pos).normalize();
                             double distance = teleport.distance(p.getLocation());
-                            p.setVelocity(dir.multiply(distance > 10 ? 3 : distance / 5));
+                            p.setVelocity(dir.multiply(distance > 15 ? 3 : distance / 5));
 
-                            if (distance < 2) {
+                            if (distance < 4) {
                                 p.setVelocity(dir.multiply(0));
                                 p.removePotionEffect(PotionEffectType.BLINDNESS);
                                 p.setGameMode(GameMode.SURVIVAL);

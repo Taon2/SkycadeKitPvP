@@ -14,12 +14,14 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.disabled.KitMedic;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import net.skycade.koth.SkycadeKoth;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,6 +33,8 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import static net.skycade.kitpvp.Messages.KNOCKBACK_REMOVED;
 
 public class PlayerListeners implements Listener {
 
@@ -99,6 +103,13 @@ public class PlayerListeners implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getFrom().getBlock().equals(event.getTo().getBlock())) return;
+
+        // Removes knockback during KOTH
+        if (event.getPlayer().getItemInHand().getEnchantments().containsKey(Enchantment.KNOCKBACK) && SkycadeKoth.getInstance().getGameManager().getActiveKOTHGame() != null) {
+            event.getPlayer().getItemInHand().removeEnchantment(Enchantment.KNOCKBACK);
+            event.getPlayer().updateInventory();
+            KNOCKBACK_REMOVED.msg(event.getPlayer());
+        }
 
         if (!plugin.getSpawnRegion().contains(event.getPlayer().getLocation())) {
             KitPvPStats stats = KitPvP.getInstance().getStats(event.getPlayer());

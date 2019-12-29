@@ -5,19 +5,19 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 import static net.skycade.kitpvp.Messages.KIT_EQUIPPED;
 
 public class KitGambler extends Kit {
-
-    private List<UUID> hasChanged = new ArrayList<>();
 
     public KitGambler(KitManager kitManager) {
         super(kitManager, "Gambler", KitType.GAMBLER, 45000, getLore());
@@ -28,8 +28,6 @@ public class KitGambler extends Kit {
 
     @Override
     public void applyKit(Player p) {
-        if (hasChanged.contains(p.getUniqueId())) return;
-
         KitPvPStats stats = KitPvP.getInstance().getStats(p);
 
         KitType randomKit = (KitType) stats.getKits().keySet().toArray()[new Random().nextInt(stats.getKits().keySet().toArray().length)];
@@ -37,13 +35,8 @@ public class KitGambler extends Kit {
             applyKit(p);
 
         randomKit.getKit().beginApplyKit(p);
-        hasChanged.add(p.getUniqueId());
 
         KIT_EQUIPPED.msg(p, "%kit%", randomKit.getKit().getName());
-
-        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            hasChanged.remove(p.getUniqueId());
-        }, 100);
     }
 
     @Override

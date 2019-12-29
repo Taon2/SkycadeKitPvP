@@ -142,6 +142,9 @@ public class Messages {
     public static final Localization.Message CAPTURETHEFLAG_OVERTIME = new Localization.Message("event.capturetheflag-overtime", "&a&lOVERTIME! &7The scores are tied! Next flag capture wins!");
     public static final Localization.Message CAPTURETHEFLAG_TOO_LONG = new Localization.Message("event.capturetheflag-too-long", "&a&lThe flag took too long to capture.");
 
+    //KOTH
+    public static final Localization.Message KNOCKBACK_REMOVED = new Localization.Message("knockback-removed", "&cThe Knockback on your weapon was removed due to KOTH being active.");
+
     //KitPvP Kill Messages
     public static final Localization.Message NO_REWARDS = new Localization.Message("kill.no-rewards", "&7You killed the same player more than 3 times, &cno rewards &7rewarded.");
     public static final Localization.Message ASSIST_REWARD = new Localization.Message("kill.assist-rewards", "&7You got &6%amount% &7coins for assisting to kill %player%&7!");
@@ -352,7 +355,8 @@ public class Messages {
                 GANG_POINTS_RESET,
                 YOU_KILLED_LOGGED_OUT,
                 CAPTURETHEFLAG_OVERTIME,
-                CAPTURETHEFLAG_TOO_LONG
+                CAPTURETHEFLAG_TOO_LONG,
+                KNOCKBACK_REMOVED
         );
     }
 }

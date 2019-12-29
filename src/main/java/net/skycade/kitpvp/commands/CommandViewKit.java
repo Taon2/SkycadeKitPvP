@@ -26,7 +26,7 @@ public class CommandViewKit extends SkycadeCommand {
 
         Kit kit = null;
         for (Map.Entry<KitType, Kit> entry : KitPvP.getInstance().getKitManager().getKits().entrySet())
-            if (entry.getValue().getName().equalsIgnoreCase(strings[0]))
+            if (entry.getKey().name().equalsIgnoreCase(strings[0]))
                 kit = entry.getValue();
 
         if (kit == null) {

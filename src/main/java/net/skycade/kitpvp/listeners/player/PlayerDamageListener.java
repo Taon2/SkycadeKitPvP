@@ -55,36 +55,36 @@ public class PlayerDamageListener implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-            if (plugin.getSpawnRegion().contains(event.getEntity().getLocation())) {
-                event.setCancelled(true);
-                return;
-            }
+        if (plugin.getSpawnRegion().contains(event.getEntity().getLocation())) {
+            event.setCancelled(true);
+            return;
+        }
 
-            if (!(event.getEntity() instanceof Player))
-                return;
+        if (!(event.getEntity() instanceof Player))
+            return;
 
-            Player damagee = (Player) event.getEntity();
-            if (lastProjLaunch.containsKey(damagee)) {
-                addAssist(damagee, Bukkit.getPlayer(lastProjLaunch.get(damagee)), event.getDamage());
-                lastProjLaunch.remove(damagee);
-                return;
-            }
+        Player damagee = (Player) event.getEntity();
+        if (lastProjLaunch.containsKey(damagee)) {
+            addAssist(damagee, Bukkit.getPlayer(lastProjLaunch.get(damagee)), event.getDamage());
+            lastProjLaunch.remove(damagee);
+            return;
+        }
 
-            if (!(event.getDamager() instanceof Player))
-                return;
+        if (!(event.getDamager() instanceof Player))
+            return;
 
-            if (plugin.getStats(damagee).getActiveKit().getKit().getKitType() == KitType.SONIC)
-                ((KitSonic) plugin.getStats(damagee).getActiveKit().getKit()).disableSprint(damagee);
+        if (plugin.getStats(damagee).getActiveKit().getKit().getKitType() == KitType.SONIC)
+            ((KitSonic) plugin.getStats(damagee).getActiveKit().getKit()).disableSprint(damagee);
 
-            Player damager = (Player) event.getDamager();
+        Player damager = (Player) event.getDamager();
 
-            plugin.getStats(damager).getActiveKit().getKit().onDamageDealHit(event, damager, damagee);
-            plugin.getStats(damagee).getActiveKit().getKit().onDamageGetHit(event, damager, damagee);
+        plugin.getStats(damager).getActiveKit().getKit().onDamageDealHit(event, damager, damagee);
+        plugin.getStats(damagee).getActiveKit().getKit().onDamageGetHit(event, damager, damagee);
 
-            lastDamagerMap.put(damagee.getUniqueId(), event.getDamager());
+        lastDamagerMap.put(damagee.getUniqueId(), event.getDamager());
 
-            if (!damager.equals(damagee))
-                addAssist(damagee, damager, event.getDamage());
+        if (!damager.equals(damagee))
+            addAssist(damagee, damager, event.getDamage());
     }
 
     @EventHandler
@@ -129,6 +129,7 @@ public class PlayerDamageListener implements Listener {
 
         //Try to get the killer
         Player killer = died.getKiller();
+
         if (killer == null && lastDamagerMap.get(died.getUniqueId()) != null) {
             String customName;
             customName = lastDamagerMap.get(died.getUniqueId()).getCustomName();
@@ -150,6 +151,10 @@ public class PlayerDamageListener implements Listener {
 
         //Update kills
         KitPvPStats stats = plugin.getStats(killerMem);
+
+        if (stats.getActiveKit() == KitType.ELITE) {
+            stats.getActiveKit().getKit().onDeath(killer);
+        }
 
         final int kills = stats.getKills() + 1;
         stats.setKills(kills);
@@ -456,14 +461,5 @@ public class PlayerDamageListener implements Listener {
         p.teleport(TeleportUtil.getSpawn());
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), p::updateInventory, 10);
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> p.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
-        KitPvPStats stats = KitPvP.getInstance().getStats(p);
-        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            stats.getActiveKit().getKit().giveSoup(p, 32);
-        }, 5);
-        stats.applyKitPreference();
-        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            stats.getActiveKit().getKit().beginApplyKit(p);
-            KitPvP.getInstance().getEventShopManager().reapplyUpgrades(p);
-        }, 3);
     }
 }
