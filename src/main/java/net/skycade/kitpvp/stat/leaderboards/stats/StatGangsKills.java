@@ -3,6 +3,7 @@ package net.skycade.kitpvp.stat.leaderboards.stats;
 import net.brcdev.gangs.GangsPlugin;
 import net.brcdev.gangs.GangsPlusApi;
 import net.brcdev.gangs.gang.Gang;
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.skycadeleaderboards.leaderboards.StatisticType;
 
 import java.util.ArrayList;
@@ -29,11 +30,11 @@ public class StatGangsKills extends StatisticType<String, Integer> {
 
     @Override
     public Integer get(String s) {
-        Integer data = GangsPlugin.getInstance().gangManager.getGang(s).getKills();
-        if (data == null) {
+        Integer kills = GangsPlugin.getInstance().gangManager.getGang(s).getKills();
+        if (kills == null) {
             return 0;
         } else {
-            return data;
+            return kills;
         }
     }
 
