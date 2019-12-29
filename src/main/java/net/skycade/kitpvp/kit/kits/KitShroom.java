@@ -123,9 +123,8 @@ public class KitShroom extends Kit {
         particleMoveEffect(p, ParticleEffect.TOWN_AURA, 2, 30);
 
         if (UtilPlayer.isMoving(p) && !getKitManager().getKitPvP().getSpawnRegion().contains(p)) {
-            UtilPlayer.getNearbyPlayers(p.getLocation(), 2).forEach(target -> {
-                if (target != p)
-                    target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 0));
+            UtilPlayer.getNearbyPlayers(p, p.getLocation(), 2).forEach(target -> {
+                target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 0));
             });
         }
     }

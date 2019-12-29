@@ -93,7 +93,7 @@ public class KitFireMage extends Kit {
 
                 ParticleEffect.FLAME.display(0, 0, 0, 0.03F, 3, loc, 30);
 
-                for (Player target : UtilPlayer.getNearbyPlayers(loc, 1.5).stream().filter(player -> !player.equals(p) && player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList())) {
+                for (Player target : UtilPlayer.getNearbyPlayers(p, loc, 1.5).stream().filter(player -> player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList())) {
                     target.damage(2+ 3, p);
                     target.setFireTicks(20);
                 }

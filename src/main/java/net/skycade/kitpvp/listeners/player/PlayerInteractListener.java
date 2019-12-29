@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.listeners.player;
 
+import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.GameMode;
@@ -28,10 +29,7 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (!(event.getRightClicked() instanceof Player))
-            return;
-
-        if (plugin.isInSpawnArea(event.getPlayer()))
+        if (!(event.getRightClicked() instanceof Player) || VanishStatus.isVanished(event.getPlayer().getUniqueId()) || plugin.isInSpawnArea(event.getPlayer()))
             return;
 
         plugin.getStats(event.getPlayer()).getActiveKit().getKit().onInteract(event.getPlayer(), (Player) event.getRightClicked(),
@@ -73,7 +71,7 @@ public class PlayerInteractListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player p = event.getPlayer();
 
-        if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && plugin.isInSpawnArea(p)) {
+        if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && (plugin.isInSpawnArea(p) || VanishStatus.isVanished(event.getPlayer().getUniqueId()))) {
             plugin.getStats(event.getPlayer()).getActiveKit().getKit().reimburseItem(event.getPlayer(), event.getItem());
             return;
         }

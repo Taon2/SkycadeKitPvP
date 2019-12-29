@@ -98,8 +98,7 @@ public class KitMystic extends Kit {
         p.getWorld().playSound(loc, Sound.CAT_MEOW, 1F, 1F);
 
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
-            Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(cat.getLocation(), 4);
-            targetPlayers.remove(p);
+            Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, cat.getLocation(), 4);
 
             targetPlayers.forEach(target -> {
                 mysticEffects(target, p, 7, 7, 22, 22, 22, 12, 14);

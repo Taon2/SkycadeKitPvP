@@ -83,7 +83,7 @@ public class KitSupport extends Kit {
         if (!addCooldown(p, "Buff", beaconCooldown, true))
             return;
 
-        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 5);
+        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 5);
         if (targetPlayers.size() <= 1) {
             removeCooldowns(p, getName());
             return;

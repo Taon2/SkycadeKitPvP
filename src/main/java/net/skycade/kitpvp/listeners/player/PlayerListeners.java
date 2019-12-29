@@ -4,6 +4,7 @@ import net.brcdev.gangs.GangsPlusApi;
 import net.brcdev.gangs.gang.Gang;
 import net.minelink.ctplus.CombatTagPlus;
 import net.skycade.SkycadeCore.utility.TeleportUtil;
+import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPKillstreakChange;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
@@ -111,7 +112,7 @@ public class PlayerListeners implements Listener {
             KNOCKBACK_REMOVED.msg(event.getPlayer());
         }
 
-        if (!plugin.getSpawnRegion().contains(event.getPlayer().getLocation())) {
+        if (!plugin.getSpawnRegion().contains(event.getPlayer().getLocation()) && !VanishStatus.isVanished(event.getPlayer().getUniqueId())) {
             KitPvPStats stats = KitPvP.getInstance().getStats(event.getPlayer());
             stats.getActiveKit().getKit().onMove(event.getPlayer());
         }

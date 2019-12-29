@@ -1,6 +1,5 @@
 package net.skycade.kitpvp.kit.kits;
 
-import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
@@ -15,7 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 import static net.skycade.kitpvp.Messages.WOOSH;
 
@@ -106,15 +108,7 @@ public class KitEnderman extends Kit {
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
-        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 10);
-        targetPlayers.remove(p);
-
-        List<Player> toRemove = new ArrayList<>();
-        targetPlayers.forEach(target -> {
-            if (KitPvP.getInstance().isInSpawnArea(target))
-                toRemove.add(target);
-        });
-        targetPlayers.removeAll(toRemove);
+        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 10);
 
         if (targetPlayers.isEmpty()) {
             removeCooldowns(p, getName());

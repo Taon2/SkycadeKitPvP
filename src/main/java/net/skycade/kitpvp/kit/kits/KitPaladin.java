@@ -67,7 +67,7 @@ public class KitPaladin extends Kit {
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
-        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 7);
+        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 7);
 
         Gang gang = GangsPlusApi.getPlayersGang(p);
 

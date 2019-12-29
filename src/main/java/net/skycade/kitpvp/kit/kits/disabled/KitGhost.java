@@ -67,15 +67,13 @@ public class KitGhost extends Kit {
             return;
 
         int range = 4;
-        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), range);
+        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), range);
         if (targetPlayers.size() <= 1)
             removeCooldowns(p, getName());
 
         targetPlayers.forEach(target -> {
-            if (!target.equals(p)) {
-                GET_SPOOKED.msg(p);
-                levitateInAir(target, 40);
-            }
+            GET_SPOOKED.msg(p);
+            levitateInAir(target, 40);
         });
     }
 
