@@ -105,7 +105,7 @@ public class PlayerListeners implements Listener {
         if (event.getFrom().getBlock().equals(event.getTo().getBlock())) return;
 
         // Removes knockback during KOTH
-        if (event.getPlayer().getItemInHand().getEnchantments().containsKey(Enchantment.KNOCKBACK) && SkycadeKoth.getInstance().getGameManager().getActiveKOTHGame() != null) {
+        if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getEnchantments().containsKey(Enchantment.KNOCKBACK) && SkycadeKoth.getInstance().getGameManager().getActiveKOTHGame() != null) {
             event.getPlayer().getItemInHand().removeEnchantment(Enchantment.KNOCKBACK);
             event.getPlayer().updateInventory();
             KNOCKBACK_REMOVED.msg(event.getPlayer());

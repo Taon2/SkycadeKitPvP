@@ -110,6 +110,9 @@ public class KitWitchdoctor extends Kit {
 
         Gang gang = GangsPlusApi.getPlayersGang(p);
 
+        if (gang == null)
+            return;
+
         targetPlayers.forEach(target -> {
             if (gang.getOnlineMembers().contains(target))
                 target.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 120, 1));
