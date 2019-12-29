@@ -100,7 +100,7 @@ public class PlayerMoveListener implements Listener {
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         // Stops spectators from teleporting
-        if (teleporting.containsKey(event.getPlayer().getUniqueId())) {
+        if (teleporting.containsKey(event.getPlayer().getUniqueId()) && event.getPlayer().getGameMode() == GameMode.SPECTATOR) {
             event.setCancelled(true);
             event.getPlayer().setSpectatorTarget(null);
         }
