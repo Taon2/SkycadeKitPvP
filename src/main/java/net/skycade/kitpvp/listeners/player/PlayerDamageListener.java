@@ -104,7 +104,7 @@ public class PlayerDamageListener implements Listener {
 
         pl.getTagManager().untag(event.getEntity().getUniqueId());
 
-        boolean resetStats = plugin.getStats(event.getEntity()).getActiveKit().getKit().onDeath(event.getEntity());
+        boolean resetStats = plugin.getStats(event.getEntity()).getActiveKit().getKit().onDeath(event.getEntity(), event.getEntity().getKiller());
 
         //Removes the wolves from the player before respawning, due to player teleporting back to wolves bug
         Kit playerKit = plugin.getStats(MemberManager.getInstance().getMember(event.getEntity())).getActiveKit().getKit();
@@ -153,7 +153,7 @@ public class PlayerDamageListener implements Listener {
         KitPvPStats stats = plugin.getStats(killerMem);
 
         if (stats.getActiveKit() == KitType.ELITE) {
-            stats.getActiveKit().getKit().onDeath(killer);
+            stats.getActiveKit().getKit().onDeath(died, killer);
         }
 
         final int kills = stats.getKills() + 1;

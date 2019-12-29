@@ -23,8 +23,6 @@ public class KitElite extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
-    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
-
     public KitElite(KitManager kitManager) {
         super(kitManager, "Elite", KitType.ELITE, 12000, getLore());
 
@@ -69,16 +67,15 @@ public class KitElite extends Kit {
         p.getInventory().setChestplate(chestplate);
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
-
-        constantEffects.forEach((effect, amplifier) -> {
-            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
-        });
     }
 
     @Override
-    public boolean onDeath(Player p) {
-        if (p != null)
-            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 80, 1));
+    public boolean onDeath(Player died, Player killer) {
+        if (killer != null) {
+            if (killer.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE))
+                killer.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+            killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 80, 1));
+        }
 
         return true;
     }

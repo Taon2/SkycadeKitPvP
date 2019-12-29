@@ -136,7 +136,9 @@ public class KitPvPDB {
 
     private synchronized void executeUpdate(Member member) {
         try (Connection connection = CoreSettings.getInstance().getConnection()) {
-            String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, EventCoins, Assists, ChosenKit, PrestigeLevel, Season) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?, ?) ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), Coins = VALUES(Coins), EventCoins = VALUES(EventCoins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), PrestigeLevel = VALUES(PrestigeLevel), Season = VALUES(Season)";
+            String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, EventCoins, Assists, ChosenKit, PrestigeLevel, Season) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?, ?) " +
+                    "ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), " +
+                    "Coins = VALUES(Coins), EventCoins = VALUES(EventCoins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), PrestigeLevel = VALUES(PrestigeLevel)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 KitPvPStats stats = KitPvP.getInstance().getStats(member);
                 statement.setString(1, member.getUUID().toString());

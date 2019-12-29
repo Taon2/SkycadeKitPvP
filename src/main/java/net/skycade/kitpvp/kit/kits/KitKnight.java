@@ -132,13 +132,13 @@ public class KitKnight extends Kit {
     }
 
     @Override
-    public boolean onDeath(Player p) {
-        if (horses.containsKey(p.getUniqueId())) {
-            if (p.getVehicle() != null)
-                p.getVehicle().eject();
-            if (horses.get(p.getUniqueId()) != null)
-                horses.get(p.getUniqueId()).remove();
-            horses.remove(p.getUniqueId());
+    public boolean onDeath(Player died, Player killer) {
+        if (horses.containsKey(died.getUniqueId())) {
+            if (died.getVehicle() != null)
+                died.getVehicle().eject();
+            if (horses.get(died.getUniqueId()) != null)
+                horses.get(died.getUniqueId()).remove();
+            horses.remove(died.getUniqueId());
         }
 
         return true;

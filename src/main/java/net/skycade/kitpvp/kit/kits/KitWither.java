@@ -13,12 +13,13 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class KitWither extends Kit {
 
@@ -80,8 +81,8 @@ public class KitWither extends Kit {
     }
 
     @Override
-    public boolean onDeath(Player p) {
-        p.getLocation().getWorld().createExplosion(p.getLocation().getBlockX(), p.getLocation().getBlockY(), p.getLocation().getBlockZ(), 4F, false, false);
+    public boolean onDeath(Player died, Player killer) {
+        died.getLocation().getWorld().createExplosion(died.getLocation().getBlockX(), died.getLocation().getBlockY(), died.getLocation().getBlockZ(), 2F, false, false);
         return true;
     }
 

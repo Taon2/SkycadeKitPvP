@@ -149,8 +149,8 @@ public class KitBlockhunt extends Kit {
     }
 
     @Override
-    public boolean onDeath(Player p) {
-        removeDisguise(p);
+    public boolean onDeath(Player died, Player killer) {
+        removeDisguise(died);
         return true;
     }
 
