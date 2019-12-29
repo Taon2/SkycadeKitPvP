@@ -74,7 +74,11 @@ public class KitElite extends Kit {
         if (killer != null) {
             if (killer.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE))
                 killer.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-            killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 80, 1));
+            if (killer.hasPotionEffect(PotionEffectType.REGENERATION))
+                killer.removePotionEffect(PotionEffectType.REGENERATION);
+
+            killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40, 0));
+            killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 40, 1));
         }
 
         return true;
@@ -90,7 +94,7 @@ public class KitElite extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Quite experienced.",
                 "",
-                ChatColor.GRAY + "Gains strength when you kill a player."
+                ChatColor.GRAY + "Gains strength and regeneration when you kill a player."
         );
     }
 }

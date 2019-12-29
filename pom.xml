@@ -6,7 +6,7 @@
 
     <groupId>net.skycade</groupId>
     <artifactId>SkycadeKitPvP</artifactId>
-    <version>4.0.3-SNAPSHOT</version>
+    <version>4.0.4-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -119,8 +119,8 @@
         <dependency>
             <groupId>net.skycade</groupId>
             <artifactId>SkycadeLeaderboards</artifactId>
-            <version>1.0.7-SNAPSHOT</version>
-            <systemPath>${basedir}/dependencies/SkycadeLeaderboards-1.0.7-SNAPSHOT.jar</systemPath>
+            <version>1.0.8-SNAPSHOT</version>
+            <systemPath>${basedir}/dependencies/SkycadeLeaderboards-1.0.8-SNAPSHOT.jar</systemPath>
             <scope>system</scope>
         </dependency>
         <!-- SkycadeKoth -->
