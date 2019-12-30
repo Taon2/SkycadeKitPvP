@@ -3,6 +3,7 @@ package net.skycade.kitpvp.kit.kits;
 import net.minelink.ctplus.CombatTagPlus;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
+import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
@@ -273,6 +274,10 @@ public class KitNecromancer extends Kit {
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
+        if (CaptureTheFlagEvent.getInstance().getBegin() != null && CaptureTheFlagEvent.getInstance().isTeamRed(shooter) == CaptureTheFlagEvent.getInstance().isTeamRed(damagee)) {
+            return;
+        }
+
         if (!addCooldown(shooter, "Curse", snowballCooldown, true)) {
             return;
         }

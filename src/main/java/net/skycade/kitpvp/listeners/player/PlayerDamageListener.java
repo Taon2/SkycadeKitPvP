@@ -11,6 +11,7 @@ import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
+import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.events.DoubleCoinsEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
@@ -51,6 +52,9 @@ public class PlayerDamageListener implements Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.FALL)
             event.setCancelled(true);
+
+        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)
+            event.setDamage((event.getDamage() * 0.25));
     }
 
     @EventHandler
@@ -68,6 +72,15 @@ public class PlayerDamageListener implements Listener {
             addAssist(damagee, Bukkit.getPlayer(lastProjLaunch.get(damagee)), event.getDamage());
             lastProjLaunch.remove(damagee);
             return;
+        }
+
+        // Grants assists and stuff to players using these entities
+        if ((event.getDamager() instanceof TNTPrimed || event.getDamager() instanceof Fireball) && event.getDamager().getCustomName() != null && Bukkit.getOfflinePlayer(event.getDamager().getCustomName()).isOnline()) {
+            if (CaptureTheFlagEvent.getInstance().getBegin() != null && CaptureTheFlagEvent.getInstance().isTeamRed(Bukkit.getPlayer(event.getDamager().getCustomName())) == CaptureTheFlagEvent.getInstance().isTeamRed(damagee)) {
+                event.setCancelled(true);
+                return;
+            }
+            addAssist(damagee, Bukkit.getPlayer(event.getDamager().getCustomName()), event.getDamage());
         }
 
         if (!(event.getDamager() instanceof Player))
