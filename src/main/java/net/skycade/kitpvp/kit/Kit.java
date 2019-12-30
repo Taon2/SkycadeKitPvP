@@ -201,8 +201,10 @@ public abstract class Kit implements Listener {
     }
 
     protected void removeCooldowns(Player p, String ability) {
-        cooldownDate.get(p.getUniqueId()).remove(playerCooldown.get(p.getUniqueId()).indexOf(ability));
-        playerCooldown.get(p.getUniqueId()).remove(ability);
+        if (playerCooldown.get(p.getUniqueId()).indexOf(ability) != -1) {
+            cooldownDate.get(p.getUniqueId()).remove(playerCooldown.get(p.getUniqueId()).indexOf(ability));
+            playerCooldown.get(p.getUniqueId()).remove(ability);
+        }
     }
 
     public boolean addCooldown(Player p, String ability, int seconds, boolean message) {

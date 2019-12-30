@@ -103,7 +103,7 @@ public class KitCaveMan extends Kit {
                 }
                 blockCounter++;
                 UtilPlayer.getNearbyPlayers(p, b.getLocation(), 2).forEach(player -> {
-                    if (Arrays.asList(GameMode.SURVIVAL, GameMode.ADVENTURE).contains(player.getGameMode()))
+                    if (player.getGameMode() == GameMode.SURVIVAL)
                         player.damage(11, p);
                 });
             }
