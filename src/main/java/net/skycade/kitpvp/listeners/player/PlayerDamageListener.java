@@ -159,8 +159,10 @@ public class PlayerDamageListener implements Listener {
         diedMem.setLastKiller(killer.getUniqueId());
 
         killer.playSound(killer.getLocation(), "minecraft:entity.experience_orb.pickup", 1, 1);
-        KILLED_BY.msg(diedMem.getPlayer(), "%player%", killerMem.getName());
-        YOU_KILLED.msg(killerMem.getPlayer(), "%player%", diedMem.getName());
+        if (died.isOnline())
+            KILLED_BY.msg(diedMem.getPlayer(), "%player%", killerMem.getName());
+        if (killer.isOnline())
+            YOU_KILLED.msg(killerMem.getPlayer(), "%player%", diedMem.getName());
 
         //Update kills
         KitPvPStats stats = plugin.getStats(killerMem);
