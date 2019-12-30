@@ -153,7 +153,7 @@ public class PlayerDamageListener implements Listener {
             lastDamagerMap.remove(died.getUniqueId());
         }
         if (killer == null || killer.equals(died))
-            return;r
+            return;
 
         Member killerMem = MemberManager.getInstance().getMember(killer);
         diedMem.setLastKiller(killer.getUniqueId());
