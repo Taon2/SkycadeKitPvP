@@ -42,6 +42,7 @@ public class Messages {
     public static final Localization.Message YOUR_STAT_SET = new Localization.Message("command.your-stat-set", "&7Your %stat% has been set to %amount%.");
     public static final Localization.Message MAX_PRESTIGE = new Localization.Message("command.max-prestige", "&cYou are already the maximum prestige level!.");
     public static final Localization.Message NOT_THAT_PRESTIGE = new Localization.Message("command.not-that-prestige", "&cYou cannot rank up to that prestige yet.");
+    public static final Localization.Message PLAYER_NOW_PRESTIGE = new Localization.Message("command.now-prestige", "&a&l%player% &7&lis now &a&lPrestige %num%!");
     public static final Localization.Message GANG_POINTS_RESET = new Localization.Message("command.gang-points-reset", "&a%gang%'s &7gang points are reset.");
 
     //KitPvP Command Usages
@@ -130,7 +131,7 @@ public class Messages {
             "&aSteal the flag in the center and bring it to your capture point. The team with the most captures at the end gets &6&l2x coins &aat the end for 30 minutes and &6&l5 event tokens&a!");
     public static final Localization.Message CAPTURETHEFLAG_POINT = new Localization.Message("event.capturetheflag.point", "%player% &ahas gained a point for the %team% &ateam!");
     public static final Localization.Message CAPTURETHEFLAG_DROPPED_FLAG = new Localization.Message("event.capturetheflag.dropped-flag", "&a&l%player% &ahas dropped the flag!");
-    public static final Localization.Message CAPTURETHEFLAG_CANT_CARRY = new Localization.Message("event.capturetheflag.cant-carry", "&cYou cannot carry the flag now! You were the last one to carry the flag.");
+    public static final Localization.Message CAPTURETHEFLAG_CANT_CARRY = new Localization.Message("event.capturetheflag.cant-carry", "&cYou cannot carry the flag now! %reason%.");
     public static final Localization.Message CAPTURETHEFLAG_PICKED_UP_FLAG = new Localization.Message("event.capturetheflag.picked-up-flag", "%player% &ahas picked up the flag!");
     public static final Localization.Message CAPTURETHEFLAG_FINAL_STATS = new Localization.Message("event.capturetheflag.final-stats", "&a&lThe Capture The Flag event is over! &aHere are the results:\n" +
             "&bTeam &c&lRED&b: &6%points1% Points\n" +
@@ -356,7 +357,8 @@ public class Messages {
                 YOU_KILLED_LOGGED_OUT,
                 CAPTURETHEFLAG_OVERTIME,
                 CAPTURETHEFLAG_TOO_LONG,
-                KNOCKBACK_REMOVED
+                KNOCKBACK_REMOVED,
+                PLAYER_NOW_PRESTIGE
         );
     }
 }

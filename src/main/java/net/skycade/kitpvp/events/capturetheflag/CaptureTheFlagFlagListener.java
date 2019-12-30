@@ -52,7 +52,12 @@ public class CaptureTheFlagFlagListener implements Listener {
         Player p = event.getPlayer();
         if (p.getLocation().getBlock().getType() == Material.STANDING_BANNER) {
             if (p.equals(lastCarrier)) {
-                CAPTURETHEFLAG_CANT_CARRY.msg(p);
+                CAPTURETHEFLAG_CANT_CARRY.msg(p, "%reason%", "You were the last one to carry the flag");
+                return;
+            }
+
+            if (p.getVehicle() != null) {
+                CAPTURETHEFLAG_CANT_CARRY.msg(p, "%reason%", "You are currently riding a mount");
                 return;
             }
 

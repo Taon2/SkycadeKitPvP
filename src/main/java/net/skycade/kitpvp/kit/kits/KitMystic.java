@@ -123,7 +123,7 @@ public class KitMystic extends Kit {
             onCatHit(target, p, ChatColor.DARK_GREEN + "POISON", PotionEffectType.POISON, 140, 0);
         } else if (percentage <= speedPer + regPer + slowPer + weakPer + poisPer + blindPer) {
             onCatHit(target, p, ChatColor.BLACK + "BLINDNESS", PotionEffectType.BLINDNESS, 140, 0);
-        } else {
+        } else if (!frozenPlayers.containsKey(target.getUniqueId())) {
             freezePlayer(target, 5);
             CAT.msg(target, "%effect%", ChatColor.AQUA + "FROZEN!");
             CAT.msg(p, "%effect%", ChatColor.AQUA + "FREEZE!");

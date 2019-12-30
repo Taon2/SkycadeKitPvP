@@ -143,7 +143,14 @@ public class KitShroom extends Kit {
 
     @Override
     public void reimburseItem(Player p, ItemStack item) {
-        if (item != null && item.getType() == getSnowball(item.getAmount()).getType()) {
+        int count = -1;
+        for (ItemStack itemStack : p.getInventory()) {
+            if (itemStack != null && item != null && item.getType() == itemStack.getType() && item.getDurability() == itemStack.getDurability()) {
+                count += itemStack.getAmount();
+            }
+        }
+
+        if (item != null && item.getType() == getSnowball(item.getAmount()).getType() && count < snowballMaxAmount) {
             Inventory inv = p.getInventory();
             int amount = 0;
             ItemStack newItem = getSnowball(1);
