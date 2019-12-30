@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.skycade</groupId>
   <artifactId>SkycadeKitPvP</artifactId>
-  <version>4.0.3-SNAPSHOT</version>
+  <version>4.0.6-SNAPSHOT</version>
   <build>
     <plugins>
       <plugin>
@@ -112,9 +112,9 @@
     <dependency>
       <groupId>net.skycade</groupId>
       <artifactId>SkycadeLeaderboards</artifactId>
-      <version>1.0.7-SNAPSHOT</version>
+      <version>1.0.8-SNAPSHOT</version>
       <scope>system</scope>
-      <systemPath>${basedir}/dependencies/SkycadeLeaderboards-1.0.7-SNAPSHOT.jar</systemPath>
+      <systemPath>${basedir}/dependencies/SkycadeLeaderboards-1.0.8-SNAPSHOT.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>net.skycade</groupId>

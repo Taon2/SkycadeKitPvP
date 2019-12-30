@@ -77,8 +77,7 @@ public class KitKing extends Kit {
         golem.setCustomName(p.getName() + " golem");
         golem.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 2));
 
-        Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 5);
-        nearbyPlayers.remove(p);
+        Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 5);
 
         if (!(nearbyPlayers.isEmpty()))
             golem.setTarget(getClosestTarget(nearbyPlayers, p));

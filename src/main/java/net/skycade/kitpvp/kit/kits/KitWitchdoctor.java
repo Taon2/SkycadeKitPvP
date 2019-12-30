@@ -106,7 +106,7 @@ public class KitWitchdoctor extends Kit {
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
-        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 7);
+        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 7);
 
         Gang gang = GangsPlusApi.getPlayersGang(p);
 
@@ -137,7 +137,22 @@ public class KitWitchdoctor extends Kit {
 
     @Override
     public void reimburseItem(Player p, ItemStack item) {
-        if (item != null && item.getType() == getWeakness(1).getType() && item.getDurability() == getWeakness(1).getDurability()) {
+        if (item != null && item.getType() == Material.POTION && item.getDurability() == 16421) {
+            ItemStack newItem = new ItemStack(Material.POTION, 1, (short) 16421);
+
+            p.getInventory().addItem(newItem);
+            return;
+        }
+
+        //Starts at -1 because the item is still considered in the inventory, and thus counted when it shouldn't be
+        int count = -1;
+        for (ItemStack itemStack : p.getInventory()) {
+            if (itemStack != null && item != null && item.getType() == itemStack.getType() && item.getDurability() == itemStack.getDurability()) {
+                count += itemStack.getAmount();
+            }
+        }
+
+        if (item != null && item.getType() == getWeakness(1).getType() && item.getDurability() == getWeakness(1).getDurability() && count < potionMaxAmount) {
             ItemStack newItem = getWeakness(1);
 
             p.getInventory().addItem(newItem);

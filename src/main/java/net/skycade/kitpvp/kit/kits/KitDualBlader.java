@@ -87,7 +87,7 @@ public class KitDualBlader extends Kit {
 
         if (random <= firechance)
             damagee.setFireTicks(firedur * 20);
-        else if (random <= firechance + freezechance) {
+        else if (random <= firechance + freezechance && !frozenPlayers.containsKey(damagee.getUniqueId())) {
             YOURE_FROZEN.msg(damagee, "%player%", damager.getName(), "%kit%", stats.getActiveKit().getKit().getName());
             freezePlayer(damagee, 5);
         }

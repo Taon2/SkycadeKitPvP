@@ -80,6 +80,7 @@ public class PrestigeManager {
         stats.takeCoins(nextLevel.getCost());
         stats.setPrestigeLevel(currentLevel + 1);
         STAT_SET.msg(member.getPlayer(), "%player%", member.getName(), "%stat%", "prestige rank", "%amount%", Integer.toString(stats.getPrestigeLevel()));
+        PLAYER_NOW_PRESTIGE.broadcast("%player%", member.getName(), "%num%", Integer.toString(stats.getPrestigeLevel()));
         nextLevel.getCommands().forEach(command -> {
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command.replace("%player%", member.getName()));
         });

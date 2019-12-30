@@ -4,6 +4,7 @@ import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
+import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
@@ -106,6 +107,10 @@ public class KitShroom extends Kit {
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
+        if (CaptureTheFlagEvent.getInstance().getBegin() != null && CaptureTheFlagEvent.getInstance().isTeamRed(shooter) == CaptureTheFlagEvent.getInstance().isTeamRed(damagee)) {
+            return;
+        }
+
         if (!addCooldown(shooter, "Spore", snowballCooldown, true)) {
             return;
         }
@@ -123,9 +128,8 @@ public class KitShroom extends Kit {
         particleMoveEffect(p, ParticleEffect.TOWN_AURA, 2, 30);
 
         if (UtilPlayer.isMoving(p) && !getKitManager().getKitPvP().getSpawnRegion().contains(p)) {
-            UtilPlayer.getNearbyPlayers(p.getLocation(), 2).forEach(target -> {
-                if (target != p)
-                    target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 0));
+            UtilPlayer.getNearbyPlayers(p, p.getLocation(), 2).forEach(target -> {
+                target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 0));
             });
         }
     }
@@ -139,7 +143,14 @@ public class KitShroom extends Kit {
 
     @Override
     public void reimburseItem(Player p, ItemStack item) {
-        if (item != null && item.getType() == getSnowball(item.getAmount()).getType()) {
+        int count = -1;
+        for (ItemStack itemStack : p.getInventory()) {
+            if (itemStack != null && item != null && item.getType() == itemStack.getType() && item.getDurability() == itemStack.getDurability()) {
+                count += itemStack.getAmount();
+            }
+        }
+
+        if (item != null && item.getType() == getSnowball(item.getAmount()).getType() && count < snowballMaxAmount) {
             Inventory inv = p.getInventory();
             int amount = 0;
             ItemStack newItem = getSnowball(1);

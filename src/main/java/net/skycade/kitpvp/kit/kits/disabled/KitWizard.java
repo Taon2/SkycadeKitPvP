@@ -122,7 +122,7 @@ public class KitWizard extends Kit {
 
                     ParticleEffect.LAVA.display(0, 0, 0, 0, 3, loc, 100);
 
-                    for (Player target : UtilPlayer.getNearbyPlayers(loc, 1.5).stream().filter(player -> !player.equals(p) && player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList()))
+                    for (Player target : UtilPlayer.getNearbyPlayers(p, loc, 1.5).stream().filter(player -> player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList()))
                         if (target.getGameMode() == GameMode.SURVIVAL)
                             target.damage(8 + (3 * 3), p);
 

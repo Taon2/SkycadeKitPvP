@@ -78,12 +78,12 @@ public class KitKnight extends Kit {
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
     }
-
+//todo gang
     @Override
     public void onMove(Player p) {
         Gang gang = GangsPlusApi.getPlayersGang(p);
 
-        Set<Player> nearby = UtilPlayer.getNearbyPlayers(p.getLocation(), 8);
+        Set<Player> nearby = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 8);
 
         if (gang == null) return;
 

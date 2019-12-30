@@ -115,7 +115,7 @@ public class KitUnicorn extends Kit {
                 if (UtilMath.getRandom(0, 3) == 2)
                     ParticleEffect.LAVA.display(0, 0, 0, 0, 3, loc, 30);
 
-                for (Player target : UtilPlayer.getNearbyPlayers(loc, 1).stream().filter(player -> !player.equals(p) && player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList())) {
+                for (Player target : UtilPlayer.getNearbyPlayers(p, loc, 1).stream().filter(player -> !player.equals(p) && player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList())) {
                     target.damage(14, p);
                     target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 1));
                 }

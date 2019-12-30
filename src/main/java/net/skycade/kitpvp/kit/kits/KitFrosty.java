@@ -3,6 +3,7 @@ package net.skycade.kitpvp.kit.kits;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
+import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
@@ -100,6 +101,10 @@ public class KitFrosty extends Kit {
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
+        if (CaptureTheFlagEvent.getInstance().getBegin() != null && CaptureTheFlagEvent.getInstance().isTeamRed(shooter) == CaptureTheFlagEvent.getInstance().isTeamRed(damagee)) {
+            return;
+        }
+
         if (!addCooldown(shooter, "Frosty", snowballCooldown, true)) {
             return;
         }
@@ -110,8 +115,10 @@ public class KitFrosty extends Kit {
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(shooter, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
-        YOURE_FROZEN.msg(damagee, "%player%", shooter.getName(), "%kit%", stats.getActiveKit().getKit().getName());
-        freezePlayer(damagee, 5);
+        if (!frozenPlayers.containsKey(damagee.getUniqueId())) {
+            YOURE_FROZEN.msg(damagee, "%player%", shooter.getName(), "%kit%", stats.getActiveKit().getKit().getName());
+            freezePlayer(damagee, 5);
+        }
     }
 
     @Override
@@ -130,7 +137,14 @@ public class KitFrosty extends Kit {
 
     @Override
     public void reimburseItem(Player p, ItemStack item) {
-        if (item != null && item.getType() == getSnowball(item.getAmount()).getType()) {
+        int count = -1;
+        for (ItemStack itemStack : p.getInventory()) {
+            if (itemStack != null && item != null && item.getType() == itemStack.getType() && item.getDurability() == itemStack.getDurability()) {
+                count += itemStack.getAmount();
+            }
+        }
+
+        if (item != null && item.getType() == getSnowball(item.getAmount()).getType() && count < snowballMaxAmount) {
             Inventory inv = p.getInventory();
             int amount = 0;
             ItemStack newItem = getSnowball(1);
