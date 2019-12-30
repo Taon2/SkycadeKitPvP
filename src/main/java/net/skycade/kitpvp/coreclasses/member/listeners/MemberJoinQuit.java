@@ -4,10 +4,7 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
-import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPCoins;
-import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPDeaths;
-import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPKillStreak;
-import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPKills;
+import net.skycade.kitpvp.stat.leaderboards.stats.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.logging.Level;
 
@@ -65,7 +63,7 @@ public class MemberJoinQuit implements Listener {
 //        StatKitPvPKillStreak.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
 //    }
 
-    @EventHandler (ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
 
@@ -90,6 +88,7 @@ public class MemberJoinQuit implements Listener {
         StatKitPvPCoins.getInstance().update(Collections.singletonList(p.getUniqueId()), true);
         StatKitPvPDeaths.getInstance().update(Collections.singletonList(p.getUniqueId()), true);
         StatKitPvPKillStreak.getInstance().update(Collections.singletonList(p.getUniqueId()), true);
+        StatKitPvPKDR.getInstance().update(Collections.singleton(p.getUniqueId()), true);
 
         // Update name
         if (!p.getName().equals(member.getName()))
