@@ -31,10 +31,10 @@ public class StatKitPvPKDR extends StatisticType<UUID, Double> {
         Integer kills = LeaderboardsCache.get(s).getKills();
         Integer deaths = LeaderboardsCache.get(s).getDeaths();
 
-        Double data = UtilMath.getKDR(kills, deaths);
-        if (data == null) {
+        if (kills == null || deaths == null) {
             return 0D;
         } else {
+            Double data = UtilMath.getKDR(kills, deaths);
             return data;
         }
     }

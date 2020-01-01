@@ -437,40 +437,52 @@ public class PlayerDamageListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
-        Member member = MemberManager.getInstance().getMember(event.getPlayer().getUniqueId(), false);
-
-        // Kills player if in combat and not in spawn
-        CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
-        if (member != null && !plugin.getSpawnRegion().contains(member.getPlayer()) && pl.getTagManager().isTagged(uuid)) {
-            plugin.getStats(member).setDeaths(plugin.getStats(member.getPlayer()).getDeaths() + 1);
-
-            // Checks to see which player really logged out
-            UUID notQuitter;
-            if (pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getAttackerId().equals(uuid)) {
-                notQuitter = pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getVictimId();
-            } else {
-                notQuitter = pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getAttackerId();
-            }
-
-            // Increases kills for last damager to the player logging out
-            Player attacker = Bukkit.getPlayer(notQuitter);
-
-            if (attacker != null) {
-                Member lastDamager = MemberManager.getInstance().getMember(attacker.getUniqueId(), false);
-                plugin.getStats(lastDamager).setKills(plugin.getStats(lastDamager).getKills() + 1);
-                YOU_KILLED_LOGGED_OUT.msg(lastDamager.getPlayer(), "%player%", member.getName());
-                ScoreboardInfo.getInstance().updatePlayer(attacker);
-            }
-
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        UUID uuid = e.getPlayer().getUniqueId();
+        Member member = MemberManager.getInstance().getMember(e.getPlayer().getUniqueId(), false);
+        if (member != null) {
             member.setLastKiller(null);
         }
-
         lastDamagerMap.remove(uuid);
         killAssist.remove(uuid);
         samePlayerKill.remove(uuid);
     }
+
+//    @EventHandler
+//    public void onPlayerQuit(PlayerQuitEvent event) {
+//        UUID uuid = event.getPlayer().getUniqueId();
+//        Member member = MemberManager.getInstance().getMember(event.getPlayer().getUniqueId(), false);
+//
+//        // Kills player if in combat and not in spawn
+//        CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
+//        if (member != null && !plugin.getSpawnRegion().contains(member.getPlayer()) && pl.getTagManager().isTagged(uuid)) {
+//            plugin.getStats(member).setDeaths(plugin.getStats(member.getPlayer()).getDeaths() + 1);
+//
+//            // Checks to see which player really logged out
+//            UUID notQuitter;
+//            if (pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getAttackerId().equals(uuid)) {
+//                notQuitter = pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getVictimId();
+//            } else {
+//                notQuitter = pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getAttackerId();
+//            }
+//
+//            // Increases kills for last damager to the player logging out
+//            Player attacker = Bukkit.getPlayer(notQuitter);
+//
+//            if (attacker != null) {
+//                Member lastDamager = MemberManager.getInstance().getMember(attacker.getUniqueId(), false);
+//                plugin.getStats(lastDamager).setKills(plugin.getStats(lastDamager).getKills() + 1);
+//                YOU_KILLED_LOGGED_OUT.msg(lastDamager.getPlayer(), "%player%", member.getName());
+//                ScoreboardInfo.getInstance().updatePlayer(attacker);
+//            }
+//
+//            member.setLastKiller(null);
+//        }
+//
+//        lastDamagerMap.remove(uuid);
+//        killAssist.remove(uuid);
+//        samePlayerKill.remove(uuid);
+//    }
 
     private void respawn(Player p) {
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> UtilPlayer.reset(p), 1);
