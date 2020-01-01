@@ -359,6 +359,7 @@ public abstract class Kit implements Listener {
             blockState.update();
 
             PlayerMoveListener.addImmunePlayer(p.getUniqueId());
+            frozenPlayers.remove(p.getUniqueId());
             YOURE_UNFROZEN.msg(p);
         }, sec * 20);
 
