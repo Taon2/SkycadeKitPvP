@@ -7,7 +7,6 @@ import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
-import net.skycade.kitpvp.listeners.player.PlayerMoveListener;
 import net.skycade.kitpvp.nms.ActionBarUtil;
 import net.skycade.kitpvp.runnable.ItemRunnable;
 import org.bukkit.Bukkit;
@@ -46,6 +45,8 @@ public abstract class Kit implements Listener {
     protected final Map<UUID, List<ItemRunnable>> playerItemRunnable = new HashMap<>();
 
     protected static final Map<UUID, Map<Location, BlockState>> frozenPlayers = new HashMap<>();
+    protected static final List<UUID> frozenImmunity = new ArrayList<>();
+
     protected final List<UUID> shacoHit = new ArrayList<>();
 
     private static final CraftPlayer DUMMY_PLAYER = new CraftPlayer((CraftServer) Bukkit.getServer(),
@@ -358,15 +359,19 @@ public abstract class Kit implements Listener {
             blockState.setData(replaced.getData());
             blockState.update();
 
-            PlayerMoveListener.addImmunePlayer(p.getUniqueId());
+            frozenImmunity.add(p.getUniqueId());
             frozenPlayers.remove(p.getUniqueId());
             YOURE_UNFROZEN.msg(p);
         }, sec * 20);
 
         // Removes players from the list 5 seconds after being unfrozen, to stop players from being frozen right away
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            PlayerMoveListener.removeImmunePlayer(p.getUniqueId());
+            frozenImmunity.remove(p.getUniqueId());
         }, (sec + 5) * 20);
+    }
+
+    public List<UUID> getFrozenImmunity() {
+        return frozenImmunity;
     }
 
     @EventHandler (ignoreCancelled = true, priority = EventPriority.LOWEST)

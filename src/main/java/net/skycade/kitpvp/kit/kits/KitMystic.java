@@ -125,7 +125,7 @@ public class KitMystic extends Kit {
         } else if (percentage <= speedPer + regPer + slowPer + weakPer + poisPer + blindPer) {
             onCatHit(target, p, ChatColor.BLACK + "BLINDNESS", PotionEffectType.BLINDNESS, 140, 0);
         } else {
-            if (frozenPlayers.containsKey(target.getUniqueId())) {
+            if (getFrozenImmunity().contains(target.getUniqueId())) {
                 FROZEN_ALREADY.msg(p, "%player%", target.getName());
                 return;
             }

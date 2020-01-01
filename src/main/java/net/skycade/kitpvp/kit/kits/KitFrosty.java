@@ -7,7 +7,6 @@ import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import net.skycade.kitpvp.listeners.player.PlayerMoveListener;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -111,7 +110,7 @@ public class KitFrosty extends Kit {
             return;
         }
 
-        if (PlayerMoveListener.getImmunePlayers().contains(damagee.getUniqueId())) {
+        if (getFrozenImmunity().contains(damagee.getUniqueId())) {
             FROZEN_ALREADY.msg(shooter, "%player%", damagee.getName());
             return;
         }
