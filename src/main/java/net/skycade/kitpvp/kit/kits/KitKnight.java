@@ -178,12 +178,11 @@ public class KitKnight extends Kit {
 
     @EventHandler
     public void onExit(VehicleExitEvent event) {
-        event.setCancelled(true);
-//        if (horses.containsKey(event.getExited().getUniqueId())) {
-//            horses.get(event.getExited().getUniqueId()).remove();
-//            if (horses.get(event.getExited().getUniqueId()) != null)
-//                horses.remove(event.getExited().getUniqueId());
-//        }
+        if (horses.containsKey(event.getExited().getUniqueId())) {
+            horses.get(event.getExited().getUniqueId()).remove();
+            if (horses.get(event.getExited().getUniqueId()) != null)
+                horses.remove(event.getExited().getUniqueId());
+        }
     }
 
     @Override
