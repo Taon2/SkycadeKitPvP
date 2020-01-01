@@ -5,10 +5,7 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -83,6 +80,7 @@ public class KitKangaroo extends Kit {
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
+        p.playSound(p.getLocation(), Sound.BAT_TAKEOFF, 2.0F, 1.0F);
         p.setVelocity(new Vector(p.getLocation().getDirection().getX(), leapYVelocity, p.getLocation().getDirection().getZ()).multiply(4));
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> p.setVelocity(new Vector(p.getLocation().getDirection().getX(), 0.15, p.getLocation().getDirection().getZ()).multiply(3)), 3);
     }
