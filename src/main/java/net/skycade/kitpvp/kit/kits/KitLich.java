@@ -268,13 +268,14 @@ public class KitLich extends Kit {
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
             placed.get(p.getUniqueId()).forEach((loc, replace) -> {
                 Material material = replace.getType();
-                BlockState state = replace;
 
                 if (loc.equals(block.getLocation())) {
                     loc.getBlock().setType(material);
                     BlockState blockState = loc.getBlock().getState();
-                    blockState.setData(state.getData());
+                    blockState.setData(replace.getData());
                     blockState.update();
+                    if (p.isOnline())
+                        PHYLACTERY_EXPIRED.msg(p);
                 }
             });
         }, blockRemoveSpeed * 20);

@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static net.skycade.kitpvp.Messages.FROZEN_ALREADY;
 import static net.skycade.kitpvp.Messages.YOURE_FROZEN;
 
 public class KitFrosty extends Kit {
@@ -109,16 +110,19 @@ public class KitFrosty extends Kit {
             return;
         }
 
+        if (frozenPlayers.containsKey(damagee.getUniqueId())) {
+            FROZEN_ALREADY.msg(shooter, "%player%", damagee.getName());
+            return;
+        }
+
         KitPvPStats stats = KitPvP.getInstance().getStats(shooter);
 
         //For missions
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(shooter, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
-        if (!frozenPlayers.containsKey(damagee.getUniqueId())) {
-            YOURE_FROZEN.msg(damagee, "%player%", shooter.getName(), "%kit%", stats.getActiveKit().getKit().getName());
-            freezePlayer(damagee, 5);
-        }
+        YOURE_FROZEN.msg(damagee, "%player%", shooter.getName(), "%kit%", stats.getActiveKit().getKit().getName());
+        freezePlayer(damagee, 5);
     }
 
     @Override

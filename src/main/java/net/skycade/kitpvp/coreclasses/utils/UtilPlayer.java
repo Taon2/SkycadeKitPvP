@@ -63,7 +63,7 @@ public class UtilPlayer {
 
         for (Player pl : Bukkit.getOnlinePlayers()) {
             if (pl.getLocation().distanceSquared(loc) <= r * r && !VanishStatus.isVanished(pl.getUniqueId()) && pl.getGameMode() == GameMode.SURVIVAL && !KitPvP.getInstance().isInSpawnArea(pl) && !initialPlayer.equals(pl)
-                && CaptureTheFlagEvent.getInstance().getBegin() != null && CaptureTheFlagEvent.getInstance().isTeamRed(initialPlayer) == CaptureTheFlagEvent.getInstance().isTeamRed(pl)) {
+                && !(CaptureTheFlagEvent.getInstance().getBegin() != null && CaptureTheFlagEvent.getInstance().isTeamRed(initialPlayer) == CaptureTheFlagEvent.getInstance().isTeamRed(pl))) {
                 players.add(pl);
             }
         }

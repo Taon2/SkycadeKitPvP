@@ -136,7 +136,8 @@ public class PlayerListeners implements Listener {
         if ((event.getClickedInventory() != null
                 && event.getClickedInventory().getName() != null
                 && !event.getWhoClicked().getGameMode().equals(GameMode.CREATIVE)
-                && event.getInventory().getType() != InventoryType.CRAFTING)
+                && event.getInventory().getType() != InventoryType.CRAFTING
+                && event.getInventory().getType() != InventoryType.CHEST)
                 || event.getSlotType() == InventoryType.SlotType.CRAFTING)
             event.setCancelled(true);
     }

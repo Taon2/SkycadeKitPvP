@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static net.skycade.kitpvp.Messages.FROZEN_ALREADY;
 import static net.skycade.kitpvp.Messages.YOURE_FROZEN;
 
 public class KitDualBlader extends Kit {
@@ -87,7 +88,12 @@ public class KitDualBlader extends Kit {
 
         if (random <= firechance)
             damagee.setFireTicks(firedur * 20);
-        else if (random <= firechance + freezechance && !frozenPlayers.containsKey(damagee.getUniqueId())) {
+        else if (random <= firechance + freezechance) {
+            if (frozenPlayers.containsKey(damagee.getUniqueId())) {
+                FROZEN_ALREADY.msg(damager, "%player%", damagee.getName());
+                return;
+            }
+
             YOURE_FROZEN.msg(damagee, "%player%", damager.getName(), "%kit%", stats.getActiveKit().getKit().getName());
             freezePlayer(damagee, 5);
         }

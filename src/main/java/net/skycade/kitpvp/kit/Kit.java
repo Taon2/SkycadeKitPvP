@@ -357,9 +357,13 @@ public abstract class Kit implements Listener {
             blockState.setData(replaced.getData());
             blockState.update();
 
-            frozenPlayers.remove(p.getUniqueId());
             YOURE_UNFROZEN.msg(p);
         }, sec * 20);
+
+        // Removes players from the list 5 seconds after being unfrozen, to stop players from being frozen right away
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            frozenPlayers.remove(p.getUniqueId());
+        }, (sec + 5) * 20);
     }
 
     @EventHandler (ignoreCancelled = true, priority = EventPriority.LOWEST)

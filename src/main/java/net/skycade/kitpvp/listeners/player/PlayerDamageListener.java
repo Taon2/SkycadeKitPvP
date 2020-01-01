@@ -50,10 +50,14 @@ public class PlayerDamageListener implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.FALL)
+        if (event.getCause() == EntityDamageEvent.DamageCause.FALL)
             event.setCancelled(true);
 
-        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)
+        if (event.getEntity() instanceof Player && PlayerMoveListener.getImmunePlayers().contains(event.getEntity().getUniqueId())) {
+            event.setCancelled(true);
+        }
+
+        if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)
             event.setDamage((event.getDamage() * 0.25));
     }
 

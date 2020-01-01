@@ -2,6 +2,8 @@ package net.skycade.kitpvp.kit.kits;
 
 import net.brcdev.gangs.GangsPlusApi;
 import net.brcdev.gangs.gang.Gang;
+import net.minecraft.server.v1_8_R3.AttributeInstance;
+import net.minecraft.server.v1_8_R3.GenericAttributes;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
@@ -13,11 +15,15 @@ import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -78,7 +84,7 @@ public class KitKnight extends Kit {
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
     }
-//todo gang
+
     @Override
     public void onMove(Player p) {
         Gang gang = GangsPlusApi.getPlayersGang(p);
@@ -118,17 +124,66 @@ public class KitKnight extends Kit {
         horse.getInventory().setArmor(new ItemStack(Material.GOLD_BARDING));
         horse.setMaxHealth(30);
         horse.setHealth(horse.getMaxHealth());
+        horse.setJumpStrength(0.55);
+        AttributeInstance attributes = ((CraftLivingEntity) horse).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
+        attributes.setValue(0.30);
 
         horses.put(p.getUniqueId(), horse);
     }
 
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (event.getInventory() == null || event.getInventory().getType() != InventoryType.CHEST)
+            return;
+
+        if (!event.isShiftClick())
+            return;
+
+        if (event.getSlot() > 8) {
+            // Moving from inventory to hotbar
+            int openHotbarSlot = -1;
+            for (int i = 0; i < 9; i++) {
+                if (event.getClickedInventory().getItem(i) == null) {
+                    openHotbarSlot = i;
+                    break;
+                }
+            }
+
+            if (openHotbarSlot == -1)
+                return;
+
+            event.getClickedInventory().setItem(openHotbarSlot, event.getCurrentItem());
+            event.getClickedInventory().setItem(event.getSlot(), null);
+        } else if (event.getSlot() < 9) {
+            // Moving from hotbar to inventory
+            int openInventorySlot = -1;
+            for (int i = 9; i < 36; i++) {
+                if (event.getClickedInventory().getItem(i) == null) {
+                    openInventorySlot = i;
+                    break;
+                }
+            }
+
+            if (openInventorySlot == -1)
+                return;
+
+            event.getClickedInventory().setItem(openInventorySlot, event.getCurrentItem());
+            event.getClickedInventory().setItem(event.getSlot(), null);
+        }
+
+        event.getViewers().forEach(viewer -> {
+            ((Player) viewer).updateInventory();
+        });
+    }
+
     @EventHandler
     public void onExit(VehicleExitEvent event) {
-        if (horses.containsKey(event.getExited().getUniqueId())) {
-            horses.get(event.getExited().getUniqueId()).remove();
-            if (horses.get(event.getExited().getUniqueId()) != null)
-                horses.remove(event.getExited().getUniqueId());
-        }
+        event.setCancelled(true);
+//        if (horses.containsKey(event.getExited().getUniqueId())) {
+//            horses.get(event.getExited().getUniqueId()).remove();
+//            if (horses.get(event.getExited().getUniqueId()) != null)
+//                horses.remove(event.getExited().getUniqueId());
+//        }
     }
 
     @Override
@@ -144,8 +199,6 @@ public class KitKnight extends Kit {
         return true;
     }
 
-    //todo listen for horse death and remove from list
-
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         if (horses.containsKey(event.getPlayer().getUniqueId())) {
@@ -160,7 +213,6 @@ public class KitKnight extends Kit {
     public void removeSummon(int seconds, Player p) {
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
             if (horses.containsKey(p.getUniqueId())) {
-                p.getVehicle().eject();
                 horses.get(p.getUniqueId()).remove();
                 horses.remove(p.getUniqueId());
             }

@@ -203,6 +203,7 @@ public class Messages {
     public static final Localization.Message PHYLACTERY_BROKEN = new Localization.Message("kit.lich.phylactery-broken", "&7Your phylactery was broken by &a%player%&7.");
     public static final Localization.Message YOU_BROKE_PHYLACTERY = new Localization.Message("kit.lich.you-broke-phylactery", "&7You broke &a%player%'s &7phylactery.");
     public static final Localization.Message PHYLACTERY_RESPAWNED = new Localization.Message("kit.lich.phylactery-respawned", "&7Respawned at your phylactery.");
+    public static final Localization.Message FROZEN_ALREADY = new Localization.Message("kit.frosty.frozen-already", "&a%player% &chas already been frozen recently!");
 
     static void init() {
         Localization.getInstance().registerMessages("skycade.kitpvp",
@@ -358,7 +359,8 @@ public class Messages {
                 CAPTURETHEFLAG_OVERTIME,
                 CAPTURETHEFLAG_TOO_LONG,
                 KNOCKBACK_REMOVED,
-                PLAYER_NOW_PRESTIGE
+                PLAYER_NOW_PRESTIGE,
+                FROZEN_ALREADY
         );
     }
 }

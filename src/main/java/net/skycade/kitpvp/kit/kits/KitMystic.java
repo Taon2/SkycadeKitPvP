@@ -19,6 +19,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.*;
 
 import static net.skycade.kitpvp.Messages.CAT;
+import static net.skycade.kitpvp.Messages.FROZEN_ALREADY;
 
 public class KitMystic extends Kit {
 
@@ -123,7 +124,12 @@ public class KitMystic extends Kit {
             onCatHit(target, p, ChatColor.DARK_GREEN + "POISON", PotionEffectType.POISON, 140, 0);
         } else if (percentage <= speedPer + regPer + slowPer + weakPer + poisPer + blindPer) {
             onCatHit(target, p, ChatColor.BLACK + "BLINDNESS", PotionEffectType.BLINDNESS, 140, 0);
-        } else if (!frozenPlayers.containsKey(target.getUniqueId())) {
+        } else {
+            if (frozenPlayers.containsKey(target.getUniqueId())) {
+                FROZEN_ALREADY.msg(p, "%player%", target.getName());
+                return;
+            }
+
             freezePlayer(target, 5);
             CAT.msg(target, "%effect%", ChatColor.AQUA + "FROZEN!");
             CAT.msg(p, "%effect%", ChatColor.AQUA + "FREEZE!");

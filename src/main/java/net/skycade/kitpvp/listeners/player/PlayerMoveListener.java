@@ -23,6 +23,7 @@ public class PlayerMoveListener implements Listener {
     private final KitPvP plugin;
     private List<Location> teleports = new ArrayList<>();
     private Map<UUID, Location> teleporting = new HashMap<>();
+    private static List<UUID> immune = new ArrayList<>();
 
     public PlayerMoveListener(KitPvP plugin) {
         this.plugin = plugin;
@@ -78,6 +79,13 @@ public class PlayerMoveListener implements Listener {
                                 p.setGameMode(GameMode.SURVIVAL);
                                 p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                                 teleporting.remove(p.getUniqueId());
+                                immune.add(p.getUniqueId());
+
+                                // Removes immunity after 2 seconds
+                                Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+                                    immune.remove(p.getUniqueId());
+                                }, 4 * 20);
+
                                 this.cancel();
                             }
                         }
@@ -94,6 +102,7 @@ public class PlayerMoveListener implements Listener {
             p.removePotionEffect(PotionEffectType.BLINDNESS);
             p.setGameMode(GameMode.SURVIVAL);
             teleporting.remove(p.getUniqueId());
+            immune.remove(p.getUniqueId());
         }
     }
 
@@ -104,5 +113,9 @@ public class PlayerMoveListener implements Listener {
             event.setCancelled(true);
             event.getPlayer().setSpectatorTarget(null);
         }
+    }
+
+    public static List<UUID> getImmunePlayers() {
+        return immune;
     }
 }
