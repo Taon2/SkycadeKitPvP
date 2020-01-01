@@ -47,6 +47,7 @@ public class LeaderboardsCache {
                 // Creates member
                 member = new StatsMember(key, name);
 
+                //TODO try running ASYNC to prevent spikes every 2 mins
                 // Loads information from database if uuid is offline
                 try (Connection connection = CoreSettings.getInstance().getConnection()) {
                     String sql = "SELECT Kills, Coins, Deaths, HighestStreak FROM " + KitPvPDB.kitPvPTable + " WHERE UUID = ? AND Season = ?";

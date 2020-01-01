@@ -73,10 +73,10 @@ public class KitChance extends Kit {
 
     @Override
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        chanceEffect(6, 5, 2, 1, 4, 2, damager, e);
+        chanceEffect(6, 5, 2, 2, damager, e);
     }
 
-    private void chanceEffect(int healthPer, int doublePer, int soupPer, int swingDownPer, int swingUpPer, int backPer, Player damager, EntityDamageByEntityEvent e) {
+    private void chanceEffect(int healthPer, int doublePer, int soupPer, int backPer, Player damager, EntityDamageByEntityEvent e) {
         int random = UtilMath.getRandom(0, 100);
 
         if (random <= healthPer) {
@@ -88,7 +88,7 @@ public class KitChance extends Kit {
         } else if (random <= healthPer + doublePer + soupPer) {
             giveSoup(damager, 5);
             SOUP_REFILL.msg(damager);
-        } else if (random <= healthPer + doublePer + soupPer + swingDownPer + swingUpPer + backPer) {
+        } else if (random <= healthPer + doublePer + soupPer + backPer) {
             damager.damage(e.getDamage());
             BACKFIRE.msg(damager);
             e.setCancelled(true);

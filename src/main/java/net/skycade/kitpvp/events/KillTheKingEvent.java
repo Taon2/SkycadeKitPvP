@@ -271,7 +271,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event){
-        if(KitPvP.getInstance().isInSpawnArea(event.getPlayer()) && event.getPlayer().getUniqueId().equals(this.king)){
+        if(KitPvP.getInstance().getSpawnRegion().contains(event.getTo()) && event.getPlayer().getUniqueId().equals(this.king)) {
             KILLTHEKING_TO_SPAWN.broadcast();
             stop();
         }
