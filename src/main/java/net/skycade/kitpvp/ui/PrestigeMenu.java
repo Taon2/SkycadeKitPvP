@@ -67,6 +67,10 @@ public class PrestigeMenu extends DynamicGui {
                             ItemStack clicked = ev.getCurrentItem();
                             String name = clicked.getItemMeta().getDisplayName();
                             name = ChatColor.stripColor(name);
+
+                            if (name == null)
+                                return;
+
                             int index1 = name.indexOf('[') + 1;
                             int index2 = name.indexOf('★');
                             int level = Integer.parseInt(name.substring(index1, index2));
