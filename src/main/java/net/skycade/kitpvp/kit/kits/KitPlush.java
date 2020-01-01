@@ -91,6 +91,7 @@ public class KitPlush extends Kit {
 
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
             Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, cat.getLocation(), 3.5);
+            targetPlayers.add(p);
             targetPlayers.forEach(target -> {
                 target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 3));
                 target.setVelocity(new Vector(0, jumpPower, 0));
