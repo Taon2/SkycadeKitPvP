@@ -7,6 +7,7 @@ import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
+import net.skycade.kitpvp.listeners.player.PlayerMoveListener;
 import net.skycade.kitpvp.nms.ActionBarUtil;
 import net.skycade.kitpvp.runnable.ItemRunnable;
 import org.bukkit.Bukkit;
@@ -357,12 +358,13 @@ public abstract class Kit implements Listener {
             blockState.setData(replaced.getData());
             blockState.update();
 
+            PlayerMoveListener.addImmunePlayer(p.getUniqueId());
             YOURE_UNFROZEN.msg(p);
         }, sec * 20);
 
         // Removes players from the list 5 seconds after being unfrozen, to stop players from being frozen right away
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            frozenPlayers.remove(p.getUniqueId());
+            PlayerMoveListener.removeImmunePlayer(p.getUniqueId());
         }, (sec + 5) * 20);
     }
 

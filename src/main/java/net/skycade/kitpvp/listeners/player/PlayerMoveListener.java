@@ -118,4 +118,12 @@ public class PlayerMoveListener implements Listener {
     public static List<UUID> getImmunePlayers() {
         return immune;
     }
+
+    public static void addImmunePlayer(UUID uuid) {
+        immune.add(uuid);
+    }
+
+    public static void removeImmunePlayer(UUID uuid) {
+        immune.remove(uuid);
+    }
 }

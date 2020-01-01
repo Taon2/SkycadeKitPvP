@@ -213,6 +213,8 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
             }
             catch (Exception ignored) {}
 
+            if (!Bukkit.getOfflinePlayer(king).isOnline()) return;
+
             //Dish out event token rewards for the king
             KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
             if (kingStats != null) {
