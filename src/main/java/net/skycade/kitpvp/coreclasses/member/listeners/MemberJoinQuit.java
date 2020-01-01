@@ -4,6 +4,9 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
+import net.skycade.kitpvp.stat.KitPvPStats;
+import net.skycade.kitpvp.stat.leaderboards.caching.LeaderboardsCache;
+import net.skycade.kitpvp.stat.leaderboards.member.StatsMember;
 import net.skycade.kitpvp.stat.leaderboards.stats.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,7 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.logging.Level;
 
@@ -98,10 +100,20 @@ public class MemberJoinQuit implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Member member = memberManager.getMember(event.getPlayer());
+        KitPvPStats stats = KitPvP.getInstance().getStats(member);
 
         UtilPlayer.removeAttachment(event.getPlayer());
 
         if (member != null) {
+            // Updates leaderboard cache for offline player
+            StatsMember statsMember = new StatsMember(member.getUUID(), member.getName());
+            statsMember.setKills(stats.getKills());
+            statsMember.setHighestStreak(stats.getHighestStreak());
+            statsMember.setDeaths(stats.getDeaths());
+            statsMember.setCoins(stats.getCoins());
+
+            LeaderboardsCache.memberCache.put(member.getUUID(), statsMember);
+
             MemberManager.getInstance().update(member, true);
         } else
             event.setQuitMessage(null);

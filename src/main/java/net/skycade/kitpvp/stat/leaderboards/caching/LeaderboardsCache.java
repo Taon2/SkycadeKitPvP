@@ -11,7 +11,6 @@ import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.stat.leaderboards.member.StatsMember;
-import org.bukkit.Bukkit;
 
 import javax.annotation.Nonnull;
 import java.sql.Connection;
@@ -28,19 +27,7 @@ public class LeaderboardsCache {
         public StatsMember load(@Nonnull UUID key) {
             StatsMember member;
 
-            if (Bukkit.getOfflinePlayer(key).isOnline()) {
-                Member kitpvpMember = MemberManager.getInstance().getMember(key);
-                KitPvPStats stats = KitPvP.getInstance().getStats(kitpvpMember);
-
-                // Creates member
-                member = new StatsMember(key, kitpvpMember.getName());
-
-                // Loads information from online player if player is online
-                member.setKills(stats.getKills());
-                member.setHighestStreak(stats.getHighestStreak());
-                member.setDeaths(stats.getDeaths());
-                member.setCoins(stats.getCoins());
-            } else {
+            if (memberCache.getIfPresent(key) == null){
                 MojangUtil.PlayerData data = MojangUtil.get(key);
                 String name = data == null ? "unknown" : data.getName();
 
@@ -68,10 +55,26 @@ public class LeaderboardsCache {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+
+                return member;
             }
+
+            Member kitpvpMember = MemberManager.getInstance().getMember(key);
+            KitPvPStats stats = KitPvP.getInstance().getStats(kitpvpMember);
+
+            // Creates member
+            member = new StatsMember(key, kitpvpMember.getName());
+
+            // Loads information from online player if player is online
+            member.setKills(stats.getKills());
+            member.setHighestStreak(stats.getHighestStreak());
+            member.setDeaths(stats.getDeaths());
+            member.setCoins(stats.getCoins());
+
             return member;
         }
     });
+
     public static StatsMember get(UUID key) {
         return memberCache.getUnchecked(key);
     }
