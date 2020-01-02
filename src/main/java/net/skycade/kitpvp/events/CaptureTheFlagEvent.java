@@ -245,7 +245,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
 
                 flagVector.setY(0);
 
-                int chars = 30;
+                int chars = 40;
 
                 for (Player viewer : Bukkit.getOnlinePlayers()) {
                     org.bukkit.util.Vector vector = viewer.getLocation().toVector();
