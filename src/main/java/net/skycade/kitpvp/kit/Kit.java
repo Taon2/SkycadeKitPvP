@@ -44,7 +44,9 @@ public abstract class Kit implements Listener {
 
     protected final Map<UUID, List<ItemRunnable>> playerItemRunnable = new HashMap<>();
 
-    protected static final Map<UUID, Map<Location, Material>> frozenPlayers = new HashMap<>();
+    protected static final Map<UUID, Map<Location, BlockState>> frozenPlayers = new HashMap<>();
+    protected static final List<UUID> frozenImmunity = new ArrayList<>();
+
     protected final List<UUID> shacoHit = new ArrayList<>();
 
     private static final CraftPlayer DUMMY_PLAYER = new CraftPlayer((CraftServer) Bukkit.getServer(),
@@ -163,7 +165,7 @@ public abstract class Kit implements Listener {
     public void onMove(Player p) {
     }
 
-    public boolean onDeath(Player p) {
+    public boolean onDeath(Player died, Player killer) {
         return true;
     }
 
@@ -201,8 +203,10 @@ public abstract class Kit implements Listener {
     }
 
     protected void removeCooldowns(Player p, String ability) {
-        cooldownDate.get(p.getUniqueId()).remove(playerCooldown.get(p.getUniqueId()).indexOf(ability));
-        playerCooldown.get(p.getUniqueId()).remove(ability);
+        if (playerCooldown.get(p.getUniqueId()).indexOf(ability) != -1) {
+            cooldownDate.get(p.getUniqueId()).remove(playerCooldown.get(p.getUniqueId()).indexOf(ability));
+            playerCooldown.get(p.getUniqueId()).remove(ability);
+        }
     }
 
     public boolean addCooldown(Player p, String ability, int seconds, boolean message) {
@@ -339,28 +343,45 @@ public abstract class Kit implements Listener {
         }
 
         Location loc = p.getLocation();
-        Material initialType = loc.getBlock().getType();
+        BlockState replaced = loc.getBlock().getState();
         loc.getBlock().setType(Material.ICE);
 
-        Map<Location, Material> ice = new HashMap<>();
-        ice.put(loc, initialType);
+        Map<Location, BlockState> ice = new HashMap<>();
+        ice.put(loc, replaced);
 
         frozenPlayers.put(p.getUniqueId(), ice);
 
         p.teleport(new Location(loc.getWorld(), Math.floor(loc.getX()) + .5, loc.getY(), Math.floor(loc.getZ()) + .5, loc.getYaw(), loc.getPitch()));
 
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            loc.getBlock().setType(initialType);
+            loc.getBlock().setType(replaced.getType());
+            BlockState blockState = loc.getBlock().getState();
+            blockState.setData(replaced.getData());
+            blockState.update();
+
+            frozenImmunity.add(p.getUniqueId());
             frozenPlayers.remove(p.getUniqueId());
             YOURE_UNFROZEN.msg(p);
         }, sec * 20);
+
+        // Removes players from the list 5 seconds after being unfrozen, to stop players from being frozen right away
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            frozenImmunity.remove(p.getUniqueId());
+        }, (sec + 5) * 20);
+    }
+
+    public List<UUID> getFrozenImmunity() {
+        return frozenImmunity;
     }
 
     @EventHandler (ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerQuit(PlayerQuitEvent event) {
         if (frozenPlayers.containsKey(event.getPlayer().getUniqueId())) {
-            frozenPlayers.get(event.getPlayer().getUniqueId()).forEach((location, material) -> {
-                location.getBlock().setType(material);
+            frozenPlayers.get(event.getPlayer().getUniqueId()).forEach((loc, replaced) -> {
+                loc.getBlock().setType(replaced.getType());
+                BlockState blockState = loc.getBlock().getState();
+                blockState.setData(replaced.getData());
+                blockState.update();
             });
 
             frozenPlayers.remove(event.getPlayer().getUniqueId());

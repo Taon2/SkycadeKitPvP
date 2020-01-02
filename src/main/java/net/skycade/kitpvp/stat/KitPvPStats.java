@@ -2,6 +2,7 @@ package net.skycade.kitpvp.stat;
 
 import net.brcdev.gangs.GangsPlusApi;
 import net.brcdev.gangs.gang.Gang;
+import net.skycade.crates.CrateUser;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
@@ -83,7 +84,7 @@ public class KitPvPStats {
     public void giveEventTokens(int eventTokens) {
         this.eventTokens += eventTokens;
 
-        //Adds the amount of event tokens times 5 to the gang points
+        //Adds the amount of event tokens times 200 to the gang points
         Gang gang = GangsPlusApi.getPlayersGang(Bukkit.getPlayer(uuid));
         if (gang != null)
             KitPvP.getInstance().getGangPointsManager().addPoints(gang.getName(), eventTokens * 200);
@@ -157,10 +158,10 @@ public class KitPvPStats {
     }
 
     public void resetKits() {
-        kits.keySet().forEach(kit -> {
-            String nodeCommand = "addtempperm %player% skycade.crates.reward." + kit.name().toLowerCase() + " false";
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), nodeCommand);
-        });
+        kits.forEach(((kitType, kitData) -> {
+            CrateUser crateUser = CrateUser.get(uuid);
+            crateUser.removeReward("skycade.crates.reward." + kitType.name().toLowerCase());
+        }));
 
         kits.clear();
 
@@ -176,8 +177,8 @@ public class KitPvPStats {
     public void removeKit(KitType kit) {
         kits.remove(kit);
 
-        String nodeCommand = "addtempperm %player% skycade.crates.reward." + kit.name().toLowerCase() + " false";
-        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), nodeCommand);
+        CrateUser crateUser = CrateUser.get(uuid);
+        crateUser.removeReward("skycade.crates.reward." + kit.name().toLowerCase());
     }
 
     public boolean hasKit(KitType kit) {
@@ -189,8 +190,18 @@ public class KitPvPStats {
             return;
         kits.put(kit, new KitData(kit));
 
-        String nodeCommand = "addtempperm %player% skycade.crates.reward." + kit.name().toLowerCase() + " true";
-        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), nodeCommand);
+        boolean hasReward = false;
+        // Checks all active rewards to see if the player has the reward
+        CrateUser crateUser = CrateUser.get(uuid);
+
+        if (crateUser.getRewards(false).containsKey("skycade.crates.reward." + kit.name().toLowerCase())) {
+            hasReward = true;
+        }
+
+        // Stops from being applied if already applied
+        if (!hasReward) {
+            crateUser.addReward("skycade.crates.reward." + kit.name().toLowerCase());
+        }
     }
 
     public Integer getLastStreak() {

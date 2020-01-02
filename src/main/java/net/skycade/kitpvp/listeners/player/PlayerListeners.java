@@ -4,6 +4,7 @@ import net.brcdev.gangs.GangsPlusApi;
 import net.brcdev.gangs.gang.Gang;
 import net.minelink.ctplus.CombatTagPlus;
 import net.skycade.SkycadeCore.utility.TeleportUtil;
+import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPKillstreakChange;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
@@ -14,12 +15,14 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.disabled.KitMedic;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import net.skycade.koth.SkycadeKoth;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,6 +34,8 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import static net.skycade.kitpvp.Messages.KNOCKBACK_REMOVED;
 
 public class PlayerListeners implements Listener {
 
@@ -78,6 +83,8 @@ public class PlayerListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
+        if (event.getPlayer().isDead()) return;
+
         CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
 
         if (TeleportUtil.getSpawn().equals(event.getTo()) && !plugin.isInSpawnArea(event.getPlayer()) && pl.getTagManager().isTagged(event.getPlayer().getUniqueId())) {
@@ -98,7 +105,14 @@ public class PlayerListeners implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getFrom().getBlock().equals(event.getTo().getBlock())) return;
 
-        if (!plugin.getSpawnRegion().contains(event.getPlayer().getLocation())) {
+        // Removes knockback during KOTH
+        if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getEnchantments().containsKey(Enchantment.KNOCKBACK) && SkycadeKoth.getInstance().getGameManager().getActiveKOTHGame() != null) {
+            event.getPlayer().getItemInHand().removeEnchantment(Enchantment.KNOCKBACK);
+            event.getPlayer().updateInventory();
+            KNOCKBACK_REMOVED.msg(event.getPlayer());
+        }
+
+        if (!plugin.getSpawnRegion().contains(event.getPlayer().getLocation()) && !VanishStatus.isVanished(event.getPlayer().getUniqueId())) {
             KitPvPStats stats = KitPvP.getInstance().getStats(event.getPlayer());
             stats.getActiveKit().getKit().onMove(event.getPlayer());
         }
@@ -122,7 +136,8 @@ public class PlayerListeners implements Listener {
         if ((event.getClickedInventory() != null
                 && event.getClickedInventory().getName() != null
                 && !event.getWhoClicked().getGameMode().equals(GameMode.CREATIVE)
-                && event.getInventory().getType() != InventoryType.CRAFTING)
+                && event.getInventory().getType() != InventoryType.CRAFTING
+                && event.getInventory().getType() != InventoryType.CHEST)
                 || event.getSlotType() == InventoryType.SlotType.CRAFTING)
             event.setCancelled(true);
     }

@@ -213,6 +213,8 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
             }
             catch (Exception ignored) {}
 
+            if (!Bukkit.getOfflinePlayer(king).isOnline()) return;
+
             //Dish out event token rewards for the king
             KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
             if (kingStats != null) {
@@ -271,7 +273,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event){
-        if(KitPvP.getInstance().isInSpawnArea(event.getPlayer()) && event.getPlayer().getUniqueId().equals(this.king)){
+        if(KitPvP.getInstance().getSpawnRegion().contains(event.getTo()) && event.getPlayer().getUniqueId().equals(this.king)) {
             KILLTHEKING_TO_SPAWN.broadcast();
             stop();
         }

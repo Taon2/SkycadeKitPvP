@@ -12,9 +12,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -41,8 +39,6 @@ public class KitBlacksmith extends Kit {
     private int armorkitRegenSpeed = 15;
     private int armorkitStartAmount = 2;
     private int armorkitMaxAmount = 4;
-
-    private Map<UUID, List<Block>> anvils = new HashMap<>();
 
     public KitBlacksmith(KitManager kitManager) {
         super(kitManager, "Blacksmith", KitType.BLACKSMITH, 0, getLore());
@@ -148,32 +144,13 @@ public class KitBlacksmith extends Kit {
 
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
-        if (event.getEntity() instanceof FallingBlock) {
-            Location loc = event.getBlock().getLocation();
-
-            List<Block> blocks;
-            if (anvils.containsKey(event.getEntity().getUniqueId()))
-                blocks = anvils.get(event.getEntity().getUniqueId());
-            else
-                blocks = new ArrayList<>();
-
-            blocks.add(loc.getBlock());
-            anvils.put(event.getEntity().getUniqueId(), blocks);
+        if (event.getEntity() instanceof FallingBlock && event.getEntity().isOnGround()) {
+            Block block = event.getBlock();
+            Material initialMaterial = block.getType();
 
             Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-                loc.getBlock().setType(Material.AIR);
+                block.setType(initialMaterial);
             }, 40);
-        }
-    }
-
-    @EventHandler (ignoreCancelled = true, priority = EventPriority.LOWEST)
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        if (anvils.containsKey(event.getPlayer().getUniqueId())) {
-            anvils.get(event.getPlayer().getUniqueId()).forEach(anvil -> {
-                anvil.setType(Material.AIR);
-            });
-
-            anvils.remove(event.getPlayer().getUniqueId());
         }
     }
 

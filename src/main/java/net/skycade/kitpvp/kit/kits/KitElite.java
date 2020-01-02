@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
-import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
@@ -23,8 +22,6 @@ public class KitElite extends Kit {
     private ItemStack leggings;
     private ItemStack boots;
     private ItemStack weapon;
-
-    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
     public KitElite(KitManager kitManager) {
         super(kitManager, "Elite", KitType.ELITE, 12000, getLore());
@@ -70,15 +67,21 @@ public class KitElite extends Kit {
         p.getInventory().setChestplate(chestplate);
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
-
-        constantEffects.forEach((effect, amplifier) -> {
-            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
-        });
     }
 
-    public void onMove(Player p) {
-        if (UtilMath.getRandom(0, 100) <= 5)
-            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 30, 1));
+    @Override
+    public boolean onDeath(Player died, Player killer) {
+        if (killer != null) {
+            if (killer.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE))
+                killer.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+            if (killer.hasPotionEffect(PotionEffectType.REGENERATION))
+                killer.removePotionEffect(PotionEffectType.REGENERATION);
+
+            killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40, 0));
+            killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 40, 1));
+        }
+
+        return true;
     }
 
     @Override
@@ -91,7 +94,7 @@ public class KitElite extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Quite experienced.",
                 "",
-                ChatColor.GRAY + "Randomly gains small bursts of strength."
+                ChatColor.GRAY + "Gains strength and regeneration when you kill a player."
         );
     }
 }

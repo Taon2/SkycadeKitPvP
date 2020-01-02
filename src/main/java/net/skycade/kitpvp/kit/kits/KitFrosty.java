@@ -3,6 +3,7 @@ package net.skycade.kitpvp.kit.kits;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
+import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
@@ -23,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static net.skycade.kitpvp.Messages.FROZEN_ALREADY;
 import static net.skycade.kitpvp.Messages.YOURE_FROZEN;
 
 public class KitFrosty extends Kit {
@@ -100,7 +102,16 @@ public class KitFrosty extends Kit {
     }
 
     public void onSnowballHit(Player shooter, Player damagee) {
+        if (CaptureTheFlagEvent.getInstance().getBegin() != null && CaptureTheFlagEvent.getInstance().isTeamRed(shooter) == CaptureTheFlagEvent.getInstance().isTeamRed(damagee)) {
+            return;
+        }
+
         if (!addCooldown(shooter, "Frosty", snowballCooldown, true)) {
+            return;
+        }
+
+        if (getFrozenImmunity().contains(damagee.getUniqueId())) {
+            FROZEN_ALREADY.msg(shooter, "%player%", damagee.getName());
             return;
         }
 
@@ -130,7 +141,14 @@ public class KitFrosty extends Kit {
 
     @Override
     public void reimburseItem(Player p, ItemStack item) {
-        if (item != null && item.getType() == getSnowball(item.getAmount()).getType()) {
+        int count = -1;
+        for (ItemStack itemStack : p.getInventory()) {
+            if (itemStack != null && item != null && item.getType() == itemStack.getType() && item.getDurability() == itemStack.getDurability()) {
+                count += itemStack.getAmount();
+            }
+        }
+
+        if (item != null && item.getType() == getSnowball(item.getAmount()).getType() && count < snowballMaxAmount) {
             Inventory inv = p.getInventory();
             int amount = 0;
             ItemStack newItem = getSnowball(1);

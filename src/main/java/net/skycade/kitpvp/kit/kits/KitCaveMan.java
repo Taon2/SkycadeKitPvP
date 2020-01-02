@@ -102,10 +102,9 @@ public class KitCaveMan extends Kit {
                     return;
                 }
                 blockCounter++;
-                UtilPlayer.getNearbyPlayers(b.getLocation(), 2).forEach(player -> {
-                    if (player != p)
-                        if (Arrays.asList(GameMode.SURVIVAL, GameMode.ADVENTURE).contains(player.getGameMode()))
-                            player.damage(11, p);
+                UtilPlayer.getNearbyPlayers(p, b.getLocation(), 2).forEach(player -> {
+                    if (player.getGameMode() == GameMode.SURVIVAL)
+                        player.damage(11, p);
                 });
             }
         }.runTaskTimer(getKitManager().getKitPvP(), 0, 2);

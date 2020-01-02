@@ -42,6 +42,7 @@ public class Messages {
     public static final Localization.Message YOUR_STAT_SET = new Localization.Message("command.your-stat-set", "&7Your %stat% has been set to %amount%.");
     public static final Localization.Message MAX_PRESTIGE = new Localization.Message("command.max-prestige", "&cYou are already the maximum prestige level!.");
     public static final Localization.Message NOT_THAT_PRESTIGE = new Localization.Message("command.not-that-prestige", "&cYou cannot rank up to that prestige yet.");
+    public static final Localization.Message PLAYER_NOW_PRESTIGE = new Localization.Message("command.now-prestige", "&a&l%player% &7&lis now &a&lPrestige %num%!");
     public static final Localization.Message GANG_POINTS_RESET = new Localization.Message("command.gang-points-reset", "&a%gang%'s &7gang points are reset.");
 
     //KitPvP Command Usages
@@ -130,7 +131,7 @@ public class Messages {
             "&aSteal the flag in the center and bring it to your capture point. The team with the most captures at the end gets &6&l2x coins &aat the end for 30 minutes and &6&l5 event tokens&a!");
     public static final Localization.Message CAPTURETHEFLAG_POINT = new Localization.Message("event.capturetheflag.point", "%player% &ahas gained a point for the %team% &ateam!");
     public static final Localization.Message CAPTURETHEFLAG_DROPPED_FLAG = new Localization.Message("event.capturetheflag.dropped-flag", "&a&l%player% &ahas dropped the flag!");
-    public static final Localization.Message CAPTURETHEFLAG_CANT_CARRY = new Localization.Message("event.capturetheflag.cant-carry", "&cYou cannot carry the flag now! You were the last one to carry the flag.");
+    public static final Localization.Message CAPTURETHEFLAG_CANT_CARRY = new Localization.Message("event.capturetheflag.cant-carry", "&cYou cannot carry the flag now! %reason%.");
     public static final Localization.Message CAPTURETHEFLAG_PICKED_UP_FLAG = new Localization.Message("event.capturetheflag.picked-up-flag", "%player% &ahas picked up the flag!");
     public static final Localization.Message CAPTURETHEFLAG_FINAL_STATS = new Localization.Message("event.capturetheflag.final-stats", "&a&lThe Capture The Flag event is over! &aHere are the results:\n" +
             "&bTeam &c&lRED&b: &6%points1% Points\n" +
@@ -141,6 +142,9 @@ public class Messages {
     public static final Localization.Message CAPTURETHEFLAG_WON = new Localization.Message("event.capturetheflag-won", "&7You have received &a%amount% &7Event Tokens for winning!");
     public static final Localization.Message CAPTURETHEFLAG_OVERTIME = new Localization.Message("event.capturetheflag-overtime", "&a&lOVERTIME! &7The scores are tied! Next flag capture wins!");
     public static final Localization.Message CAPTURETHEFLAG_TOO_LONG = new Localization.Message("event.capturetheflag-too-long", "&a&lThe flag took too long to capture.");
+
+    //KOTH
+    public static final Localization.Message KNOCKBACK_REMOVED = new Localization.Message("knockback-removed", "&cThe Knockback on your weapon was removed due to KOTH being active.");
 
     //KitPvP Kill Messages
     public static final Localization.Message NO_REWARDS = new Localization.Message("kill.no-rewards", "&7You killed the same player more than 3 times, &cno rewards &7rewarded.");
@@ -199,6 +203,7 @@ public class Messages {
     public static final Localization.Message PHYLACTERY_BROKEN = new Localization.Message("kit.lich.phylactery-broken", "&7Your phylactery was broken by &a%player%&7.");
     public static final Localization.Message YOU_BROKE_PHYLACTERY = new Localization.Message("kit.lich.you-broke-phylactery", "&7You broke &a%player%'s &7phylactery.");
     public static final Localization.Message PHYLACTERY_RESPAWNED = new Localization.Message("kit.lich.phylactery-respawned", "&7Respawned at your phylactery.");
+    public static final Localization.Message FROZEN_ALREADY = new Localization.Message("kit.frosty.frozen-already", "&a%player% &chas already been frozen recently!");
 
     static void init() {
         Localization.getInstance().registerMessages("skycade.kitpvp",
@@ -352,7 +357,10 @@ public class Messages {
                 GANG_POINTS_RESET,
                 YOU_KILLED_LOGGED_OUT,
                 CAPTURETHEFLAG_OVERTIME,
-                CAPTURETHEFLAG_TOO_LONG
+                CAPTURETHEFLAG_TOO_LONG,
+                KNOCKBACK_REMOVED,
+                PLAYER_NOW_PRESTIGE,
+                FROZEN_ALREADY
         );
     }
 }

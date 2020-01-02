@@ -2,7 +2,9 @@ package net.skycade.kitpvp.events.capturetheflag;
 
 import net.md_5.bungee.api.ChatColor;
 import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.events.CaptureTheFlagEvent;
+import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -43,12 +45,19 @@ public class CaptureTheFlagFlagListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
+        if (event.getFrom().getBlock().equals(event.getTo().getBlock())) return;
+
         if (captureTheFlagEvent.getBegin() == null) return;
 
         Player p = event.getPlayer();
         if (p.getLocation().getBlock().getType() == Material.STANDING_BANNER) {
             if (p.equals(lastCarrier)) {
-                CAPTURETHEFLAG_CANT_CARRY.msg(p);
+                CAPTURETHEFLAG_CANT_CARRY.msg(p, "%reason%", "You were the last one to carry the flag");
+                return;
+            }
+
+            if (p.getVehicle() != null) {
+                CAPTURETHEFLAG_CANT_CARRY.msg(p, "%reason%", "You are currently riding a mount");
                 return;
             }
 
@@ -73,6 +82,9 @@ public class CaptureTheFlagFlagListener implements Listener {
             clearFlagCarrier();
             spawnBanner();
         }
+
+        if (flagCarrier != null)
+            captureTheFlagEvent.refreshArmor(flagCarrier, true);
     }
 
     @EventHandler
@@ -116,6 +128,23 @@ public class CaptureTheFlagFlagListener implements Listener {
         Player p = event.getPlayer();
 
         if (p.equals(flagCarrier)) {
+            CAPTURETHEFLAG_DROPPED_FLAG.broadcast("%player%", captureTheFlagEvent.isTeamRed(p) ? ChatColor.RED + "" + ChatColor.BOLD + p.getName() : ChatColor.BLUE + "" + ChatColor.BOLD + p.getName());
+            if (p.getLocation().getBlock().getType() != Material.AIR)
+                p.getLocation().add(0, 1, 0).getBlock().setType(Material.STANDING_BANNER);
+            else
+                p.getLocation().getBlock().setType(Material.STANDING_BANNER);
+            bannerCurrentLocation = p.getLocation();
+            clearFlagCarrier();
+        }
+    }
+
+    @EventHandler
+    public void onKitPvPSpecialAbility(KitPvPSpecialAbilityEvent event) {
+        if (captureTheFlagEvent.getBegin() == null) return;
+
+        Player p = event.getPlayer();
+
+        if (p.equals(flagCarrier) && (event.getKitType() == KitType.KNIGHT || event.getKitType() == KitType.FISHERMAN)) {
             CAPTURETHEFLAG_DROPPED_FLAG.broadcast("%player%", captureTheFlagEvent.isTeamRed(p) ? ChatColor.RED + "" + ChatColor.BOLD + p.getName() : ChatColor.BLUE + "" + ChatColor.BOLD + p.getName());
             if (p.getLocation().getBlock().getType() != Material.AIR)
                 p.getLocation().add(0, 1, 0).getBlock().setType(Material.STANDING_BANNER);

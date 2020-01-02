@@ -44,7 +44,7 @@ public class PlayerJoinQuitListener implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.setJoinMessage(null);
 
@@ -57,15 +57,14 @@ public class PlayerJoinQuitListener implements Listener {
                 KitPvPStats stats = plugin.getStats(p);
 
                 // Gives every kit, only used during beta testing.
-                //TODO disable this for beta for actual launch
-                KitPvP.getInstance().getKitManager().getKits().forEach((kitType, kit) -> {
-                    if (kit.isEnabled())
-                        stats.addKit(kitType);
-                });
-//                if (!stats.getActiveKit().getKit().isEnabled()) {
-//                    stats.setActiveKit(KitType.CHANCE);
-//                    stats.getActiveKit().getKit().giveSoup(p, 32);
-//                }
+//                KitPvP.getInstance().getKitManager().getKits().forEach((kitType, kit) -> {
+//                    if (kit.isEnabled())
+//                        stats.addKit(kitType);
+//                });
+                if (!stats.getActiveKit().getKit().isEnabled()) {
+                    stats.setActiveKit(KitType.CHANCE);
+                    stats.getActiveKit().getKit().giveSoup(p, 32);
+                }
 
                 if (plugin.isInSpawnArea(p)) {
                     stats.getActiveKit().getKit().beginApplyKit(p);

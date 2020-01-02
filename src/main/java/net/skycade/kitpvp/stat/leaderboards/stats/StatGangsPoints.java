@@ -1,7 +1,5 @@
 package net.skycade.kitpvp.stat.leaderboards.stats;
 
-import net.brcdev.gangs.GangsPlusApi;
-import net.brcdev.gangs.gang.Gang;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.skycadeleaderboards.leaderboards.StatisticType;
 
@@ -14,10 +12,7 @@ public class StatGangsPoints extends StatisticType<String, Integer> {
 
     private StatGangsPoints() {
         super("gangs-points");
-        List<String> gangNames = new ArrayList<>();
-        for (Gang g : GangsPlusApi.getAllGangs()) {
-            gangNames.add(g.getName());
-        }
+        List<String> gangNames = new ArrayList<>(KitPvP.getInstance().getGangPointsManager().getAllGangNames());
         update(gangNames, true);
     }
 

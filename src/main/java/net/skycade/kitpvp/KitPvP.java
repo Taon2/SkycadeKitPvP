@@ -53,7 +53,7 @@ public class KitPvP extends SkycadePlugin {
     private void defaults() {
         Map<String, Object> defaults = new TreeMap<>();
 
-        defaults.put("update-delay", 6000);
+        defaults.put("update-delay", 2400);
         defaults.put("database.kitpvp-table", "skycade_kitpvp_members");
         defaults.put("database.kitpvp-prestige-levels", "skycade_kitpvp_prestige_levels");
 
@@ -178,11 +178,13 @@ public class KitPvP extends SkycadePlugin {
             StatKitPvPCoins.getInstance().init(uuids);
             StatKitPvPKillStreak.getInstance().init(uuids);
             StatKitPvPDeaths.getInstance().init(uuids);
+            StatKitPvPKDR.getInstance().init(uuids);
             // registering via the leaderBoards API
             SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPKills.getInstance());
             SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPCoins.getInstance());
-            SkycadeLeaderboards.getAPI().register(this.getName(), StatGangsKills.getInstance());
-            SkycadeLeaderboards.getAPI().register(this.getName(), StatGangsPoints.getInstance());
+            SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPKDR.getInstance());
+            //SkycadeLeaderboards.getAPI().register(this.getName(), StatGangsKills.getInstance()); <-- temp disabling
+            // >> register gang points later so the points load first and we don't get a 0 val
             SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPKillStreak.getInstance());
             SkycadeLeaderboards.getAPI().register(this.getName(), StatKitPvPDeaths.getInstance());
         }

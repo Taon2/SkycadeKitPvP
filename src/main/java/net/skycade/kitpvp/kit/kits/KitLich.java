@@ -268,13 +268,14 @@ public class KitLich extends Kit {
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
             placed.get(p.getUniqueId()).forEach((loc, replace) -> {
                 Material material = replace.getType();
-                BlockState state = replace;
 
                 if (loc.equals(block.getLocation())) {
                     loc.getBlock().setType(material);
                     BlockState blockState = loc.getBlock().getState();
-                    blockState.setData(state.getData());
+                    blockState.setData(replace.getData());
                     blockState.update();
+                    if (p.isOnline())
+                        PHYLACTERY_EXPIRED.msg(p);
                 }
             });
         }, blockRemoveSpeed * 20);
@@ -308,41 +309,40 @@ public class KitLich extends Kit {
 
 
     @Override
-    public boolean onDeath(Player p) {
-        if (!placed.containsKey(p.getUniqueId()))
+    public boolean onDeath(Player died, Player killer) {
+        if (!placed.containsKey(died.getUniqueId()))
             return true;
 
-        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> UtilPlayer.reset(p), 1);
-        p.setHealth(p.getMaxHealth()/2);
-        p.setVelocity(new Vector(0, 0, 0));
-        p.setGameMode(GameMode.SURVIVAL);
-        placed.get(p.getUniqueId()).forEach((loc, replace) -> {
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> UtilPlayer.reset(died), 1);
+        died.setHealth(died.getMaxHealth()/2);
+        died.setVelocity(new Vector(0, 0, 0));
+        died.setGameMode(GameMode.SURVIVAL);
+        placed.get(died.getUniqueId()).forEach((loc, replace) -> {
             Material material = replace.getType();
-            BlockState state = replace;
 
-            p.teleport(loc);
+            died.teleport(loc);
             loc.getBlock().setType(material);
             BlockState blockState = loc.getBlock().getState();
-            blockState.setData(state.getData());
+            blockState.setData(replace.getData());
             blockState.update();
         });
-        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), p::updateInventory, 10);
-        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> p.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
-        KitPvPStats stats = KitPvP.getInstance().getStats(p);
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), died::updateInventory, 10);
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> died.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
+        KitPvPStats stats = KitPvP.getInstance().getStats(died);
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            stats.getActiveKit().getKit().giveSoup(p, 32);
+            stats.getActiveKit().getKit().giveSoup(died, 32);
         }, 5);
         stats.applyKitPreference();
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            removePhylactery.add(p.getUniqueId());
-            stats.getActiveKit().getKit().beginApplyKit(p);
-            KitPvP.getInstance().getEventShopManager().reapplyUpgrades(p);
-            removePhylactery.remove(p.getUniqueId());
+            removePhylactery.add(died.getUniqueId());
+            stats.getActiveKit().getKit().beginApplyKit(died);
+            KitPvP.getInstance().getEventShopManager().reapplyUpgrades(died);
+            removePhylactery.remove(died.getUniqueId());
         }, 3);
 
 
-        PHYLACTERY_RESPAWNED.msg(p);
-        placed.remove(p.getUniqueId());
+        PHYLACTERY_RESPAWNED.msg(died);
+        placed.remove(died.getUniqueId());
 
         return false;
     }
@@ -352,11 +352,10 @@ public class KitLich extends Kit {
         if (placed.containsKey(event.getPlayer().getUniqueId())) {
             placed.get(event.getPlayer().getUniqueId()).forEach((loc, replace) -> {
                 Material material = replace.getType();
-                BlockState state = replace;
 
                 loc.getBlock().setType(material);
                 BlockState blockState = loc.getBlock().getState();
-                blockState.setData(state.getData());
+                blockState.setData(replace.getData());
                 blockState.update();
             });
             placed.remove(event.getPlayer().getUniqueId());

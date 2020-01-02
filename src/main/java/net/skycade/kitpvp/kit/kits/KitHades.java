@@ -82,9 +82,8 @@ public class KitHades extends Kit {
         particleMoveEffect(p, ParticleEffect.FLAME, 1, 30);
         if (UtilPlayer.isMoving(p) && !getKitManager().getKitPvP().getSpawnRegion().contains(p)) {
 
-            UtilPlayer.getNearbyPlayers(p.getLocation(), 2).forEach(target -> {
-                if (target != p)
-                    target.setFireTicks(3 * 20);
+            UtilPlayer.getNearbyPlayers(p, p.getLocation(), 2).forEach(target -> {
+                target.setFireTicks(3 * 20);
             });
         }
     }

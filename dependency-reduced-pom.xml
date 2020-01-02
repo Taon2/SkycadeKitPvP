@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.skycade</groupId>
   <artifactId>SkycadeKitPvP</artifactId>
-  <version>4.0.0-SNAPSHOT</version>
+  <version>4.0.9-SNAPSHOT</version>
   <build>
     <plugins>
       <plugin>
@@ -37,6 +37,14 @@
       <id>spigot-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
+    <repository>
+      <id>viaversion-repo</id>
+      <url>https://repo.viaversion.com</url>
+    </repository>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -54,24 +62,8 @@
           <groupId>com.googlecode.json-simple</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>gson</artifactId>
-          <groupId>com.google.code.gson</groupId>
-        </exclusion>
-        <exclusion>
           <artifactId>ebean</artifactId>
           <groupId>org.avaje</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>snakeyaml</artifactId>
-          <groupId>org.yaml</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>bungeecord-chat</artifactId>
-          <groupId>net.md-5</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -120,9 +112,9 @@
     <dependency>
       <groupId>net.skycade</groupId>
       <artifactId>SkycadeLeaderboards</artifactId>
-      <version>1.0.3-SNAPSHOT</version>
+      <version>1.0.8-SNAPSHOT</version>
       <scope>system</scope>
-      <systemPath>${basedir}/dependencies/SkycadeLeaderboards-1.0.3-SNAPSHOT.jar</systemPath>
+      <systemPath>${basedir}/dependencies/SkycadeLeaderboards-1.0.8-SNAPSHOT.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>net.skycade</groupId>
@@ -134,9 +126,9 @@
     <dependency>
       <groupId>net.skycade</groupId>
       <artifactId>SkycadeCrates</artifactId>
-      <version>1.5.0-SNAPSHOT</version>
+      <version>1.6.0-SNAPSHOT</version>
       <scope>system</scope>
-      <systemPath>${basedir}/dependencies/SkycadeCrates-1.5.0-SNAPSHOT.jar</systemPath>
+      <systemPath>${basedir}/dependencies/SkycadeCrates-1.6.0-SNAPSHOT.jar</systemPath>
     </dependency>
   </dependencies>
   <properties>

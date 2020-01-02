@@ -105,7 +105,7 @@ public class KitVampire extends Kit {
         if (!addCooldown(p, "Suck Blood", healCooldown, true))
             return;
 
-        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 4);
+        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 4);
         if (targetPlayers.size() <= 1) {
             removeCooldowns(p, getName());
             return;
@@ -113,10 +113,8 @@ public class KitVampire extends Kit {
 
         double healAmount = 0.0;
         for (Player target : targetPlayers) {
-            if (target != p) {
-                startBleed(p, target, 7);
-                healAmount += 4;
-            }
+            startBleed(p, target, 7);
+            healAmount += 4;
         }
 
         if (healAmount > 0) {

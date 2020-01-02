@@ -80,15 +80,14 @@ public class KitSoulMaster extends Kit {
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
-        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p.getLocation(), 6);
+        Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 6);
         if (targetPlayers.size() <= 1)
             removeCooldowns(p, getName());
 
         targetPlayers.forEach(target -> {
-            if (target != p)
-                target.addPotionEffect(
-                        new PotionEffect(PotionEffectType.SLOW, 200, 1));
+            target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 200, 1));
         });
+
         p.getWorld().playEffect(p.getLocation(), Effect.ENDER_SIGNAL, 1);
         shootParticlesFromLoc(p, ParticleEffect.SMOKE_LARGE, 500, 0.5F);
     }

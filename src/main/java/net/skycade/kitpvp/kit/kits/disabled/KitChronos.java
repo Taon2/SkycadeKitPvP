@@ -75,9 +75,8 @@ public class KitChronos extends Kit {
         particleMoveEffect(p, ParticleEffect.CRIT, 2, 30);
 
         if (UtilPlayer.isMoving(p) && !getKitManager().getKitPvP().getSpawnRegion().contains(p)) {
-            UtilPlayer.getNearbyPlayers(p.getLocation(), 2).forEach(target -> {
-                if (target != p)
-                    target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 15, 1));
+            UtilPlayer.getNearbyPlayers(p, p.getLocation(), 2).forEach(target -> {
+                target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 15, 1));
             });
         }
     }

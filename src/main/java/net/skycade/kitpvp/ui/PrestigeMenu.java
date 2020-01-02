@@ -55,7 +55,7 @@ public class PrestigeMenu extends DynamicGui {
                             lore.add(ChatColor.GOLD + "Cost: " + ChatColor.WHITE + prestigeLevel.getCost() + " Coins");
                             lore.add(ChatColor.GOLD + "Rewards: ");
                             prestigeLevel.getRewardDesc().forEach(line -> {
-                                lore.add(ChatColor.WHITE + line);
+                                lore.add(ChatColor.WHITE + ChatColor.translateAlternateColorCodes('&', line));
                             });
                             meta.setLore(lore);
 
@@ -67,6 +67,10 @@ public class PrestigeMenu extends DynamicGui {
                             ItemStack clicked = ev.getCurrentItem();
                             String name = clicked.getItemMeta().getDisplayName();
                             name = ChatColor.stripColor(name);
+
+                            if (name == null)
+                                return;
+
                             int index1 = name.indexOf('[') + 1;
                             int index2 = name.indexOf('★');
                             int level = Integer.parseInt(name.substring(index1, index2));

@@ -92,8 +92,7 @@ public class KitMedic extends Kit {
     }
 
     public void onMedpackUse(Player p, Item medpack) {
-        Set<Player> players = UtilPlayer.getNearbyPlayers(p.getLocation(), 3);
-        players.remove(p);
+        Set<Player> players = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 3);
 
         players.forEach((player) -> {
             player.setHealth(player.getMaxHealth());

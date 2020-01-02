@@ -2,6 +2,8 @@ package net.skycade.kitpvp.stat;
 
 import net.skycade.SkycadeCore.CoreSettings;
 import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.stat.leaderboards.stats.StatGangsPoints;
+import net.skycade.skycadeleaderboards.SkycadeLeaderboards;
 import org.bukkit.Bukkit;
 
 import java.sql.Connection;
@@ -10,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class GangPointsManager {
     private Map<String, Integer> points = new HashMap<>();
@@ -34,6 +37,10 @@ public class GangPointsManager {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
+            // load gang points stat here so it doesn't register 0 all the time
+            SkycadeLeaderboards.getAPI().register(KitPvP.getInstance().getName(), StatGangsPoints.getInstance());
+
         });
     }
 
@@ -61,8 +68,15 @@ public class GangPointsManager {
         return points;
     }
 
+    public Set<String> getAllGangNames() {
+        return points.keySet();
+    }
+
     public Integer getPoints(String gangName) {
-        return points.get(gangName);
+        if (!points.containsKey(gangName))
+            return 0;
+        else
+            return (points.get(gangName) / 100);
     }
 
     public void setPoints(String gangName, int amount) {

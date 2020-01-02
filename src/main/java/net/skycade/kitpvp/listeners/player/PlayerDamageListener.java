@@ -11,6 +11,7 @@ import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
+import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.events.DoubleCoinsEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
@@ -49,42 +50,58 @@ public class PlayerDamageListener implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.FALL)
+        if (event.getCause() == EntityDamageEvent.DamageCause.FALL)
             event.setCancelled(true);
+
+        if (event.getEntity() instanceof Player && PlayerMoveListener.getImmunePlayers().contains(event.getEntity().getUniqueId())) {
+            event.setCancelled(true);
+        }
+
+        if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)
+            event.setDamage((event.getDamage() * 0.25));
     }
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-            if (plugin.getSpawnRegion().contains(event.getEntity().getLocation())) {
+        if (plugin.getSpawnRegion().contains(event.getEntity().getLocation())) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!(event.getEntity() instanceof Player))
+            return;
+
+        Player damagee = (Player) event.getEntity();
+        if (lastProjLaunch.containsKey(damagee)) {
+            addAssist(damagee, Bukkit.getPlayer(lastProjLaunch.get(damagee)), event.getDamage());
+            lastProjLaunch.remove(damagee);
+            return;
+        }
+
+        // Grants assists and stuff to players using these entities
+        if ((event.getDamager() instanceof TNTPrimed || event.getDamager() instanceof Fireball) && event.getDamager().getCustomName() != null && Bukkit.getOfflinePlayer(event.getDamager().getCustomName()).isOnline()) {
+            if (CaptureTheFlagEvent.getInstance().getBegin() != null && CaptureTheFlagEvent.getInstance().isTeamRed(Bukkit.getPlayer(event.getDamager().getCustomName())) == CaptureTheFlagEvent.getInstance().isTeamRed(damagee)) {
                 event.setCancelled(true);
                 return;
             }
+            addAssist(damagee, Bukkit.getPlayer(event.getDamager().getCustomName()), event.getDamage());
+        }
 
-            if (!(event.getEntity() instanceof Player))
-                return;
+        if (!(event.getDamager() instanceof Player))
+            return;
 
-            Player damagee = (Player) event.getEntity();
-            if (lastProjLaunch.containsKey(damagee)) {
-                addAssist(damagee, Bukkit.getPlayer(lastProjLaunch.get(damagee)), event.getDamage());
-                lastProjLaunch.remove(damagee);
-                return;
-            }
+        if (plugin.getStats(damagee).getActiveKit().getKit().getKitType() == KitType.SONIC)
+            ((KitSonic) plugin.getStats(damagee).getActiveKit().getKit()).disableSprint(damagee);
 
-            if (!(event.getDamager() instanceof Player))
-                return;
+        Player damager = (Player) event.getDamager();
 
-            if (plugin.getStats(damagee).getActiveKit().getKit().getKitType() == KitType.SONIC)
-                ((KitSonic) plugin.getStats(damagee).getActiveKit().getKit()).disableSprint(damagee);
+        plugin.getStats(damager).getActiveKit().getKit().onDamageDealHit(event, damager, damagee);
+        plugin.getStats(damagee).getActiveKit().getKit().onDamageGetHit(event, damager, damagee);
 
-            Player damager = (Player) event.getDamager();
+        lastDamagerMap.put(damagee.getUniqueId(), event.getDamager());
 
-            plugin.getStats(damager).getActiveKit().getKit().onDamageDealHit(event, damager, damagee);
-            plugin.getStats(damagee).getActiveKit().getKit().onDamageGetHit(event, damager, damagee);
-
-            lastDamagerMap.put(damagee.getUniqueId(), event.getDamager());
-
-            if (!damager.equals(damagee))
-                addAssist(damagee, damager, event.getDamage());
+        if (!damager.equals(damagee))
+            addAssist(damagee, damager, event.getDamage());
     }
 
     @EventHandler
@@ -104,7 +121,7 @@ public class PlayerDamageListener implements Listener {
 
         pl.getTagManager().untag(event.getEntity().getUniqueId());
 
-        boolean resetStats = plugin.getStats(event.getEntity()).getActiveKit().getKit().onDeath(event.getEntity());
+        boolean resetStats = plugin.getStats(event.getEntity()).getActiveKit().getKit().onDeath(event.getEntity(), event.getEntity().getKiller());
 
         //Removes the wolves from the player before respawning, due to player teleporting back to wolves bug
         Kit playerKit = plugin.getStats(MemberManager.getInstance().getMember(event.getEntity())).getActiveKit().getKit();
@@ -129,6 +146,7 @@ public class PlayerDamageListener implements Listener {
 
         //Try to get the killer
         Player killer = died.getKiller();
+
         if (killer == null && lastDamagerMap.get(died.getUniqueId()) != null) {
             String customName;
             customName = lastDamagerMap.get(died.getUniqueId()).getCustomName();
@@ -145,11 +163,17 @@ public class PlayerDamageListener implements Listener {
         diedMem.setLastKiller(killer.getUniqueId());
 
         killer.playSound(killer.getLocation(), "minecraft:entity.experience_orb.pickup", 1, 1);
-        KILLED_BY.msg(diedMem.getPlayer(), "%player%", killerMem.getName());
-        YOU_KILLED.msg(killerMem.getPlayer(), "%player%", diedMem.getName());
+        if (died.isOnline())
+            KILLED_BY.msg(diedMem.getPlayer(), "%player%", killerMem.getName());
+        if (killer.isOnline())
+            YOU_KILLED.msg(killerMem.getPlayer(), "%player%", diedMem.getName());
 
         //Update kills
         KitPvPStats stats = plugin.getStats(killerMem);
+
+        if (stats.getActiveKit() == KitType.ELITE) {
+            stats.getActiveKit().getKit().onDeath(died, killer);
+        }
 
         final int kills = stats.getKills() + 1;
         stats.setKills(kills);
@@ -413,40 +437,52 @@ public class PlayerDamageListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
-        Member member = MemberManager.getInstance().getMember(event.getPlayer().getUniqueId(), false);
-
-        // Kills player if in combat and not in spawn
-        CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
-        if (member != null && !plugin.getSpawnRegion().contains(member.getPlayer()) && pl.getTagManager().isTagged(uuid)) {
-            plugin.getStats(member).setDeaths(plugin.getStats(member.getPlayer()).getDeaths() + 1);
-
-            // Checks to see which player really logged out
-            UUID notQuitter;
-            if (pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getAttackerId().equals(uuid)) {
-                notQuitter = pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getVictimId();
-            } else {
-                notQuitter = pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getAttackerId();
-            }
-
-            // Increases kills for last damager to the player logging out
-            Player attacker = Bukkit.getPlayer(notQuitter);
-
-            if (attacker != null) {
-                Member lastDamager = MemberManager.getInstance().getMember(attacker.getUniqueId(), false);
-                plugin.getStats(lastDamager).setKills(plugin.getStats(lastDamager).getKills() + 1);
-                YOU_KILLED_LOGGED_OUT.msg(lastDamager.getPlayer(), "%player%", member.getName());
-                ScoreboardInfo.getInstance().updatePlayer(attacker);
-            }
-
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        UUID uuid = e.getPlayer().getUniqueId();
+        Member member = MemberManager.getInstance().getMember(e.getPlayer().getUniqueId(), false);
+        if (member != null) {
             member.setLastKiller(null);
         }
-
         lastDamagerMap.remove(uuid);
         killAssist.remove(uuid);
         samePlayerKill.remove(uuid);
     }
+
+//    @EventHandler
+//    public void onPlayerQuit(PlayerQuitEvent event) {
+//        UUID uuid = event.getPlayer().getUniqueId();
+//        Member member = MemberManager.getInstance().getMember(event.getPlayer().getUniqueId(), false);
+//
+//        // Kills player if in combat and not in spawn
+//        CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
+//        if (member != null && !plugin.getSpawnRegion().contains(member.getPlayer()) && pl.getTagManager().isTagged(uuid)) {
+//            plugin.getStats(member).setDeaths(plugin.getStats(member.getPlayer()).getDeaths() + 1);
+//
+//            // Checks to see which player really logged out
+//            UUID notQuitter;
+//            if (pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getAttackerId().equals(uuid)) {
+//                notQuitter = pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getVictimId();
+//            } else {
+//                notQuitter = pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getAttackerId();
+//            }
+//
+//            // Increases kills for last damager to the player logging out
+//            Player attacker = Bukkit.getPlayer(notQuitter);
+//
+//            if (attacker != null) {
+//                Member lastDamager = MemberManager.getInstance().getMember(attacker.getUniqueId(), false);
+//                plugin.getStats(lastDamager).setKills(plugin.getStats(lastDamager).getKills() + 1);
+//                YOU_KILLED_LOGGED_OUT.msg(lastDamager.getPlayer(), "%player%", member.getName());
+//                ScoreboardInfo.getInstance().updatePlayer(attacker);
+//            }
+//
+//            member.setLastKiller(null);
+//        }
+//
+//        lastDamagerMap.remove(uuid);
+//        killAssist.remove(uuid);
+//        samePlayerKill.remove(uuid);
+//    }
 
     private void respawn(Player p) {
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> UtilPlayer.reset(p), 1);
@@ -456,14 +492,5 @@ public class PlayerDamageListener implements Listener {
         p.teleport(TeleportUtil.getSpawn());
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), p::updateInventory, 10);
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> p.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
-        KitPvPStats stats = KitPvP.getInstance().getStats(p);
-        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            stats.getActiveKit().getKit().giveSoup(p, 32);
-        }, 5);
-        stats.applyKitPreference();
-        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            stats.getActiveKit().getKit().beginApplyKit(p);
-            KitPvP.getInstance().getEventShopManager().reapplyUpgrades(p);
-        }, 3);
     }
 }

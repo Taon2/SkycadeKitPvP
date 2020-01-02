@@ -87,6 +87,8 @@ public class KitFisherman extends Kit {
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
+        p.playSound(p.getLocation(), Sound.BAT_TAKEOFF, 2.0F, 1.0F);
+
         Vector v = getVectorForPoints(p.getLocation(), target);
         e.getEntity().setVelocity(v);
 

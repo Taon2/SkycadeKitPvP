@@ -4,81 +4,93 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
-import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPCoins;
-import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPDeaths;
-import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPKillStreak;
-import net.skycade.kitpvp.stat.leaderboards.stats.StatKitPvPKills;
-import org.bukkit.ChatColor;
+import net.skycade.kitpvp.stat.KitPvPStats;
+import net.skycade.kitpvp.stat.leaderboards.caching.LeaderboardsCache;
+import net.skycade.kitpvp.stat.leaderboards.member.StatsMember;
+import net.skycade.kitpvp.stat.leaderboards.stats.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import java.util.logging.Level;
 
 
 public class MemberJoinQuit implements Listener {
 
     private final MemberManager memberManager;
-    private final Map<UUID, Long> lastLogin = new HashMap<>();
-    private final long startup;
+//    private final Map<UUID, Long> lastLogin = new HashMap<>();
+//    private final long startup;
 
     public MemberJoinQuit(MemberManager memberManager) {
         this.memberManager = memberManager;
-        this.startup = System.currentTimeMillis();
+//        this.startup = System.currentTimeMillis();
     }
 
-    @EventHandler
-    public void onPreLogin(AsyncPlayerPreLoginEvent event) {
-        if (System.currentTimeMillis() - startup < 2000) {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Server starting up...");
-            return;
-        }
-        if (lastLogin.containsKey(event.getUniqueId())
-                && System.currentTimeMillis() - lastLogin.get(event.getUniqueId()) < 4000L) {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Please wait before re-logging in");
-            return;
-        }
+//    @EventHandler
+//    public void onPreLogin(AsyncPlayerPreLoginEvent event) {
+//        if (System.currentTimeMillis() - startup < 2000) {
+//            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Server starting up...");
+//            return;
+//        }
+//        if (lastLogin.containsKey(event.getUniqueId())
+//                && System.currentTimeMillis() - lastLogin.get(event.getUniqueId()) < 4000L) {
+//            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Please wait before re-logging in");
+//            return;
+//        }
+//
+//        lastLogin.put(event.getUniqueId(), System.currentTimeMillis());
+//        Member member;
+//        try {
+//            member = memberManager.getMember(event.getUniqueId(), true);
+//            if (member == null) {
+//                member = new Member(event.getUniqueId(), event.getName());
+//            } else {
+//                member.setName(event.getName());
+//            }
+//            memberManager.getMembers().put(member.getUUID(), member);
+//        } catch (Exception a) {
+//            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "Sorry, your data was not loaded correctly! Please re-join!");
+//            KitPvP.getInstance().getLogger().log(Level.WARNING, "An error occurred while loading player's data.", a);
+//            memberManager.getMembers().remove(event.getUniqueId());
+//        }
+//
+//        // update the UUIDs when a player joins so that the stats includes them
+//        StatKitPvPKills.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
+//        StatKitPvPCoins.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
+//        StatKitPvPDeaths.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
+//        StatKitPvPKillStreak.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
+//    }
 
-        lastLogin.put(event.getUniqueId(), System.currentTimeMillis());
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player p = event.getPlayer();
+
         Member member;
         try {
-            member = memberManager.getMember(event.getUniqueId(), true);
+            member = memberManager.getMember(p.getUniqueId(), true);
             if (member == null) {
-                member = new Member(event.getUniqueId(), event.getName());
+                member = new Member(p.getUniqueId(), p.getName());
             } else {
-                member.setName(event.getName());
+                member.setName(p.getName());
             }
             memberManager.getMembers().put(member.getUUID(), member);
         } catch (Exception a) {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "Sorry, your data was not loaded correctly! Please re-join!");
+            event.getPlayer().kickPlayer("§cSorry, your data was not loaded correctly! Please re-join!");
             KitPvP.getInstance().getLogger().log(Level.WARNING, "An error occurred while loading player's data.", a);
-            memberManager.getMembers().remove(event.getUniqueId());
+            memberManager.getMembers().remove(p.getUniqueId());
+            return;
         }
 
         // update the UUIDs when a player joins so that the stats includes them
-        StatKitPvPKills.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
-        StatKitPvPCoins.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
-        StatKitPvPDeaths.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
-        StatKitPvPKillStreak.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
-    }
-
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        Player p = event.getPlayer();
-        Member member = memberManager.getMember(p, true);
-
-        if (member == null) {
-            event.getPlayer().kickPlayer("§cSorry, your data was not loaded correctly! Please re-join!");
-            return;
-        }
+        StatKitPvPKills.getInstance().update(Collections.singletonList(p.getUniqueId()), true);
+        StatKitPvPCoins.getInstance().update(Collections.singletonList(p.getUniqueId()), true);
+        StatKitPvPDeaths.getInstance().update(Collections.singletonList(p.getUniqueId()), true);
+        StatKitPvPKillStreak.getInstance().update(Collections.singletonList(p.getUniqueId()), true);
+        StatKitPvPKDR.getInstance().update(Collections.singleton(p.getUniqueId()), true);
 
         // Update name
         if (!p.getName().equals(member.getName()))
@@ -88,10 +100,20 @@ public class MemberJoinQuit implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Member member = memberManager.getMember(event.getPlayer());
+        KitPvPStats stats = KitPvP.getInstance().getStats(member);
 
         UtilPlayer.removeAttachment(event.getPlayer());
 
         if (member != null) {
+            // Updates leaderboard cache for offline player
+            StatsMember statsMember = new StatsMember(member.getUUID(), member.getName());
+            statsMember.setKills(stats.getKills());
+            statsMember.setHighestStreak(stats.getHighestStreak());
+            statsMember.setDeaths(stats.getDeaths());
+            statsMember.setCoins(stats.getCoins());
+
+            LeaderboardsCache.memberCache.put(member.getUUID(), statsMember);
+
             MemberManager.getInstance().update(member, true);
         } else
             event.setQuitMessage(null);

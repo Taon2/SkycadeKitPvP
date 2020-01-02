@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,6 +23,7 @@ public class PlayerMoveListener implements Listener {
     private final KitPvP plugin;
     private List<Location> teleports = new ArrayList<>();
     private Map<UUID, Location> teleporting = new HashMap<>();
+    private static List<UUID> immune = new ArrayList<>();
 
     public PlayerMoveListener(KitPvP plugin) {
         this.plugin = plugin;
@@ -48,6 +50,7 @@ public class PlayerMoveListener implements Listener {
         Bukkit.getOnlinePlayers().stream()
                 .filter(p -> (p.getLocation().getBlock().getType() == Material.GOLD_PLATE)
                         && UtilPlayer.isMoving(p)
+                        && p.getGameMode() == GameMode.SURVIVAL
                         && !teleporting.containsKey(p.getUniqueId())).collect(Collectors.toList())
                 .forEach(p -> {
                     Location teleport = teleports.get(ThreadLocalRandom.current().nextInt(0, teleports.size()));
@@ -68,14 +71,21 @@ public class PlayerMoveListener implements Listener {
                             org.bukkit.util.Vector target = teleport.toVector();
                             Vector dir = target.subtract(pos).normalize();
                             double distance = teleport.distance(p.getLocation());
-                            p.setVelocity(dir.multiply(distance > 10 ? 3 : distance / 5));
+                            p.setVelocity(dir.multiply(distance > 15 ? 3 : distance / 5));
 
-                            if (distance < 2) {
+                            if (distance < 4) {
                                 p.setVelocity(dir.multiply(0));
                                 p.removePotionEffect(PotionEffectType.BLINDNESS);
                                 p.setGameMode(GameMode.SURVIVAL);
                                 p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                                 teleporting.remove(p.getUniqueId());
+                                immune.add(p.getUniqueId());
+
+                                // Removes immunity after 2 seconds
+                                Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+                                    immune.remove(p.getUniqueId());
+                                }, 4 * 20);
+
                                 this.cancel();
                             }
                         }
@@ -92,6 +102,28 @@ public class PlayerMoveListener implements Listener {
             p.removePotionEffect(PotionEffectType.BLINDNESS);
             p.setGameMode(GameMode.SURVIVAL);
             teleporting.remove(p.getUniqueId());
+            immune.remove(p.getUniqueId());
         }
+    }
+
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        // Stops spectators from teleporting
+        if (teleporting.containsKey(event.getPlayer().getUniqueId()) && event.getPlayer().getGameMode() == GameMode.SPECTATOR) {
+            event.setCancelled(true);
+            event.getPlayer().setSpectatorTarget(null);
+        }
+    }
+
+    public static List<UUID> getImmunePlayers() {
+        return immune;
+    }
+
+    public static void addImmunePlayer(UUID uuid) {
+        immune.add(uuid);
+    }
+
+    public static void removeImmunePlayer(UUID uuid) {
+        immune.remove(uuid);
     }
 }
