@@ -68,7 +68,9 @@ public class KitPvPStats {
         this.coins += coins;
 
         //Adds the amount of coins to the gang points
-        Gang gang = GangsPlusApi.getPlayersGang(Bukkit.getPlayer(uuid));
+        Gang gang = null;
+        if (Bukkit.getOfflinePlayer(uuid).isOnline())
+            gang = GangsPlusApi.getPlayersGang(Bukkit.getPlayer(uuid));
         if (gang != null)
             KitPvP.getInstance().getGangPointsManager().addPoints(gang.getName(), coins);
     }

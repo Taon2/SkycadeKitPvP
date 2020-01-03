@@ -81,7 +81,8 @@ public class KitBladeMaster extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Studied the blade.",
                 "",
-                ChatColor.GRAY + "Uses two swords to defeat your enemies."
+                ChatColor.GRAY + "Uses two swords to defeat your enemies.",
+                ChatColor.GRAY + "Gains speed when sneaking."
         );
     }
 }

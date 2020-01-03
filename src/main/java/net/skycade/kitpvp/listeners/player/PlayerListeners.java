@@ -6,7 +6,6 @@ import net.minelink.ctplus.CombatTagPlus;
 import net.skycade.SkycadeCore.utility.TeleportUtil;
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.bukkitevents.KitPvPKillstreakChange;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.events.RandomEvent;
 import net.skycade.kitpvp.events.TagEvent;
@@ -173,10 +172,6 @@ public class PlayerListeners implements Listener {
             p.setItemOnCursor(null);
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
         int streak = stats.getStreak();
-
-        //For missions
-        KitPvPKillstreakChange killstreakEvent = new KitPvPKillstreakChange(p, streak);
-        Bukkit.getServer().getPluginManager().callEvent(killstreakEvent);
 
         if (streak > stats.getHighestStreak())
             stats.setHighestStreak(stats.getStreak());

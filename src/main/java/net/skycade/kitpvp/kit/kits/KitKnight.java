@@ -48,22 +48,22 @@ public class KitKnight extends Kit {
 
         helmet = new ItemBuilder(
                 Material.CHAINMAIL_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 8)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         chestplate = new ItemBuilder(
                 Material.CHAINMAIL_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 8)
+                .addEnchantment(Enchantment.DURABILITY, 6)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         leggings = new ItemBuilder(
                 Material.CHAINMAIL_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 8)
+                .addEnchantment(Enchantment.DURABILITY, 6)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         boots = new ItemBuilder(
                 Material.CHAINMAIL_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 8)
+                .addEnchantment(Enchantment.DURABILITY, 6)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         weapon = new ItemBuilder(

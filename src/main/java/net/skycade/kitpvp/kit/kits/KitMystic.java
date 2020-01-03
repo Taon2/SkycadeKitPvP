@@ -88,7 +88,7 @@ public class KitMystic extends Kit {
         Location loc = p.getEyeLocation();
         LivingEntity cat = (LivingEntity) p.getWorld().spawnEntity(loc.add(loc.getDirection()), EntityType.OCELOT);
         cat.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 99));
-        cat.setCustomName("Mystic cat");
+        cat.setCustomName(p.getName());
 
         for (Entity ent : loc.getChunk().getEntities())
             if (ent.getType() == EntityType.OCELOT)

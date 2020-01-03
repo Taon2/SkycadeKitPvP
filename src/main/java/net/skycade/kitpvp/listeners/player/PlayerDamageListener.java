@@ -7,6 +7,7 @@ import net.skycade.SkycadeCore.utility.TeleportUtil;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPCoinsRewardEvent;
 import net.skycade.kitpvp.bukkitevents.KitPvPKillPlayerEvent;
+import net.skycade.kitpvp.bukkitevents.KitPvPKillstreakChange;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
@@ -56,6 +57,9 @@ public class PlayerDamageListener implements Listener {
         if (event.getEntity() instanceof Player && PlayerMoveListener.getImmunePlayers().contains(event.getEntity().getUniqueId())) {
             event.setCancelled(true);
         }
+
+        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK && KitPvP.getInstance().isInSpawnArea((Player) event.getEntity()))
+            event.setCancelled(true);
 
         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)
             event.setDamage((event.getDamage() * 0.25));
@@ -204,6 +208,10 @@ public class PlayerDamageListener implements Listener {
         //Update ks
         final int streak = plugin.getStats(killer).getStreak() + 1;
         stats.setStreak(streak);
+
+        //For missions
+        KitPvPKillstreakChange killstreakEvent = new KitPvPKillstreakChange(killer, streak);
+        Bukkit.getServer().getPluginManager().callEvent(killstreakEvent);
 
         if (streak % 10 == 0)
             HAS_KILLSTREAK.broadcast("%killer%", killer.getName(), "%ks%", Integer.toString(streak));

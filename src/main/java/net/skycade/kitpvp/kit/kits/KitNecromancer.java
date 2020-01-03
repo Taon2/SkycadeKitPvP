@@ -144,7 +144,7 @@ public class KitNecromancer extends Kit {
 
             entity.setOwner(p);
             Zombie zombie = (Zombie) entity.getBukkitEntity();
-            zombie.setCustomName(net.md_5.bungee.api.ChatColor.GRAY + p.getName());
+            zombie.setCustomName(p.getName());
 
             // Add potion effects and items
             zombie.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false));

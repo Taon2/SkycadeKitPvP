@@ -86,7 +86,7 @@ public class KitPlush extends Kit {
                     ent.remove();
 
         cat.setVelocity(loc.getDirection().multiply(0.5D));
-        cat.setCustomName("Plush Cat");
+        cat.setCustomName(p.getName());
         p.getWorld().playSound(loc, Sound.CAT_MEOW, 1F, 1F);
 
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {

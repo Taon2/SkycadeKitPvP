@@ -52,8 +52,9 @@ public class KitBlockhunt extends Kit {
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build();
         weapon = new ItemBuilder(
                 Material.IRON_AXE)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking on a block every " + disguiseCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift right clicking on a block every " + disguiseCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "disguises you as that block.").build();
         bow = new ItemBuilder(
                 Material.BOW)
