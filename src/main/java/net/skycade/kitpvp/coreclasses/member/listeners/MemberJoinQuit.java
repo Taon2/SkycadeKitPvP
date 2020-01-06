@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -64,6 +65,15 @@ public class MemberJoinQuit implements Listener {
 //        StatKitPvPDeaths.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
 //        StatKitPvPKillStreak.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
 //    }
+
+    @EventHandler
+    public void onPreLogin(AsyncPlayerPreLoginEvent event) {
+        // update the UUIDs when a player joins so that the stats includes them
+        StatKitPvPKills.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
+        StatKitPvPCoins.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
+        StatKitPvPDeaths.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
+        StatKitPvPKillStreak.getInstance().update(Collections.singletonList(event.getUniqueId()), true);
+    }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
