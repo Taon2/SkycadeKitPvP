@@ -132,7 +132,8 @@ public class PlayerListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onInventoryClick(InventoryClickEvent event) {
-        if ((event.getClickedInventory() != null
+        if ((!VanishStatus.isVanished(event.getWhoClicked().getUniqueId())
+                && event.getClickedInventory() != null
                 && event.getClickedInventory().getName() != null
                 && !event.getWhoClicked().getGameMode().equals(GameMode.CREATIVE)
                 && event.getInventory().getType() != InventoryType.CRAFTING

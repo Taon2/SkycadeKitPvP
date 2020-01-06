@@ -94,6 +94,9 @@ public class PlayerDamageListener implements Listener {
         if (!(event.getDamager() instanceof Player))
             return;
 
+        if (PlayerMoveListener.getImmunePlayers().contains(event.getDamager().getUniqueId()))
+            PlayerMoveListener.removeImmunePlayer(event.getDamager().getUniqueId());
+
         if (plugin.getStats(damagee).getActiveKit().getKit().getKitType() == KitType.SONIC)
             ((KitSonic) plugin.getStats(damagee).getActiveKit().getKit()).disableSprint(damagee);
 
@@ -112,7 +115,7 @@ public class PlayerDamageListener implements Listener {
     public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event) {
         if (!(event.getEntity() instanceof Golem)) return;
         if (event.getTarget() == null) return;
-        if (event.getEntity().getName().equalsIgnoreCase(event.getTarget().getName() + " golem"))
+        if (event.getEntity().getName().contains(event.getTarget().getName()) || event.getTarget().getName().contains(event.getEntity().getName()))
             event.setCancelled(true);
     }
 
