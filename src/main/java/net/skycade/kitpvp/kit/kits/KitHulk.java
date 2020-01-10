@@ -64,7 +64,7 @@ public class KitHulk extends Kit {
                 .setColour(Color.GREEN).build();
 
         constantEffects.put(PotionEffectType.SLOW, 1);
-        constantEffects.put(PotionEffectType.INCREASE_DAMAGE, 4);
+        constantEffects.put(PotionEffectType.INCREASE_DAMAGE, 5);
 
         ItemStack icon = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
@@ -143,6 +143,7 @@ public class KitHulk extends Kit {
                                     .forEach((ent) -> {
                                 if (ent.hasMetadata("NPC"))
                                     return;
+                                ((Player) ent).damage(4, p);
                                 ent.setVelocity(ent.getLocation().getDirection().multiply(-1.35F).setY(0.8F));
                             });
                         });

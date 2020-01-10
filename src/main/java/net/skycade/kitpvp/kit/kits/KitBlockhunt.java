@@ -131,6 +131,7 @@ public class KitBlockhunt extends Kit {
                     addFallingBlock(p, clickedBlock.getType(), clickedBlock.getData());
 
                     p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 3));
+                    p.setCustomNameVisible(false);
                     disguised.put(p.getUniqueId(), loc.getBlock());
                     DISGUISED.msg(p);
                 }
@@ -197,6 +198,7 @@ public class KitBlockhunt extends Kit {
             p.getLocation().getWorld().playEffect(p.getLocation(), Effect.STEP_SOUND, type);
             p.removePotionEffect(PotionEffectType.INVISIBILITY);
             disguised.remove(p.getUniqueId());
+            p.setCustomNameVisible(true);
             DISGUISE_REMOVED.msg(p);
         }
     }

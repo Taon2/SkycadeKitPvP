@@ -54,7 +54,7 @@ public class KitTreeEnt extends Kit {
         weapon = new ItemBuilder(
                 Material.STICK)
                 .addEnchantment(Enchantment.KNOCKBACK, 1)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 3)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 5)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + blockCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws five leaf blocks in a shotgun pattern.").build();
 

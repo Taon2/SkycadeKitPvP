@@ -59,6 +59,7 @@ public class KitWolfPack extends Kit {
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + wolvesCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "summons wolves to fight for you.").build();
 

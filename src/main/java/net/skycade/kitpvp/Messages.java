@@ -113,6 +113,7 @@ public class Messages {
     public static final Localization.Message KILLTHEKING_START = new Localization.Message("event.killtheking-start", "&a&lKILL THE KING! &r&a%player% is the King. Everyone attack them!");
     public static final Localization.Message KILLTHEKING_TOO_LONG = new Localization.Message("event.killtheking-too-long", "&a&lThe King took too long to kill.");
     public static final Localization.Message KILLTHEKING_PARTICIPATE = new Localization.Message("event.killtheking-participate", "&7You have received &a%amount% &7Event Tokens for participating!");
+    public static final Localization.Message KILLTHEKING_SURVIVED = new Localization.Message("event.killtheking-survived", "&7You have received &a%amount% &7Event Tokens for surviving!");
     public static final Localization.Message KILLTHEKING_WON = new Localization.Message("event.killtheking-won", "&7You have killed the King! You have received &a%amount% &7Event Tokens for winning!");
     public static final Localization.Message KILLTHEKING_KILLED_BY = new Localization.Message("event.killtheking-killed-by", "&c%player% &ahas killed the King!");
     public static final Localization.Message KILLTHEKING_KILLED = new Localization.Message("event.killtheking-killed", "&aThe King has been killed!");

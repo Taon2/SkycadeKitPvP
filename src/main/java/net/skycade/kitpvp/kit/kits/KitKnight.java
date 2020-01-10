@@ -48,7 +48,7 @@ public class KitKnight extends Kit {
 
         helmet = new ItemBuilder(
                 Material.CHAINMAIL_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.DURABILITY, 6)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         chestplate = new ItemBuilder(

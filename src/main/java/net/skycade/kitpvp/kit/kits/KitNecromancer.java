@@ -58,17 +58,17 @@ public class KitNecromancer extends Kit {
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 8)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .setColour(Color.GRAY).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 8)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .setColour(Color.GRAY).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 8)
+                .addEnchantment(Enchantment.DURABILITY,  11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .setColour(Color.GRAY).build();
         weapon = new ItemBuilder(

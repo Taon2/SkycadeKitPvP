@@ -33,25 +33,25 @@ public class KitPrick extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 14)
+                .addEnchantment(Enchantment.DURABILITY, 16)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addEnchantment(Enchantment.THORNS, 1)
                 .setColour(Color.GREEN).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 14)
+                .addEnchantment(Enchantment.DURABILITY, 16)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addEnchantment(Enchantment.THORNS, 1)
                 .setColour(Color.GREEN).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 14)
+                .addEnchantment(Enchantment.DURABILITY, 16)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addEnchantment(Enchantment.THORNS, 1)
                 .setColour(Color.GREEN).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 14)
+                .addEnchantment(Enchantment.DURABILITY, 16)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addEnchantment(Enchantment.THORNS, 1)
                 .setColour(Color.GREEN).build();
