@@ -1,6 +1,6 @@
 package net.skycade.kitpvp.listeners.player;
 
-import net.minelink.ctplus.CombatTagPlus;
+import net.skycade.SkycadeCombat.data.CombatData;
 import net.skycade.SkycadeCore.leveling.achievements.Achievement;
 import net.skycade.SkycadeCore.leveling.achievements.CoreAchievementEvent;
 import net.skycade.SkycadeCore.utility.TeleportUtil;
@@ -124,9 +124,9 @@ public class PlayerDamageListener implements Listener {
         event.getDrops().clear();
         event.setDeathMessage("");
 
-        CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
+        CombatData.Combat combat = CombatData.getCombat(event.getEntity());
 
-        pl.getTagManager().untag(event.getEntity().getUniqueId());
+        combat.setInCombat(false);
 
         boolean resetStats = plugin.getStats(event.getEntity()).getActiveKit().getKit().onDeath(event.getEntity(), event.getEntity().getKiller());
 

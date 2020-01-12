@@ -2,7 +2,7 @@ package net.skycade.kitpvp.listeners.player;
 
 import net.brcdev.gangs.GangsPlusApi;
 import net.brcdev.gangs.gang.Gang;
-import net.minelink.ctplus.CombatTagPlus;
+import net.skycade.SkycadeCombat.data.CombatData;
 import net.skycade.SkycadeCore.utility.TeleportUtil;
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
@@ -84,9 +84,9 @@ public class PlayerListeners implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         if (event.getPlayer().isDead()) return;
 
-        CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
+        CombatData.Combat combat = CombatData.getCombat(event.getPlayer());
 
-        if (TeleportUtil.getSpawn().equals(event.getTo()) && !plugin.isInSpawnArea(event.getPlayer()) && pl.getTagManager().isTagged(event.getPlayer().getUniqueId())) {
+        if (TeleportUtil.getSpawn().equals(event.getTo()) && !plugin.isInSpawnArea(event.getPlayer()) && combat.isInCombat()) {
             event.setCancelled(true);
             return;
         }
