@@ -121,8 +121,8 @@ public class KitKnight extends Kit {
         horse.setTamed(true);
         horse.setStyle(Horse.Style.WHITE);
         horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
-        horse.getInventory().setArmor(new ItemStack(Material.GOLD_BARDING));
-        horse.setMaxHealth(30);
+        horse.getInventory().setArmor(new ItemStack(Material.IRON_BARDING));
+        horse.setMaxHealth(20);
         horse.setHealth(horse.getMaxHealth());
         horse.setJumpStrength(0.55);
         AttributeInstance attributes = ((CraftLivingEntity) horse).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
