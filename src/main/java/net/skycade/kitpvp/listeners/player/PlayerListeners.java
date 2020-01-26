@@ -168,6 +168,7 @@ public class PlayerListeners implements Listener {
         if (stats == null) return;
         stats.getActiveKit().getKit().cancelRunnables(p);
         stats.applyKitPreference();
+        p.getOpenInventory().close();
         p.getInventory().clear();
         if (p.getItemOnCursor().getType() != null && p.getItemOnCursor().getType() != Material.AIR)
             p.setItemOnCursor(null);

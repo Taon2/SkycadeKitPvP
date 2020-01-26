@@ -43,24 +43,24 @@ public class KitGuardian extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fires a laser at the nearest enemy within 6 blocks.")
                 .setColour(Color.ORANGE).build();
         chestplate = new ItemBuilder(
                 Material.DIAMOND_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.THORNS, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fires a laser at the nearest enemy within 6 blocks.").build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fires a laser at the nearest enemy within 6 blocks.")
                 .setColour(Color.fromRGB(0, 204, 204)).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addEnchantment(Enchantment.DEPTH_STRIDER, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fires a laser at the nearest enemy within 6 blocks.")
@@ -221,7 +221,7 @@ public class KitGuardian extends Kit {
 
     @Override
     public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 75!");
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 50!");
     }
 
     public static List<String> getLore() {

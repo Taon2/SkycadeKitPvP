@@ -37,25 +37,25 @@ public class KitBomber extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addEnchantment(Enchantment.PROTECTION_EXPLOSIONS, 5)
                 .setColour(Color.WHITE).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addEnchantment(Enchantment.PROTECTION_EXPLOSIONS, 5)
                 .setColour(Color.RED).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addEnchantment(Enchantment.PROTECTION_EXPLOSIONS, 5)
                 .setColour(Color.RED).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addEnchantment(Enchantment.PROTECTION_EXPLOSIONS, 5)
                 .setColour(Color.RED).build();

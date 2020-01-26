@@ -65,7 +65,7 @@ public class KitDubstep extends Kit {
 
     @Override
     public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 50!");
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "A default kit.");
     }
 
     public static List<String> getLore() {

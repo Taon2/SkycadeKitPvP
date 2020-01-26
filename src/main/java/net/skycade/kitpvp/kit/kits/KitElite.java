@@ -28,25 +28,25 @@ public class KitElite extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 13)
+                .addEnchantment(Enchantment.DURABILITY, 14)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you strength.")
                 .setColour(Color.WHITE).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you strength.")
                 .setColour(Color.BLUE).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you strength.")
                 .setColour(Color.BLUE).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you strength.")
                 .setColour(Color.BLUE).build();

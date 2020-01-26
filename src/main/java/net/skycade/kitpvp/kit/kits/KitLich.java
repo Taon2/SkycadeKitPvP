@@ -59,17 +59,17 @@ public class KitLich extends Kit {
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .setColour(Color.fromRGB(25, 25, 112)).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .setColour(Color.fromRGB(25, 25, 112)).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .setColour(Color.fromRGB(25, 25, 112)).build();
         weapon = new ItemBuilder(
@@ -207,7 +207,7 @@ public class KitLich extends Kit {
         if (event.getDamager().getType() == EntityType.ZOMBIE && (((CraftEntity) event.getDamager()).getHandle() instanceof MiniArmyZombie)) {
             MiniArmyZombie entity = (MiniArmyZombie) ((CraftEntity) event.getDamager()).getHandle();
 
-            CombatData.Combat playerCombat = CombatData.getCombat((Player)event.getEntity());
+            CombatData.Combat playerCombat = CombatData.getCombat((Player) event.getDamager());
             CombatData.Combat entityCombat = CombatData.getCombat(Bukkit.getPlayer(entity.getOwnerUUID()));
 
             if (event.getEntity().getType() == EntityType.PLAYER && event.getEntity() != entity.getOwner()) {
@@ -371,7 +371,7 @@ public class KitLich extends Kit {
 
     @Override
     public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 100!");
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 75!");
     }
 
     public static List<String> getLore() {

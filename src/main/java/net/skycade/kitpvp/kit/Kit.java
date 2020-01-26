@@ -82,6 +82,7 @@ public abstract class Kit implements Listener {
 
     public void beginApplyKit(Player p) {
         if (p == null || !p.isOnline()) return;
+        p.getOpenInventory().close();
         clearArmor(p);
         p.getInventory().clear();
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());

@@ -57,7 +57,7 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("database.kitpvp-table", "skycade_kitpvp_members");
         defaults.put("database.kitpvp-prestige-levels", "skycade_kitpvp_prestige_levels");
 
-        defaults.put("start-kits", Arrays.asList(KitType.ARCHER.getAlias(), KitType.CHANCE.getAlias()));
+        defaults.put("start-kits", Arrays.asList(KitType.ARCHER.getAlias(), KitType.CHANCE.getAlias(), KitType.DUBSTEP.getAlias()));
         defaults.put("start-coins", 3500);
 
         defaults.put("rotation-seconds", 3600);
