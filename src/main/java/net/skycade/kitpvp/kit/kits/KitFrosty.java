@@ -52,19 +52,19 @@ public class KitFrosty extends Kit {
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Takes extra damage from lava and fire.").build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Takes extra damage from lava and fire.")
                 .setColour(Color.fromRGB(200, 255, 255)).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Takes extra damage from lava and fire.")
                 .setColour(Color.fromRGB(200, 255, 255)).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Takes extra damage from lava and fire.")
                 .setColour(Color.fromRGB(200, 255, 255)).build();

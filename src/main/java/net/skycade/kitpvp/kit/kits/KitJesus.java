@@ -13,7 +13,6 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -39,16 +38,13 @@ public class KitJesus extends Kit {
 
         chestplate = new ItemBuilder(
                 Material.DIAMOND_CHESTPLATE)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains speed in water.").build();
         leggings = new ItemBuilder(
                 Material.DIAMOND_LEGGINGS)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains speed in water.").build();
         boots = new ItemBuilder(
                 Material.DIAMOND_BOOTS)
                 .addEnchantment(Enchantment.DEPTH_STRIDER, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains speed in water.").build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
@@ -69,11 +65,6 @@ public class KitJesus extends Kit {
         p.getInventory().setChestplate(chestplate);
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
-    }
-
-    @Override
-    public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        e.setDamage(e.getDamage() * 1.5);
     }
 
     @Override
@@ -120,8 +111,7 @@ public class KitJesus extends Kit {
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Respawns in 3 days. Just kidding.",
                 "",
                 ChatColor.GRAY + "Fast in water and",
-                ChatColor.GRAY + "heals your friends.",
-                ChatColor.GRAY + "Takes 50% extra damage when hit."
+                ChatColor.GRAY + "heals your friends."
         );
     }
 }

@@ -35,7 +35,7 @@ public class KitPlush extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .setColour(Color.fromRGB(200, 255, 255)).build();
         chestplate = new ItemBuilder(
                 Material.IRON_CHESTPLATE).build();

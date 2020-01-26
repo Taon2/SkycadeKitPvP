@@ -2,6 +2,7 @@ package net.skycade.kitpvp.kit.kits;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
+import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
@@ -32,22 +33,22 @@ public class KitJumper extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.WHITE).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.RED).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.RED).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.WHITE).build();
         weapon = new ItemBuilder(
@@ -71,7 +72,11 @@ public class KitJumper extends Kit {
         p.getInventory().setBoots(boots);
 
         constantEffects.forEach((effect, amplifier) -> {
-            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+            if (CaptureTheFlagEvent.getInstance().getBegin() != null) {
+                p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, 1));
+            } else {
+                p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+            }
         });
     }
 

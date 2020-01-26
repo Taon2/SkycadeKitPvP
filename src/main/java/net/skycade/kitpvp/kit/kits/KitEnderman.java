@@ -36,28 +36,28 @@ public class KitEnderman extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Touching water damages you.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Immune to arrows.")
                 .setColour(Color.PURPLE).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Touching water damages you.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Immune to arrows.")
                 .setColour(Color.PURPLE).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Touching water damages you.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Immune to arrows.")
                 .setColour(Color.PURPLE).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Touching water damages you.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Immune to arrows.")
@@ -101,7 +101,7 @@ public class KitEnderman extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), teleportCooldown, true) || frozenPlayers.containsKey(p.getUniqueId()))
+        if (!addCooldown(p, getName(), teleportCooldown, true))
             return;
 
         //For missions

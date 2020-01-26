@@ -46,22 +46,22 @@ public class KitSniper extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.fromRGB(0, 60, 0)).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .setColour(Color.fromRGB(0, 60, 0)).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .setColour(Color.fromRGB(0, 60, 0)).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.fromRGB(0, 60, 0)).build();
         weapon = new ItemBuilder(

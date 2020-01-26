@@ -45,11 +45,11 @@ public class KitTeleporter extends Kit {
                 Material.IRON_HELMET).build();
         chestplate = new ItemBuilder(
                 Material.CHAINMAIL_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.DURABILITY, 8)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
         leggings = new ItemBuilder(
                 Material.CHAINMAIL_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.DURABILITY, 8)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
         boots = new ItemBuilder(
                 Material.IRON_BOOTS).build();

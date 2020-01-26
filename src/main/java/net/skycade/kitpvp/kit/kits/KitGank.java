@@ -26,7 +26,7 @@ public class KitGank extends Kit {
 
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DURABILITY, 6)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 4).build();
 
         constantEffects.put(PotionEffectType.DAMAGE_RESISTANCE, 0);

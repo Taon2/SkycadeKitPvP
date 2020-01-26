@@ -1,6 +1,7 @@
 package net.skycade.kitpvp.events.capturetheflag;
 
 import net.md_5.bungee.api.ChatColor;
+import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.events.CaptureTheFlagEvent;
@@ -60,6 +61,9 @@ public class CaptureTheFlagFlagListener implements Listener {
                 CAPTURETHEFLAG_CANT_CARRY.msg(p, "%reason%", "You are currently riding a mount");
                 return;
             }
+
+            if (VanishStatus.isVanished(event.getPlayer().getUniqueId()))
+                return;
 
             CAPTURETHEFLAG_PICKED_UP_FLAG.broadcast("%player%", captureTheFlagEvent.isTeamRed(p) ? ChatColor.RED + "" + ChatColor.BOLD + p.getName() : ChatColor.BLUE + "" + ChatColor.BOLD + p.getName());
             flagCarrier = event.getPlayer();

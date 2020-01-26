@@ -42,6 +42,7 @@ public class UtilPlayer {
         p.setWalkSpeed(0.2F);
         p.setAllowFlight(false);
         p.setFlying(false);
+        p.getOpenInventory().close();
         p.getInventory().clear();
         p.getInventory().setArmorContents(null);
         p.setMaxHealth(20);

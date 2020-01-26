@@ -169,6 +169,7 @@ public class TagEvent extends RandomEvent implements Listener {
 
         if (infectedPlayer == null) return;
 
+        infectedPlayer.getOpenInventory().close();
         infectedPlayer.getInventory().clear();
         infectedPlayer.getInventory().setHelmet(null);
         infectedPlayer.getInventory().setChestplate(null);
@@ -200,6 +201,7 @@ public class TagEvent extends RandomEvent implements Listener {
         inGame.remove(player.getUniqueId());
 
         if (this.infected.equals(player.getUniqueId())) {
+            player.getOpenInventory().close();
             player.getInventory().clear();
 
             player.getInventory().setHelmet(null);
@@ -236,6 +238,7 @@ public class TagEvent extends RandomEvent implements Listener {
                 boolean remove = inGame.remove(damagee.getUniqueId());
                 if (!remove) return;
 
+                damagee.getOpenInventory().close();
                 damagee.getInventory().clear();
                 damagee.getInventory().setHelmet(null);
                 damagee.getInventory().setChestplate(null);

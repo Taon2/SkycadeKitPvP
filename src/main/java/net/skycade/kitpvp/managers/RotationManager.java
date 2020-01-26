@@ -111,7 +111,7 @@ public class RotationManager {
 
         KitType kitType = available.get(UtilMath.getRandom(0, available.size() - 1));
 
-        if (kits.contains(kitType.toString()) || !kitType.getKit().isEnabled() || Arrays.asList(KitType.DEFAULT, KitType.KITMASTER, KitType.CHANCE, KitType.ARCHER).contains(kitType)) {
+        if (kits.contains(kitType.toString()) || !kitType.getKit().isEnabled() || Arrays.asList(KitType.DEFAULT, KitType.KITMASTER, KitType.CHANCE, KitType.ARCHER, KitType.DUBSTEP).contains(kitType)) {
             fillNoRotationList(kits);
             return;
         }

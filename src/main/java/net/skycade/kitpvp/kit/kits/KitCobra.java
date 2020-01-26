@@ -32,22 +32,22 @@ public class KitCobra extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
                 .setColour(Color.GREEN).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
                 .setColour(Color.GREEN).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
                 .setColour(Color.GREEN).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
                 .setColour(Color.GREEN).build();
         weapon = new ItemBuilder(
