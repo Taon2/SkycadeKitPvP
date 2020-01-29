@@ -116,7 +116,6 @@ public class KitSniper extends Kit {
                 sniperCombo.put(shooter.getUniqueId(), sniperCombo.get(shooter.getUniqueId()) + 1);
             else
                 sniperCombo.put(shooter.getUniqueId(), 1);
-            shooter.setLevel(sniperCombo.get(shooter.getUniqueId()));
             if (!hasArmor(damagee))
                 return;
             int combo = sniperCombo.get(shooter.getUniqueId());
