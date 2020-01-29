@@ -41,7 +41,7 @@ public class KitDubstep extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 7)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
         weapon = new ItemBuilder(
-                Material.DIAMOND_SWORD)
+                Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
 
@@ -59,7 +59,10 @@ public class KitDubstep extends Kit {
     }
 
     public void onMove(Player p) {
-        if (UtilMath.getRandom(0, 100) <= 5)
+        if (p.getItemInHand().getType() != Material.DIAMOND_SWORD)
+            return;
+
+        if (UtilMath.getRandom(0, 100) <= 3)
             p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 50, 3));
     }
 

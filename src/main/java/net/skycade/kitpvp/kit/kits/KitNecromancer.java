@@ -298,8 +298,7 @@ public class KitNecromancer extends Kit {
 
         if (ghostList.containsKey(shooter.getUniqueId())) {
             for (MiniArmyZombie ghost : ghostList.get(shooter.getUniqueId())) {
-                ghost.teleportTo(damagee.getLocation(), false);
-                ghost.dead = false;
+                ((Zombie) ghost.getBukkitEntity()).teleport(damagee.getLocation());
                 ((Zombie) ghost.getBukkitEntity()).setTarget(damagee);
             }
 
