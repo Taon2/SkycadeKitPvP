@@ -37,7 +37,7 @@ public class KitBuildUHC extends Kit {
     private ItemStack bow;
     private ItemStack arrows;
 
-    private int goldenHeadCooldown = 25;
+    private int goldenHeadCooldown = 20;
     private int arrowCooldown = 1;
     private int arrowRegenSpeed = 3;
     private int arrowStartAmount = 16;
@@ -144,7 +144,7 @@ public class KitBuildUHC extends Kit {
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 80, 0));
-        p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 240, 0));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 240, 1));
     }
 
     @Override

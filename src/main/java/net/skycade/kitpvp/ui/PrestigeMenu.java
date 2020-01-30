@@ -19,10 +19,10 @@ import java.util.List;
 public class PrestigeMenu extends DynamicGui {
 
     private static final ItemStack BACK = new ItemBuilder(Material.ARROW)
-            .setDisplayName(ChatColor.YELLOW + "" + ChatColor.GOLD + "Go Back")
+            .setDisplayName(ChatColor.GOLD + "Go Back")
             .build();
     private static final ItemStack NEXT = new ItemBuilder(Material.ARROW)
-            .setDisplayName(ChatColor.YELLOW + "" + ChatColor.GOLD + "Next")
+            .setDisplayName(ChatColor.GOLD + "Next")
             .build();
 
     public PrestigeMenu(Member member, int page) {
