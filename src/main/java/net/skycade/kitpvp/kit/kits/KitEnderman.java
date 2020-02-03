@@ -101,7 +101,7 @@ public class KitEnderman extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), teleportCooldown, true))
+        if (!addCooldown(p, getName(), teleportCooldown, true) || frozenPlayers.containsKey(p.getUniqueId()))
             return;
 
         //For missions
@@ -110,10 +110,8 @@ public class KitEnderman extends Kit {
 
         Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 10);
 
-        if (targetPlayers.isEmpty()) {
-            removeCooldowns(p, getName());
+        if (targetPlayers.isEmpty())
             return;
-        }
 
         Player target = null;
         double distance = 100;
@@ -127,10 +125,8 @@ public class KitEnderman extends Kit {
             }
         }
 
-        if (target == null) {
-            removeCooldowns(p, getName());
+        if (target == null)
             return;
-        }
 
         if (!teleportBehindPlayer(p, target.getLocation())) {
             removeCooldowns(p, getName());
