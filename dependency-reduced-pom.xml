@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.skycade</groupId>
   <artifactId>SkycadeKitPvP</artifactId>
-  <version>4.0.17-SNAPSHOT</version>
+  <version>4.0.18-SNAPSHOT</version>
   <build>
     <plugins>
       <plugin>

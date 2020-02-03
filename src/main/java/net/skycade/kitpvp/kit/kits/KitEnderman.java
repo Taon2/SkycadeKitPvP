@@ -101,12 +101,6 @@ public class KitEnderman extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), teleportCooldown, true) || frozenPlayers.containsKey(p.getUniqueId()))
-            return;
-
-        //For missions
-        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
-        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 10);
 
@@ -127,6 +121,13 @@ public class KitEnderman extends Kit {
 
         if (target == null)
             return;
+
+        if (!addCooldown(p, getName(), teleportCooldown, true) || frozenPlayers.containsKey(p.getUniqueId()))
+            return;
+
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         if (!teleportBehindPlayer(p, target.getLocation())) {
             removeCooldowns(p, getName());
