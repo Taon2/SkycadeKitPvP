@@ -462,21 +462,16 @@ public class PlayerDamageListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
-        Member member = MemberManager.getInstance().getMember(event.getPlayer().getUniqueId(), false);
+        Member member = MemberManager.getInstance().getMember(uuid, false);
 
         // Kills player if in combat and not in spawn
         CombatData.Combat combatData = CombatData.getCombat(Bukkit.getPlayer(uuid));
 
         if (member != null && !plugin.getSpawnRegion().contains(member.getPlayer()) && combatData.isInCombat()) {
-            plugin.getStats(member).setDeaths(plugin.getStats(member.getPlayer()).getDeaths() + 1);
-
-            // Get the attacker
-            UUID notQuitter = null;
-            if (event.getPlayer().getLastDamageCause().getEntity() instanceof Player) {
-                // the notQuitter is the attacker
-                notQuitter = ((Player) event.getPlayer().getLastDamageCause().getEntity()).getUniqueId();
-            }
-            // Increases kills for last damager to the player logging out
+            plugin.getStats(member).setDeaths(plugin.getStats(member).getDeaths() + 1);
+            // the notQuitter is the attacker
+            UUID notQuitter = combatData.getLastDamager();
+            // increases kills for last damager to the player logging out
             Player attacker = null;
 
             if (notQuitter != null)
