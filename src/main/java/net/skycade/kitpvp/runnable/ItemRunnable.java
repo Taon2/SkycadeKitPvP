@@ -31,8 +31,11 @@ public class ItemRunnable {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (!canRun()) return;
             Inventory inv = p.getInventory();
-            inv.addItem(p.getItemOnCursor());
             int amount = 0;
+
+            if (p.getItemOnCursor().getType() == item.getType() && p.getItemOnCursor().getDurability() == item.getDurability()) {
+                amount += p.getItemOnCursor().getAmount();
+            }
 
             Integer finalSlot = null;
             for (Integer i = 0; i < inv.getSize(); i++)
