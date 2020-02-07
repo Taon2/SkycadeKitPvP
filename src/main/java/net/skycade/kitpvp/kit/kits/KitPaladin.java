@@ -50,8 +50,8 @@ public class KitPaladin extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.DAMAGE_UNDEAD, 4)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + lightCooldown + " seconds")
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "grants nearby gang members absorbtion.").build();
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + lightCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "grants nearby gang members absorption.").build();
 
         ItemStack icon = new ItemStack(Material.GLOWSTONE_DUST);
         setIcon(icon);
@@ -96,7 +96,7 @@ public class KitPaladin extends Kit {
                 ChatColor.GREEN + "" + ChatColor.BOLD + "Support Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "May the light be with you.",
                 "",
-                ChatColor.GRAY + "Right clicking with your sword",
+                ChatColor.GRAY + "Shift + Right clicking with your sword",
                 ChatColor.GRAY + "grants protection to nearby allies."
         );
     }

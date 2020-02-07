@@ -48,11 +48,11 @@ public class KitPvPDB {
                 stats.setHighestStreak(result.getInt("HighestStreak"));
                 stats.setDeaths(result.getInt("Deaths"));
                 String currentKit = result.getString("CurrentKit");
-                stats.setActiveKit(currentKit == null ? KitType.CHANCE : KitType.valueOf(currentKit));
+                stats.setActiveKit(currentKit == null ? KitType.CHANCE : KitType.getTypeFromString(currentKit));
                 try {
                     JSONObject kitsJson = (JSONObject) new JSONParser().parse(result.getString("Kits"));
                     for (Object o : kitsJson.keySet()) {
-                        KitType type = KitType.valueOf((String) o);
+                        KitType type = KitType.getTypeFromString((String) o);
                         stats.addKit(type);
                     }
                 } catch (ParseException e) {
@@ -62,7 +62,7 @@ public class KitPvPDB {
                 stats.setCoins(result.getInt("Coins"));
                 stats.setEventTokens(result.getInt("EventCoins"));
                 stats.setAssists(result.getInt("Assists"));
-                stats.setKitPreference(KitType.valueOf(result.getString("ChosenKit")));
+                stats.setKitPreference(KitType.getTypeFromString(result.getString("ChosenKit")));
                 stats.setPrestigeLevel(result.getInt("PrestigeLevel"));
             }
 

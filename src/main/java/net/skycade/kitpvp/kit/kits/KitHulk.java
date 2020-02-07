@@ -213,7 +213,7 @@ public class KitHulk extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "HULK SMASH!",
                 "",
-                ChatColor.GRAY + "Right clicking a block with your",
+                ChatColor.GRAY + "Shift + Right clicking a block with your",
                 ChatColor.GRAY + "fist makes you smash the ground,",
                 ChatColor.GRAY + "knocking back enemies."
         );

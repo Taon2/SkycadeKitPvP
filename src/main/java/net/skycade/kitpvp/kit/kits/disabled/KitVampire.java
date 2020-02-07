@@ -60,7 +60,7 @@ public class KitVampire extends Kit {
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + healCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + healCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "and being near bleeding players heals you.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Damaging players makes them bleed.").build();
 

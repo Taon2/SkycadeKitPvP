@@ -68,7 +68,7 @@ public class KitGuardian extends Kit {
         weapon = new ItemBuilder(
                 Material.RAW_FISH)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 3)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + fishCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + fishCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "slows nearby enemies.").build();
 
         ItemStack icon = new ItemStack(Material.PRISMARINE_CRYSTALS);
@@ -230,7 +230,7 @@ public class KitGuardian extends Kit {
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "I'M A FIRIN MAH LAZER!",
                 "",
                 ChatColor.GRAY + "Fires a laser at the nearest enemy.",
-                ChatColor.GRAY + "Right clicking slows players around you."
+                ChatColor.GRAY + "Shift + Right clicking slows players around you."
         );
     }
 }

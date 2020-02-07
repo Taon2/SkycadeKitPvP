@@ -140,6 +140,12 @@ public class PlayerListeners implements Listener {
                 && event.getInventory().getType() != InventoryType.CHEST)
                 || event.getSlotType() == InventoryType.SlotType.CRAFTING)
             event.setCancelled(true);
+
+        if (event.getSlotType() == InventoryType.SlotType.CRAFTING && event.getWhoClicked().getGameMode() != GameMode.CREATIVE) {
+            event.setCurrentItem(null);
+            event.setCursor(null);
+            ((Player) event.getWhoClicked()).updateInventory();
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)

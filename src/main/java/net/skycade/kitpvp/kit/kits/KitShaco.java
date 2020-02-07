@@ -73,7 +73,7 @@ public class KitShaco extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + invisibilityCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + invisibilityCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "makes you invisible for " + invisibilityLength + " seconds.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Hits from behind deal more damage while invisible .").build();
         snowball = new ItemBuilder(

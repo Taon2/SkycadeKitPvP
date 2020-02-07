@@ -55,7 +55,7 @@ public class KitHuntsman extends Kit implements Listener {
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 2)
                 .addEnchantment(Enchantment.KNOCKBACK, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + bleedCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + bleedCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "lets your attacks make players bleed.").build();
 
         constantEffects.put(PotionEffectType.JUMP, 0);
