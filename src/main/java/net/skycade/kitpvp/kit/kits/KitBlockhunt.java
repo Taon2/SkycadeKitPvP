@@ -95,6 +95,10 @@ public class KitBlockhunt extends Kit {
             return;
         if (p.getLocation().getBlock().getType() != Material.AIR)
             return;
+        if (clickedBlock.getType() == Material.FENCE
+                || clickedBlock.getType() == Material.BARRIER
+                || clickedBlock.getType() == Material.BANNER)
+            return;
 
         //For missions
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());

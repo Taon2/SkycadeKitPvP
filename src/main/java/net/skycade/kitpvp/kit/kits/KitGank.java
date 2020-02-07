@@ -29,7 +29,7 @@ public class KitGank extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 6)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 4).build();
 
-        constantEffects.put(PotionEffectType.DAMAGE_RESISTANCE, 1);
+        constantEffects.put(PotionEffectType.DAMAGE_RESISTANCE, 0);
         constantEffects.put(PotionEffectType.SPEED, 1);
         constantEffects.put(PotionEffectType.REGENERATION, 1);
 

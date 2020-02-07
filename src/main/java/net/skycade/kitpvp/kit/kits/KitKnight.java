@@ -42,6 +42,7 @@ public class KitKnight extends Kit {
 
     private int steedCooldown = 60;
     private Map<UUID, Horse> horses = new HashMap<>();
+    private Map<UUID, Long> shiftTimer = new HashMap<>();
 
     public KitKnight(KitManager kitManager) {
         super(kitManager, "Knight", KitType.KNIGHT, 26000, getLore());
@@ -114,6 +115,8 @@ public class KitKnight extends Kit {
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
+        shiftTimer.put(p.getUniqueId(), System.currentTimeMillis());
+
         Horse horse = (Horse) p.getLocation().getWorld().spawnEntity(p.getLocation(), EntityType.HORSE);
         horse.setAdult();
         horse.setPassenger(p);
@@ -178,6 +181,17 @@ public class KitKnight extends Kit {
 
     @EventHandler
     public void onExit(VehicleExitEvent event) {
+        if (shiftTimer.containsKey(event.getExited().getUniqueId())) {
+            long now = System.currentTimeMillis();
+
+            if (shiftTimer.get(event.getExited().getUniqueId()) + 5000 > now) {
+                event.setCancelled(true);
+                return;
+            } else {
+                shiftTimer.remove(event.getExited().getUniqueId());
+            }
+        }
+
         if (horses.containsKey(event.getExited().getUniqueId())) {
             horses.get(event.getExited().getUniqueId()).remove();
             if (horses.get(event.getExited().getUniqueId()) != null)

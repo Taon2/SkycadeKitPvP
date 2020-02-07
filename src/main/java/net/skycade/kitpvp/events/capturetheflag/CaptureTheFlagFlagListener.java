@@ -148,7 +148,7 @@ public class CaptureTheFlagFlagListener implements Listener {
 
         Player p = event.getPlayer();
 
-        if (p.equals(flagCarrier) && (event.getKitType() == KitType.KNIGHT || event.getKitType() == KitType.FISHERMAN)) {
+        if (p.equals(flagCarrier) && (event.getKitType() == KitType.KNIGHT || event.getKitType() == KitType.FISHERMAN || event.getKitType() == KitType.KANGAROO)) {
             CAPTURETHEFLAG_DROPPED_FLAG.broadcast("%player%", captureTheFlagEvent.isTeamRed(p) ? ChatColor.RED + "" + ChatColor.BOLD + p.getName() : ChatColor.BLUE + "" + ChatColor.BOLD + p.getName());
             if (p.getLocation().getBlock().getType() != Material.AIR)
                 p.getLocation().add(0, 1, 0).getBlock().setType(Material.STANDING_BANNER);

@@ -214,7 +214,7 @@ public class KitNecromancer extends Kit {
         if (event.getDamager().getType() == EntityType.ZOMBIE && (((CraftEntity) event.getDamager()).getHandle() instanceof MiniArmyZombie)) {
             MiniArmyZombie entity = (MiniArmyZombie) ((CraftEntity) event.getDamager()).getHandle();
 
-            CombatData.Combat playerCombat = CombatData.getCombat((Player) event.getDamager());
+            CombatData.Combat playerCombat = CombatData.getCombat((Player) event.getEntity());
             CombatData.Combat playerTwoCombat = CombatData.getCombat(Bukkit.getPlayer(entity.getOwnerUUID()));
 
             if (event.getEntity().getType() == EntityType.PLAYER && event.getEntity() != entity.getOwner()) {
