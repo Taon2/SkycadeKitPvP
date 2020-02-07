@@ -56,7 +56,7 @@ public class KitLover extends Kit {
                 Material.WOOD_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 2)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking a player every " + loveCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking a player every " + loveCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "gives your target debuff effects.").build();
         rose = new ItemStack(
                 Material.RED_ROSE);
@@ -98,7 +98,7 @@ public class KitLover extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "<3",
                 "",
-                ChatColor.GRAY + "Right clicking with the flower",
+                ChatColor.GRAY + "Shift + Right clicking with the flower",
                 ChatColor.GRAY + "gives your target debuff potion effects."
         );
     }

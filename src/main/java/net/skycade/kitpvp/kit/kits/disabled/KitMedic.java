@@ -67,7 +67,7 @@ public class KitMedic extends Kit {
                 .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
         shears = new ItemBuilder(
                 Material.SHEARS)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking a player every " + shearsCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking a player every " + shearsCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "heals them.").build();
         medpack = new ItemBuilder(
                 Material.LEATHER, medpackStartAmount)

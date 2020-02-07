@@ -58,11 +58,11 @@ public class KitBlacksmith extends Kit {
                 Material.IRON_PICKAXE)
                 .addEnchantment(Enchantment.DURABILITY, 3)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 3)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + anvilDropCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + anvilDropCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "drops 5 anvils in front of you.").build();
         armorkits = new ItemBuilder(
                 Material.ANVIL, armorkitStartAmount)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking a player every " + armorkitCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking a player every " + armorkitCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "repairs their armor.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 armor kit every " + armorkitRegenSpeed + " seconds.")
                 .setName("Armor Kit").build();
@@ -171,8 +171,8 @@ public class KitBlacksmith extends Kit {
                 ChatColor.GREEN + "" + ChatColor.BOLD + "Support Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Forged in fire.",
                 "",
-                ChatColor.GRAY + "Right clicking drops anvils in front of you.",
-                ChatColor.GRAY + "Right clicking a player with an armor",
+                ChatColor.GRAY + "Shift + Right clicking drops anvils in front of you.",
+                ChatColor.GRAY + "Shift + Right clicking a player with an armor",
                 ChatColor.GRAY + "kit repairs their armor slightly."
         );
     }

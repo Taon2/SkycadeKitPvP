@@ -74,7 +74,7 @@ public class KitNecromancer extends Kit {
         weapon = new ItemBuilder(
                 Material.BONE)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + ghostCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + ghostCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "summons ghosts to fight for you.").build();
         snowball = new ItemBuilder(
                 Material.SNOW_BALL, snowballStartAmount)
@@ -354,7 +354,7 @@ public class KitNecromancer extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "A healer with bad timing.",
                 "",
-                ChatColor.GRAY + "Right clicking your sword",
+                ChatColor.GRAY + "Shift + Right clicking your sword",
                 ChatColor.GRAY + "summons ghosts to fight for you.",
                 ChatColor.GRAY + "Throw snowballs to wither enemies",
                 ChatColor.GRAY + "and make your ghosts target that enemy."

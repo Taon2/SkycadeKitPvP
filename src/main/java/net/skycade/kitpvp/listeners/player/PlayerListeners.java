@@ -27,9 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -138,7 +136,15 @@ public class PlayerListeners implements Listener {
                 && !event.getWhoClicked().getGameMode().equals(GameMode.CREATIVE)
                 && event.getInventory().getType() != InventoryType.CRAFTING
                 && event.getInventory().getType() != InventoryType.CHEST)
-                || event.getSlotType() == InventoryType.SlotType.CRAFTING)
+                ||
+                (event.getSlotType() == InventoryType.SlotType.CRAFTING
+                && (event.getAction() == InventoryAction.PLACE_ONE || event.getAction() == InventoryAction.PLACE_ALL || event.getAction() == InventoryAction.HOTBAR_SWAP)))
+            event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        if (!VanishStatus.isVanished(event.getWhoClicked().getUniqueId()) && !event.getWhoClicked().getGameMode().equals(GameMode.CREATIVE))
             event.setCancelled(true);
     }
 

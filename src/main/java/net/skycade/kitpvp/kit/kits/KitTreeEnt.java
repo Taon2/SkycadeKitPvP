@@ -55,7 +55,7 @@ public class KitTreeEnt extends Kit {
                 Material.STICK)
                 .addEnchantment(Enchantment.KNOCKBACK, 1)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + blockCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + blockCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws five leaf blocks in a shotgun pattern.").build();
 
         ItemStack icon = new ItemStack(Material.LEAVES);

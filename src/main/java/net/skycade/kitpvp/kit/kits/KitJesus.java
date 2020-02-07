@@ -49,7 +49,7 @@ public class KitJesus extends Kit {
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + cleanseCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + cleanseCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "grants your nearby gang members regeneration.").build();
         book = new ItemStack(
                 Material.ENCHANTED_BOOK);

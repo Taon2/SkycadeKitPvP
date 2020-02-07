@@ -68,7 +68,7 @@ public class KitPyromancer extends Kit {
         weapon = new ItemBuilder(
                 Material.BLAZE_ROD)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + fireballCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + fireballCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "launches a fireball.").build();
         bow = new ItemBuilder(
                 Material.BOW)

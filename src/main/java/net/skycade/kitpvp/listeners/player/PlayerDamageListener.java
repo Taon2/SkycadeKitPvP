@@ -447,34 +447,23 @@ public class PlayerDamageListener implements Listener {
         ScoreboardInfo.getInstance().updatePlayer(killed);
     }
 
-//    @EventHandler
-//    public void onPlayerQuit(PlayerQuitEvent e) {
-//        UUID uuid = e.getPlayer().getUniqueId();
-//        Member member = MemberManager.getInstance().getMember(e.getPlayer().getUniqueId(), false);
-//        if (member != null) {
-//            member.setLastKiller(null);
-//        }
-//        lastDamagerMap.remove(uuid);
-//        killAssist.remove(uuid);
-//        samePlayerKill.remove(uuid);
-//    }
-
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
-        Member member = MemberManager.getInstance().getMember(event.getPlayer().getUniqueId(), false);
+        Member member = MemberManager.getInstance().getMember(uuid, false);
 
         // Kills player if in combat and not in spawn
-        CombatData.Combat combatData = CombatData.getCombat(Bukkit.getPlayer(uuid));
+        CombatData.Combat combatData = CombatData.getCombat(event.getPlayer());
 
         if (member != null && !plugin.getSpawnRegion().contains(member.getPlayer()) && combatData.isInCombat()) {
-            plugin.getStats(member).setDeaths(plugin.getStats(member.getPlayer()).getDeaths() + 1);
+            // Kills the logging out player
+            event.getPlayer().setHealth(0);
 
             // Get the attacker
             UUID notQuitter = null;
-            if (event.getPlayer().getLastDamageCause().getEntity() instanceof Player) {
+            if (event.getPlayer().getLastDamageCause() != null && event.getPlayer().getLastDamageCause().getEntity() != null && event.getPlayer().getLastDamageCause().getEntity() instanceof Player) {
                 // the notQuitter is the attacker
-                notQuitter = ((Player) event.getPlayer().getLastDamageCause().getEntity()).getUniqueId();
+                notQuitter = event.getPlayer().getLastDamageCause().getEntity().getUniqueId();
             }
             // Increases kills for last damager to the player logging out
             Player attacker = null;
@@ -483,9 +472,7 @@ public class PlayerDamageListener implements Listener {
                 attacker = Bukkit.getPlayer(notQuitter);
 
             if (attacker != null) {
-                Member lastDamager = MemberManager.getInstance().getMember(attacker.getUniqueId(), false);
-                plugin.getStats(lastDamager).setKills(plugin.getStats(lastDamager).getKills() + 1);
-                YOU_KILLED_LOGGED_OUT.msg(lastDamager.getPlayer(), "%player%", member.getName());
+                YOU_KILLED_LOGGED_OUT.msg(attacker, "%player%", member.getName());
                 ScoreboardInfo.getInstance().updatePlayer(attacker);
             }
 

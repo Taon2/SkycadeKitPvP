@@ -72,7 +72,7 @@ public class RotationManager {
 
     public List<KitType> getCurrentKits() {
         List<KitType> kits = new ArrayList<>();
-        getCurrentKitRotation().forEach(currKit -> kits.add(KitType.valueOf(currKit)));
+        getCurrentKitRotation().forEach(currKit -> kits.add(KitType.getTypeFromString(currKit)));
         return kits;
     }
 
@@ -159,7 +159,7 @@ public class RotationManager {
         String temp;
         for (int i = 0; i < rotationKits.size(); i++) {
             for (int j = i; j > 0; j--) {
-                if (KitType.valueOf(rotationKits.get(j)).getKit().getPrice() < KitType.valueOf(rotationKits.get(j - 1)).getKit().getPrice()) {
+                if (Objects.requireNonNull(KitType.getTypeFromString(rotationKits.get(j))).getKit().getPrice() < Objects.requireNonNull(KitType.getTypeFromString(rotationKits.get(j - 1))).getKit().getPrice()) {
                     temp = rotationKits.get(j);
                     rotationKits.set(j, rotationKits.get(j - 1));
                     rotationKits.set(j - 1, temp);

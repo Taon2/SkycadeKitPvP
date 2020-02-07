@@ -29,11 +29,10 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (!(event.getRightClicked() instanceof Player) || VanishStatus.isVanished(event.getPlayer().getUniqueId()) || plugin.isInSpawnArea(event.getPlayer()))
+        if (!(event.getRightClicked() instanceof Player) || VanishStatus.isVanished(event.getPlayer().getUniqueId()) || plugin.isInSpawnArea(event.getPlayer()) || !event.getPlayer().isSneaking())
             return;
 
-        plugin.getStats(event.getPlayer()).getActiveKit().getKit().onInteract(event.getPlayer(), (Player) event.getRightClicked(),
-                event.getPlayer().getInventory().getItemInHand());
+        plugin.getStats(event.getPlayer()).getActiveKit().getKit().onInteract(event.getPlayer(), (Player) event.getRightClicked(), event.getPlayer().getInventory().getItemInHand());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
@@ -41,7 +40,9 @@ public class PlayerInteractListener implements Listener {
         if (event.getPlayer().getGameMode().equals(GameMode.CREATIVE))
             return;
 
-        if (KitPvP.getInstance().isInSpawnArea(event.getPlayer()) || event.getBlock().getRelative(BlockFace.UP).getType() == Material.WATER_LILY || event.getBlockReplacedState().getType() == Material.DOUBLE_PLANT) {
+        if (KitPvP.getInstance().isInSpawnArea(event.getPlayer())
+                || event.getBlock().getRelative(BlockFace.UP).getType() == Material.WATER_LILY
+                || event.getBlockReplacedState().getType() == Material.DOUBLE_PLANT) {
             event.setCancelled(true);
             return;
         }
@@ -77,7 +78,7 @@ public class PlayerInteractListener implements Listener {
         }
 
         if (event.getItem() == null) {
-            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && plugin.getStats(p).getActiveKit() == KitType.HULK && !p.getGameMode().equals(GameMode.CREATIVE)) {
+            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getPlayer().isSneaking() && plugin.getStats(p).getActiveKit() == KitType.HULK && !p.getGameMode().equals(GameMode.CREATIVE)) {
                 plugin.getStats(p).getActiveKit().getKit().onItemUse(p, new ItemStack(Material.AIR));
             }
             return;
@@ -105,11 +106,11 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
-        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !p.getGameMode().equals(GameMode.CREATIVE) && !plugin.isInSpawnArea(p)) {
+        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getPlayer().isSneaking() && !p.getGameMode().equals(GameMode.CREATIVE) && !plugin.isInSpawnArea(p)) {
             plugin.getStats(p).getActiveKit().getKit().onItemUse(p, event.getItem(), event.getClickedBlock());
         }
 
-        if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && !p.getGameMode().equals(GameMode.CREATIVE)) {
+        if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && event.getPlayer().isSneaking() && !p.getGameMode().equals(GameMode.CREATIVE)) {
             plugin.getStats(p).getActiveKit().getKit().onItemUse(p, event.getItem());
         }
     }

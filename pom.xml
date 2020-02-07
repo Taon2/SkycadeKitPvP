@@ -6,7 +6,7 @@
 
     <groupId>net.skycade</groupId>
     <artifactId>SkycadeKitPvP</artifactId>
-    <version>4.0.18-SNAPSHOT</version>
+    <version>4.1.0-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -99,12 +99,13 @@
             <scope>system</scope>
             <systemPath>${basedir}/dependencies/GuardianBeamAPI-0.4.jar</systemPath>
         </dependency>
+        <!--SkycadeCombat-->
         <dependency>
             <groupId>net.skycade</groupId>
             <artifactId>SkycadeCombat</artifactId>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>1.5.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${basedir}/dependencies/SkycadeCombat-1.4.0-SNAPSHOT.jar</systemPath>
+            <systemPath>${basedir}/dependencies/SkycadeCombat-1.5.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <!--GangsPlus-->
         <dependency>
