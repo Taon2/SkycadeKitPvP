@@ -24,30 +24,33 @@ public class KitSharingan extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int copyPotionEffectsCooldown = 20;
+    private int copyPotionEffectsLength = 15;
+
     public KitSharingan(KitManager kitManager) {
         super(kitManager, "Sharingan", KitType.SHARINGAN, 40000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Copies potion effects when hit.")
                 .setColour(Color.BLACK).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Copies potion effects when hit.")
                 .setColour(Color.BLACK).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Copies potion effects when hit.")
                 .setColour(Color.BLACK).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Copies potion effects when hit.")
                 .setColour(Color.BLACK).build();
@@ -70,11 +73,14 @@ public class KitSharingan extends Kit {
 
     @Override
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+        if (!addCooldown(damagee, "Copy Potion Effects", copyPotionEffectsCooldown, true))
+            return;
+
         Collection<PotionEffect> effects = damager.getActivePotionEffects();
 
         effects.forEach((eff) -> {
             if (eff.getDuration() > 1200 * 3)
-                damagee.addPotionEffect(new PotionEffect(eff.getType(), 1800, eff.getAmplifier()));
+                damagee.addPotionEffect(new PotionEffect(eff.getType(), copyPotionEffectsLength * 20, eff.getAmplifier()));
             else
                 damagee.addPotionEffect(eff);
         });

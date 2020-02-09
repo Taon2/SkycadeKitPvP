@@ -17,8 +17,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import static net.skycade.kitpvp.Messages.ALL_KITS_UNLOCKED;
-
 
 public class PlayerJoinQuitListener implements Listener {
 
@@ -71,11 +69,12 @@ public class PlayerJoinQuitListener implements Listener {
                     stats.getActiveKit().getKit().giveSoup(p, 32);
                 }
 
-                //Unlock KitMaster
-                if (KitPvP.getInstance().getAvailableKits() - 1 == stats.getKits().size()) {
-                    ALL_KITS_UNLOCKED.msg(p);
-                    stats.addKit(KitType.KITMASTER);
-                }
+                // KitMaster now unlocked at level 100 Prestige
+//                //Unlock KitMaster
+//                if (KitPvP.getInstance().getAvailableKits() - 1 == stats.getKits().size()) {
+//                    ALL_KITS_UNLOCKED.msg(p);
+//                    stats.addKit(KitType.KITMASTER);
+//                }
 
                 ScoreboardInfo.getInstance().updatePlayer(p);
                 p.teleport(TeleportUtil.getSpawn());

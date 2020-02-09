@@ -47,28 +47,28 @@ public class KitPyromancer extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .setColour(Color.YELLOW).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .setColour(Color.ORANGE).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .setColour(Color.ORANGE).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .setColour(Color.RED).build();
         weapon = new ItemBuilder(
                 Material.BLAZE_ROD)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 3)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + fireballCooldown + " seconds")
+                .addEnchantment(Enchantment.DAMAGE_ALL, 5)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + fireballCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "launches a fireball.").build();
         bow = new ItemBuilder(
                 Material.BOW)

@@ -36,28 +36,28 @@ public class KitEnderman extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Touching water damages you.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Immune to arrows.")
                 .setColour(Color.PURPLE).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Touching water damages you.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Immune to arrows.")
                 .setColour(Color.PURPLE).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Touching water damages you.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Immune to arrows.")
                 .setColour(Color.PURPLE).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Touching water damages you.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Immune to arrows.")
@@ -66,7 +66,7 @@ public class KitEnderman extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking your enemy every " + teleportCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking your enemy every " + teleportCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "teleports you behind them.").build();
 
         ItemStack icon = new ItemStack(Material.ENDER_PEARL);
@@ -101,19 +101,11 @@ public class KitEnderman extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
-        if (!addCooldown(p, getName(), teleportCooldown, true) || frozenPlayers.containsKey(p.getUniqueId()))
-            return;
-
-        //For missions
-        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
-        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 10);
 
-        if (targetPlayers.isEmpty()) {
-            removeCooldowns(p, getName());
+        if (targetPlayers.isEmpty())
             return;
-        }
 
         Player target = null;
         double distance = 100;
@@ -127,10 +119,15 @@ public class KitEnderman extends Kit {
             }
         }
 
-        if (target == null) {
-            removeCooldowns(p, getName());
+        if (target == null)
             return;
-        }
+
+        if (!addCooldown(p, getName(), teleportCooldown, true) || frozenPlayers.containsKey(p.getUniqueId()))
+            return;
+
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         if (!teleportBehindPlayer(p, target.getLocation())) {
             removeCooldowns(p, getName());
@@ -159,7 +156,7 @@ public class KitEnderman extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Hates the water.",
                 "",
-                ChatColor.GRAY + "Right clicking your enemy",
+                ChatColor.GRAY + "Shift + Right clicking your enemy",
                 ChatColor.GRAY + "teleports you behind them.",
                 ChatColor.GRAY + "Touching water damages you.",
                 ChatColor.GRAY + "Immune to projectiles."

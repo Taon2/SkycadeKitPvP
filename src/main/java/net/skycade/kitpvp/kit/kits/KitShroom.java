@@ -48,22 +48,22 @@ public class KitShroom extends Kit {
 
         helmet = new ItemBuilder(
                 Material.HUGE_MUSHROOM_2)
-                .addEnchantment(Enchantment.THORNS, 1)
+                .addEnchantment(Enchantment.THORNS, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving makes people around you nauseous.").build();
         chestplate = new ItemBuilder(
                 Material.IRON_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving makes people around you nauseous.").build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving makes people around you nauseous.")
                 .setColour(Color.WHITE).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving makes people around you nauseous.")
                 .setColour(Color.WHITE).build();
         weapon = new ItemBuilder(

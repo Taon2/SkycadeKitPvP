@@ -1,6 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
-import net.minelink.ctplus.CombatTagPlus;
+import net.skycade.SkycadeCombat.data.CombatData;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
@@ -59,24 +59,24 @@ public class KitLich extends Kit {
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .setColour(Color.fromRGB(25, 25, 112)).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .setColour(Color.fromRGB(25, 25, 112)).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .setColour(Color.fromRGB(25, 25, 112)).build();
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 7)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + ghostCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + ghostCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "summons ghosts to fight for you.").build();
         phylactery = new ItemBuilder(
                 Material.BEACON)
@@ -144,7 +144,7 @@ public class KitLich extends Kit {
 
             entity.setOwner(p);
             Zombie zombie = (Zombie) entity.getBukkitEntity();
-            zombie.setCustomName(net.md_5.bungee.api.ChatColor.GRAY + p.getName());
+            zombie.setCustomName(p.getName());
 
             // Add potion effects and items
             zombie.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false));
@@ -202,25 +202,32 @@ public class KitLich extends Kit {
                 event.setCancelled(true);
             }
         }
-        CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
 
         //Combat tags the player upon being hit by the ghosts
         if (event.getDamager().getType() == EntityType.ZOMBIE && (((CraftEntity) event.getDamager()).getHandle() instanceof MiniArmyZombie)) {
             MiniArmyZombie entity = (MiniArmyZombie) ((CraftEntity) event.getDamager()).getHandle();
 
+            CombatData.Combat playerCombat = CombatData.getCombat((Player) event.getDamager());
+            CombatData.Combat entityCombat = CombatData.getCombat(Bukkit.getPlayer(entity.getOwnerUUID()));
+
             if (event.getEntity().getType() == EntityType.PLAYER && event.getEntity() != entity.getOwner()) {
-                pl.getTagManager().tag((Player) event.getEntity(), Bukkit.getPlayer(entity.getOwnerUUID()));
+                playerCombat.setInCombat(true);
+                entityCombat.setInCombat(true);
             }
         }
         //Combat tags the players upon hitting the ghosts
         else if (event.getEntity().getType() == EntityType.ZOMBIE && (((CraftEntity) event.getEntity()).getHandle() instanceof MiniArmyZombie)) {
             MiniArmyZombie entity = (MiniArmyZombie) ((CraftEntity) event.getEntity()).getHandle();
 
+            CombatData.Combat playerCombat = CombatData.getCombat(Bukkit.getPlayer(entity.getOwnerUUID()));
+            CombatData.Combat entityCombat = CombatData.getCombat((Player) event.getDamager());
+
             if (event.getDamager() == entity.getOwner())
                 event.setCancelled(true);
 
             if (event.getDamager().getType() == EntityType.PLAYER && event.getDamager() != entity.getOwner()) {
-                pl.getTagManager().tag(Bukkit.getPlayer(entity.getOwnerUUID()), (Player) event.getDamager());
+                playerCombat.setInCombat(true);
+                entityCombat.setInCombat(true);
             }
         }
 
@@ -364,7 +371,7 @@ public class KitLich extends Kit {
 
     @Override
     public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 100!");
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 75!");
     }
 
     public static List<String> getLore() {
@@ -372,7 +379,7 @@ public class KitLich extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Ruler of the undead.",
                 "",
-                ChatColor.GRAY + "Right clicking summons 2 ghosts",
+                ChatColor.GRAY + "Shift + Right clicking summons 2 ghosts",
                 ChatColor.GRAY + "to attack enemies for you.",
                 ChatColor.GRAY + "If you die within 1.5 minutes of placing your",
                 ChatColor.GRAY + "phylactery, you respawn at the phylactery's location",

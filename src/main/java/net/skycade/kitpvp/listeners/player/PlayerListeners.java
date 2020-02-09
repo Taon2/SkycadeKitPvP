@@ -2,11 +2,10 @@ package net.skycade.kitpvp.listeners.player;
 
 import net.brcdev.gangs.GangsPlusApi;
 import net.brcdev.gangs.gang.Gang;
-import net.minelink.ctplus.CombatTagPlus;
+import net.skycade.SkycadeCombat.data.CombatData;
 import net.skycade.SkycadeCore.utility.TeleportUtil;
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.bukkitevents.KitPvPKillstreakChange;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.events.RandomEvent;
 import net.skycade.kitpvp.events.TagEvent;
@@ -28,9 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -85,9 +82,9 @@ public class PlayerListeners implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         if (event.getPlayer().isDead()) return;
 
-        CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
+        CombatData.Combat combat = CombatData.getCombat(event.getPlayer());
 
-        if (TeleportUtil.getSpawn().equals(event.getTo()) && !plugin.isInSpawnArea(event.getPlayer()) && pl.getTagManager().isTagged(event.getPlayer().getUniqueId())) {
+        if (TeleportUtil.getSpawn().equals(event.getTo()) && !plugin.isInSpawnArea(event.getPlayer()) && combat.isInCombat()) {
             event.setCancelled(true);
             return;
         }
@@ -133,12 +130,21 @@ public class PlayerListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onInventoryClick(InventoryClickEvent event) {
-        if ((event.getClickedInventory() != null
+        if ((!VanishStatus.isVanished(event.getWhoClicked().getUniqueId())
+                && event.getClickedInventory() != null
                 && event.getClickedInventory().getName() != null
                 && !event.getWhoClicked().getGameMode().equals(GameMode.CREATIVE)
                 && event.getInventory().getType() != InventoryType.CRAFTING
                 && event.getInventory().getType() != InventoryType.CHEST)
-                || event.getSlotType() == InventoryType.SlotType.CRAFTING)
+                ||
+                (event.getSlotType() == InventoryType.SlotType.CRAFTING
+                && (event.getAction() == InventoryAction.PLACE_ONE || event.getAction() == InventoryAction.PLACE_ALL || event.getAction() == InventoryAction.HOTBAR_SWAP)))
+            event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        if (!VanishStatus.isVanished(event.getWhoClicked().getUniqueId()) && !event.getWhoClicked().getGameMode().equals(GameMode.CREATIVE))
             event.setCancelled(true);
     }
 
@@ -168,15 +174,12 @@ public class PlayerListeners implements Listener {
         if (stats == null) return;
         stats.getActiveKit().getKit().cancelRunnables(p);
         stats.applyKitPreference();
+        p.getOpenInventory().close();
         p.getInventory().clear();
         if (p.getItemOnCursor().getType() != null && p.getItemOnCursor().getType() != Material.AIR)
             p.setItemOnCursor(null);
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
         int streak = stats.getStreak();
-
-        //For missions
-        KitPvPKillstreakChange killstreakEvent = new KitPvPKillstreakChange(p, streak);
-        Bukkit.getServer().getPluginManager().callEvent(killstreakEvent);
 
         if (streak > stats.getHighestStreak())
             stats.setHighestStreak(stats.getStreak());

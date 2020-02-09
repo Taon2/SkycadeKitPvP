@@ -1,12 +1,13 @@
 package net.skycade.kitpvp.listeners.player;
 
-import net.minelink.ctplus.CombatTagPlus;
+import net.skycade.SkycadeCombat.data.CombatData;
 import net.skycade.SkycadeCore.leveling.achievements.Achievement;
 import net.skycade.SkycadeCore.leveling.achievements.CoreAchievementEvent;
 import net.skycade.SkycadeCore.utility.TeleportUtil;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPCoinsRewardEvent;
 import net.skycade.kitpvp.bukkitevents.KitPvPKillPlayerEvent;
+import net.skycade.kitpvp.bukkitevents.KitPvPKillstreakChange;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
@@ -57,6 +58,9 @@ public class PlayerDamageListener implements Listener {
             event.setCancelled(true);
         }
 
+        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK && KitPvP.getInstance().isInSpawnArea((Player) event.getEntity()))
+            event.setCancelled(true);
+
         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)
             event.setDamage((event.getDamage() * 0.25));
     }
@@ -90,6 +94,9 @@ public class PlayerDamageListener implements Listener {
         if (!(event.getDamager() instanceof Player))
             return;
 
+        if (PlayerMoveListener.getImmunePlayers().contains(event.getDamager().getUniqueId()))
+            PlayerMoveListener.removeImmunePlayer(event.getDamager().getUniqueId());
+
         if (plugin.getStats(damagee).getActiveKit().getKit().getKitType() == KitType.SONIC)
             ((KitSonic) plugin.getStats(damagee).getActiveKit().getKit()).disableSprint(damagee);
 
@@ -108,7 +115,7 @@ public class PlayerDamageListener implements Listener {
     public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event) {
         if (!(event.getEntity() instanceof Golem)) return;
         if (event.getTarget() == null) return;
-        if (event.getEntity().getName().equalsIgnoreCase(event.getTarget().getName() + " golem"))
+        if (event.getEntity().getName().contains(event.getTarget().getName()) || event.getTarget().getName().contains(event.getEntity().getName()))
             event.setCancelled(true);
     }
 
@@ -117,9 +124,9 @@ public class PlayerDamageListener implements Listener {
         event.getDrops().clear();
         event.setDeathMessage("");
 
-        CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
+        CombatData.Combat combat = CombatData.getCombat(event.getEntity());
 
-        pl.getTagManager().untag(event.getEntity().getUniqueId());
+        combat.setInCombat(false);
 
         boolean resetStats = plugin.getStats(event.getEntity()).getActiveKit().getKit().onDeath(event.getEntity(), event.getEntity().getKiller());
 
@@ -205,6 +212,10 @@ public class PlayerDamageListener implements Listener {
         final int streak = plugin.getStats(killer).getStreak() + 1;
         stats.setStreak(streak);
 
+        //For missions
+        KitPvPKillstreakChange killstreakEvent = new KitPvPKillstreakChange(killer, streak);
+        Bukkit.getServer().getPluginManager().callEvent(killstreakEvent);
+
         if (streak % 10 == 0)
             HAS_KILLSTREAK.broadcast("%killer%", killer.getName(), "%ks%", Integer.toString(streak));
 
@@ -287,11 +298,11 @@ public class PlayerDamageListener implements Listener {
             if (kit.getKitType() == KitType.SHACO)
                 ((KitShaco) kit).onSnowballUse(shooter, event);
             else if (kit.getKitType() == KitType.FROSTY)
-                ((KitFrosty) kit).onSnowballUse(shooter,event);
+                ((KitFrosty) kit).onSnowballUse(shooter, event);
             else if (kit.getKitType() == KitType.SHROOM)
-                ((KitShroom) kit).onSnowballUse(shooter,event);
+                ((KitShroom) kit).onSnowballUse(shooter, event);
             else if (kit.getKitType() == KitType.NECROMANCER)
-                ((KitNecromancer) kit).onSnowballUse(shooter,event);
+                ((KitNecromancer) kit).onSnowballUse(shooter, event);
         } else if (proj.getType() == EntityType.ARROW) {
             if (kit.getKitType() == KitType.ARCHER)
                 ((KitArcher) kit).onArrowLaunch(shooter, event);
@@ -437,52 +448,41 @@ public class PlayerDamageListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        UUID uuid = e.getPlayer().getUniqueId();
-        Member member = MemberManager.getInstance().getMember(e.getPlayer().getUniqueId(), false);
-        if (member != null) {
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        UUID uuid = event.getPlayer().getUniqueId();
+        Member member = MemberManager.getInstance().getMember(uuid, false);
+
+        // Kills player if in combat and not in spawn
+        CombatData.Combat combatData = CombatData.getCombat(event.getPlayer());
+
+        if (member != null && !plugin.getSpawnRegion().contains(member.getPlayer()) && combatData.isInCombat()) {
+            // Kills the logging out player
+            event.getPlayer().setHealth(0);
+
+            // Get the attacker
+            UUID notQuitter = null;
+            if (event.getPlayer().getLastDamageCause() != null && event.getPlayer().getLastDamageCause().getEntity() != null && event.getPlayer().getLastDamageCause().getEntity() instanceof Player) {
+                // the notQuitter is the attacker
+                notQuitter = event.getPlayer().getLastDamageCause().getEntity().getUniqueId();
+            }
+            // Increases kills for last damager to the player logging out
+            Player attacker = null;
+
+            if (notQuitter != null)
+                attacker = Bukkit.getPlayer(notQuitter);
+
+            if (attacker != null) {
+                YOU_KILLED_LOGGED_OUT.msg(attacker, "%player%", member.getName());
+                ScoreboardInfo.getInstance().updatePlayer(attacker);
+            }
+
             member.setLastKiller(null);
         }
+
         lastDamagerMap.remove(uuid);
         killAssist.remove(uuid);
         samePlayerKill.remove(uuid);
     }
-
-//    @EventHandler
-//    public void onPlayerQuit(PlayerQuitEvent event) {
-//        UUID uuid = event.getPlayer().getUniqueId();
-//        Member member = MemberManager.getInstance().getMember(event.getPlayer().getUniqueId(), false);
-//
-//        // Kills player if in combat and not in spawn
-//        CombatTagPlus pl = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
-//        if (member != null && !plugin.getSpawnRegion().contains(member.getPlayer()) && pl.getTagManager().isTagged(uuid)) {
-//            plugin.getStats(member).setDeaths(plugin.getStats(member.getPlayer()).getDeaths() + 1);
-//
-//            // Checks to see which player really logged out
-//            UUID notQuitter;
-//            if (pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getAttackerId().equals(uuid)) {
-//                notQuitter = pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getVictimId();
-//            } else {
-//                notQuitter = pl.getTagManager().getTag(event.getPlayer().getUniqueId()).getAttackerId();
-//            }
-//
-//            // Increases kills for last damager to the player logging out
-//            Player attacker = Bukkit.getPlayer(notQuitter);
-//
-//            if (attacker != null) {
-//                Member lastDamager = MemberManager.getInstance().getMember(attacker.getUniqueId(), false);
-//                plugin.getStats(lastDamager).setKills(plugin.getStats(lastDamager).getKills() + 1);
-//                YOU_KILLED_LOGGED_OUT.msg(lastDamager.getPlayer(), "%player%", member.getName());
-//                ScoreboardInfo.getInstance().updatePlayer(attacker);
-//            }
-//
-//            member.setLastKiller(null);
-//        }
-//
-//        lastDamagerMap.remove(uuid);
-//        killAssist.remove(uuid);
-//        samePlayerKill.remove(uuid);
-//    }
 
     private void respawn(Player p) {
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> UtilPlayer.reset(p), 1);

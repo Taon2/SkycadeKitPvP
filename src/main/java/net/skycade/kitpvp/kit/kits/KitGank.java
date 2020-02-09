@@ -26,12 +26,12 @@ public class KitGank extends Kit {
 
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 2).build();
+                .addEnchantment(Enchantment.DURABILITY, 6)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 4).build();
 
         constantEffects.put(PotionEffectType.DAMAGE_RESISTANCE, 0);
         constantEffects.put(PotionEffectType.SPEED, 1);
-        constantEffects.put(PotionEffectType.REGENERATION, 0);
+        constantEffects.put(PotionEffectType.REGENERATION, 1);
 
         ItemStack icon = new ItemStack(Material.STONE_SWORD);
         setIcon(icon);

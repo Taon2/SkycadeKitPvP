@@ -82,6 +82,7 @@ public abstract class Kit implements Listener {
 
     public void beginApplyKit(Player p) {
         if (p == null || !p.isOnline()) return;
+        p.getOpenInventory().close();
         clearArmor(p);
         p.getInventory().clear();
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
@@ -350,6 +351,7 @@ public abstract class Kit implements Listener {
         ice.put(loc, replaced);
 
         frozenPlayers.put(p.getUniqueId(), ice);
+        frozenImmunity.add(p.getUniqueId());
 
         p.teleport(new Location(loc.getWorld(), Math.floor(loc.getX()) + .5, loc.getY(), Math.floor(loc.getZ()) + .5, loc.getYaw(), loc.getPitch()));
 
@@ -359,7 +361,6 @@ public abstract class Kit implements Listener {
             blockState.setData(replaced.getData());
             blockState.update();
 
-            frozenImmunity.add(p.getUniqueId());
             frozenPlayers.remove(p.getUniqueId());
             YOURE_UNFROZEN.msg(p);
         }, sec * 20);

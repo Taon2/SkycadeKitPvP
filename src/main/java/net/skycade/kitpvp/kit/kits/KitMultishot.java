@@ -43,19 +43,19 @@ public class KitMultishot extends Kit {
 
         helmet = new ItemBuilder(
                 Material.CHAINMAIL_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 6)
+                .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 6)
+                .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 6)
+                .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 6)
+                .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build();
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)

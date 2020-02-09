@@ -42,28 +42,28 @@ public class KitWitchdoctor extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.OLIVE).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.OLIVE).build();
         leggings = new ItemBuilder(
                 Material.IRON_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.OLIVE).build();
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 2)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + chantCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + chantCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "heals nearby allies and weakens nearby enemies.").build();
         regen = new ItemStack(Material.POTION, potionStartAmount, (short) 16385);
                 ItemMeta meta = regen.getItemMeta();
@@ -173,7 +173,7 @@ public class KitWitchdoctor extends Kit {
                 ChatColor.GREEN + "" + ChatColor.BOLD + "Support Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "I told the witchdoctor I was in love with you!",
                 "",
-                ChatColor.GRAY + "Right clicking heals allies",
+                ChatColor.GRAY + "Shift + Right clicking heals allies",
                 ChatColor.GRAY + "and weakens enemies.",
                 ChatColor.GRAY + "Heals with potions instead of soups."
         );

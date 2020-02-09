@@ -53,7 +53,7 @@ public class KitSoulMaster extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + slowCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + slowCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "slows enemies around you.").build();
 
         ItemStack icon = new ItemStack(Material.SOUL_SAND);
@@ -102,7 +102,7 @@ public class KitSoulMaster extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Give me your soul.",
                 "",
-                ChatColor.GRAY + "Right clicking your sword",
+                ChatColor.GRAY + "Shift + Right clicking your sword",
                 ChatColor.GRAY + "slows players around you."
         );
     }

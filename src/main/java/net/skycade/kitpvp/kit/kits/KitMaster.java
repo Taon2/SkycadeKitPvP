@@ -65,7 +65,7 @@ public class KitMaster extends Kit {
                 .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
         stick = new ItemBuilder(
                 Material.STICK)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking a player every " + swapCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking a player every " + swapCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "lets you copy their kit for 20 seconds.").build();
 
         ItemStack icon = new ItemStack(Material.DIAMOND_SPADE);
@@ -116,6 +116,7 @@ public class KitMaster extends Kit {
     }
 
     private void clearInventory(Player p) {
+        p.getOpenInventory().close();
         p.getInventory().clear();
         p.getInventory().setArmorContents(new ItemStack[p.getInventory().getArmorContents().length]);
     }
@@ -151,7 +152,7 @@ public class KitMaster extends Kit {
 
     @Override
     public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Obtain every kit!");
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 100!");
     }
 
     public static List<String> getLore() {

@@ -44,27 +44,27 @@ public class KitHulk extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.BLACK).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.GREEN).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.PURPLE).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.GREEN).build();
 
         constantEffects.put(PotionEffectType.SLOW, 1);
-        constantEffects.put(PotionEffectType.INCREASE_DAMAGE, 4);
+        constantEffects.put(PotionEffectType.INCREASE_DAMAGE, 5);
 
         ItemStack icon = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
@@ -143,6 +143,7 @@ public class KitHulk extends Kit {
                                     .forEach((ent) -> {
                                 if (ent.hasMetadata("NPC"))
                                     return;
+                                ((Player) ent).damage(4, p);
                                 ent.setVelocity(ent.getLocation().getDirection().multiply(-1.35F).setY(0.8F));
                             });
                         });
@@ -212,7 +213,7 @@ public class KitHulk extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "HULK SMASH!",
                 "",
-                ChatColor.GRAY + "Right clicking a block with your",
+                ChatColor.GRAY + "Shift + Right clicking a block with your",
                 ChatColor.GRAY + "fist makes you smash the ground,",
                 ChatColor.GRAY + "knocking back enemies."
         );

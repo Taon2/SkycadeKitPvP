@@ -61,11 +61,11 @@ public class KitWizard extends Kit {
         weapon = new ItemBuilder(
                 Material.STICK)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + fireballCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + fireballCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "shoots a fireball.").build();
         book = new ItemBuilder(
                 Material.BOOK)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + teleportCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + teleportCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "teleports you in that direction.").build();
 
         ItemStack icon = new ItemStack(Material.REDSTONE_TORCH_ON);

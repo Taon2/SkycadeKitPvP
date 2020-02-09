@@ -35,7 +35,7 @@ public class KitPlush extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.DURABILITY, 12)
                 .setColour(Color.fromRGB(200, 255, 255)).build();
         chestplate = new ItemBuilder(
                 Material.IRON_CHESTPLATE).build();
@@ -49,7 +49,7 @@ public class KitPlush extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + catCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + catCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws cats that grant potion effects.").build();
 
         ItemStack icon = new ItemStack(Material.RAW_FISH);
@@ -86,7 +86,7 @@ public class KitPlush extends Kit {
                     ent.remove();
 
         cat.setVelocity(loc.getDirection().multiply(0.5D));
-        cat.setCustomName("Plush Cat");
+        cat.setCustomName(p.getName());
         p.getWorld().playSound(loc, Sound.CAT_MEOW, 1F, 1F);
 
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {

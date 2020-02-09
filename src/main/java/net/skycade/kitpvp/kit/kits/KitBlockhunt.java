@@ -49,11 +49,12 @@ public class KitBlockhunt extends Kit {
 
         boots = new ItemBuilder(
                 Material.DIAMOND_BOOTS)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build();
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
         weapon = new ItemBuilder(
                 Material.IRON_AXE)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking on a block every " + disguiseCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking on a block every " + disguiseCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "disguises you as that block.").build();
         bow = new ItemBuilder(
                 Material.BOW)
@@ -86,7 +87,7 @@ public class KitBlockhunt extends Kit {
 
     @Override
     public void onItemUse(Player p, ItemStack item, Block clickedBlock) {
-        if (item.getType() != Material.IRON_AXE || !p.isSneaking())
+        if (item.getType() != Material.IRON_AXE)
             return;
         if (disguised.containsKey(p.getUniqueId()))
             return;
@@ -94,10 +95,17 @@ public class KitBlockhunt extends Kit {
             return;
         if (p.getLocation().getBlock().getType() != Material.AIR)
             return;
+        if (clickedBlock.getType() == Material.FENCE
+                || clickedBlock.getType() == Material.BARRIER
+                || clickedBlock.getType() == Material.BANNER)
+            return;
 
         //For missions
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
+        Material disguiseType = clickedBlock.getType();
+        byte disguiseData = clickedBlock.getData();
 
         disguising.add(p.getUniqueId());
         DISGUISING.msg(p);
@@ -107,7 +115,7 @@ public class KitBlockhunt extends Kit {
             Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), new BukkitRunnable() {
                 @Override
                 public void run() {
-                    p.getLocation().getWorld().playEffect(p.getLocation(), Effect.STEP_SOUND, clickedBlock.getType());
+                    p.getLocation().getWorld().playEffect(p.getLocation(), Effect.STEP_SOUND, disguiseType);
                 }
             }, i * 20);
         }
@@ -123,13 +131,14 @@ public class KitBlockhunt extends Kit {
 
                     Bukkit.getOnlinePlayers().forEach(player -> {
                         if (p.getUniqueId() != player.getUniqueId())
-                            player.sendBlockChange(loc, clickedBlock.getType(), clickedBlock.getData());
+                            player.sendBlockChange(loc, disguiseType, disguiseData);
                     });
 
                     //Updates the fallingblock entity bound to the hider
-                    addFallingBlock(p, clickedBlock.getType(), clickedBlock.getData());
+                    addFallingBlock(p, disguiseType, disguiseData);
 
                     p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 3));
+                    p.setCustomNameVisible(false);
                     disguised.put(p.getUniqueId(), loc.getBlock());
                     DISGUISED.msg(p);
                 }
@@ -196,6 +205,7 @@ public class KitBlockhunt extends Kit {
             p.getLocation().getWorld().playEffect(p.getLocation(), Effect.STEP_SOUND, type);
             p.removePotionEffect(PotionEffectType.INVISIBILITY);
             disguised.remove(p.getUniqueId());
+            p.setCustomNameVisible(true);
             DISGUISE_REMOVED.msg(p);
         }
     }

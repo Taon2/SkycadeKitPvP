@@ -52,7 +52,7 @@ public class KitFireMage extends Kit {
         weapon = new ItemBuilder(
                 Material.STICK)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + flameCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + flameCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "fires flames in front of you.").build();
 
         ItemStack icon = new ItemStack(Material.FIREWORK_CHARGE);

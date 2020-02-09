@@ -35,11 +35,11 @@ public class KitCaveMan extends Kit {
 
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3).build();
         boots = new ItemBuilder(
                 Material.IRON_BOOTS)
@@ -49,7 +49,7 @@ public class KitCaveMan extends Kit {
                 Material.WOOD_SPADE)
                 .addEnchantment(Enchantment.DURABILITY, 7)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + blockCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + blockCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws a dirt block.").build();
 
         constantEffects.put(PotionEffectType.DAMAGE_RESISTANCE, 0);

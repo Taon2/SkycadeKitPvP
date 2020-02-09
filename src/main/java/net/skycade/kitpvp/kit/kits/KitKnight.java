@@ -42,34 +42,35 @@ public class KitKnight extends Kit {
 
     private int steedCooldown = 60;
     private Map<UUID, Horse> horses = new HashMap<>();
+    private Map<UUID, Long> shiftTimer = new HashMap<>();
 
     public KitKnight(KitManager kitManager) {
         super(kitManager, "Knight", KitType.KNIGHT, 26000, getLore());
 
         helmet = new ItemBuilder(
                 Material.CHAINMAIL_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 8)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+                .addEnchantment(Enchantment.DURABILITY, 6)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         chestplate = new ItemBuilder(
                 Material.CHAINMAIL_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 8)
+                .addEnchantment(Enchantment.DURABILITY, 6)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         leggings = new ItemBuilder(
                 Material.CHAINMAIL_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 8)
+                .addEnchantment(Enchantment.DURABILITY, 6)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         boots = new ItemBuilder(
                 Material.CHAINMAIL_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 8)
+                .addEnchantment(Enchantment.DURABILITY, 6)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         weapon = new ItemBuilder(
                 Material.DIAMOND_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + steedCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + steedCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "lets you charge a horse into battle.").build();
 
         ItemStack icon = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
@@ -114,6 +115,8 @@ public class KitKnight extends Kit {
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
+        shiftTimer.put(p.getUniqueId(), System.currentTimeMillis());
+
         Horse horse = (Horse) p.getLocation().getWorld().spawnEntity(p.getLocation(), EntityType.HORSE);
         horse.setAdult();
         horse.setPassenger(p);
@@ -121,8 +124,8 @@ public class KitKnight extends Kit {
         horse.setTamed(true);
         horse.setStyle(Horse.Style.WHITE);
         horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
-        horse.getInventory().setArmor(new ItemStack(Material.GOLD_BARDING));
-        horse.setMaxHealth(30);
+        horse.getInventory().setArmor(new ItemStack(Material.IRON_BARDING));
+        horse.setMaxHealth(20);
         horse.setHealth(horse.getMaxHealth());
         horse.setJumpStrength(0.55);
         AttributeInstance attributes = ((CraftLivingEntity) horse).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
@@ -178,6 +181,17 @@ public class KitKnight extends Kit {
 
     @EventHandler
     public void onExit(VehicleExitEvent event) {
+        if (shiftTimer.containsKey(event.getExited().getUniqueId())) {
+            long now = System.currentTimeMillis();
+
+            if (shiftTimer.get(event.getExited().getUniqueId()) + 5000 > now) {
+                event.setCancelled(true);
+                return;
+            } else {
+                shiftTimer.remove(event.getExited().getUniqueId());
+            }
+        }
+
         if (horses.containsKey(event.getExited().getUniqueId())) {
             horses.get(event.getExited().getUniqueId()).remove();
             if (horses.get(event.getExited().getUniqueId()) != null)
@@ -230,8 +244,8 @@ public class KitKnight extends Kit {
                 "",
                 ChatColor.GRAY + "Being in a gang with a player using",
                 ChatColor.GRAY + "Kit King nearby increases your defence.",
-                ChatColor.GRAY + "Right clicking with your sword mounts you",
-                ChatColor.GRAY + "onto a horse."
+                ChatColor.GRAY + "Shift + Right clicking with your sword",
+                ChatColor.GRAY + "mounts you onto a horse."
         );
     }
 }

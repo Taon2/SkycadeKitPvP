@@ -135,7 +135,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                     KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
                     if (kingStats != null) {
                         kingStats.giveEventTokens(prizeAmount);
-                        KILLTHEKING_PARTICIPATE.msg(Bukkit.getPlayer(king), "%amount%", Integer.toString(participationAmount));
+                        KILLTHEKING_SURVIVED.msg(Bukkit.getPlayer(king), "%amount%", Integer.toString(participationAmount));
                     }
                     end();
                     cancel();
@@ -166,6 +166,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
 
         for (PotionEffect potionEffect : kingPlayer.getActivePotionEffects())
             kingPlayer.removePotionEffect(potionEffect.getType());
+        kingPlayer.getOpenInventory().close();
         kingPlayer.getInventory().clear();
         kingPlayer.getInventory().setHelmet(null);
         kingPlayer.getInventory().setChestplate(null);
@@ -236,8 +237,8 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
 
         Player player = event.getPlayer();
         if (this.king.equals(player.getUniqueId())) {
+            player.getOpenInventory().close();
             player.getInventory().clear();
-
 
             for (PotionEffect potionEffect : player.getActivePotionEffects())
                 player.removePotionEffect(potionEffect.getType());

@@ -46,22 +46,22 @@ public class KitSniper extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.fromRGB(0, 60, 0)).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .setColour(Color.fromRGB(0, 60, 0)).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .setColour(Color.fromRGB(0, 60, 0)).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.fromRGB(0, 60, 0)).build();
         weapon = new ItemBuilder(
@@ -116,7 +116,6 @@ public class KitSniper extends Kit {
                 sniperCombo.put(shooter.getUniqueId(), sniperCombo.get(shooter.getUniqueId()) + 1);
             else
                 sniperCombo.put(shooter.getUniqueId(), 1);
-            shooter.setLevel(sniperCombo.get(shooter.getUniqueId()));
             if (!hasArmor(damagee))
                 return;
             int combo = sniperCombo.get(shooter.getUniqueId());

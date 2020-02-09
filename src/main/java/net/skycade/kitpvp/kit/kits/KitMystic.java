@@ -58,7 +58,7 @@ public class KitMystic extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + catCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + catCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws cats that grant potion effects.").build();
 
         ItemStack icon = new ItemStack(Material.STICK);
@@ -88,7 +88,7 @@ public class KitMystic extends Kit {
         Location loc = p.getEyeLocation();
         LivingEntity cat = (LivingEntity) p.getWorld().spawnEntity(loc.add(loc.getDirection()), EntityType.OCELOT);
         cat.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 99));
-        cat.setCustomName("Mystic cat");
+        cat.setCustomName(p.getName());
 
         for (Entity ent : loc.getChunk().getEntities())
             if (ent.getType() == EntityType.OCELOT)

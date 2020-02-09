@@ -42,28 +42,28 @@ public class KitPotionMaster extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .setColour(color).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .setColour(color).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .setColour(color).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .setColour(color).build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + potCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + potCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws debuff potions in front of you.").build();
 
         ItemStack icon = new ItemStack(Material.BREWING_STAND_ITEM);
@@ -118,7 +118,7 @@ public class KitPotionMaster extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Bartender!",
                 "",
-                ChatColor.GRAY + "Right clicking throws debuff potions.",
+                ChatColor.GRAY + "Shift + Right clicking throws debuff potions.",
                 ChatColor.GRAY + "Heals with potions instead of soups."
         );
     }

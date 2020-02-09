@@ -65,7 +65,7 @@ public class KitUnicorn extends Kit {
         weapon = new ItemBuilder(
                 Material.STICK)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right clicking every " + rainbowCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + rainbowCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "shoots a rainbow from your wand.").build();
 
         ItemStack icon = new ItemStack(Material.HAY_BLOCK);

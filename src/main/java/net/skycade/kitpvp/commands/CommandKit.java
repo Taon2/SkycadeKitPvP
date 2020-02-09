@@ -6,13 +6,16 @@ import net.skycade.SkycadeCore.utility.command.addons.SubCommand;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
+import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.events.KillTheKingEvent;
 import net.skycade.kitpvp.kit.Kit;
+import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.ui.KitMenu;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.command.ColouredConsoleSender;
 import org.bukkit.entity.Player;
@@ -41,6 +44,49 @@ public class CommandKit extends SkycadeCommand {
                 CANNOT_USE.msg(member.getPlayer(), "%thing%", "/kit", "%reason%", "as the King");
                 return;
             }
+        }
+
+        if (strings.length > 0) {
+            KitType kit = KitType.getTypeFromString(strings[0].toLowerCase());
+
+            if (kit == null) {
+                COULDNT_FIND.msg(commandSender, "%type%", "kit", "%thing%", strings[0]);
+                return;
+            }
+
+            KitPvPStats stats = KitPvP.getInstance().getStats(member);
+            Player p = member.getPlayer();
+            KitManager kitManager = KitPvP.getInstance().getKitManager();
+
+            if (!stats.hasKit(kit)) {
+                DONT_OWN.msg(member.getPlayer(), "%kit%", "kit " + kit.getKit().getName());
+                p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
+                return;
+            }
+
+            if (stats.getActiveKit() == kit) {
+                ALREADY_USING.msg(member.getPlayer(), "%kit%", kit.getKit().getKitType().getKit().getName());
+                p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
+                return;
+            }
+
+            if (kitManager.getKitPvP().getSpawnRegion().contains(member.getPlayer())) {
+                KIT_EQUIPPED.msg(member.getPlayer(), "%kit%", kit.getKit().getName());
+                UtilPlayer.reset(member.getPlayer());
+                stats.getActiveKit().getKit().cancelRunnables(member.getPlayer());
+                kitManager.getKitPvP().getStats(member).setActiveKit(kit);
+                kitManager.getKitPvP().getStats(member).setKitPreference(kit);
+                kit.getKit().beginApplyKit(member.getPlayer());
+                kit.getKit().giveSoup(member.getPlayer(), 32);
+                p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
+                ScoreboardInfo.getInstance().updatePlayer(p);
+            } else {
+                KIT_EQUIPPED_RESPAWN.msg(member.getPlayer(), "%kit%", kit.getKit().getName());
+                kitManager.getKitPvP().getStats(member).setKitPreference(kit);
+                p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
+            }
+
+            return;
         }
 
         new KitMenu(KitPvP.getInstance().getKitManager(), member).open(member.getPlayer());
