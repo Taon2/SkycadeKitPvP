@@ -1,7 +1,9 @@
 package net.skycade.kitpvp.listeners.player;
 
+import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
+import net.skycade.kitpvp.nms.ActionBarUtil;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -18,12 +20,15 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import static net.skycade.kitpvp.Messages.*;
+
 public class PlayerMoveListener implements Listener {
 
     private final KitPvP plugin;
     private List<Location> teleports = new ArrayList<>();
     private Map<UUID, Location> teleporting = new HashMap<>();
     private static List<UUID> immune = new ArrayList<>();
+    private final Map<UUID, Long> lilyCooldown = new HashMap<>();
 
     public PlayerMoveListener(KitPvP plugin) {
         this.plugin = plugin;
@@ -40,9 +45,13 @@ public class PlayerMoveListener implements Listener {
     private void startLilypadEffect() {
         Bukkit.getOnlinePlayers().stream()
                 .filter(p -> (p.getLocation().getBlock().getType() == Material.WATER_LILY)
-                                && UtilPlayer.isMoving(p)).collect(Collectors.toList())
-                .forEach(p -> p.setVelocity(new org.bukkit.util.Vector(p.getLocation().getDirection().getX(), 1.3,
-                        p.getLocation().getDirection().getZ())));
+                        && UtilPlayer.isMoving(p) && !isOnLilyCooldown(p)).collect(Collectors.toList())
+                .forEach(p -> {
+                            p.setVelocity(new org.bukkit.util.Vector(p.getLocation().getDirection().getX(), 1.3,
+                                    p.getLocation().getDirection().getZ()));
+                            addLilyCooldown(p, 10); // 10 second cool-down
+                        }
+                );
         Bukkit.getScheduler().runTaskLater(plugin, this::startLilypadEffect, 5);
     }
 
@@ -125,5 +134,28 @@ public class PlayerMoveListener implements Listener {
 
     public static void removeImmunePlayer(UUID uuid) {
         immune.remove(uuid);
+    }
+
+
+    private void removeLilyCooldown(Player p) {
+        lilyCooldown.remove(p.getUniqueId());
+    }
+
+    private boolean isOnLilyCooldown(Player p) {
+        return lilyCooldown.containsKey(p.getUniqueId());
+    }
+
+    public boolean addLilyCooldown(Player p, int seconds) {
+        if (isOnLilyCooldown(p)) {
+            return false;
+        }
+
+        lilyCooldown.put(p.getUniqueId(), new Date().getTime() + seconds * 1000);
+
+        // cooldown task
+        Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+            removeLilyCooldown(p);
+        }, seconds * 20);
+        return true;
     }
 }
