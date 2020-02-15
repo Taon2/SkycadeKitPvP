@@ -176,6 +176,7 @@ public class PlayerListeners implements Listener {
         stats.applyKitPreference();
         p.getOpenInventory().close();
         p.getInventory().clear();
+        p.setLevel(0);
         if (p.getItemOnCursor().getType() != null && p.getItemOnCursor().getType() != Material.AIR)
             p.setItemOnCursor(null);
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());

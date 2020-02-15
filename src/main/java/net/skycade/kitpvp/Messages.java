@@ -44,6 +44,9 @@ public class Messages {
     public static final Localization.Message NOT_THAT_PRESTIGE = new Localization.Message("command.not-that-prestige", "&cYou cannot rank up to that prestige yet.");
     public static final Localization.Message PLAYER_NOW_PRESTIGE = new Localization.Message("command.now-prestige", "&a&l%player% &7&lis now &a&lPrestige %num%!");
     public static final Localization.Message GANG_POINTS_RESET = new Localization.Message("command.gang-points-reset", "&a%gang%'s &7gang points are reset.");
+    public static final Localization.Message SHIFT_ABILITIES = new Localization.Message("command.shift-abilities", "&aYour abilities now require Shift + Right Click to activate.");
+    public static final Localization.Message NO_SHIFT_ABILITIES = new Localization.Message("command.no-shift-abilities", "&aYour abilities now require Right Click to activate.");
+
 
     //KitPvP Command Usages
     public static final Localization.Message SOUP_USAGE = new Localization.Message("usage.soup", "&7/soup");
@@ -64,6 +67,7 @@ public class Messages {
     public static final Localization.Message LOCK_UNLOCK_USAGE = new Localization.Message("usage.lock-unlock", "&7/kit &a<lock/unlock> <player/all> <kitname>");
     public static final Localization.Message KITSUNLOCKED_USAGE = new Localization.Message("usage.kitsunlocked", "&7/kitsunlocked &a<player>");
     public static final Localization.Message RESETGANGPOINTS_USAGE = new Localization.Message("usage.resetgangpoints", "&7/resetgangpoints &a<gangname/all>");
+    public static final Localization.Message ABILITYTOGGLE_USAGE = new Localization.Message("usage.abilitytoggle", "&7/abilitytoggle");
 
     public static final Localization.Message KITPVPHELP_TITLE = new Localization.Message("title.kitpvphelp", "&7------------------&2KitPvP Help&7------------------");
     public static final Localization.Message SOUP_DESCRIPTION = new Localization.Message("description.soup", "&7Gives the player soup.");
@@ -84,6 +88,7 @@ public class Messages {
     public static final Localization.Message LOCK_UNLOCK_DESCRIPTION = new Localization.Message("description.lock-unlock", "&7Locks or unlocks a kit for a player.");
     public static final Localization.Message KITSUNLOCKED_DESCRIPTION = new Localization.Message("description.kitsunlocked", "&7Displays all kits unlocked by a player.");
     public static final Localization.Message RESETGANGPOINTS_DESCRIPTION = new Localization.Message("description.resetgangpoints", "&7Resets the points of a gang.");
+    public static final Localization.Message ABILITYTOGGLE_DESCRIPTION = new Localization.Message("description.abilitytoggle", "&7Toggles abilities between requiring the use of Shift to activate.");
 
     //KitPvP Stats
     public static final Localization.Message STATS = new Localization.Message("command.your-stat-set",
@@ -361,7 +366,9 @@ public class Messages {
                 CAPTURETHEFLAG_TOO_LONG,
                 KNOCKBACK_REMOVED,
                 PLAYER_NOW_PRESTIGE,
-                FROZEN_ALREADY
+                FROZEN_ALREADY,
+                SHIFT_ABILITIES,
+                NO_SHIFT_ABILITIES
         );
     }
 }

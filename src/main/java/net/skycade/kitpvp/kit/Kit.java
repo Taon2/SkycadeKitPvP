@@ -240,7 +240,6 @@ public abstract class Kit implements Listener {
                     if (p.getLevel() > 0)
                         p.setLevel(p.getLevel() - 1);
                 } else {
-                    p.setLevel(0);
                     this.cancel();
                 }
             }

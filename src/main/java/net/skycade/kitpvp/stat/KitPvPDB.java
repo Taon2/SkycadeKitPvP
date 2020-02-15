@@ -62,6 +62,7 @@ public class KitPvPDB {
                 stats.setCoins(result.getInt("Coins"));
                 stats.setEventTokens(result.getInt("EventCoins"));
                 stats.setAssists(result.getInt("Assists"));
+                stats.setAbilityToggle(result.getBoolean("AbilityToggle"));
                 stats.setKitPreference(KitType.getTypeFromString(result.getString("ChosenKit")));
                 stats.setPrestigeLevel(result.getInt("PrestigeLevel"));
             }
@@ -136,9 +137,9 @@ public class KitPvPDB {
 
     private synchronized void executeUpdate(Member member) {
         try (Connection connection = CoreSettings.getInstance().getConnection()) {
-            String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, EventCoins, Assists, ChosenKit, PrestigeLevel, Season) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?, ?) " +
+            String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, EventCoins, Assists, ChosenKit, PrestigeLevel, AbilityToggle, Season) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?, ?) " +
                     "ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), " +
-                    "Coins = VALUES(Coins), EventCoins = VALUES(EventCoins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), PrestigeLevel = VALUES(PrestigeLevel)";
+                    "Coins = VALUES(Coins), EventCoins = VALUES(EventCoins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), PrestigeLevel = VALUES(PrestigeLevel), AbilityToggle = VALUES(AbilityToggle)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 KitPvPStats stats = KitPvP.getInstance().getStats(member);
                 statement.setString(1, member.getUUID().toString());
@@ -165,7 +166,8 @@ public class KitPvPDB {
                 statement.setInt(11, stats.getAssists());
                 statement.setString(12, stats.getKitPreference().name());
                 statement.setInt(13, stats.getPrestigeLevel());
-                statement.setString(14, CoreSettings.getInstance().getSeason());
+                statement.setBoolean(14, stats.isAbilityToggle());
+                statement.setString(15, CoreSettings.getInstance().getSeason());
 
                 statement.executeUpdate();
             }

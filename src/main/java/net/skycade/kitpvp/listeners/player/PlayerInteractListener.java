@@ -2,6 +2,7 @@ package net.skycade.kitpvp.listeners.player;
 
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -29,7 +30,7 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (!(event.getRightClicked() instanceof Player) || VanishStatus.isVanished(event.getPlayer().getUniqueId()) || plugin.isInSpawnArea(event.getPlayer()) || !event.getPlayer().isSneaking())
+        if (!(event.getRightClicked() instanceof Player) || VanishStatus.isVanished(event.getPlayer().getUniqueId()) || plugin.isInSpawnArea(event.getPlayer()) || (plugin.getStats(event.getPlayer()).isAbilityToggle() && !event.getPlayer().isSneaking()))
             return;
 
         plugin.getStats(event.getPlayer()).getActiveKit().getKit().onInteract(event.getPlayer(), (Player) event.getRightClicked(), event.getPlayer().getInventory().getItemInHand());
@@ -78,7 +79,9 @@ public class PlayerInteractListener implements Listener {
         }
 
         if (event.getItem() == null) {
-            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getPlayer().isSneaking() && plugin.getStats(p).getActiveKit() == KitType.HULK && !p.getGameMode().equals(GameMode.CREATIVE)) {
+            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && plugin.getStats(p).getActiveKit() == KitType.HULK && !p.getGameMode().equals(GameMode.CREATIVE)) {
+                if ((plugin.getStats(event.getPlayer()).isAbilityToggle() && !event.getPlayer().isSneaking()))
+                    return;
                 plugin.getStats(p).getActiveKit().getKit().onItemUse(p, new ItemStack(Material.AIR));
             }
             return;
@@ -106,11 +109,15 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
-        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getPlayer().isSneaking() && !p.getGameMode().equals(GameMode.CREATIVE) && !plugin.isInSpawnArea(p)) {
+        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !p.getGameMode().equals(GameMode.CREATIVE) && !plugin.isInSpawnArea(p)) {
+            if ((plugin.getStats(event.getPlayer()).isAbilityToggle() && !event.getPlayer().isSneaking()))
+                return;
             plugin.getStats(p).getActiveKit().getKit().onItemUse(p, event.getItem(), event.getClickedBlock());
         }
 
-        if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && event.getPlayer().isSneaking() && !p.getGameMode().equals(GameMode.CREATIVE)) {
+        if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && !p.getGameMode().equals(GameMode.CREATIVE)) {
+            if ((plugin.getStats(event.getPlayer()).isAbilityToggle() && !event.getPlayer().isSneaking()))
+                return;
             plugin.getStats(p).getActiveKit().getKit().onItemUse(p, event.getItem());
         }
     }

@@ -34,5 +34,6 @@ public class CommandKitPvPHelp extends SkycadeCommand {
         commandSender.sendMessage(RESETGANGPOINTS_USAGE + "" + ChatColor.WHITE + " - " + RESETGANGPOINTS_DESCRIPTION);
         commandSender.sendMessage(LOCK_UNLOCK_USAGE + "" + ChatColor.WHITE + " - " + LOCK_UNLOCK_DESCRIPTION);
         commandSender.sendMessage(KITSUNLOCKED_USAGE + "" + ChatColor.WHITE + " - " + KITSUNLOCKED_DESCRIPTION);
+        commandSender.sendMessage(ABILITYTOGGLE_USAGE + "" + ChatColor.WHITE + " - " + ABILITYTOGGLE_DESCRIPTION);
     }
 }

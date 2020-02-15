@@ -26,6 +26,7 @@ public class KitPvPStats {
     private int streak = 0;
     private int highestStreak = 0;
     private int assists = 0;
+    private boolean abilityToggle = false;
     private KitType activeKit = KitType.CHANCE;
     private KitType kitPreference = KitType.CHANCE;
     private Map<KitType, KitData> kits = new HashMap<>();
@@ -216,5 +217,13 @@ public class KitPvPStats {
 
     public void setPrestigeLevel(int prestigeLevel) {
         this.prestigeLevel = prestigeLevel;
+    }
+
+    public boolean isAbilityToggle() {
+        return abilityToggle;
+    }
+
+    public void setAbilityToggle(boolean abilityToggle) {
+        this.abilityToggle = abilityToggle;
     }
 }

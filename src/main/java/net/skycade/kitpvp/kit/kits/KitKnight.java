@@ -136,6 +136,9 @@ public class KitKnight extends Kit {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onInventoryClick(InventoryClickEvent event) {
+        KitPvPStats stats = KitPvP.getInstance().getStats((Player) event.getWhoClicked());
+        if (stats.getActiveKit() != KitType.KNIGHT) return;
+
         if (event.getInventory() == null || event.getInventory().getType() != InventoryType.CHEST)
             return;
 

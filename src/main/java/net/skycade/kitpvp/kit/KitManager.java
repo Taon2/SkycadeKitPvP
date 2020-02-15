@@ -20,6 +20,7 @@ public class KitManager {
 
         registerKits();
 
+        new CommandAbilityToggle();
         new CommandEventShop();
         new CommandKit();
         new CommandKitName();
