@@ -25,7 +25,7 @@ public class KitSharingan extends Kit {
     private ItemStack weapon;
 
     private int copyPotionEffectsCooldown = 20;
-    private int copyPotionEffectsLength = 15;
+    private int copyPotionEffectsLength = 30;
 
     public KitSharingan(KitManager kitManager) {
         super(kitManager, "Sharingan", KitType.SHARINGAN, 40000, getLore());
@@ -73,10 +73,13 @@ public class KitSharingan extends Kit {
 
     @Override
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+        Collection<PotionEffect> effects = damager.getActivePotionEffects();
+
+        if(effects.size() < 1)
+            return; // no effects, so don't copy effects
+
         if (!addCooldown(damagee, "Copy Potion Effects", copyPotionEffectsCooldown, true))
             return;
-
-        Collection<PotionEffect> effects = damager.getActivePotionEffects();
 
         effects.forEach((eff) -> {
             if (eff.getDuration() > 1200 * 3)
@@ -84,6 +87,7 @@ public class KitSharingan extends Kit {
             else
                 damagee.addPotionEffect(eff);
         });
+
         if (damagee.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE))
             damagee.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
 
