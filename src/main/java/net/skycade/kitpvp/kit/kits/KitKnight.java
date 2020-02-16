@@ -110,6 +110,8 @@ public class KitKnight extends Kit {
             return;
         if (!addCooldown(p, "Summon Steed", steedCooldown, true))
             return;
+        if (horses.containsKey(p.getUniqueId()))
+            return;
 
         //For missions
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
