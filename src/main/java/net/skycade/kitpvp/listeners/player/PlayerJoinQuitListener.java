@@ -39,7 +39,6 @@ public class PlayerJoinQuitListener implements Listener {
 
         plugin.getStats(p).getActiveKit().getKit().stopItemRunnables(p);
         plugin.getStats(p).getActiveKit().getKit().cancelRunnables(p);
-
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
