@@ -207,11 +207,9 @@ public class KitLich extends Kit {
         if (event.getDamager().getType() == EntityType.ZOMBIE && (((CraftEntity) event.getDamager()).getHandle() instanceof MiniArmyZombie)) {
             MiniArmyZombie entity = (MiniArmyZombie) ((CraftEntity) event.getDamager()).getHandle();
 
-            CombatData.Combat playerCombat = CombatData.getCombat((Player) event.getDamager());
             CombatData.Combat entityCombat = CombatData.getCombat(Bukkit.getPlayer(entity.getOwnerUUID()));
 
             if (event.getEntity().getType() == EntityType.PLAYER && event.getEntity() != entity.getOwner()) {
-                playerCombat.setInCombat(true);
                 entityCombat.setInCombat(true);
             }
         }

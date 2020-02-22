@@ -78,7 +78,7 @@ public abstract class Kit implements Listener {
         this.price = price;
         this.enabled = enabled;
         this.description = description;
-}
+    }
 
     public void beginApplyKit(Player p) {
         if (p == null || !p.isOnline()) return;
@@ -179,7 +179,7 @@ public abstract class Kit implements Listener {
     public void cancelRunnables(Player p) {
     }
 
-    public void reimburseItem(Player p, ItemStack item){
+    public void reimburseItem(Player p, ItemStack item) {
     }
 
     protected boolean onCooldown(Player p, String ability) {
@@ -188,8 +188,8 @@ public abstract class Kit implements Listener {
                 long remainingSeconds = (cooldownDate.get(p.getUniqueId()).get(playerCooldown.get(p.getUniqueId()).indexOf(ability)) - new Date().getTime()) / 1000;
 
                 ActionBarUtil.sendActionBarMessage(p, ON_COOLDOWN.getMessage()
-                        .replace("%time%", CoreUtil.niceFormat((int) remainingSeconds))
-                        .replace("%thing%", ability),
+                                .replace("%time%", CoreUtil.niceFormat((int) remainingSeconds))
+                                .replace("%thing%", ability),
                         4, KitPvP.getInstance());
                 return true;
             } else {
@@ -223,7 +223,7 @@ public abstract class Kit implements Listener {
 
         // Send cooldown message
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            if (playerCooldown.get(p.getUniqueId()).contains(ability)){
+            if (playerCooldown.get(p.getUniqueId()).contains(ability)) {
                 if (message)
                     ActionBarUtil.sendActionBarMessage(p, OFF_COOLDOWN.getMessage()
                                     .replace("%thing%", ability),
@@ -255,7 +255,7 @@ public abstract class Kit implements Listener {
                 .contains(type);
     }
 
-    private void clearArmor(Player player){
+    private void clearArmor(Player player) {
         player.getInventory().setHelmet(null);
         player.getInventory().setChestplate(null);
         player.getInventory().setLeggings(null);
@@ -336,7 +336,7 @@ public abstract class Kit implements Listener {
                 if (loc.getBlock().getType() == Material.AIR) {
                     y--;
                 } else {
-                    p.teleport(new Location(loc.getWorld(), Math.floor(loc.getX()) + .5, y+1, Math.floor(loc.getZ()) + .5, loc.getYaw(), loc.getPitch()));
+                    p.teleport(new Location(loc.getWorld(), Math.floor(loc.getX()) + .5, y + 1, Math.floor(loc.getZ()) + .5, loc.getYaw(), loc.getPitch()));
                     break;
                 }
             }
@@ -374,7 +374,11 @@ public abstract class Kit implements Listener {
         return frozenImmunity;
     }
 
-    @EventHandler (ignoreCancelled = true, priority = EventPriority.LOWEST)
+    public List<UUID> getFrozenPlayers() {
+        return new ArrayList<>(frozenPlayers.keySet());
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerQuit(PlayerQuitEvent event) {
         if (frozenPlayers.containsKey(event.getPlayer().getUniqueId())) {
             frozenPlayers.get(event.getPlayer().getUniqueId()).forEach((loc, replaced) -> {
