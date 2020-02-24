@@ -5,7 +5,10 @@ import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.events.CaptureTheFlagEvent;
+import net.skycade.kitpvp.kit.Kit;
+import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.kit.kits.KitFrosty;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -113,6 +116,12 @@ public class CaptureTheFlagFlagListener implements Listener {
         if (captureTheFlagEvent.getBegin() == null) return;
 
         Player p = event.getPlayer();
+
+        // if the player has been frozen by frosty kit
+        if (KitPvP.getInstance().getKitManager().getKits().get(KitType.FROSTY).getFrozenPlayers().contains(p.getUniqueId())) {
+            // yes, they are frozen
+            return; // cancel the flag drop event
+        }
 
         if (p.equals(flagCarrier)) {
             CAPTURETHEFLAG_DROPPED_FLAG.broadcast("%player%", captureTheFlagEvent.isTeamRed(p) ? ChatColor.RED + "" + ChatColor.BOLD + p.getName() : ChatColor.BLUE + "" + ChatColor.BOLD + p.getName());
