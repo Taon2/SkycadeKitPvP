@@ -8,6 +8,7 @@ import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
@@ -56,8 +57,8 @@ public class KitBlacksmith extends Kit {
                 Material.IRON_BOOTS).build();
         weapon = new ItemBuilder(
                 Material.IRON_PICKAXE)
-                .addEnchantment(Enchantment.DURABILITY, 3)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 3)
+                .addEnchantment(Enchantment.DURABILITY, 6)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 4)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + anvilDropCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "drops 5 anvils in front of you.").build();
         armorkits = new ItemBuilder(
@@ -110,7 +111,8 @@ public class KitBlacksmith extends Kit {
                         if (!p.isOnline())
                             return;
 
-                        anvilLocation.getBlock().setType(Material.ANVIL);
+                        if (anvilLocation.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR)
+                            anvilLocation.getBlock().setType(Material.ANVIL);
                     }
                 }, anvilNum * 5);
             }

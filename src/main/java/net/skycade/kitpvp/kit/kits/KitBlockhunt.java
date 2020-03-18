@@ -49,17 +49,18 @@ public class KitBlockhunt extends Kit {
 
         boots = new ItemBuilder(
                 Material.DIAMOND_BOOTS)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addEnchantment(Enchantment.DURABILITY, 2).build();
         weapon = new ItemBuilder(
                 Material.IRON_AXE)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 2)
+                .addEnchantment(Enchantment.DURABILITY, 7)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking on a block every " + disguiseCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "disguises you as that block.").build();
         bow = new ItemBuilder(
                 Material.BOW)
-                .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.ARROW_DAMAGE, 1).build();
+                .addEnchantment(Enchantment.DURABILITY, 6)
+                .addEnchantment(Enchantment.ARROW_DAMAGE, 2).build();
         arrows = new ItemBuilder(
                 Material.ARROW, arrowStartAmount)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 arrow every " + arrowRegenSpeed + " seconds.").build();
