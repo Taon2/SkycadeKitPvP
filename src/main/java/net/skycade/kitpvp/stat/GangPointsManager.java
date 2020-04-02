@@ -92,6 +92,12 @@ public class GangPointsManager {
     }
 
     public void resetAllPoints() {
-        points.clear();
+        Map<String, Integer> newPoints = new HashMap<>();
+
+        points.forEach((gang, points) -> {
+            newPoints.put(gang, 0);
+        });
+
+        points = newPoints;
     }
 }
