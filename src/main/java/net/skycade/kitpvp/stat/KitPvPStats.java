@@ -197,8 +197,10 @@ public class KitPvPStats {
         // Checks all active rewards to see if the player has the reward
         CrateUser crateUser = CrateUser.get(uuid);
 
-        if (crateUser.getRewards(false).containsKey("skycade.crates.reward." + kit.name().toLowerCase())) {
-            hasReward = true;
+        if (crateUser != null) {
+            if (crateUser.getRewards(false).containsKey("skycade.crates.reward." + kit.name().toLowerCase())) {
+                hasReward = true;
+            }
         }
 
         // Stops from being applied if already applied
