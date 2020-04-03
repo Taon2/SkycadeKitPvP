@@ -39,15 +39,15 @@ public class ItemKeepKillstreak extends EventShopItem {
     public void reapplyReward(Player p) {
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        Player p = event.getEntity();
-        if (eventShopManager.isKeepingKs(p)) {
-            KitPvPStats stats = eventShopManager.getKitPvP().getStats(p);
-            stats.setStreak(stats.getLastStreak());
-            ScoreboardInfo.getInstance().updatePlayer(p);
-        }
-    }
+//    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+//    public void onPlayerDeath(PlayerDeathEvent event) {
+//        Player p = event.getEntity();
+//        if (eventShopManager.isKeepingKs(p)) {
+//            KitPvPStats stats = eventShopManager.getKitPvP().getStats(p);
+//            stats.setStreak(stats.getLastStreak());
+//            ScoreboardInfo.getInstance().updatePlayer(p);
+//        }
+//    }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onPlayerMove(PlayerMoveEvent event) {

@@ -20,6 +20,7 @@ import net.skycade.kitpvp.kit.kits.*;
 import net.skycade.kitpvp.kit.kits.disabled.KitFireArcher;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
@@ -124,84 +125,85 @@ public class PlayerDamageListener implements Listener {
         event.getDrops().clear();
         event.setDeathMessage("");
 
-        CombatData.Combat combat = CombatData.getCombat(event.getEntity());
+        Player diedPlayer = event.getEntity();
 
+        // combat logging (remove combat log for the player who has died)
+        CombatData.Combat combat = CombatData.getCombat(diedPlayer);
         combat.setInCombat(false);
 
-        boolean resetStats = plugin.getStats(event.getEntity()).getActiveKit().getKit().onDeath(event.getEntity(), event.getEntity().getKiller());
+        // special case for certain kits that allow the player to respawn at a custom point (like a block placed somewhere)
+        boolean willRespawnAndReset = plugin.getStats(event.getEntity()).getActiveKit().getKit().onDeath(event.getEntity(), event.getEntity().getKiller());
 
-        //Removes the wolves from the player before respawning, due to player teleporting back to wolves bug
-        Kit playerKit = plugin.getStats(MemberManager.getInstance().getMember(event.getEntity())).getActiveKit().getKit();
-        playerKit.removeSummon(0, event.getEntity());
-        playerKit.cancelRunnables(event.getEntity());
+        // removes teleporting entities so that they do not teleport to the player when they die (removes the wolves from the player before respawning, due to player teleporting back to wolves bug)
+        Kit diedPlayerKit = plugin.getStats(MemberManager.getInstance().getMember(diedPlayer)).getActiveKit().getKit();
+        diedPlayerKit.removeSummon(0, event.getEntity()); // remove the entities summoned
+        diedPlayerKit.cancelRunnables(event.getEntity()); // cancel all the entity summoning events
 
-        if (event.getEntity().isOnline() && resetStats) respawn(event.getEntity());
+        if (diedPlayer.isOnline() && willRespawnAndReset)
+            respawn(event.getEntity()); // if the player who died is both online and does not have the special case flag set, then respawn
 
-        Player died = event.getEntity();
-        Member diedMem = MemberManager.getInstance().getMember(died);
-        KitPvPStats diedStats = plugin.getStats(diedMem);
+        Member diedMember = MemberManager.getInstance().getMember(diedPlayer); // get the member object for the player who has died
+        KitPvPStats diedStats = plugin.getStats(diedMember); // get the stats object for the player who as died
 
-        // Increase highest killstreak
-        int diedStreak = diedStats.getStreak();
+        int diedStreak = diedStats.getStreak(); // the player who has died's kill streak
+        diedStats.setDeaths(plugin.getStats(diedMember).getDeaths() + 1); // increase player who has died's death count
 
-        //Increase deaths
-        diedStats.setDeaths(plugin.getStats(diedMem).getDeaths() + 1);
+        boolean isKeepingKillStreak = EventShopManager.getInstance().isKeepingKs(diedPlayer);
+        if (willRespawnAndReset && !isKeepingKillStreak) // only reset kill streak of the dead player if they are: Going to reset AND do NOT have the event upgrade for keeping killstreak
+            diedStats.setStreak(0);
 
-        died.getLocation().getWorld().playEffect(died.getLocation(), Effect.SMOKE, 1);
+        diedPlayer.getLocation().getWorld().playEffect(diedPlayer.getLocation(), Effect.SMOKE, 1); // play smoke particle effect at location they died
 
-        ScoreboardInfo.getInstance().updatePlayer(died);
+        ScoreboardInfo.getInstance().updatePlayer(diedPlayer); // update scoreboard for the player who died
 
         //Try to get the killer
-        Player killer = died.getKiller();
+        Player killerPlayer = diedPlayer.getKiller();
 
-        if (killer == null && lastDamagerMap.get(died.getUniqueId()) != null) {
+        if (killerPlayer == null && lastDamagerMap.get(diedPlayer.getUniqueId()) != null) {
             String customName;
-            customName = lastDamagerMap.get(died.getUniqueId()).getCustomName();
+            customName = lastDamagerMap.get(diedPlayer.getUniqueId()).getCustomName();
             if (customName == null)
                 return;
 
-            killer = Bukkit.getPlayer(customName);
-            lastDamagerMap.remove(died.getUniqueId());
+            killerPlayer = Bukkit.getPlayer(customName);
+            lastDamagerMap.remove(diedPlayer.getUniqueId());
         }
-        if (killer == null || killer.equals(died))
+        if (killerPlayer == null || killerPlayer.equals(diedPlayer))
             return;
 
-        Member killerMem = MemberManager.getInstance().getMember(killer);
-        diedMem.setLastKiller(killer.getUniqueId());
+        Member killerMember = MemberManager.getInstance().getMember(killerPlayer); // get member of the one who killed the player
+        diedMember.setLastKiller(killerPlayer.getUniqueId()); // set the last killer of the player who died to the player who killed them
 
-        killer.playSound(killer.getLocation(), "minecraft:entity.experience_orb.pickup", 1, 1);
-        if (died.isOnline())
-            KILLED_BY.msg(diedMem.getPlayer(), "%player%", killerMem.getName());
-        if (killer.isOnline())
-            YOU_KILLED.msg(killerMem.getPlayer(), "%player%", diedMem.getName());
+        killerPlayer.playSound(killerPlayer.getLocation(), "minecraft:entity.experience_orb.pickup", 1, 1); // play the "killed sound effect" to the player who killed the other
+        if (diedPlayer.isOnline()) // if the player who died is online
+            KILLED_BY.msg(diedMember.getPlayer(), "%player%", killerMember.getName());
+        if (killerPlayer.isOnline()) // if the player who killed is online
+            YOU_KILLED.msg(killerMember.getPlayer(), "%player%", diedMember.getName());
 
         //Update kills
-        KitPvPStats stats = plugin.getStats(killerMem);
+        KitPvPStats killerStats = plugin.getStats(killerMember); // get the stats for the player who killed the other
 
-        if (stats.getActiveKit() == KitType.ELITE) {
-            stats.getActiveKit().getKit().onDeath(died, killer);
+        if (killerStats.getActiveKit() == KitType.ELITE) { // if the player who killed the other has kit elite
+            killerStats.getActiveKit().getKit().onDeath(diedPlayer, killerPlayer); // call the onDeath event
         }
 
-        final int kills = stats.getKills() + 1;
-        stats.setKills(kills);
-
-        if (resetStats)
-            diedStats.setStreak(0);
+        final int killerKills = killerStats.getKills() + 1; // get kills for the killer
+        killerStats.setKills(killerKills); // add one to the kills ^
 
         //For missions
-        KitPvPKillPlayerEvent killEvent = new KitPvPKillPlayerEvent(killer, stats.getActiveKit());
-        Bukkit.getServer().getPluginManager().callEvent(killEvent);
+        KitPvPKillPlayerEvent killEvent = new KitPvPKillPlayerEvent(killerPlayer, killerStats.getActiveKit()); // get kill player event for the killer
+        Bukkit.getServer().getPluginManager().callEvent(killEvent); // call the kill player event
 
-        Bukkit.getServer().getPluginManager().callEvent(new CoreAchievementEvent(killer, "kitpvpkills") {
+        Bukkit.getServer().getPluginManager().callEvent(new CoreAchievementEvent(killerPlayer, "kitpvpkills") {
             @Override
             public boolean matcher(Achievement achievement) {
-                return achievement.getJsonParams().get("kills").getAsInt() <= kills;
+                return achievement.getJsonParams().get("kills").getAsInt() <= killerKills;
             }
         });
 
-        double kdr = UtilMath.getKDR(kills, stats.getDeaths());
+        double kdr = UtilMath.getKDR(killerKills, killerStats.getDeaths()); // get the KDR for the player who killed the other
 
-        Bukkit.getServer().getPluginManager().callEvent(new CoreAchievementEvent(killer, "kitpvpkdr") {
+        Bukkit.getServer().getPluginManager().callEvent(new CoreAchievementEvent(killerPlayer, "kitpvpkdr") { // call achievement event
             @Override
             public boolean matcher(Achievement achievement) {
                 return achievement.getJsonParams().get("kdr").getAsDouble() <= kdr;
@@ -209,26 +211,26 @@ public class PlayerDamageListener implements Listener {
         });
 
         //Update ks
-        final int streak = plugin.getStats(killer).getStreak() + 1;
-        stats.setStreak(streak);
+        final int killerStreak = plugin.getStats(killerPlayer).getStreak() + 1; // get the killStreak for the player who killed the other
+        killerStats.setStreak(killerStreak); // add one to their kill streak ^
 
         //For missions
-        KitPvPKillstreakChange killstreakEvent = new KitPvPKillstreakChange(killer, streak);
-        Bukkit.getServer().getPluginManager().callEvent(killstreakEvent);
+        KitPvPKillstreakChange killstreakEvent = new KitPvPKillstreakChange(killerPlayer, killerStreak); // get the kill streak event for the killer
+        Bukkit.getServer().getPluginManager().callEvent(killstreakEvent); // call the kill streak event
 
-        if (streak % 10 == 0)
-            HAS_KILLSTREAK.broadcast("%killer%", killer.getName(), "%ks%", Integer.toString(streak));
+        if (killerStreak % 10 == 0) // if the kill streak is a multiple of 10
+            HAS_KILLSTREAK.broadcast("%killer%", killerPlayer.getName(), "%ks%", Integer.toString(killerStreak)); // broadcast the kill streak message
 
-        Bukkit.getServer().getPluginManager().callEvent(new CoreAchievementEvent(killer, "kitpvpstreak") {
+        Bukkit.getServer().getPluginManager().callEvent(new CoreAchievementEvent(killerPlayer, "kitpvpstreak") { // call the kill streak achievement event
             @Override
             public boolean matcher(Achievement achievement) {
-                return achievement.getJsonParams().get("streak").getAsInt() <= streak;
+                return achievement.getJsonParams().get("streak").getAsInt() <= killerStreak;
             }
         });
 
         //The same player got killed multiple times
-        if (noKillRewards(killer, died)) {
-            ScoreboardInfo.getInstance().updatePlayer(killer);
+        if (noKillRewards(killerPlayer, diedPlayer)) { // check to see if the killer should get a reward for killing the player
+            ScoreboardInfo.getInstance().updatePlayer(killerPlayer);
             return;
         }
 
@@ -244,18 +246,18 @@ public class PlayerDamageListener implements Listener {
         }
 
         if (bounty != 0)
-            COLLECTED_BOUNTY.msg(killerMem.getPlayer(), "%amount%", Integer.toString(bounty), "%player%", diedMem.getName());
+            COLLECTED_BOUNTY.msg(killerMember.getPlayer(), "%amount%", Integer.toString(bounty), "%player%", diedMember.getName());
 
         //Extra coins when a high ks gets broken
         int killstreakCoins = diedStreak >= 10 ? diedStreak : 0;
         if (diedStreak >= 10) {
-            YOU_BROKE_KILLSTREAK.msg(killerMem.getPlayer(), "%amount%", Integer.toString(diedStreak), "%player%", diedMem.getName());
-            BROKE_KILLSTREAK.broadcast("%killer%", killer.getName(), "%dead%", died.getName(), "%ks%", Integer.toString(diedStreak));
+            YOU_BROKE_KILLSTREAK.msg(killerMember.getPlayer(), "%amount%", Integer.toString(diedStreak), "%player%", diedMember.getName());
+            BROKE_KILLSTREAK.broadcast("%killer%", killerPlayer.getName(), "%dead%", diedPlayer.getName(), "%ks%", Integer.toString(diedStreak));
         }
 
         //Normal kill coins
         int base = KitPvP.getInstance().getConfig().getInt("kill-coins");
-        int extra = (int) Math.ceil(base * Math.pow((100 + KitPvP.getInstance().getConfig().getInt("kill-bonus-percentage")) / ((double) 100), stats.getStreak() - 1)) + bounty;
+        int extra = (int) Math.ceil(base * Math.pow((100 + KitPvP.getInstance().getConfig().getInt("kill-bonus-percentage")) / ((double) 100), killerStats.getStreak() - 1)) + bounty;
 
         double modifier = KitPvP.getInstance().getConfig().getDouble("coins-modifier");
         int finalReward = (int) Math.ceil(modifier / (double) 100 * (extra + killstreakCoins));
@@ -263,16 +265,16 @@ public class PlayerDamageListener implements Listener {
         if (DoubleCoinsEvent.isActive())
             finalReward = finalReward * 2;
 
-        KitPvPCoinsRewardEvent coinsEvent = new KitPvPCoinsRewardEvent(killer, finalReward);
+        KitPvPCoinsRewardEvent coinsEvent = new KitPvPCoinsRewardEvent(killerPlayer, finalReward);
         Bukkit.getPluginManager().callEvent(coinsEvent);
 
         if (!coinsEvent.isCancelled()) {
-            stats.giveCoins(coinsEvent.getNewCoins());
+            killerStats.giveCoins(coinsEvent.getNewCoins());
         }
 
-        checkAssist(died, killer);
+        checkAssist(diedPlayer, killerPlayer);
 
-        ScoreboardInfo.getInstance().updatePlayer(killer);
+        ScoreboardInfo.getInstance().updatePlayer(killerPlayer);
     }
 
     @EventHandler
