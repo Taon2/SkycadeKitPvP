@@ -36,10 +36,11 @@ public class LeaderboardsCache {
 
                 // Loads information from database if uuid is offline
                 try (Connection connection = CoreSettings.getInstance().getConnection()) {
-                    String sql = "SELECT Kills, Coins, Deaths, HighestStreak FROM " + KitPvPDB.kitPvPTable + " WHERE UUID = ? AND Season = ?";
+                    String sql = "SELECT Kills, Coins, Deaths, HighestStreak FROM " + KitPvPDB.kitPvPTable + " WHERE UUID = ? AND Instance = ? AND Season = ?";
                     try (PreparedStatement statement = connection.prepareStatement(sql)) {
                         statement.setString(1, key.toString());
-                        statement.setString(2, CoreSettings.getInstance().getSeason());
+                        statement.setString(2, CoreSettings.getInstance().getThisInstance());
+                        statement.setString(3, CoreSettings.getInstance().getSeason());
                         ResultSet result = statement.executeQuery();
                         while (result.next()) {
                             Integer kills = result.getInt("Kills");

@@ -24,8 +24,9 @@ public class GangPointsManager {
     private void loadPoints() {
         Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () -> {
             try (Connection connection = CoreSettings.getInstance().getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT `name`, `points` FROM skycade_kitpvp_gangs_points WHERE season = ?");
-                statement.setString(1, CoreSettings.getInstance().getSeason());
+                PreparedStatement statement = connection.prepareStatement("SELECT `name`, `points` FROM skycade_kitpvp_gangs_points WHERE instance = ? AND season = ?");
+                statement.setString(1, CoreSettings.getInstance().getThisInstance());
+                statement.setString(2, CoreSettings.getInstance().getSeason());
                 ResultSet set = statement.executeQuery();
 
                 while (set.next()) {
@@ -47,12 +48,13 @@ public class GangPointsManager {
     public void save() {
         points.forEach((gangName, amount) -> {
             try (Connection connection = CoreSettings.getInstance().getConnection()) {
-                String sql = "INSERT INTO skycade_kitpvp_gangs_points (`name`, `points`, `season`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE points = VALUES(points)";
+                String sql = "INSERT INTO skycade_kitpvp_gangs_points (`name`, `points`, `instance`, `season`) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE points = VALUES(points)";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 try {
                     statement.setString(1, gangName);
                     statement.setInt(2, amount);
-                    statement.setString(3, CoreSettings.getInstance().getSeason());
+                    statement.setString(3, CoreSettings.getInstance().getThisInstance());
+                    statement.setString(4, CoreSettings.getInstance().getSeason());
                     statement.addBatch();
                 } catch (SQLException e) {
                     e.printStackTrace();

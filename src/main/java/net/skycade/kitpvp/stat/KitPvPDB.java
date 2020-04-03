@@ -33,12 +33,13 @@ public class KitPvPDB {
     }
 
     public Member getMemberData(UUID uuid) {
-        String sql = "SELECT * FROM " + kitPvPTable + " WHERE UUID = ? AND Season = ?";
+        String sql = "SELECT * FROM " + kitPvPTable + " WHERE UUID = ? AND Instance = ? AND Season = ?";
         Member member;
         try (Connection connection = CoreSettings.getInstance().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, uuid.toString());
-                statement.setString(2, CoreSettings.getInstance().getSeason());
+                statement.setString(2, CoreSettings.getInstance().getThisInstance());
+                statement.setString(3, CoreSettings.getInstance().getSeason());
                 statement.executeQuery();
                 ResultSet result = statement.getResultSet();
                 if (!result.next()) return null;
@@ -76,11 +77,12 @@ public class KitPvPDB {
 
     public List<UUID> getAllUUIDs() {
         List<UUID> uuidList = new ArrayList<>();
-        String sql = "SELECT UUID FROM " + kitPvPTable + " WHERE Season = ?";
+        String sql = "SELECT UUID FROM " + kitPvPTable + " WHERE Instance = ? AND Season = ?";
 
         try (Connection connection = CoreSettings.getInstance().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, CoreSettings.getInstance().getSeason());
+                statement.setString(1, CoreSettings.getInstance().getThisInstance());
+                statement.setString(2, CoreSettings.getInstance().getSeason());
                 statement.executeQuery();
                 ResultSet resultSet = statement.getResultSet();
                 while (resultSet.next()) {
@@ -116,11 +118,12 @@ public class KitPvPDB {
     }
 
     public Map<String, Object> getHighestKs() {
-        String sql = "SELECT UUID, HighestStreak FROM " + kitPvPTable + " ORDER BY HighestStreak * 1 DESC LIMIT 0, 1 WHERE Season = ?";
+        String sql = "SELECT UUID, HighestStreak FROM " + kitPvPTable + " ORDER BY HighestStreak * 1 DESC LIMIT 0, 1 WHERE Instance = ? AND Season = ?";
 
         try (Connection connection = CoreSettings.getInstance().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, CoreSettings.getInstance().getSeason());
+                statement.setString(1, CoreSettings.getInstance().getThisInstance());
+                statement.setString(2, CoreSettings.getInstance().getSeason());
                 statement.executeQuery();
                 ResultSet resultSet = statement.getResultSet();
                 Map<String, Object> map = new HashMap<>();
@@ -137,7 +140,7 @@ public class KitPvPDB {
 
     private synchronized void executeUpdate(Member member) {
         try (Connection connection = CoreSettings.getInstance().getConnection()) {
-            String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, EventCoins, Assists, ChosenKit, PrestigeLevel, AbilityToggle, Season) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?, ?) " +
+            String query = "INSERT INTO " + kitPvPTable + " (UUID, PlayerName, Kills, HighestStreak, Deaths, KillRatio, CurrentKit, Kits, Coins, EventCoins, Assists, ChosenKit, PrestigeLevel, AbilityToggle, Instance, Season) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,?, ?) " +
                     "ON DUPLICATE KEY UPDATE PlayerName = VALUES(PlayerName), Kills = VALUES(Kills), HighestStreak = VALUES(HighestStreak), Deaths = VALUES(Deaths), KillRatio = VALUES(KillRatio), CurrentKit = VALUES(CurrentKit), Kits = VALUES(Kits), " +
                     "Coins = VALUES(Coins), EventCoins = VALUES(EventCoins), Assists = VALUES(Assists), ChosenKit = VALUES(ChosenKit), PrestigeLevel = VALUES(PrestigeLevel), AbilityToggle = VALUES(AbilityToggle)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -167,7 +170,8 @@ public class KitPvPDB {
                 statement.setString(12, stats.getKitPreference().name());
                 statement.setInt(13, stats.getPrestigeLevel());
                 statement.setBoolean(14, stats.isAbilityToggle());
-                statement.setString(15, CoreSettings.getInstance().getSeason());
+                statement.setString(15, CoreSettings.getInstance().getThisInstance());
+                statement.setString(16, CoreSettings.getInstance().getSeason());
 
                 statement.executeUpdate();
             }
