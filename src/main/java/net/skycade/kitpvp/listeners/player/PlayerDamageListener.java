@@ -149,8 +149,10 @@ public class PlayerDamageListener implements Listener {
         diedStats.setDeaths(plugin.getStats(diedMember).getDeaths() + 1); // increase player who has died's death count
 
         boolean isKeepingKillStreak = EventShopManager.getInstance().isKeepingKs(diedPlayer);
-        if (willRespawnAndReset && !isKeepingKillStreak) // only reset kill streak of the dead player if they are: Going to reset AND do NOT have the event upgrade for keeping killstreak
+        if (willRespawnAndReset && !isKeepingKillStreak) { // only reset kill streak of the dead player if they are: Going to reset AND do NOT have the event upgrade for keeping killstreak
+            ScoreboardInfo.getInstance().updatePlayer(diedPlayer);
             diedStats.setStreak(0);
+        }
 
         diedPlayer.getLocation().getWorld().playEffect(diedPlayer.getLocation(), Effect.SMOKE, 1); // play smoke particle effect at location they died
 
