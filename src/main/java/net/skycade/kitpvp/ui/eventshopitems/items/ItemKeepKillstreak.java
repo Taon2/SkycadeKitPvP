@@ -39,15 +39,15 @@ public class ItemKeepKillstreak extends EventShopItem {
     public void reapplyReward(Player p) {
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        Player p = event.getEntity();
-        if (eventShopManager.isKeepingKs(p)) {
-            KitPvPStats stats = eventShopManager.getKitPvP().getStats(p);
-            stats.setStreak(stats.getLastStreak());
-            ScoreboardInfo.getInstance().updatePlayer(p);
-        }
-    }
+//    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+//    public void onPlayerDeath(PlayerDeathEvent event) {
+//        Player p = event.getEntity();
+//        if (eventShopManager.isKeepingKs(p)) {
+//            KitPvPStats stats = eventShopManager.getKitPvP().getStats(p);
+//            stats.setStreak(stats.getLastStreak());
+//            ScoreboardInfo.getInstance().updatePlayer(p);
+//        }
+//    }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onPlayerMove(PlayerMoveEvent event) {
@@ -55,12 +55,14 @@ public class ItemKeepKillstreak extends EventShopItem {
 
         Player p = event.getPlayer();
 
-        if (KitPvP.getInstance().getSpawnRegion().contains(event.getFrom()) && KitPvP.getInstance().getSpawnRegion().contains(event.getTo()) && eventShopManager.isKeepingKs(p)) {
+
+        if (KitPvP.getInstance().getSpawnRegion().contains(event.getFrom()) && !KitPvP.getInstance().getSpawnRegion().contains(event.getTo()) && eventShopManager.isKeepingKs(p)) { // if the player is moving OUT of the spawn area into the arena AND they currently have the event upgrade to keep their streak...
+            /* set the value in the config to false, so they lose their streak NEXT TIME */
             YamlConfiguration yaml = eventShopManager.getYaml();
             yaml.set((p.getUniqueId() + "." + getName()), false);
             eventShopManager.setYaml(yaml);
             eventShopManager.save();
-        } else if (KitPvP.getInstance().getSpawnRegion().contains(p) && eventShopManager.isKeepingKs(p)){
+        } else if (KitPvP.getInstance().getSpawnRegion().contains(p) && eventShopManager.isKeepingKs(p)){ // we know they are just walking around in spawn, so keep setting their streak to their previous streak
             KitPvPStats stats = eventShopManager.getKitPvP().getStats(p);
             stats.setStreak(stats.getLastStreak());
             ScoreboardInfo.getInstance().updatePlayer(p);
