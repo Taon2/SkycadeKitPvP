@@ -39,16 +39,6 @@ public class ItemKeepKillstreak extends EventShopItem {
     public void reapplyReward(Player p) {
     }
 
-//    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-//    public void onPlayerDeath(PlayerDeathEvent event) {
-//        Player p = event.getEntity();
-//        if (eventShopManager.isKeepingKs(p)) {
-//            KitPvPStats stats = eventShopManager.getKitPvP().getStats(p);
-//            stats.setStreak(stats.getLastStreak());
-//            ScoreboardInfo.getInstance().updatePlayer(p);
-//        }
-//    }
-
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getFrom().getBlock().equals(event.getTo().getBlock())) return;
@@ -62,10 +52,6 @@ public class ItemKeepKillstreak extends EventShopItem {
             yaml.set((p.getUniqueId() + "." + getName()), false);
             eventShopManager.setYaml(yaml);
             eventShopManager.save();
-        } else if (KitPvP.getInstance().getSpawnRegion().contains(p) && eventShopManager.isKeepingKs(p)){ // we know they are just walking around in spawn, so keep setting their streak to their previous streak
-            KitPvPStats stats = eventShopManager.getKitPvP().getStats(p);
-            stats.setStreak(stats.getLastStreak());
-            ScoreboardInfo.getInstance().updatePlayer(p);
         }
     }
 

@@ -1,10 +1,12 @@
 package net.skycade.kitpvp.ui.eventshopitems;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.ui.eventshopitems.items.*;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,7 +85,9 @@ public class EventShopManager {
             String key = entry.getKey();
             EventShopItem item = entry.getValue();
             if (key.contains("Killstreak")) {
-                keepKs = isActive(p, item);
+                keepKs = yaml.contains(p.getUniqueId().toString())
+                        && yaml.contains(p.getUniqueId().toString() + "." + item.getName())
+                        && yaml.getBoolean(p.getUniqueId().toString() + "." + item.getName());
             }
         }
 
