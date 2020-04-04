@@ -84,7 +84,7 @@ public class CommandRefreshKit extends SkycadeCommand {
         }
 
         KitPvPStats stats = KitPvP.getInstance().getStats(member);
-        int coins = stats.getCoins();
+        long coins = stats.getCoins();
         if (coins < COST) {
             NOT_ENOUGH.msg(member.getPlayer(), "%thing%", "coins");
             return;

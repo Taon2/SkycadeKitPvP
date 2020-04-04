@@ -11,7 +11,7 @@ public class StatsMember {
     private UUID uuid;
     private String name;
     private Integer kills;
-    private Integer coins;
+    private Long coins;
     private Integer deaths;
     private Integer highestStreak;
 
@@ -35,7 +35,7 @@ public class StatsMember {
         return name;
     }
 
-    public Integer getCoins() {
+    public Long getCoins() {
         return coins;
     }
 
@@ -57,7 +57,7 @@ public class StatsMember {
         this.name = name;
     }
 
-    public void setCoins(Integer coins) {
+    public void setCoins(Long coins) {
         this.coins = coins;
     }
 

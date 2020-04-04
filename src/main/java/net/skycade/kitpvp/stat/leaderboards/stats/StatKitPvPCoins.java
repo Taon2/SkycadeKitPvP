@@ -7,7 +7,7 @@ import net.skycade.skycadeleaderboards.leaderboards.StatisticType;
 import java.util.List;
 import java.util.UUID;
 
-public class StatKitPvPCoins extends StatisticType<UUID, Integer> {
+public class StatKitPvPCoins extends StatisticType<UUID, Long> {
 
     private static StatKitPvPCoins instance;
 
@@ -26,10 +26,10 @@ public class StatKitPvPCoins extends StatisticType<UUID, Integer> {
     }
 
     @Override
-    public Integer get(UUID s) {
-        Integer data = LeaderboardsCache.get(s).getCoins();
+    public Long get(UUID s) {
+        Long data = LeaderboardsCache.get(s).getCoins();
         if (data == null) {
-            return 0;
+            return 0L;
         } else {
             return data;
         }
@@ -42,7 +42,7 @@ public class StatKitPvPCoins extends StatisticType<UUID, Integer> {
     }
 
     @Override
-    public String valueToString(Integer integer) {
-        return Integer.toString(integer);
+    public String valueToString(Long lng) {
+        return Long.toString(lng);
     }
 }
