@@ -73,7 +73,7 @@ public class KitPvPStats {
         if (Bukkit.getOfflinePlayer(uuid).isOnline())
             gang = GangsPlusApi.getPlayersGang(Bukkit.getPlayer(uuid));
         if (gang != null)
-            KitPvP.getInstance().getGangPointsManager().addPoints(gang.getName(), coins);
+            KitPvP.getInstance().getGangPointsManager().addPoints(gang.getName(), (long) coins);
     }
 
     public void takeCoins(int coins) {
@@ -90,7 +90,7 @@ public class KitPvPStats {
         //Adds the amount of event tokens times 200 to the gang points
         Gang gang = GangsPlusApi.getPlayersGang(Bukkit.getPlayer(uuid));
         if (gang != null)
-            KitPvP.getInstance().getGangPointsManager().addPoints(gang.getName(), eventTokens * 200);
+            KitPvP.getInstance().getGangPointsManager().addPoints(gang.getName(), (long) (eventTokens * 200));
     }
 
     public void takeEventTokens(int eventTokens) {

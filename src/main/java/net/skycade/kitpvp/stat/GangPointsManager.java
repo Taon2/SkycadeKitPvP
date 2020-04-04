@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class GangPointsManager {
-    private Map<String, Integer> points = new HashMap<>();
+    private Map<String, Long> points = new HashMap<>();
 
     public GangPointsManager() {
         loadPoints();
@@ -31,7 +31,7 @@ public class GangPointsManager {
 
                 while (set.next()) {
                     String name = set.getString("name");
-                    int amount = set.getInt("points");
+                    Long amount = set.getLong("points");
 
                     points.put(name, amount);
                 }
@@ -52,7 +52,7 @@ public class GangPointsManager {
                 PreparedStatement statement = connection.prepareStatement(sql);
                 try {
                     statement.setString(1, gangName);
-                    statement.setInt(2, amount);
+                    statement.setLong(2, amount);
                     statement.setString(3, CoreSettings.getInstance().getThisInstance());
                     statement.setString(4, CoreSettings.getInstance().getSeason());
                     statement.addBatch();
@@ -66,7 +66,7 @@ public class GangPointsManager {
         });
     }
 
-    public Map<String, Integer> getAllPoints() {
+    public Map<String, Long> getAllPoints() {
         return points;
     }
 
@@ -74,18 +74,18 @@ public class GangPointsManager {
         return points.keySet();
     }
 
-    public Integer getPoints(String gangName) {
+    public Long getPoints(String gangName) {
         if (!points.containsKey(gangName))
-            return 0;
+            return 0L;
         else
             return (points.get(gangName) / 100);
     }
 
-    public void setPoints(String gangName, int amount) {
+    public void setPoints(String gangName, Long amount) {
         points.replace(gangName, amount);
     }
 
-    public void addPoints(String gangName, int amount) {
+    public void addPoints(String gangName, Long amount) {
         if (points.containsKey(gangName)) {
             points.replace(gangName, points.get(gangName) + amount);
         } else {
@@ -94,10 +94,10 @@ public class GangPointsManager {
     }
 
     public void resetAllPoints() {
-        Map<String, Integer> newPoints = new HashMap<>();
+        Map<String, Long> newPoints = new HashMap<>();
 
         points.forEach((gang, points) -> {
-            newPoints.put(gang, 0);
+            newPoints.put(gang, 0L);
         });
 
         points = newPoints;
