@@ -36,11 +36,6 @@ public class CommandViewStats extends SkycadeCommand {
             return;
         }
 
-//        if (Bukkit.getPlayer(strings[0]) == null || VanishStatus.isVanished(Bukkit.getPlayer(strings[0]).getUniqueId())) {
-//            COULDNT_FIND.msg(commandSender, "%type%", "player", "%thing%", strings[0]);
-//            return;
-//        }
-
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(strings[0]);
 
         if (offlinePlayer == null || offlinePlayer.getUniqueId() == null) { // double check case data pattern
@@ -80,7 +75,7 @@ public class CommandViewStats extends SkycadeCommand {
                     "%highestkillstreak%", Integer.toString(stats.getHighestStreak()),
                     "%kits%", Integer.toString(stats.getKits().size()),
                     "%currentkit%", stats.getActiveKit().getKit().getName(),
-                    "%coins%", Integer.toString(stats.getCoins()),
+                    "%coins%", Long.toString(stats.getCoins()),
                     "%eventtokens%", Integer.toString(stats.getEventTokens())
             );
         });

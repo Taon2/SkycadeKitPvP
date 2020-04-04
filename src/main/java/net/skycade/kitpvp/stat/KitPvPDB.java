@@ -60,7 +60,7 @@ public class KitPvPDB {
                     throw new RuntimeException(e);
                 }
 
-                stats.setCoins(result.getInt("Coins"));
+                stats.setCoins(result.getLong("Coins"));
                 stats.setEventTokens(result.getInt("EventCoins"));
                 stats.setAssists(result.getInt("Assists"));
                 stats.setAbilityToggle(result.getBoolean("AbilityToggle"));
@@ -164,7 +164,7 @@ public class KitPvPDB {
 
                 statement.setString(8, new JSONObject(kitMap).toJSONString());
 
-                statement.setInt(9, stats.getCoins());
+                statement.setLong(9, stats.getCoins());
                 statement.setInt(10, stats.getEventTokens());
                 statement.setInt(11, stats.getAssists());
                 statement.setString(12, stats.getKitPreference().name());

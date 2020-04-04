@@ -46,7 +46,7 @@ public class LeaderboardsCache {
                             Integer kills = result.getInt("Kills");
                             Integer highestKills = result.getInt("HighestStreak");
                             Integer deaths = result.getInt("Deaths");
-                            Integer coins = result.getInt("Coins");
+                            Long coins = result.getLong("Coins");
                             member.setKills(kills);
                             member.setHighestStreak(highestKills);
                             member.setDeaths(deaths);

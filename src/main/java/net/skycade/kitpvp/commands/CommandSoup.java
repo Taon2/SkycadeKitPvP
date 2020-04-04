@@ -60,7 +60,7 @@ public class CommandSoup extends SkycadeCommand {
         }
 
         KitPvPStats stats = KitPvP.getInstance().getStats(member);
-        int coins = stats.getCoins();
+        long coins = stats.getCoins();
 
         // Applies soup cost reduction upgrade
         int cost = COST;

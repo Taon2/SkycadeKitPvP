@@ -21,7 +21,7 @@ public class KitPvPStats {
     private int prestigeLevel = 0;
     private int kills = 0;
     private int deaths = 0;
-    private int coins = 0;
+    private long coins = 0;
     private int eventTokens = 0;
     private int streak = 0;
     private int highestStreak = 0;
@@ -57,15 +57,15 @@ public class KitPvPStats {
         this.deaths = deaths;
     }
 
-    public int getCoins() {
+    public long getCoins() {
         return coins;
     }
 
-    public void setCoins(int coins) {
+    public void setCoins(long coins) {
         this.coins = coins;
     }
 
-    public void giveCoins(int coins) {
+    public void giveCoins(long coins) {
         this.coins += coins;
 
         //Adds the amount of coins to the gang points
@@ -76,7 +76,7 @@ public class KitPvPStats {
             KitPvP.getInstance().getGangPointsManager().addPoints(gang.getName(), (long) coins);
     }
 
-    public void takeCoins(int coins) {
+    public void takeCoins(long coins) {
         this.coins -= coins;
     }
 
