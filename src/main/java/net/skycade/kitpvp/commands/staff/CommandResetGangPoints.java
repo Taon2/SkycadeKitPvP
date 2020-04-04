@@ -38,7 +38,7 @@ public class CommandResetGangPoints extends SkycadeCommand {
                 return;
             }
 
-            KitPvP.getInstance().getGangPointsManager().setPoints(gang.getName(), 0);
+            KitPvP.getInstance().getGangPointsManager().setPoints(gang.getName(), 0L);
 
             GANG_POINTS_RESET.msg(commandSender, "%gang%", gang.getName());
         }

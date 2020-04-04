@@ -6,7 +6,7 @@ import net.skycade.skycadeleaderboards.leaderboards.StatisticType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatGangsPoints extends StatisticType<String, Integer> {
+public class StatGangsPoints extends StatisticType<String, Long> {
 
     private static StatGangsPoints instance;
 
@@ -23,10 +23,10 @@ public class StatGangsPoints extends StatisticType<String, Integer> {
     }
 
     @Override
-    public Integer get(String s) {
-        Integer points = KitPvP.getInstance().getGangPointsManager().getPoints(s);
+    public Long get(String s) {
+        Long points = KitPvP.getInstance().getGangPointsManager().getPoints(s);
         if (points == null) {
-            return 0;
+            return 0L;
         } else {
             return points;
         }
@@ -38,7 +38,7 @@ public class StatGangsPoints extends StatisticType<String, Integer> {
     }
 
     @Override
-    public String valueToString(Integer integer) {
-        return Integer.toString(integer);
+    public String valueToString(Long lng) {
+        return Long.toString(lng);
     }
 }
