@@ -145,7 +145,7 @@ public class CommandEco extends SkycadeCommand {
 
     private void resetCoins(KitPvPStats targetStats, CommandSender commandSender, Player target) {
         targetStats.setCoins(0);
-        YOUR_CURRENCY_RESET.msg(commandSender, "%currency%", "coins");
+        YOUR_CURRENCY_RESET.msg(target, "%currency%", "coins");
         CURRENCY_RESET.msg(commandSender, "%player%", target.getName(), "%currency%", "coins");
     }
 

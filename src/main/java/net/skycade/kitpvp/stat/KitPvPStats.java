@@ -201,11 +201,11 @@ public class KitPvPStats {
             if (crateUser.getRewards(false).containsKey("skycade.crates.reward." + kit.name().toLowerCase())) {
                 hasReward = true;
             }
-        }
 
-        // Stops from being applied if already applied
-        if (!hasReward) {
-            crateUser.addReward("skycade.crates.reward." + kit.name().toLowerCase());
+            // Stops from being applied if already applied
+            if (!hasReward) {
+                crateUser.addReward("skycade.crates.reward." + kit.name().toLowerCase());
+            }
         }
     }
 
