@@ -96,6 +96,29 @@ public class KitPvPDB {
         return uuidList;
     }
 
+    public Set<UUID> getTopUuids() {
+        Set<UUID> uuids = new HashSet<>();
+
+        try (Connection connection = CoreSettings.getInstance().getConnection()) {
+            String sql = "SELECT UUID FROM skycade_kitpvp_members WHERE Instance = ? AND Season = ? " +
+                    "ORDER BY %s DESC LIMIT 50";
+            for (String col : new String[]{"Kills", "Deaths", "HighestStreak", "KillRatio", "Coins"}) {
+                try (PreparedStatement statement = connection.prepareStatement(String.format(sql, col))) {
+                    statement.setString(1, CoreSettings.getInstance().getThisInstance());
+                    statement.setString(2, CoreSettings.getInstance().getSeason());
+
+                    ResultSet resultSet = statement.executeQuery();
+                    while (resultSet.next()) {
+                        uuids.add(UUID.fromString(resultSet.getString("UUID")));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return uuids;
+    }
+
     public UUID getUUIDForName(String playerName) {
         try (Jedis jedis = plugin.getJedis()) {
             String uuid = jedis.hget("uuidCache", playerName.toLowerCase());
