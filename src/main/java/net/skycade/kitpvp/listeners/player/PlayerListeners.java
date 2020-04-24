@@ -135,8 +135,9 @@ public class PlayerListeners implements Listener {
                 event.getWhoClicked().getGameMode() == GameMode.CREATIVE)
             return;
 
-        if (event.getClickedInventory() != null && event.getClickedInventory().getType() == CRAFTING &&
-                event.getRawSlot() >= 1 && event.getRawSlot() <= 4)
+        if (event.getClickedInventory() != null && (event.getClickedInventory().getType() == HOPPER || (
+                event.getClickedInventory().getType() == CRAFTING &&
+                        event.getRawSlot() >= 1 && event.getRawSlot() <= 4)))
             event.setCancelled(true);
     }
 
@@ -146,8 +147,9 @@ public class PlayerListeners implements Listener {
                 event.getWhoClicked().getGameMode() == GameMode.CREATIVE)
             return;
 
-        if ((event.getInventory().getType() == PLAYER || event.getInventory().getType() == CRAFTING) &&
-                event.getRawSlots().stream().anyMatch(s -> s >= 1 && s <= 4))
+        if (((event.getInventory().getType() == PLAYER || event.getInventory().getType() == CRAFTING) &&
+                event.getRawSlots().stream().anyMatch(s -> s >= 1 && s <= 4)) ||
+                event.getInventory().getType() == HOPPER)
             event.setCancelled(true);
     }
 
