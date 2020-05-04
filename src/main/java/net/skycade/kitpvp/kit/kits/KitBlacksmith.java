@@ -33,8 +33,6 @@ public class KitBlacksmith extends Kit {
     private ItemStack weapon;
     private ItemStack armorkits;
 
-    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
-
     private int anvilDropCooldown = 15;
     private int armorkitCooldown = 4;
     private int armorkitRegenSpeed = 15;
@@ -68,8 +66,6 @@ public class KitBlacksmith extends Kit {
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 armor kit every " + armorkitRegenSpeed + " seconds.")
                 .setName("Armor Kit").build();
 
-        constantEffects.put(PotionEffectType.SLOW, 0);
-
         ItemStack icon = new ItemStack(Material.ANVIL);
         setIcon(icon);
     }
@@ -82,10 +78,6 @@ public class KitBlacksmith extends Kit {
         p.getInventory().setChestplate(chestplate);
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
-
-        constantEffects.forEach((effect, amplifier) -> {
-            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
-        });
 
         startItemRunnable(p, armorkitRegenSpeed, getArmorkits(1), armorkitMaxAmount, KitType.BLACKSMITH);
     }

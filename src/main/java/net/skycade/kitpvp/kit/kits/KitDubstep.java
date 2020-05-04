@@ -59,7 +59,7 @@ public class KitDubstep extends Kit {
     }
 
     public void onMove(Player p) {
-        if (p.getItemInHand().getType() != Material.DIAMOND_SWORD)
+        if (p.getItemInHand().getType() != Material.IRON_SWORD)
             return;
 
         if (UtilMath.getRandom(0, 100) <= 3)

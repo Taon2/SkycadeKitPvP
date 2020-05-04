@@ -56,26 +56,26 @@ public class KitLich extends Kit {
         helmet = new ItemBuilder(
                 Material.SKULL_ITEM)
                 .setDurability((short) 1)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 12)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.fromRGB(25, 25, 112)).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.fromRGB(25, 25, 112)).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.fromRGB(25, 25, 112)).build();
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 7)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1)
+                .addEnchantment(Enchantment.DURABILITY, 9)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + ghostCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "summons ghosts to fight for you.").build();
         phylactery = new ItemBuilder(

@@ -25,23 +25,23 @@ public class KitTank extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
-    private double damageMultiplier = 1.5;
+    private double damageMultiplier = 1.6;
 
     public KitTank(KitManager kitManager) {
         super(kitManager, "Tank", KitType.TANK, 46000, getLore());
 
         helmet = new ItemBuilder(
                 Material.DIAMOND_HELMET)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 60% more damage.").build();
         chestplate = new ItemBuilder(
                 Material.DIAMOND_CHESTPLATE)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 60% more damage.").build();
         leggings = new ItemBuilder(
                 Material.DIAMOND_LEGGINGS)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 60% more damage.").build();
         boots = new ItemBuilder(
                 Material.DIAMOND_BOOTS)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 60% more damage.").build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
@@ -82,7 +82,7 @@ public class KitTank extends Kit {
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "A true brute force.",
                 "",
                 ChatColor.GRAY + "Slow, but powerful.",
-                ChatColor.GRAY + "Takes 50% more damage when hit."
+                ChatColor.GRAY + "Takes 60% more damage when hit."
         );
     }
 }

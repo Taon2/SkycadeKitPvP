@@ -8,6 +8,7 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
+import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
@@ -39,9 +40,12 @@ public class ViewKitMenu extends DynamicGui {
     public ViewKitMenu(Kit kit) {
         super(ChatColor.GOLD + "" + ChatColor.BOLD + "View Kit " + kit.getName(), 2);
 
-        kit.applyKit(DUMMY_PLAYER);
-        addItems(0, getItems(), getPotionEffects(DUMMY_PLAYER.getActivePotionEffects()));
-        reset();
+        if (kit.getKitType() != KitType.GAMBLER) {
+            kit.applyKit(DUMMY_PLAYER);
+            addItems(0, getItems(), getPotionEffects(DUMMY_PLAYER.getActivePotionEffects()));
+            reset();
+        }
+
         if (kit.getDescription() != null) {
             List<String> lore = new ArrayList<>(kit.getDescription());
             lore.add("");

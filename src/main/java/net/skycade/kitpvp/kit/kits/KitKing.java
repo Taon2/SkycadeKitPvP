@@ -75,7 +75,6 @@ public class KitKing extends Kit {
 
         IronGolem golem = (IronGolem) p.getWorld().spawnEntity(p.getLocation(), EntityType.IRON_GOLEM);
         golem.setCustomName(p.getName());
-        golem.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 2));
 
         Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 5);
 

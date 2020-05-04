@@ -67,7 +67,7 @@ public class KitGuardian extends Kit {
                 .setColour(Color.fromRGB(0, 204, 204)).build();
         weapon = new ItemBuilder(
                 Material.RAW_FISH)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 3)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 4)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + fishCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "slows nearby enemies.").build();
 
@@ -91,7 +91,7 @@ public class KitGuardian extends Kit {
                 beam.setStartingPosition(p.getLocation());
 
                 if (!getKitManager().getKitPvP().isInSpawnArea(p)) {
-                    Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 6);
+                    Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 8);
 
                     if (!(nearbyPlayers.isEmpty())) {
                         Player target = getClosestTarget(nearbyPlayers, p);

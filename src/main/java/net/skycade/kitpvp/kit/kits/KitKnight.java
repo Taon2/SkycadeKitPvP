@@ -84,6 +84,8 @@ public class KitKnight extends Kit {
         p.getInventory().setChestplate(chestplate);
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
+
+        horses.remove(p.getUniqueId());
     }
 
     @Override
@@ -108,9 +110,9 @@ public class KitKnight extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.DIAMOND_SWORD)
             return;
-        if (!addCooldown(p, "Summon Steed", steedCooldown, true))
-            return;
         if (horses.containsKey(p.getUniqueId()))
+            return;
+        if (!addCooldown(p, "Summon Steed", steedCooldown, true))
             return;
 
         //For missions

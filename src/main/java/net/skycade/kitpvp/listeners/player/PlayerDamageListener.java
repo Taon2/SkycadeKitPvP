@@ -120,7 +120,7 @@ public class PlayerDamageListener implements Listener {
             event.setCancelled(true);
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         event.getDrops().clear();
         event.setDeathMessage("");
