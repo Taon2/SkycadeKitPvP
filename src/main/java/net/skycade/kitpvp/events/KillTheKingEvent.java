@@ -184,24 +184,14 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
-        Bukkit.getLogger().info("-3");
-
         if (begin == null) return;
-
-        Bukkit.getLogger().info("-2");
 
         Player died = event.getEntity();
         if (this.king.equals(died.getUniqueId())) {
-            Bukkit.getLogger().info("-1");
-
             Player killer = null;
             //try to get the killer
             try {
-                Bukkit.getLogger().info("0");
-
-                killer = died.getKiller();
-                Bukkit.getLogger().info("1");
-                //Dish out event token rewards for killer
+                killer = died.getKiller();//Dish out event token rewards for killer
                 KitPvPStats killerStats = KitPvP.getInstance().getStats(killer);
                 if (killerStats != null) {
                     killerStats.giveEventTokens(prizeAmount);
@@ -225,13 +215,9 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
             }
 
             if (Bukkit.getOfflinePlayer(king).isOnline()) {
-                Bukkit.getLogger().info("2");
                 //Dish out event token rewards for the king
                 KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
-                Bukkit.getLogger().info("3");
                 if (kingStats != null) {
-                    Bukkit.getLogger().info("4");
-
                     kingStats.giveEventTokens(prizeAmount);
                     KILLTHEKING_PARTICIPATE.msg(Bukkit.getPlayer(king), "%amount%", Integer.toString(participationAmount));
                 }
