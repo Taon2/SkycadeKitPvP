@@ -283,13 +283,11 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
-        if (begin == null) return;
+        if (begin == null || !this.king.equals(event.getWhoClicked().getUniqueId())) return;
 
-        //stops king from removing their armor
-        if (this.king.equals(event.getWhoClicked().getUniqueId())) {
-            if (event.getSlotType() == InventoryType.SlotType.ARMOR) {
-                event.setCancelled(true);
-            }
+        // stops king from removing their armor
+        if (event.getSlotType() == InventoryType.SlotType.ARMOR) {
+            event.setCancelled(true);
         }
     }
 

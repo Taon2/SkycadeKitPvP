@@ -60,7 +60,7 @@ public class KitWolfPack extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + wolvesCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + wolvesCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "summons wolves to fight for you.").build();
 
         ItemStack icon = new ItemStack(Material.BONE);
@@ -125,7 +125,7 @@ public class KitWolfPack extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Bork!",
                 "",
-                ChatColor.GRAY + "Shift + Right clicking your sword",
+                ChatColor.GRAY + "%click% your sword",
                 ChatColor.GRAY + "summons wolves to fight for you."
         );
     }

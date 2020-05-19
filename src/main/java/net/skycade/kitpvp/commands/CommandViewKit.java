@@ -39,6 +39,6 @@ public class CommandViewKit extends SkycadeCommand {
             return;
         }
 
-        new ViewKitMenu(kit).open((Player) commandSender);
+        new ViewKitMenu(kit, (Player) commandSender).open((Player) commandSender);
     }
 }

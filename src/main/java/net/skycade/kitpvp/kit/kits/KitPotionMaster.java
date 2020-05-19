@@ -63,7 +63,7 @@ public class KitPotionMaster extends Kit {
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + potCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + potCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws debuff potions in front of you.").build();
 
         ItemStack icon = new ItemStack(Material.BREWING_STAND_ITEM);
@@ -118,7 +118,7 @@ public class KitPotionMaster extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Bartender!",
                 "",
-                ChatColor.GRAY + "Shift + Right clicking throws debuff potions.",
+                ChatColor.GRAY + "%click% throws debuff potions.",
                 ChatColor.GRAY + "Heals with potions instead of soups."
         );
     }

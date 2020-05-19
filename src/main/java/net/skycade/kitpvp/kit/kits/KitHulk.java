@@ -63,7 +63,7 @@ public class KitHulk extends Kit {
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.GREEN).build();
 
-        constantEffects.put(PotionEffectType.SLOW, 1);
+        constantEffects.put(PotionEffectType.SLOW, 0);
         constantEffects.put(PotionEffectType.INCREASE_DAMAGE, 5);
 
         ItemStack icon = new ItemBuilder(
@@ -213,7 +213,7 @@ public class KitHulk extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "HULK SMASH!",
                 "",
-                ChatColor.GRAY + "Shift + Right clicking a block with your",
+                ChatColor.GRAY + "%click% a block with your",
                 ChatColor.GRAY + "fist makes you smash the ground,",
                 ChatColor.GRAY + "knocking back enemies."
         );

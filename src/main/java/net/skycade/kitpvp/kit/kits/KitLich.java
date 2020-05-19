@@ -76,7 +76,7 @@ public class KitLich extends Kit {
                 Material.STONE_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 9)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 2)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + ghostCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + ghostCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "summons ghosts to fight for you.").build();
         phylactery = new ItemBuilder(
                 Material.BEACON)
@@ -377,7 +377,7 @@ public class KitLich extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Ruler of the undead.",
                 "",
-                ChatColor.GRAY + "Shift + Right clicking summons 2 ghosts",
+                ChatColor.GRAY + "%click% summons 2 ghosts",
                 ChatColor.GRAY + "to attack enemies for you.",
                 ChatColor.GRAY + "If you die within 1.5 minutes of placing your",
                 ChatColor.GRAY + "phylactery, you respawn at the phylactery's location",

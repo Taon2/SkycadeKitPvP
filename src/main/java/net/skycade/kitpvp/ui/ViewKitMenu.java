@@ -9,11 +9,13 @@ import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,17 +39,55 @@ public class ViewKitMenu extends DynamicGui {
         DUMMY_PLAYER.getHandle().playerConnection = new PlayerConnection(MinecraftServer.getServer(), new NetworkManager(null), DUMMY_PLAYER.getHandle());
     }
 
-    public ViewKitMenu(Kit kit) {
+    public ViewKitMenu(Kit kit, Player player) {
         super(ChatColor.GOLD + "" + ChatColor.BOLD + "View Kit " + kit.getName(), 2);
+
+        KitPvPStats stats = KitPvP.getInstance().getStats(player);
 
         if (kit.getKitType() != KitType.GAMBLER) {
             kit.applyKit(DUMMY_PLAYER);
+
+            // properly display lore for abilitytoggle
+            for (ItemStack item : DUMMY_PLAYER.getInventory()) {
+
+                if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
+                    ItemMeta meta = item.getItemMeta();
+                    List<String> lore = item.getItemMeta().getLore();
+
+                    // check the lore and replace if necessary
+                    for (int i = 0; i < lore.size(); i++) {
+                        String s = lore.get(i);
+                        if (s.contains("%click%")) {
+                            if (stats.isAbilityToggle())
+                                s = s.replace("%click%", "Shift + Right clicking");
+                            else
+                                s = s.replace("%click%", "Right clicking");
+                        }
+
+                        lore.set(i, s);
+                    }
+
+                    meta.setLore(lore);
+                    item.setItemMeta(meta);
+                }
+            }
+
             addItems(0, getItems(), getPotionEffects(DUMMY_PLAYER.getActivePotionEffects()));
             reset();
         }
 
         if (kit.getDescription() != null) {
-            List<String> lore = new ArrayList<>(kit.getDescription());
+            List<String> lore = new ArrayList<>();
+            for (String s : kit.getDescription()) {
+                if (s.contains("%click%")) {
+                    if (stats.isAbilityToggle())
+                        s = s.replace("%click%", "Shift + Right clicking");
+                    else
+                        s = s.replace("%click%", "Right clicking");
+                }
+
+                lore.add(s);
+            }
             lore.add("");
             lore.addAll(kit.getHowToObtain());
             setItem(13,  new ItemBuilder(Material.PAPER).setName(ChatColor.GREEN + kit.getName()).addLore(lore).build());

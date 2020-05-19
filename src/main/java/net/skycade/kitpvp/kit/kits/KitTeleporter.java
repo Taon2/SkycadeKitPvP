@@ -86,7 +86,7 @@ public class KitTeleporter extends Kit {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+        if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if (player.getItemInHand().getType() == Material.ENDER_PEARL) {
                 if (!addCooldown(event.getPlayer(), getName(), 10, true) || frozenPlayers.containsKey(event.getPlayer().getUniqueId())) {
                     event.setCancelled(true);

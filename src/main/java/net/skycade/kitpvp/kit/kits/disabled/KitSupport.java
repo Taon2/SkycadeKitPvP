@@ -55,7 +55,7 @@ public class KitSupport extends Kit {
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + beaconCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + beaconCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "gives players around you speed and resistance.").build();
 
         ItemStack icon = new ItemStack(Material.BEACON);

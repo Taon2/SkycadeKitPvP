@@ -64,7 +64,7 @@ public class KitBomber extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 5).build();
         tnt = new ItemBuilder(
                 Material.TNT, tntStartAmount)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + tntCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + tntCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws 1 tnt.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 tnt every " + tntRegenSpeed + " seconds.").build();
 

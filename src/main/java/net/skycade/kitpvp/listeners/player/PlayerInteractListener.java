@@ -73,21 +73,8 @@ public class PlayerInteractListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player p = event.getPlayer();
 
-        if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && (plugin.isInSpawnArea(p) || VanishStatus.isVanished(event.getPlayer().getUniqueId()))) {
-            plugin.getStats(event.getPlayer()).getActiveKit().getKit().reimburseItem(event.getPlayer(), event.getItem());
-            return;
-        }
-
-        if (event.getItem() == null) {
-            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && plugin.getStats(p).getActiveKit() == KitType.HULK && !p.getGameMode().equals(GameMode.CREATIVE)) {
-                if ((plugin.getStats(event.getPlayer()).isAbilityToggle() && !event.getPlayer().isSneaking()))
-                    return;
-                plugin.getStats(p).getActiveKit().getKit().onItemUse(p, new ItemStack(Material.AIR));
-            }
-            return;
-        }
-
-        if (event.getItem().getType() == Material.MUSHROOM_SOUP) {
+        // applies soup to the player, runs first for soup reg reasons
+        if (event.getItem() != null && event.getItem().getType() == Material.MUSHROOM_SOUP) {
             double maxHealth = p.getMaxHealth();
             if (p.getHealth() < maxHealth) {
                 if (p.getHealth() < maxHealth - 7) {
@@ -109,12 +96,30 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
+        // gives item back if used in spawn
+        if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && (plugin.isInSpawnArea(p) || VanishStatus.isVanished(event.getPlayer().getUniqueId()))) {
+            plugin.getStats(event.getPlayer()).getActiveKit().getKit().reimburseItem(event.getPlayer(), event.getItem());
+            return;
+        }
+
+        // activates hulk kits ability with empty hand
+        if (event.getItem() == null) {
+            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && plugin.getStats(p).getActiveKit() == KitType.HULK && !p.getGameMode().equals(GameMode.CREATIVE)) {
+                if ((plugin.getStats(event.getPlayer()).isAbilityToggle() && !event.getPlayer().isSneaking()))
+                    return;
+                plugin.getStats(p).getActiveKit().getKit().onItemUse(p, new ItemStack(Material.AIR));
+            }
+            return;
+        }
+
+        // activates block ability
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !p.getGameMode().equals(GameMode.CREATIVE) && !plugin.isInSpawnArea(p)) {
             if ((plugin.getStats(event.getPlayer()).isAbilityToggle() && !event.getPlayer().isSneaking()))
                 return;
             plugin.getStats(p).getActiveKit().getKit().onItemUse(p, event.getItem(), event.getClickedBlock());
         }
 
+        // activates air ability
         if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && !p.getGameMode().equals(GameMode.CREATIVE)) {
             if ((plugin.getStats(event.getPlayer()).isAbilityToggle() && !event.getPlayer().isSneaking()))
                 return;

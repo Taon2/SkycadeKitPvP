@@ -49,7 +49,7 @@ public class KitCaveMan extends Kit {
                 Material.WOOD_SPADE)
                 .addEnchantment(Enchantment.DURABILITY, 7)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + blockCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + blockCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "throws a dirt block.").build();
 
         constantEffects.put(PotionEffectType.DAMAGE_RESISTANCE, 0);

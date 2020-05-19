@@ -47,7 +47,7 @@ public class KitHyper extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5).build();
         sugar = new ItemBuilder(Material.SUGAR)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + sugarCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + sugarCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "grants you speed and regeneration.").build();
 
         ItemStack icon = new ItemStack(Material.SUGAR);

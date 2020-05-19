@@ -76,7 +76,9 @@ public class KitChance extends Kit {
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
         // ensures the person being hit is not on the same ctf team
         if (CaptureTheFlagEvent.getInstance().getBegin() != null
-                && (CaptureTheFlagEvent.getInstance().isTeamRed(damagee) != CaptureTheFlagEvent.getInstance().isTeamRed(damager)))
+                && (CaptureTheFlagEvent.getInstance().isTeamRed(damagee) == CaptureTheFlagEvent.getInstance().isTeamRed(damager)))
+            return;
+
         chanceEffect(6, 5, 2, 2, damager, e);
     }
 

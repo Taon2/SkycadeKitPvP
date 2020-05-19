@@ -46,7 +46,7 @@ public class KitKing extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + golemCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + golemCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "summons a golem to fight for you.").build();
 
         ItemStack icon = new ItemStack(Material.GOLD_HELMET);
@@ -123,7 +123,7 @@ public class KitKing extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Bow down.",
                 "",
-                ChatColor.GRAY + "Shift + Right clicking spawns a golem",
+                ChatColor.GRAY + "%click% spawns a golem",
                 ChatColor.GRAY + "to attack enemies for you."
         );
     }

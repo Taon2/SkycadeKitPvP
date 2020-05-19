@@ -9,6 +9,7 @@ import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.nms.ActionBarUtil;
 import net.skycade.kitpvp.runnable.ItemRunnable;
+import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -28,6 +29,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -87,6 +89,32 @@ public abstract class Kit implements Listener {
         p.getInventory().clear();
         for (PotionEffect potionEffect : p.getActivePotionEffects()) p.removePotionEffect(potionEffect.getType());
         applyKit(p);
+
+        // sets proper lore between Shift + Right click or normal Right click
+        KitPvPStats stats = KitPvP.getInstance().getStats(p);
+        for (ItemStack item : p.getInventory()) {
+
+            if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
+                ItemMeta meta = item.getItemMeta();
+                List<String> lore = item.getItemMeta().getLore();
+
+                // check the lore and replace if necessary
+                for (int i = 0; i < lore.size(); i++) {
+                    String s = lore.get(i);
+                    if (s.contains("%click%")) {
+                        if (stats.isAbilityToggle())
+                            s = s.replace("%click%", "Shift + Right clicking");
+                        else
+                            s = s.replace("%click%", "Right clicking");
+                    }
+
+                    lore.set(i, s);
+                }
+
+                meta.setLore(lore);
+                item.setItemMeta(meta);
+            }
+        }
     }
 
     public abstract void applyKit(Player p);

@@ -58,7 +58,17 @@ public class KitMenu extends DynamicGui {
 
                     meta.setDisplayName(ChatColor.GREEN + kit.getName());
 
-                    List<String> lore = new ArrayList<>(kit.getDescription());
+                    List<String> lore = new ArrayList<>();
+                    for (String s : kit.getDescription()) {
+                        if (s.contains("%click%")) {
+                            if (stats.isAbilityToggle())
+                                s = s.replace("%click%", "Shift + Right clicking");
+                            else
+                                s = s.replace("%click%", "Right clicking");
+                        }
+
+                        lore.add(s);
+                    }
                     lore.add("");
                     lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to view this kit!");
                     if (stats.hasKit(kit.getKitType())) {
@@ -73,7 +83,7 @@ public class KitMenu extends DynamicGui {
                 },
                 (p, ev) -> {
                     if (ev.getClick() == ClickType.RIGHT) {
-                        new ViewKitMenu(kit).open(p);
+                        new ViewKitMenu(kit, p).open(p);
                     } else if (ev.getClick() == ClickType.LEFT) {
                         if (!stats.hasKit(kit.getKitType())) {
                             DONT_OWN.msg(member.getPlayer(), "%kit%", "kit " + kit.getName());

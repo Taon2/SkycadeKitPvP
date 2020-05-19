@@ -72,7 +72,7 @@ public class KitBuildUHC extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + goldenHeadCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + goldenHeadCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "grants a golden head effect.").build();
         fishingrod = new ItemBuilder(
                 Material.FISHING_ROD)
@@ -235,7 +235,7 @@ public class KitBuildUHC extends Kit {
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "9999 Elo!",
                 "",
                 ChatColor.GRAY + "Can place blocks to escape enemies.",
-                ChatColor.GRAY + "Shift + Right clicking gives a golden head effect.",
+                ChatColor.GRAY + "%click% gives a golden head effect.",
                 ChatColor.GRAY + "Heals with potions instead of soups."
         );
     }

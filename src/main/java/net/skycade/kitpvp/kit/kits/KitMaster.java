@@ -65,7 +65,7 @@ public class KitMaster extends Kit {
                 .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
         stick = new ItemBuilder(
                 Material.STICK)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking a player every " + swapCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% a player every " + swapCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "lets you copy their kit for 20 seconds.").build();
 
         ItemStack icon = new ItemStack(Material.DIAMOND_SPADE);

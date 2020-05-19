@@ -52,7 +52,7 @@ public class KitNinja extends Kit {
                 Material.STONE_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 3)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + dashCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + dashCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "lets you dash around and have extra strength.").build();
 
         constantEffects.put(PotionEffectType.SPEED, 1);

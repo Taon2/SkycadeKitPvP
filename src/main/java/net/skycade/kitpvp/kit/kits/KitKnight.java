@@ -70,7 +70,7 @@ public class KitKnight extends Kit {
         weapon = new ItemBuilder(
                 Material.DIAMOND_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 4)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + steedCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + steedCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "lets you charge a horse into battle.").build();
 
         ItemStack icon = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
@@ -251,7 +251,7 @@ public class KitKnight extends Kit {
                 "",
                 ChatColor.GRAY + "Being in a gang with a player using",
                 ChatColor.GRAY + "Kit King nearby increases your defence.",
-                ChatColor.GRAY + "Shift + Right clicking with your sword",
+                ChatColor.GRAY + "%click% with your sword",
                 ChatColor.GRAY + "mounts you onto a horse."
         );
     }

@@ -49,7 +49,7 @@ public class KitGolem extends Kit {
                 Material.WOOD_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 4)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + smashCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + smashCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "smashes the ground around you.").build();
 
         ItemStack icon = new ItemStack(Material.IRON_BLOCK);

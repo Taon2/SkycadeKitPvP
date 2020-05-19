@@ -53,7 +53,7 @@ public class KitKangaroo extends Kit {
                 Material.GOLD_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 2)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + leapCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + leapCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "makes you mega jump.").build();
 
         ItemStack icon = new ItemStack(Material.RABBIT_FOOT);
@@ -95,7 +95,7 @@ public class KitKangaroo extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "From down under.",
                 "",
-                ChatColor.GRAY + "Shift + Right clicking makes you a mega jump."
+                ChatColor.GRAY + "%click% makes you a mega jump."
         );
     }
 }
