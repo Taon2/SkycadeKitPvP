@@ -37,7 +37,7 @@ public class KitGhost extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 2)
                 .addEnchantment(Enchantment.KNOCKBACK, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + spookCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + spookCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "levitates players around you.").build();
 
         constantEffects.put(PotionEffectType.INVISIBILITY, 10);
@@ -103,7 +103,7 @@ public class KitGhost extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "OooOOOooo!",
                 "",
-                ChatColor.GRAY + "Shift + Right clicking will",
+                ChatColor.GRAY + "%click% will",
                 ChatColor.GRAY + "spook players around you."
         );
     }

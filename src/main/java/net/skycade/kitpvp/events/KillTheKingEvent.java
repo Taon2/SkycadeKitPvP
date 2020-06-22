@@ -15,6 +15,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -181,19 +182,16 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
 
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         if (begin == null) return;
 
         Player died = event.getEntity();
         if (this.king.equals(died.getUniqueId())) {
-            stop();
-
             Player killer = null;
             //try to get the killer
             try {
-                killer = died.getKiller();
-                //Dish out event token rewards for killer
+                killer = died.getKiller();//Dish out event token rewards for killer
                 KitPvPStats killerStats = KitPvP.getInstance().getStats(killer);
                 if (killerStats != null) {
                     killerStats.giveEventTokens(prizeAmount);
@@ -212,23 +210,26 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                     }
                 });
             }
-            catch (Exception ignored) {}
+            catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            if (!Bukkit.getOfflinePlayer(king).isOnline()) return;
-
-            //Dish out event token rewards for the king
-            KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
-            if (kingStats != null) {
-                kingStats.giveEventTokens(prizeAmount);
-                KILLTHEKING_PARTICIPATE.msg(Bukkit.getPlayer(king), "%amount%", Integer.toString(participationAmount));
+            if (Bukkit.getOfflinePlayer(king).isOnline()) {
+                //Dish out event token rewards for the king
+                KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
+                if (kingStats != null) {
+                    kingStats.giveEventTokens(prizeAmount);
+                    KILLTHEKING_PARTICIPATE.msg(Bukkit.getPlayer(king), "%amount%", Integer.toString(participationAmount));
+                }
             }
 
             if (killer != null)
                 KILLTHEKING_KILLED_BY.broadcast("%player%", killer.getName());
             else
                 KILLTHEKING_KILLED.broadcast();
-        }
 
+            stop();
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -282,13 +283,11 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
-        if (begin == null) return;
+        if (begin == null || !this.king.equals(event.getWhoClicked().getUniqueId())) return;
 
-        //stops king from removing their armor
-        if (this.king.equals(event.getWhoClicked().getUniqueId())) {
-            if (event.getSlotType() == InventoryType.SlotType.ARMOR) {
-                event.setCancelled(true);
-            }
+        // stops king from removing their armor
+        if (event.getSlotType() == InventoryType.SlotType.ARMOR) {
+            event.setCancelled(true);
         }
     }
 

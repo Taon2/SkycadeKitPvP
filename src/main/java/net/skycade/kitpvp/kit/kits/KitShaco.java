@@ -73,7 +73,7 @@ public class KitShaco extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + invisibilityCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + invisibilityCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "makes you invisible for " + invisibilityLength + " seconds.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Hits from behind deal more damage while invisible .").build();
         snowball = new ItemBuilder(
@@ -130,9 +130,11 @@ public class KitShaco extends Kit {
 
         shacoArmor.put(p.getUniqueId(), p.getInventory().getArmorContents());
         p.getInventory().setArmorContents(null);
+        p.setCustomNameVisible(false);
         p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, invisibilityLength * 20, 0));
 
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+            p.setCustomNameVisible(true);
             if (shacoArmor.containsKey(p.getUniqueId())) {
                 p.getInventory().setArmorContents(shacoArmor.get(p.getUniqueId()));
                 shacoArmor.remove(p.getUniqueId());

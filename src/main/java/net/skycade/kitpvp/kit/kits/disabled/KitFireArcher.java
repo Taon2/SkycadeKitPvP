@@ -99,14 +99,16 @@ public class KitFireArcher extends Kit {
         item.addEnchantment(Enchantment.ARROW_FIRE, 1);
         p.getWorld().playSound(p.getLocation(), Sound.FIRE_IGNITE, 1.0F, 1.0F);
 
-        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> p.getInventory().forEach((itemStack) -> {
-            if (itemStack != null && itemStack.getType() == Material.BOW) {
-                if (itemStack.containsEnchantment(Enchantment.ARROW_FIRE)) {
-                    FIRE_REMOVED.msg(p);
-                    itemStack.removeEnchantment(Enchantment.ARROW_FIRE);
+        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
+            for (ItemStack itemStack : p.getInventory().getContents()) {
+                if (itemStack != null && itemStack.getType() == Material.BOW) {
+                    if (itemStack.containsEnchantment(Enchantment.ARROW_FIRE)) {
+                        FIRE_REMOVED.msg(p);
+                        itemStack.removeEnchantment(Enchantment.ARROW_FIRE);
+                    }
                 }
             }
-        }), 20 * flameSeconds);
+        }, 20 * flameSeconds);
     }
 
 

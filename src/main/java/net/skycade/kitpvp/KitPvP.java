@@ -172,7 +172,7 @@ public class KitPvP extends SkycadePlugin {
 
         // register stats
         if (Bukkit.getPluginManager().getPlugin("SkycadeLeaderboards") != null) {
-            List<UUID> uuids = KitPvPDB.getInstance().getAllUUIDs();
+            Set<UUID> uuids = KitPvPDB.getInstance().getTopUuids();
             // initializing ones that use UUIDs
             StatKitPvPKills.getInstance().init(uuids);
             StatKitPvPCoins.getInstance().init(uuids);

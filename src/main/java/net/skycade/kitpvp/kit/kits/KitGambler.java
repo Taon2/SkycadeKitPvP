@@ -34,6 +34,9 @@ public class KitGambler extends Kit {
         if (randomKit == KitType.GAMBLER || !randomKit.getKit().isEnabled())
             applyKit(p);
 
+        getKitManager().getKitPvP().getStats(p).setActiveKit(randomKit);
+        getKitManager().getKitPvP().getStats(p).setKitPreference(KitType.GAMBLER);
+
         randomKit.getKit().beginApplyKit(p);
 
         KIT_EQUIPPED.msg(p, "%kit%", randomKit.getKit().getName());

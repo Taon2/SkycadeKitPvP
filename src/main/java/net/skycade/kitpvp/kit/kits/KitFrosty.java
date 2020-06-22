@@ -37,8 +37,8 @@ public class KitFrosty extends Kit {
     private ItemStack snowball;
 
     private int snowballCooldown = 5;
-    private int snowballStartAmount = 6;
-    private int snowballMaxAmount = 8;
+    private int snowballStartAmount = 3;
+    private int snowballMaxAmount = 5;
     private int snowballRegenSpeed = 20;
 
     private List<Snowball> snowballList = new ArrayList<>();

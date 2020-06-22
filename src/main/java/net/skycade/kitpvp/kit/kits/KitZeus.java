@@ -91,7 +91,7 @@ public class KitZeus extends Kit {
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
         if (UtilMath.getRandom(0, 100) <= 7) {
             HashMap<Player, List<Block>> playerBlockList = getBlocks(damagee);
-            for(Block b : playerBlockList.get(damagee)){
+            for (Block b : playerBlockList.get(damagee)){
                 if (!allowedTypes.contains(b.getType())) {
                     CANNOT_USE.msg(damager, "%thing%", "lightning", "%reason%", "while under a block!");
                     return;

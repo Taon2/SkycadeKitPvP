@@ -4,7 +4,7 @@ import net.skycade.SkycadeCore.utility.MojangUtil;
 import net.skycade.kitpvp.stat.leaderboards.caching.LeaderboardsCache;
 import net.skycade.skycadeleaderboards.leaderboards.StatisticType;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 public class StatKitPvPDeaths extends StatisticType<UUID, Integer> {
@@ -21,7 +21,7 @@ public class StatKitPvPDeaths extends StatisticType<UUID, Integer> {
         return instance;
     }
 
-    public void init(List<UUID> uuids) {
+    public void init(Collection<UUID> uuids) {
         update(uuids, true);
     }
 

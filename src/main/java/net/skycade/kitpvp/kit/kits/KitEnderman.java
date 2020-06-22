@@ -66,7 +66,7 @@ public class KitEnderman extends Kit {
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking your enemy every " + teleportCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% your enemy every " + teleportCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "teleports you behind them.").build();
 
         ItemStack icon = new ItemStack(Material.ENDER_PEARL);
@@ -156,7 +156,7 @@ public class KitEnderman extends Kit {
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Hates the water.",
                 "",
-                ChatColor.GRAY + "Shift + Right clicking your enemy",
+                ChatColor.GRAY + "%click% your enemy",
                 ChatColor.GRAY + "teleports you behind them.",
                 ChatColor.GRAY + "Touching water damages you.",
                 ChatColor.GRAY + "Immune to projectiles."

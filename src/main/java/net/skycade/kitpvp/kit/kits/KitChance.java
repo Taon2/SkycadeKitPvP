@@ -3,6 +3,7 @@ package net.skycade.kitpvp.kit.kits;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
+import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
@@ -73,6 +74,11 @@ public class KitChance extends Kit {
 
     @Override
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
+        // ensures the person being hit is not on the same ctf team
+        if (CaptureTheFlagEvent.getInstance().getBegin() != null
+                && (CaptureTheFlagEvent.getInstance().isTeamRed(damagee) == CaptureTheFlagEvent.getInstance().isTeamRed(damager)))
+            return;
+
         chanceEffect(6, 5, 2, 2, damager, e);
     }
 

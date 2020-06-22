@@ -41,22 +41,22 @@ public class KitMaster extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5)
                 .setColour(Color.fromBGR(0, 215, 255)).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 7)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
                 .setColour(Color.fromBGR(0, 215, 255)).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 7)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5)
+                .addEnchantment(Enchantment.DURABILITY, 10)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
                 .setColour(Color.fromBGR(0, 215, 255)).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.DURABILITY, 10)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5)
                 .setColour(Color.fromBGR(0, 215, 255)).build();
         weapon = new ItemBuilder(
@@ -65,7 +65,7 @@ public class KitMaster extends Kit {
                 .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
         stick = new ItemBuilder(
                 Material.STICK)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking a player every " + swapCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% a player every " + swapCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "lets you copy their kit for 20 seconds.").build();
 
         ItemStack icon = new ItemStack(Material.DIAMOND_SPADE);

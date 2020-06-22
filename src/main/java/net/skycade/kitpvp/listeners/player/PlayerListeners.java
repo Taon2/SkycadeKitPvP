@@ -33,6 +33,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import static net.skycade.kitpvp.Messages.KNOCKBACK_REMOVED;
+import static org.bukkit.event.inventory.InventoryType.*;
 
 public class PlayerListeners implements Listener {
 
@@ -72,8 +73,8 @@ public class PlayerListeners implements Listener {
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent event) {
         if (event.getInventory().getHolder() instanceof Chest || event.getInventory().getHolder() instanceof DoubleChest
-                || event.getInventory().getType() == InventoryType.ANVIL
-                || event.getInventory().getType() == InventoryType.FURNACE)
+                || event.getInventory().getType() == ANVIL
+                || event.getInventory().getType() == FURNACE)
             if (event.getPlayer().getGameMode() != GameMode.CREATIVE)
                 event.setCancelled(true);
     }
@@ -130,21 +131,25 @@ public class PlayerListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onInventoryClick(InventoryClickEvent event) {
-        if ((!VanishStatus.isVanished(event.getWhoClicked().getUniqueId())
-                && event.getClickedInventory() != null
-                && event.getClickedInventory().getName() != null
-                && !event.getWhoClicked().getGameMode().equals(GameMode.CREATIVE)
-                && event.getInventory().getType() != InventoryType.CRAFTING
-                && event.getInventory().getType() != InventoryType.CHEST)
-                ||
-                (event.getSlotType() == InventoryType.SlotType.CRAFTING
-                && (event.getAction() == InventoryAction.PLACE_ONE || event.getAction() == InventoryAction.PLACE_ALL || event.getAction() == InventoryAction.HOTBAR_SWAP)))
+        if (VanishStatus.isVanished(event.getWhoClicked().getUniqueId()) ||
+                event.getWhoClicked().getGameMode() == GameMode.CREATIVE)
+            return;
+
+        if (event.getClickedInventory() != null && (event.getClickedInventory().getType() == HOPPER || (
+                event.getClickedInventory().getType() == CRAFTING &&
+                        event.getRawSlot() >= 1 && event.getRawSlot() <= 4)))
             event.setCancelled(true);
     }
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
-        if (!VanishStatus.isVanished(event.getWhoClicked().getUniqueId()) && !event.getWhoClicked().getGameMode().equals(GameMode.CREATIVE))
+        if (VanishStatus.isVanished(event.getWhoClicked().getUniqueId()) ||
+                event.getWhoClicked().getGameMode() == GameMode.CREATIVE)
+            return;
+
+        if (((event.getInventory().getType() == PLAYER || event.getInventory().getType() == CRAFTING) &&
+                event.getRawSlots().stream().anyMatch(s -> s >= 1 && s <= 4)) ||
+                event.getInventory().getType() == HOPPER)
             event.setCancelled(true);
     }
 

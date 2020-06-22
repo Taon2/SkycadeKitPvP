@@ -61,7 +61,7 @@ public class KitPrick extends Kit {
                 .addEnchantment(Enchantment.KNOCKBACK, 1).build();
         cactus = new ItemBuilder(
                 Material.CACTUS)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking on a player every " + cactusCooldown + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% on a player every " + cactusCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "gives the target poison and damages their armor.").build();
 
         ItemStack icon = new ItemStack(Material.CACTUS);

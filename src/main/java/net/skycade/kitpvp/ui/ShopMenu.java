@@ -51,7 +51,17 @@ public class ShopMenu extends DynamicGui {
 
                         meta.setDisplayName(ChatColor.GREEN + kit.getName());
 
-                        List<String> lore = new ArrayList<>(kit.getDescription());
+                        List<String> lore = new ArrayList<>();
+                        for (String s : kit.getDescription()) {
+                            if (s.contains("%click%")) {
+                                if (stats.isAbilityToggle())
+                                    s = s.replace("%click%", "Shift + Right clicking");
+                                else
+                                    s = s.replace("%click%", "Right clicking");
+                            }
+
+                            lore.add(s);
+                        }
                         lore.add("");
                         lore.add(ChatColor.GOLD + "Cost: " + ChatColor.WHITE + kit.getPrice() + " Coins");
                         if (stats.hasKit(kit.getKitType()))

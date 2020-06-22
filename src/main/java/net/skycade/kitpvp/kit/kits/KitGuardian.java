@@ -67,8 +67,8 @@ public class KitGuardian extends Kit {
                 .setColour(Color.fromRGB(0, 204, 204)).build();
         weapon = new ItemBuilder(
                 Material.RAW_FISH)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 3)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Shift + Right clicking every " + fishCooldown + " seconds")
+                .addEnchantment(Enchantment.DAMAGE_ALL, 4)
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + fishCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "slows nearby enemies.").build();
 
         ItemStack icon = new ItemStack(Material.PRISMARINE_CRYSTALS);
@@ -91,7 +91,7 @@ public class KitGuardian extends Kit {
                 beam.setStartingPosition(p.getLocation());
 
                 if (!getKitManager().getKitPvP().isInSpawnArea(p)) {
-                    Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 6);
+                    Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 8);
 
                     if (!(nearbyPlayers.isEmpty())) {
                         Player target = getClosestTarget(nearbyPlayers, p);
@@ -230,7 +230,7 @@ public class KitGuardian extends Kit {
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "I'M A FIRIN MAH LAZER!",
                 "",
                 ChatColor.GRAY + "Fires a laser at the nearest enemy.",
-                ChatColor.GRAY + "Shift + Right clicking slows players around you."
+                ChatColor.GRAY + "%click% slows players around you."
         );
     }
 }
