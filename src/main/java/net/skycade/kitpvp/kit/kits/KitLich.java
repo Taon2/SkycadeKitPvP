@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
+import com.sun.org.glassfish.external.statistics.Stats;
 import net.skycade.SkycadeCombat.data.CombatData;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
@@ -21,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -257,6 +259,25 @@ public class KitLich extends Kit {
                     }
                 }
             });
+        }
+    }
+
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        KitPvPStats stats = KitPvP.getInstance().getStats(event.getPlayer());
+
+        if (stats.getActiveKit() == KitType.LICH) {
+            if (placed.containsKey(event.getPlayer().getUniqueId())) {
+                placed.get(event.getPlayer().getUniqueId()).forEach((loc, replace) -> {
+                    Material material = replace.getType();
+
+                    loc.getBlock().setType(material);
+                    BlockState blockState = loc.getBlock().getState();
+                    blockState.setData(replace.getData());
+                    blockState.update();
+                });
+                placed.remove(event.getPlayer().getUniqueId());
+            }
         }
     }
 

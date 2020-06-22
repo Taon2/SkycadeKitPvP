@@ -10,13 +10,17 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -162,6 +166,15 @@ public class KitBlockhunt extends Kit {
     public boolean onDeath(Player died, Player killer) {
         removeDisguise(died);
         return true;
+    }
+
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        KitPvPStats stats = KitPvP.getInstance().getStats(event.getPlayer());
+
+        if (stats.getActiveKit() == KitType.BLOCKHUNT) {
+            removeDisguise(event.getPlayer());
+        }
     }
 
     private void addFallingBlock(Player p, Material material, byte data) {
