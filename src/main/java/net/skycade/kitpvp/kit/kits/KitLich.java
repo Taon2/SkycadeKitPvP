@@ -1,6 +1,5 @@
 package net.skycade.kitpvp.kit.kits;
 
-import com.sun.org.glassfish.external.statistics.Stats;
 import net.skycade.SkycadeCombat.data.CombatData;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
