@@ -15,11 +15,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static net.skycade.kitpvp.Messages.PLAYER_REPAIRED;
 import static net.skycade.kitpvp.Messages.REPAIRED;
@@ -97,6 +97,7 @@ public class KitBlacksmith extends Kit {
             anvilLocation.add(0, 3, 0);
 
             if (anvilLocation.getBlock().getType() == Material.AIR) {
+                // spawn the anvils
                 Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -107,6 +108,15 @@ public class KitBlacksmith extends Kit {
                             anvilLocation.getBlock().setType(Material.ANVIL);
                     }
                 }, anvilNum * 5);
+
+                // try to ensure it goes back to something that isnt an anvil
+                Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (anvilLocation.getBlock().getType() == Material.ANVIL)
+                            anvilLocation.getBlock().setType(Material.AIR);
+                    }
+                }, 5 * 20);
             }
         }
     }

@@ -259,7 +259,8 @@ public class PlayerDamageListener implements Listener {
 
         //Normal kill coins
         int base = KitPvP.getInstance().getConfig().getInt("kill-coins");
-        int extra = (int) Math.ceil(base * Math.pow((100 + KitPvP.getInstance().getConfig().getInt("kill-bonus-percentage")) / ((double) 100), killerStats.getStreak() - 1)) + bounty;
+        int power = killerStats.getStreak() - 1 <= 150 ? killerStats.getStreak() - 1 : 150;
+        int extra = (int) Math.ceil(base * Math.pow((100 + KitPvP.getInstance().getConfig().getInt("kill-bonus-percentage")) / ((double) 100), power)) + bounty;
 
         double modifier = KitPvP.getInstance().getConfig().getDouble("coins-modifier");
         int finalReward = (int) Math.ceil(modifier / (double) 100 * (extra + killstreakCoins));
