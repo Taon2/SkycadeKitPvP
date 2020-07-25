@@ -13,8 +13,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -75,6 +73,7 @@ public class KitKing extends Kit {
 
         IronGolem golem = (IronGolem) p.getWorld().spawnEntity(p.getLocation(), EntityType.IRON_GOLEM);
         golem.setCustomName(p.getName());
+        golem.setHealth(golem.getMaxHealth() * 0.75);
 
         Set<Player> nearbyPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 5);
 
@@ -83,7 +82,7 @@ public class KitKing extends Kit {
 
         golemList.add(golem);
 
-        removeSummon(30, p);
+        removeSummon(20, p);
     }
 
     public void removeSummon(int seconds, Player p) {

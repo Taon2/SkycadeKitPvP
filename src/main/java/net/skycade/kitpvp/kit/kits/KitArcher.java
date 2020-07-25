@@ -115,7 +115,7 @@ public class KitArcher extends Kit {
             HEALTH_BOOST.msg(archer);
         } else if (randomNumber <= regainHealth + doubleDamage) {
             DOUBLE_DAMAGE.msg(archer);
-            e.setDamage(e.getDamage() * 2);
+            e.setDamage(e.getFinalDamage() * 2);
             DOUBLE_DAMAGE_YOU.msg(target, "%player%", archer.getName());
         } else if (randomNumber <= regainHealth + doubleDamage + slowEffect) {
             TARGET_SLOWED.msg(archer);

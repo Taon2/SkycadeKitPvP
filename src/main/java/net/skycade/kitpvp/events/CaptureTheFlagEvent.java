@@ -73,7 +73,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
     private int team2Points = 0;
 
     private Long begin = null;
-    private Long length = 5 * 120 * 1000L;
+    private Long length = 10 * 60 * 1000L;
 
     private static final ItemStack BANNER1;
     private static final ItemStack BANNER2;
@@ -459,6 +459,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
             });
             lastWinners.addAll(team2);
         }
+        Bukkit.getServer().broadcastMessage("test");
 
         team1Points = 0;
         team2Points = 0;

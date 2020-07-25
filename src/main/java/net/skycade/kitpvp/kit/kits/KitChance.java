@@ -89,7 +89,7 @@ public class KitChance extends Kit {
             damager.setHealth(damager.getMaxHealth());
             HEALTH_BOOST.msg(damager);
         } else if (random <= healthPer + doublePer) {
-            e.setDamage(e.getDamage() * 2);
+            e.setDamage(e.getFinalDamage() * 2);
             DOUBLE_DAMAGE.msg(damager);
         } else if (random <= healthPer + doublePer + soupPer) {
             giveSoup(damager, 5);

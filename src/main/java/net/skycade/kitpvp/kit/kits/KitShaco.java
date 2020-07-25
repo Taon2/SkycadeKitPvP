@@ -109,7 +109,7 @@ public class KitShaco extends Kit {
         if (diffX > 0 && diffX < 1 || diffX < 0 && diffX > -1) {
             if (diffZ > 0 && diffZ < 1 || diffZ < 0 && diffZ > -1) {
                 BACKSTABBED.msg(damagee);
-                event.setDamage(event.getDamage() * backstabMultiplier);
+                event.setDamage(event.getFinalDamage() * backstabMultiplier);
             }
         }
     }

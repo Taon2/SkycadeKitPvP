@@ -16,7 +16,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -56,18 +55,14 @@ public class KitBuildUHC extends Kit {
         super(kitManager, "BuildUHC", KitType.BUILDUHC, 0, getLore());
 
         helmet = new ItemBuilder(
-                Material.IRON_HELMET)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
+                Material.IRON_HELMET).build();
         chestplate = new ItemBuilder(
                 Material.IRON_CHESTPLATE)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build();
         leggings = new ItemBuilder(
-                Material.IRON_LEGGINGS)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
+                Material.IRON_LEGGINGS).build();
         boots = new ItemBuilder(
-                Material.IRON_BOOTS)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Receive 50% more damage.").build();
+                Material.IRON_BOOTS).build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
@@ -199,11 +194,6 @@ public class KitBuildUHC extends Kit {
                 }
             });
         }
-    }
-
-    @Override
-    public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        e.setDamage(e.getDamage() * 1.5);
     }
 
     @Override

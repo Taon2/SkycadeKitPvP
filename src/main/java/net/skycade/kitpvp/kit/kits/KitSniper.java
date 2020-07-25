@@ -120,7 +120,7 @@ public class KitSniper extends Kit {
                 return;
             int combo = sniperCombo.get(shooter.getUniqueId());
             double increasedDamage = 1 + (combo < 10 ? combo * 0.05 : 0.5);
-            event.setDamage(event.getDamage() * increasedDamage);
+            event.setDamage(event.getFinalDamage() * increasedDamage);
         } else {
             sniperCombo.put(shooter.getUniqueId(), 1);
             sniperPlayerHit.put(shooter.getUniqueId(), damagee.getUniqueId());

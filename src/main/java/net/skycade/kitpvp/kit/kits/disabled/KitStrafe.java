@@ -74,7 +74,7 @@ public class KitStrafe extends Kit {
             dmgInc += 0.1;
             combo -= 3;
         }
-        event.setDamage(event.getDamage() * (Math.min(dmgInc, 1.5)));
+        event.setDamage(event.getFinalDamage() * (Math.min(dmgInc, 1.5)));
     }
 
     @Override

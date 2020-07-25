@@ -9,19 +9,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArrow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.entity.EntityCombustEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.lang.reflect.Field;
 
@@ -56,6 +52,23 @@ public class WorldListeners implements Listener {
             if (en instanceof FallingBlock)
                 event.getEntity().remove();
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPotionSplash(PotionSplashEvent event) {
+        if (!(event.getEntity().getShooter() instanceof Player)) return;
+
+        // only run this event on health pots
+        for (PotionEffect effect : event.getPotion().getEffects()) {
+            if (effect.getType() != PotionEffectType.HEAL) return;
+        }
+
+        // only let the health pot affect the thrower
+        for (LivingEntity affectedEntity : event.getAffectedEntities()) {
+            if (affectedEntity.getUniqueId() != ((Player) event.getEntity().getShooter()).getUniqueId()) {
+                event.setIntensity(affectedEntity, 0);
+            }
+        }
     }
 
     @EventHandler
