@@ -112,7 +112,7 @@ public class KitWolfPack extends Kit {
     public void onPlayerHit(EntityDamageByEntityEvent e) {
         if (!(e.getDamager() instanceof Wolf && e.getEntity() instanceof Player))
             return;
-        e.setDamage(e.getFinalDamage() * 2.5);
+        e.setDamage(e.getDamage() * 2.5);
     }
 
     @Override

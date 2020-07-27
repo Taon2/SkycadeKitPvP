@@ -103,7 +103,7 @@ public class KitZeus extends Kit {
             Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
             damagee.getWorld().strikeLightning(damagee.getLocation());
-            e.setDamage(e.getFinalDamage() * 1.4);
+            e.setDamage(e.getDamage() * 1.4);
             damagee.setFireTicks(60);
         }
     }

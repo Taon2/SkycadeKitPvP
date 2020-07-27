@@ -61,7 +61,7 @@ public class KitWarrior extends Kit {
 
     @Override
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        e.setDamage(e.getFinalDamage() * damageMultiplier);
+        e.setDamage(e.getDamage() * damageMultiplier);
     }
 
     @Override

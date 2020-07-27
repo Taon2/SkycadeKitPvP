@@ -86,7 +86,7 @@ public class KitAssassin extends Kit {
     @Override
     public void onDamageDealHit(EntityDamageByEntityEvent event, Player damager, Player damagee) {
         if (isBackStab(damager, damagee))
-            event.setDamage(event.getFinalDamage() * backstabMultiplier);
+            event.setDamage(event.getDamage() * backstabMultiplier);
         if (!comboMap.containsKey(damager.getUniqueId())) {
             comboMap.put(damager.getUniqueId(), 1);
             damager.setLevel(1);
