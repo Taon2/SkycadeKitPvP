@@ -26,11 +26,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import static net.skycade.kitpvp.Messages.KNOCKBACK_REMOVED;
 import static org.bukkit.event.inventory.InventoryType.*;
@@ -220,5 +227,14 @@ public class PlayerListeners implements Listener {
         }, 10);
 
         ScoreboardInfo.getInstance().updatePlayer(p);
+    }
+
+
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.LOWEST)
+    public void onEntityDamage(EntityDamageEvent event) {
+        System.out.println(Arrays.stream(event.getHandlers().getRegisteredListeners())
+                .sorted(Comparator.comparingInt(r -> r.getPriority().getSlot()))
+                .map(r -> r.getListener().getClass().getName() + " - " + r.getPriority().name())
+                .collect(Collectors.joining("\n")));
     }
 }
