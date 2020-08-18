@@ -30,7 +30,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -69,12 +68,6 @@ public class PlayerDamageListener implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-
-        Bukkit.getLogger().info(event.getFinalDamage() + "");
-        for (PotionEffect activePotionEffect : ((Player) event.getDamager()).getActivePotionEffects()) {
-            Bukkit.getLogger().info(activePotionEffect.getType().getName() + " " + activePotionEffect.getAmplifier());
-        }
-
         if (plugin.getSpawnRegion().contains(event.getEntity().getLocation())) {
             event.setCancelled(true);
             return;
