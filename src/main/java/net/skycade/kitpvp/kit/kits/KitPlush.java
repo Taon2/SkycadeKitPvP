@@ -103,14 +103,12 @@ public class KitPlush extends Kit {
     }
 
     @EventHandler
-    public void onCatHit(EntityDamageByEntityEvent e) {
-        if (!(e.getDamager() instanceof Player))
+    public void onCatHit(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player) || event.getEntity() instanceof Player)
             return;
-        if (e.getEntity() instanceof Player)
-            return;
-        if (e.getEntity().getCustomName() != null) {
-            if (e.getEntity().getCustomName().contains("Plush cat")) {
-                e.setCancelled(true);
+        if (event.getEntity().getCustomName() != null) {
+            if (event.getEntity().getCustomName().contains("Plush cat")) {
+                event.setCancelled(true);
             }
         }
     }

@@ -300,8 +300,6 @@ public abstract class Kit implements Listener {
 
             if (activeKit == KitType.POTIONMASTER || activeKit == KitType.BUILDUHC || activeKit == KitType.WITCHDOCTOR) {
                 p.getInventory().addItem(new ItemStack(Material.POTION, 1, (short) 16421));
-            } else if (activeKit == KitType.HULK) {
-                p.getInventory().addItem(new ItemStack(Material.MUSHROOM_SOUP, 1));
             } else {
                 p.getInventory().addItem(new ItemStack(Material.MUSHROOM_SOUP, 1));
             }

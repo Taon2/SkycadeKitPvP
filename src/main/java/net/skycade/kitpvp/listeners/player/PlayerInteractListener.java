@@ -2,7 +2,6 @@ package net.skycade.kitpvp.listeners.player;
 
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -77,15 +76,19 @@ public class PlayerInteractListener implements Listener {
         if (event.getItem() != null && event.getItem().getType() == Material.MUSHROOM_SOUP) {
             double maxHealth = p.getMaxHealth();
             if (p.getHealth() < maxHealth) {
+                // heals
                 if (p.getHealth() < maxHealth - 7) {
                     p.setHealth(p.getHealth() + 7);
                 } else {
                     p.setHealth(maxHealth);
                 }
                 final int heldItemSlot = event.getPlayer().getInventory().getHeldItemSlot();
+
+                //todo figure out why this is running 1 tick later, and if it dosent need to be, then make it run sync
                 new BukkitRunnable() {
                     @Override
                     public void run() {
+                        // remove the soup, and add an empty bowl
                         event.getPlayer().getInventory().clear(heldItemSlot);
                         p.updateInventory();
                         addBowl(p);

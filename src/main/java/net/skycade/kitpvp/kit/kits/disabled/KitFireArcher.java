@@ -1,10 +1,12 @@
 package net.skycade.kitpvp.kit.kits.disabled;
 
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -125,6 +127,9 @@ public class KitFireArcher extends Kit {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
+        KitPvPStats stats = KitPvP.getInstance().getStats(event.getPlayer());
+        if (stats.getActiveKit() != KitType.FIREARCHER) return;
+
         bowCooldown.remove(event.getPlayer().getUniqueId());
         flameCooldown.remove(event.getPlayer().getUniqueId());
     }

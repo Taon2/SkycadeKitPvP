@@ -223,6 +223,9 @@ public class KitKnight extends Kit {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
+        KitPvPStats stats = KitPvP.getInstance().getStats(event.getPlayer());
+        if (stats.getActiveKit() != KitType.KNIGHT) return;
+
         if (horses.containsKey(event.getPlayer().getUniqueId())) {
             if (event.getPlayer().getVehicle() != null)
                 event.getPlayer().getVehicle().eject();

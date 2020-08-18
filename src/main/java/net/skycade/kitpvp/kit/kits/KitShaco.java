@@ -1,11 +1,13 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -136,9 +138,10 @@ public class KitShaco extends Kit {
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
             p.setCustomNameVisible(true);
             if (shacoArmor.containsKey(p.getUniqueId())) {
-                p.getInventory().setArmorContents(shacoArmor.get(p.getUniqueId()));
-                shacoArmor.remove(p.getUniqueId());
+                if (KitPvP.getInstance().getStats(p).getActiveKit() == KitType.SHACO)
+                    p.getInventory().setArmorContents(shacoArmor.get(p.getUniqueId()));
             }
+            shacoArmor.remove(p.getUniqueId());
         }, 160);
     }
 
@@ -180,6 +183,9 @@ public class KitShaco extends Kit {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
+        KitPvPStats stats = KitPvP.getInstance().getStats(event.getPlayer());
+        if (stats.getActiveKit() != KitType.SHACO) return;
+
         shacoArmor.remove(event.getPlayer().getUniqueId());
     }
 

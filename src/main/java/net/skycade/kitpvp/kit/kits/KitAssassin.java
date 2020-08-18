@@ -1,10 +1,12 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -150,6 +152,9 @@ public class KitAssassin extends Kit {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
+        KitPvPStats stats = KitPvP.getInstance().getStats(event.getPlayer());
+        if (stats.getActiveKit() != KitType.ASSASSIN) return;
+
         comboMap.remove(event.getPlayer().getUniqueId());
     }
 }

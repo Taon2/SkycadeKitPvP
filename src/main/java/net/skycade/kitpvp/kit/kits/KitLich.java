@@ -374,6 +374,9 @@ public class KitLich extends Kit {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
+        KitPvPStats stats = KitPvP.getInstance().getStats(event.getPlayer());
+        if (stats.getActiveKit() != KitType.LICH) return;
+
         if (placed.containsKey(event.getPlayer().getUniqueId())) {
             placed.get(event.getPlayer().getUniqueId()).forEach((loc, replace) -> {
                 Material material = replace.getType();

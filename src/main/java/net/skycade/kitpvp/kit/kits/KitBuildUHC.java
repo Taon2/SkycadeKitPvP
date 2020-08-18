@@ -6,6 +6,7 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -180,6 +181,9 @@ public class KitBuildUHC extends Kit {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
+        KitPvPStats stats = KitPvP.getInstance().getStats(event.getPlayer());
+        if (stats.getActiveKit() != KitType.BUILDUHC) return;
+
         if (placed.containsKey(event.getPlayer().getUniqueId())) {
             placed.get(event.getPlayer().getUniqueId()).forEach(blockList -> {
                 for (Map.Entry<Location, BlockState> entry : blockList.entrySet()) {
