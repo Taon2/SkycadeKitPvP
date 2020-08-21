@@ -21,6 +21,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class PlayerInteractListener implements Listener {
 
     private final KitPvP plugin;
@@ -94,11 +98,15 @@ public class PlayerInteractListener implements Listener {
             }
         }
     }
+    private List<UUID> preventDoubleSoup = new ArrayList<>();
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
         Player p = event.getPlayer();
+
+        // cancel if they are trying to soup again when they cant
+        if (preventDoubleSoup.contains(p.getUniqueId())) return;
 
         // applies soup to the player, runs first for soup reg reasons
         if (item != null && item.getType() == Material.MUSHROOM_SOUP) {
@@ -111,13 +119,17 @@ public class PlayerInteractListener implements Listener {
                 else
                     p.setHealth(maxHealth);
 
-                final int heldItemSlot = event.getPlayer().getInventory().getHeldItemSlot();
+                // add to a list to prevent them from souping before the runnable ends
+                preventDoubleSoup.add(p.getUniqueId());
+
+                final int heldItemSlot = p.getInventory().getHeldItemSlot();
 
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         // remove the soup
-                        event.getPlayer().getInventory().clear(heldItemSlot);
+                        preventDoubleSoup.remove(p.getUniqueId());
+                        p.getInventory().clear(heldItemSlot);
                         p.updateInventory();
                     }
                 }.runTaskLater(plugin, 1L);
