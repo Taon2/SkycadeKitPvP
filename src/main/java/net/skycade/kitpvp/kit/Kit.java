@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.kit;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.server.v1_8_R3.AttributeMapBase;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.PlayerInteractManager;
 import net.skycade.SkycadeCore.utility.CoreUtil;
@@ -91,9 +90,6 @@ public abstract class Kit implements Listener {
 
         for (PotionEffect potionEffect : p.getActivePotionEffects())
             p.removePotionEffect(potionEffect.getType());
-
-        AttributeMapBase map = ((CraftPlayer) p).getHandle().getAttributeMap();
-        map.a().clear();
 
         applyKit(p);
 
