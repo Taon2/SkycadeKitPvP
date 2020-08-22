@@ -111,9 +111,9 @@ public class KitUnicorn extends Kit {
 
                 for (int i = 0; i < 3; i++)
                     for (Color col : rainbowColors)
-                        ParticleEffect.SPELL_MOB.display(new ParticleEffect.OrdinaryColor(col), loc, 30);
+                        ParticleEffect.SPELL_MOB.display(new ParticleEffect.OrdinaryColor(col), loc, 20);
                 if (UtilMath.getRandom(0, 3) == 2)
-                    ParticleEffect.LAVA.display(0, 0, 0, 0, 3, loc, 30);
+                    ParticleEffect.LAVA.display(0, 0, 0, 0, 3, loc, 20);
 
                 for (Player target : UtilPlayer.getNearbyPlayers(p, loc, 1).stream().filter(player -> !player.equals(p) && player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList())) {
                     target.damage(14, p);

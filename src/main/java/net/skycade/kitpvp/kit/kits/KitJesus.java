@@ -73,7 +73,7 @@ public class KitJesus extends Kit {
             if (!p.hasPotionEffect(PotionEffectType.SPEED))
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * (3 * 3), 1));
         }
-        particleTracerEffect(p, Color.BLUE, 20);
+        particleTracerEffect(p, Color.BLUE, 10);
     }
 
     @Override

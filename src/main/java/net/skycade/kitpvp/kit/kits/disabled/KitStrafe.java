@@ -86,7 +86,7 @@ public class KitStrafe extends Kit {
 
     @Override
     public void onMove(Player p) {
-        particleTracerEffect(p, Color.RED, 30);
+        particleTracerEffect(p, Color.RED, 15);
     }
 
     @EventHandler

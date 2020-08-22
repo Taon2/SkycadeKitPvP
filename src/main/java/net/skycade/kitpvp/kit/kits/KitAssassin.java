@@ -118,7 +118,7 @@ public class KitAssassin extends Kit {
             loc.add(x, y, z);
 
             for (int i = 0; i < 3; i++)
-                ParticleEffect.SPELL_MOB.display(new ParticleEffect.OrdinaryColor(Color.RED), loc, 30);
+                ParticleEffect.SPELL_MOB.display(new ParticleEffect.OrdinaryColor(Color.RED), loc, 20);
             for (Entity entity : loc.getChunk().getEntities()) {
                 if (entity.getLocation().distance(loc) < 0.5 && entity != p) {
                     t = 1;

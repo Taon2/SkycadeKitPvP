@@ -4,10 +4,10 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.commands.*;
 import net.skycade.kitpvp.commands.staff.*;
 import net.skycade.kitpvp.kit.kits.*;
-import net.skycade.kitpvp.kit.kits.disabled.*;
 import org.bukkit.Bukkit;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class KitManager {
 
@@ -100,22 +100,23 @@ public class KitManager {
         registerKit(new KitMaster(this));
 
         //Disabled kits, disabled because they were lame and new ones replaced them
-        registerKit(new KitChronos(this));
-        registerKit(new KitDefault(this));
-        registerKit(new KitFireArcher(this));
-        registerKit(new KitFireMage(this));
-        registerKit(new KitGolem(this));
-        registerKit(new KitGhost(this));
-        registerKit(new KitHuntsman(this));
-        registerKit(new KitLover(this));
-        registerKit(new KitMedic(this));
-        registerKit(new KitNinja(this));
-        registerKit(new KitStrafe(this));
-        registerKit(new KitSupport(this));
-        registerKit(new KitTribesman(this));
-        registerKit(new KitUnicorn(this));
-        registerKit(new KitVampire(this));
-        registerKit(new KitWizard(this));
+        //Kits are commented to stop them from registering listeners that don't need to run
+//        registerKit(new KitChronos(this));
+//        registerKit(new KitDefault(this));
+//        registerKit(new KitFireArcher(this));
+//        registerKit(new KitFireMage(this));
+//        registerKit(new KitGolem(this));
+//        registerKit(new KitGhost(this));
+//        registerKit(new KitHuntsman(this));
+//        registerKit(new KitLover(this));
+//        registerKit(new KitMedic(this));
+//        registerKit(new KitNinja(this));
+//        registerKit(new KitStrafe(this));
+//        registerKit(new KitSupport(this));
+//        registerKit(new KitTribesman(this));
+//        registerKit(new KitUnicorn(this));
+//        registerKit(new KitVampire(this));
+//        registerKit(new KitWizard(this));
     }
 
     private void registerKit(Kit kit) {

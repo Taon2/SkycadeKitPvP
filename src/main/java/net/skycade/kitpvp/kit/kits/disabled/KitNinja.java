@@ -109,7 +109,7 @@ public class KitNinja extends Kit {
 
     @Override
     public void onMove(Player p) {
-        particleTracerEffect(p, Color.PURPLE, 30);
+        particleTracerEffect(p, Color.PURPLE, 15);
     }
 
     @Override

@@ -48,7 +48,7 @@ public class KitGank extends Kit {
 
     @Override
     public void onMove(Player p) {
-        particleTracerEffect(p, Color.GRAY, 10);
+        particleTracerEffect(p, Color.GRAY, 5);
     }
 
     @Override
