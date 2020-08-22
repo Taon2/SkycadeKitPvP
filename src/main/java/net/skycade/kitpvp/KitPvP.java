@@ -125,7 +125,7 @@ public class KitPvP extends SkycadePlugin {
 
         int i = 0;
         for (KitType kitType : KitType.values()) {
-            if (kitType.getKit().isEnabled()) ++i;
+            if (kitType != null && kitType.getKit() != null && kitType.getKit().isEnabled()) ++i;
         }
         this.availableKits = i;
 

@@ -136,6 +136,8 @@ public class KitWizard extends Kit {
     }
 
     private void onMove() {
+        if (!isEnabled()) return;
+
         Bukkit.getScheduler().runTaskTimer(getKitManager().getKitPvP(), () -> getAllMovingPlayers().stream().filter(p -> getKitManager().getKitPvP().getStats(p).getActiveKit() == KitType.WIZARD && p.getItemInHand().getType() == Material.BOOK).collect(Collectors.toList()).forEach(p -> {
             Block targetBlock = getTargetBlock(p, true, 30);
             if (targetBlock == null)
