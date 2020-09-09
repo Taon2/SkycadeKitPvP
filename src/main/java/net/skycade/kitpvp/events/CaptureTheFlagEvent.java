@@ -459,7 +459,6 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
             });
             lastWinners.addAll(team2);
         }
-        Bukkit.getServer().broadcastMessage("test");
 
         team1Points = 0;
         team2Points = 0;
