@@ -10,6 +10,7 @@ import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,6 +21,8 @@ public class ScoreboardInfo {
     public final GlobalDisplay.Info killsDeathsInfo;
     public final GlobalDisplay.Info kitCoins;
 
+    private final DecimalFormat df = new DecimalFormat("###,###,###,###.##");
+
     private ScoreboardInfo() {
 
         killsDeathsInfo = new GlobalDisplay.Info("kitpvp-kdkdks") {
@@ -28,10 +31,10 @@ public class ScoreboardInfo {
                 Member member = MemberManager.getInstance().getMember(p);
                 double kdr = UtilMath.getKDR(member.getKills(), member.getDeaths());
                 return Arrays.asList(
-                        ChatColor.GRAY + "Kills: " + ChatColor.GREEN + member.getKills(),
-                        ChatColor.GRAY + "Deaths: " + ChatColor.RED + member.getDeaths(),
-                        ChatColor.GRAY + "K/D: " + (kdr >= 1 ? ChatColor.GREEN : ChatColor.RED) + kdr,
-                        ChatColor.GRAY + "Killstreak: " + ChatColor.GREEN + KitPvP.getInstance().getStats(p).getStreak()
+                        ChatColor.GRAY + "Kills: " + ChatColor.GREEN + df.format(member.getKills()),
+                        ChatColor.GRAY + "Deaths: " + ChatColor.RED + df.format(member.getDeaths()),
+                        ChatColor.GRAY + "K/D: " + (kdr >= 1 ? ChatColor.GREEN : ChatColor.RED) + df.format(kdr),
+                        ChatColor.GRAY + "Killstreak: " + ChatColor.GREEN + df.format(KitPvP.getInstance().getStats(p).getStreak())
                 );
             }
 
@@ -52,10 +55,10 @@ public class ScoreboardInfo {
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
                 return Arrays.asList(
                         ChatColor.GRAY + "Kit: " + ChatColor.GREEN + stats.getActiveKit().getKit().getName(),
-                        ChatColor.GRAY + "Coins: " + ChatColor.GOLD + stats.getCoins(),
-                        ChatColor.GRAY + "Event Tokens: " + ChatColor.GOLD + stats.getEventTokens(),
-                        ChatColor.GRAY + "Kits Unlocked: " + ChatColor.YELLOW + stats.getKits().size() +
-                                ChatColor.GRAY + "/" + ChatColor.GOLD + Arrays.stream(KitType.values()).filter(e -> e.getKit().isEnabled()).count()
+                        ChatColor.GRAY + "Coins: " + ChatColor.GOLD + df.format(stats.getCoins()),
+                        ChatColor.GRAY + "Event Tokens: " + ChatColor.GOLD + df.format(stats.getEventTokens()),
+                        ChatColor.GRAY + "Kits Unlocked: " + ChatColor.YELLOW + df.format(stats.getKits().size()) +
+                                ChatColor.GRAY + "/" + ChatColor.GOLD + df.format(Arrays.stream(KitType.values()).filter(e -> e.getKit().isEnabled()).count())
                 );
             }
 
