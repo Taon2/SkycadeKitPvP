@@ -503,6 +503,8 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
         }
         Player damagee = (Player) event.getEntity();
 
+        if (damager.hasPermission("skycade.kitpvp.ctf.bypass")) return;
+
         if (team1.contains(damager.getUniqueId()) && team1.contains(damagee.getUniqueId())) {
             event.setCancelled(true);
         } else if (team2.contains(damager.getUniqueId()) && team2.contains(damagee.getUniqueId())) {

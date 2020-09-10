@@ -60,12 +60,12 @@ public class WorldListeners implements Listener {
 
         // only run this event on health pots
         for (PotionEffect effect : event.getPotion().getEffects()) {
-            if (effect.getType() != PotionEffectType.HEAL) return;
+            if (!effect.getType().equals(PotionEffectType.HEAL)) return;
         }
 
         // only let the health pot affect the thrower
         for (LivingEntity affectedEntity : event.getAffectedEntities()) {
-            if (affectedEntity.getUniqueId() != ((Player) event.getEntity().getShooter()).getUniqueId()) {
+            if (!affectedEntity.getUniqueId().equals(((Player) event.getEntity().getShooter()).getUniqueId())) {
                 event.setIntensity(affectedEntity, 0);
             }
         }

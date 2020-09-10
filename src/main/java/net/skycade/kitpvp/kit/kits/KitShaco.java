@@ -20,6 +20,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -47,6 +48,7 @@ public class KitShaco extends Kit {
     private int invisibilityLength = 8;
 
     private final Map<UUID, ItemStack[]> shacoArmor = new HashMap<>();
+    private Map<UUID, Integer> armorRunnableMap = new HashMap<>();
 
     public KitShaco(KitManager kitManager) {
         super(kitManager, "Shaco", KitType.SHACO, 0, getLore());
@@ -135,14 +137,26 @@ public class KitShaco extends Kit {
         p.setCustomNameVisible(false);
         p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, invisibilityLength * 20, 0));
 
-        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
-            p.setCustomNameVisible(true);
-            if (shacoArmor.containsKey(p.getUniqueId())) {
-                if (KitPvP.getInstance().getStats(p).getActiveKit() == KitType.SHACO)
-                    p.getInventory().setArmorContents(shacoArmor.get(p.getUniqueId()));
+        int runnableId = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(KitPvP.getInstance(), new BukkitRunnable() {
+            public void run() {
+                p.setCustomNameVisible(true);
+                if (shacoArmor.containsKey(p.getUniqueId())) {
+                    if (KitPvP.getInstance().getStats(p).getActiveKit() == KitType.SHACO)
+                        p.getInventory().setArmorContents(shacoArmor.get(p.getUniqueId()));
+                }
+                shacoArmor.remove(p.getUniqueId());
             }
-            shacoArmor.remove(p.getUniqueId());
         }, 160);
+
+        armorRunnableMap.put(p.getUniqueId(), runnableId);
+    }
+
+    @Override
+    public void cancelRunnables(Player p) {
+        if (armorRunnableMap.containsKey(p.getUniqueId())) {
+            Bukkit.getScheduler().cancelTask(armorRunnableMap.get(p.getUniqueId()));
+            armorRunnableMap.remove(p.getUniqueId());
+        }
     }
 
     public void onSnowballUse(Player shooter, ProjectileLaunchEvent event) {

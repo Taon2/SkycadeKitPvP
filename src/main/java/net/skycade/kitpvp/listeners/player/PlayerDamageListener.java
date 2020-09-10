@@ -132,7 +132,7 @@ public class PlayerDamageListener implements Listener {
         combat.setInCombat(false);
 
         // special case for certain kits that allow the player to respawn at a custom point (like a block placed somewhere)
-        boolean willRespawnAndReset = plugin.getStats(event.getEntity()).getActiveKit().getKit().onDeath(event.getEntity(), event.getEntity().getKiller());
+        boolean willRespawnAndReset = plugin.getStats(diedPlayer).getActiveKit().getKit().onDeath(diedPlayer, diedPlayer.getKiller());
 
         // removes teleporting entities so that they do not teleport to the player when they die (removes the wolves from the player before respawning, due to player teleporting back to wolves bug)
         Kit diedPlayerKit = plugin.getStats(MemberManager.getInstance().getMember(diedPlayer)).getActiveKit().getKit();
@@ -185,7 +185,7 @@ public class PlayerDamageListener implements Listener {
         //Update kills
         KitPvPStats killerStats = plugin.getStats(killerMember); // get the stats for the player who killed the other
 
-        if (killerStats.getActiveKit() == KitType.ELITE) { // if the player who killed the other has kit elite
+        if (killerStats.getActiveKit() == KitType.ELITE) { // if the killer has kit elite active
             killerStats.getActiveKit().getKit().onDeath(diedPlayer, killerPlayer); // call the onDeath event
         }
 

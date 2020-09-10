@@ -79,6 +79,7 @@ public class KitPotionMaster extends Kit {
         p.getInventory().setBoots(boots);
     }
 
+    @Override
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
@@ -90,8 +91,6 @@ public class KitPotionMaster extends Kit {
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, p.getLocation(), 6);
-        if (targetPlayers.size() <= 1)
-            removeCooldowns(p, getName());
 
         targetPlayers.forEach(target -> {
             target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 160, 1));

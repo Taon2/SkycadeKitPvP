@@ -27,6 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -174,6 +175,11 @@ public class PlayerListeners implements Listener {
             event.setFormat(prestige + " " + ChatColor.RESET + event.getFormat());
         else
             event.setFormat(gangTitle + " " + prestige + " " + ChatColor.RESET + event.getFormat());
+    }
+
+    @EventHandler
+    public void onItemCraft(CraftItemEvent event) {
+        event.setCancelled(true);
     }
 
     private void resetKitAndKS(Player p) {
