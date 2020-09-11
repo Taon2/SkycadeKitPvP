@@ -136,7 +136,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                     KitPvPStats kingStats = KitPvP.getInstance().getStats(Bukkit.getPlayer(king));
                     if (kingStats != null) {
                         kingStats.giveEventTokens(prizeAmount);
-                        KILLTHEKING_SURVIVED.msg(Bukkit.getPlayer(king), "%amount%", Integer.toString(participationAmount));
+                        KILLTHEKING_SURVIVED.msg(Bukkit.getPlayer(king), "%amount%", Integer.toString(prizeAmount));
                     }
                     end();
                     cancel();
