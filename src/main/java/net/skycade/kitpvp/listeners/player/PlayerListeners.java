@@ -22,11 +22,14 @@ import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -34,6 +37,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import static net.skycade.kitpvp.Messages.KNOCKBACK_REMOVED;
 import static org.bukkit.event.inventory.InventoryType.*;
@@ -180,6 +184,20 @@ public class PlayerListeners implements Listener {
     @EventHandler
     public void onItemCraft(CraftItemEvent event) {
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    void onProjectileLaunch(final ProjectileLaunchEvent event) {
+        if (event.getEntityType() == EntityType.SPLASH_POTION) {
+            final Projectile projectile = event.getEntity();
+
+            if (projectile.getShooter() instanceof Player && ((Player) projectile.getShooter()).isSprinting()) {
+                final Vector velocity = projectile.getVelocity();
+
+                velocity.setY(velocity.getY() - 4.0);
+                projectile.setVelocity(velocity);
+            }
+        }
     }
 
     private void resetKitAndKS(Player p) {

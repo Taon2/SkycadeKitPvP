@@ -31,7 +31,7 @@ public class ItemKitCrateKeyTransfer extends EventShopItem {
         }
 
         if (CrateUser.get(p.getUniqueId()).hasKey(crate)) {
-            crate.getKey().take(p, 1);
+            crate.getKey().take(p.getUniqueId(), 1);
 
             KitPvPStats stats = KitPvP.getInstance().getStats(p);
             stats.giveCoins(300);

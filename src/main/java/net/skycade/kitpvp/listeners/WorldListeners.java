@@ -69,6 +69,14 @@ public class WorldListeners implements Listener {
                 event.setIntensity(affectedEntity, 0);
             }
         }
+
+        if (event.getEntity().getShooter() instanceof Player) {
+            Player shooter = (Player) event.getEntity().getShooter();
+
+            if (shooter.isSprinting() && event.getIntensity(shooter) > 0.5D) {
+                event.setIntensity(shooter, 1.0D);
+            }
+        }
     }
 
     @EventHandler
