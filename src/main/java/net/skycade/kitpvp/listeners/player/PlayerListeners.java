@@ -194,7 +194,7 @@ public class PlayerListeners implements Listener {
             if (projectile.getShooter() instanceof Player && ((Player) projectile.getShooter()).isSprinting()) {
                 final Vector velocity = projectile.getVelocity();
 
-                velocity.setY(velocity.getY() - 4.0);
+                velocity.setY(velocity.getY() - 2.0);
                 projectile.setVelocity(velocity);
             }
         }

@@ -6,4 +6,4 @@ depend: [SkycadeCore, GuardianBeamAPI]
 softdepend: [SkycadeLeaderboards, GangsPlus, SkycadeKoth, SkycadeCrates]
 permission:
   kitpvp.nametag.view:
-    default: op
+    default:
