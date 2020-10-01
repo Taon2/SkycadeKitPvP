@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
@@ -40,7 +40,7 @@ public class KitHulk extends Kit {
     private Map<UUID, Boolean> isSmashing = new HashMap<>();
 
     public KitHulk(KitManager kitManager) {
-        super(kitManager, "Hulk", KitType.HULK, 50000, getLore());
+        super(kitManager, "Hulk", KitType.HULK, 50000, false, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)

@@ -67,7 +67,6 @@ public class KitManager {
         registerKit(new KitGank(this));
         registerKit(new KitGuardian(this));
         registerKit(new KitHades(this));
-        registerKit(new KitHulk(this));
         registerKit(new KitHydra(this));
         registerKit(new KitHyper(this));
         registerKit(new KitJesus(this));
@@ -101,7 +100,6 @@ public class KitManager {
         registerKit(new KitMaster(this));
 
         //Disabled kits, disabled because they were lame and new ones replaced them
-        //Kits are commented to stop them from registering listeners that don't need to run
         registerKit(new KitChronos(this));
         registerKit(new KitDefault(this));
         registerKit(new KitFireArcher(this));
@@ -118,6 +116,7 @@ public class KitManager {
         registerKit(new KitUnicorn(this));
         registerKit(new KitVampire(this));
         registerKit(new KitWizard(this));
+        registerKit(new KitHulk(this));
     }
 
     private void registerKit(Kit kit) {

@@ -29,7 +29,6 @@ public enum KitType {
     GUARDIAN("guardian"),
     ENDERMAN("enderman"),
     HADES("hades"),
-    HULK("hulk"),
     HYDRA("hydra"),
     HYPER("hyper"),
     JESUS("jesus"),
@@ -78,7 +77,8 @@ public enum KitType {
     TRIBESMAN("tribesman"),
     UNICORN("unicorn"),
     VAMPIRE("vampire"),
-    WIZARD("wizard");
+    WIZARD("wizard"),
+    HULK("hulk");
 
     private final String alias;
 
