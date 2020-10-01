@@ -58,6 +58,12 @@ public class CommandKit extends SkycadeCommand {
             Player p = member.getPlayer();
             KitManager kitManager = KitPvP.getInstance().getKitManager();
 
+            if (!kit.getKit().isEnabled()) {
+                KIT_DISABLED.msg(member.getPlayer());
+                p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
+                return;
+            }
+
             if (!stats.hasKit(kit)) {
                 DONT_OWN.msg(member.getPlayer(), "%kit%", "kit " + kit.getKit().getName());
                 p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
