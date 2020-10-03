@@ -31,8 +31,10 @@ public class KitGambler extends Kit {
         KitPvPStats stats = KitPvP.getInstance().getStats(p);
 
         KitType randomKit = (KitType) stats.getKits().keySet().toArray()[new Random().nextInt(stats.getKits().keySet().toArray().length)];
-        if (randomKit == KitType.GAMBLER || !randomKit.getKit().isEnabled())
-            applyKit(p);
+        if (randomKit == KitType.GAMBLER || !randomKit.getKit().isEnabled()) {
+            this.applyKit(p);
+            return;
+        }
 
         getKitManager().getKitPvP().getStats(p).setActiveKit(randomKit);
         getKitManager().getKitPvP().getStats(p).setKitPreference(KitType.GAMBLER);

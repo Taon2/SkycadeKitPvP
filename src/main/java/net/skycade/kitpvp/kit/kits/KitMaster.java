@@ -94,7 +94,7 @@ public class KitMaster extends Kit {
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         Kit targetKit = getKitManager().getKitPvP().getStats(target).getActiveKit().getKit();
-        if (targetKit == null || targetKit.getKitType() == KitType.KITMASTER)
+        if (targetKit == null || targetKit.getKitType() == KitType.KITMASTER || !targetKit.isEnabled())
             return;
 
         HashMap<Integer, ItemStack> invItems = new HashMap<>();
