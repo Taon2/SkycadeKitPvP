@@ -92,7 +92,7 @@ public class CommandRefreshKit extends SkycadeCommand {
 
         UtilPlayer.reset(member.getPlayer());
         stats.getActiveKit().getKit().beginApplyKit(member.getPlayer());
-        stats.getActiveKit().getKit().giveSoup(member.getPlayer(), 32);
+        stats.getActiveKit().getKit().giveSoup(member.getPlayer(), 35);
         stats.takeCoins(COST);
 
         ScoreboardInfo.getInstance().updatePlayer(member.getPlayer());

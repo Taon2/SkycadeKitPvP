@@ -236,7 +236,7 @@ public class PlayerListeners implements Listener {
             if (p.isOnline()) {
                 stats.getActiveKit().getKit().stopItemRunnables(p);
                 stats.getActiveKit().getKit().beginApplyKit(p);
-                stats.getActiveKit().getKit().giveSoup(p, 32);
+                stats.getActiveKit().getKit().giveSoup(p, 35);
                 plugin.getEventShopManager().reapplyUpgrades(p);
             }
         }, 1);

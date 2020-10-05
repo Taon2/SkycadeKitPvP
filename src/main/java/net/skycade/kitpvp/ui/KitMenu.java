@@ -104,7 +104,7 @@ public class KitMenu extends DynamicGui {
                             kitManager.getKitPvP().getStats(member).setActiveKit(kit.getKitType());
                             kitManager.getKitPvP().getStats(member).setKitPreference(kit.getKitType());
                             kit.beginApplyKit(member.getPlayer());
-                            kit.giveSoup(member.getPlayer(), 32);
+                            kit.giveSoup(member.getPlayer(), 35);
                             p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
                             ScoreboardInfo.getInstance().updatePlayer(p);
                         } else {

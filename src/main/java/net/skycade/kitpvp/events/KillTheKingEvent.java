@@ -108,7 +108,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
         KitPvPStats stats = KitPvP.getInstance().getStats(kingPlayer);
         initialKit = stats.getActiveKit();
         stats.setActiveKit(KitType.DEFAULT);
-        stats.getActiveKit().getKit().giveSoup(kingPlayer, 32);
+        stats.getActiveKit().getKit().giveSoup(kingPlayer, 35);
         kingPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 1));
         kingPlayer.updateInventory();
 
@@ -178,7 +178,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
 
         stats.setActiveKit(initialKit);
         stats.getActiveKit().getKit().beginApplyKit(kingPlayer);
-        stats.getActiveKit().getKit().giveSoup(kingPlayer, 32);
+        stats.getActiveKit().getKit().giveSoup(kingPlayer, 35);
 
     }
 

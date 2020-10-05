@@ -355,7 +355,7 @@ public class KitLich extends Kit {
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> died.setVelocity(new org.bukkit.util.Vector(0, 0, 0)), 5);
         KitPvPStats stats = KitPvP.getInstance().getStats(died);
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-            stats.getActiveKit().getKit().giveSoup(died, 32);
+            stats.getActiveKit().getKit().giveSoup(died, 35);
         }, 5);
         stats.applyKitPreference();
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {

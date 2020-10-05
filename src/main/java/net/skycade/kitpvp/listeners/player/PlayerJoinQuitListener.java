@@ -60,12 +60,12 @@ public class PlayerJoinQuitListener implements Listener {
 //                });
                 if (!stats.getActiveKit().getKit().isEnabled()) {
                     stats.setActiveKit(KitType.CHANCE);
-                    stats.getActiveKit().getKit().giveSoup(p, 32);
+                    stats.getActiveKit().getKit().giveSoup(p, 35);
                 }
 
                 if (plugin.isInSpawnArea(p)) {
                     stats.getActiveKit().getKit().beginApplyKit(p);
-                    stats.getActiveKit().getKit().giveSoup(p, 32);
+                    stats.getActiveKit().getKit().giveSoup(p, 35);
                 }
 
                 // KitMaster now unlocked at level 100 Prestige

@@ -83,7 +83,7 @@ public class CommandKit extends SkycadeCommand {
                 kitManager.getKitPvP().getStats(member).setActiveKit(kit);
                 kitManager.getKitPvP().getStats(member).setKitPreference(kit);
                 kit.getKit().beginApplyKit(member.getPlayer());
-                kit.getKit().giveSoup(member.getPlayer(), 32);
+                kit.getKit().giveSoup(member.getPlayer(), 35);
                 p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 2f);
                 ScoreboardInfo.getInstance().updatePlayer(p);
             } else {

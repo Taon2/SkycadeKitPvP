@@ -154,7 +154,7 @@ public class TagEvent extends RandomEvent implements Listener {
             stats.giveCoins(100);
 
             stats.getActiveKit().getKit().beginApplyKit(player);
-            stats.getActiveKit().getKit().giveSoup(player, 32);
+            stats.getActiveKit().getKit().giveSoup(player, 35);
 
             ScoreboardInfo.getInstance().updatePlayer(player);
         }
@@ -179,7 +179,7 @@ public class TagEvent extends RandomEvent implements Listener {
         KitPvPStats stats = KitPvP.getInstance().getStats(infectedPlayer);
 
         stats.getActiveKit().getKit().beginApplyKit(infectedPlayer);
-        stats.getActiveKit().getKit().giveSoup(infectedPlayer, 32);
+        stats.getActiveKit().getKit().giveSoup(infectedPlayer, 35);
 
     }
 
@@ -247,7 +247,7 @@ public class TagEvent extends RandomEvent implements Listener {
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(damagee);
                 stats.getActiveKit().getKit().beginApplyKit(damagee);
-                stats.getActiveKit().getKit().giveSoup(damagee, 32);
+                stats.getActiveKit().getKit().giveSoup(damagee, 35);
 
                 KitPvPStats damagerStats = KitPvP.getInstance().getStats(damager);
                 damagerStats.giveCoins(15);

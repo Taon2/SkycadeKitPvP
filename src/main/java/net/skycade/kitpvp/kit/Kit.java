@@ -28,6 +28,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -293,23 +294,32 @@ public abstract class Kit implements Listener {
         player.getInventory().setBoots(null);
     }
 
+    private final ItemStack potion = new ItemStack(Material.POTION, 1, (short) 16421);
+    private final ItemStack soup = new ItemStack(Material.MUSHROOM_SOUP, 1);
+
     public void giveSoup(Player p, int amount) {
         if (p == null || !p.isOnline()) return;
         KitType activeKit = KitPvP.getInstance().getStats(p).getActiveKit();
+        boolean givePotion = activeKit == KitType.POTIONMASTER
+                            || activeKit == KitType.BUILDUHC
+                            || activeKit == KitType.WITCHDOCTOR;
 
-        for (int x = 0; x < amount; x++) {
-            if (p.getInventory().firstEmpty() == -1)
+        // loop through the items and fill with soup
+        Inventory inventory = p.getInventory();
+        for (int i = 0; i < amount; i++) {
+            if (inventory.firstEmpty() == -1)
                 break;
 
-            if (activeKit == KitType.POTIONMASTER || activeKit == KitType.BUILDUHC || activeKit == KitType.WITCHDOCTOR) {
-                p.getInventory().addItem(new ItemStack(Material.POTION, 1, (short) 16421));
-            } else {
-                p.getInventory().addItem(new ItemStack(Material.MUSHROOM_SOUP, 1));
-            }
+            // give soup or potion where necessary
+            if (givePotion)
+                inventory.addItem(potion);
+            else
+                inventory.addItem(soup);
         }
 
+        // set hulk's slot 1 (hand) to empty
         if (activeKit == KitType.HULK) {
-            p.getInventory().setItem(0, null);
+            inventory.setItem(0, null);
         }
     }
 

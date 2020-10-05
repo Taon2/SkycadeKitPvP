@@ -33,15 +33,17 @@ public class CommandSoup extends SkycadeCommand {
     public void onCommand(CommandSender commandSender, String[] strings) {
         Member member = MemberManager.getInstance().getMember((Player) commandSender);
 
-        if (KillTheKingEvent.getInstance() != null && KillTheKingEvent.getInstance().getCurrentKing() != null) {
-            if (member.getUUID().equals(KillTheKingEvent.getInstance().getCurrentKing())) {
+        KillTheKingEvent killTheKingEvent = KillTheKingEvent.getInstance();
+        if (killTheKingEvent != null && killTheKingEvent.getCurrentKing() != null) {
+            if (member.getUUID().equals(killTheKingEvent.getCurrentKing())) {
                 CANNOT_USE.msg(member.getPlayer(), "%thing%", "/soup", "%reason%", "as the King");
                 return;
             }
         }
 
-        if (CaptureTheFlagFlagListener.getInstance() != null && CaptureTheFlagFlagListener.getInstance().getCurrentCarrier() != null) {
-            if (member.getUUID().equals(CaptureTheFlagFlagListener.getInstance().getCurrentCarrier().getUniqueId())) {
+        CaptureTheFlagFlagListener captureTheFlagFlagListener = CaptureTheFlagFlagListener.getInstance();
+        if (captureTheFlagFlagListener != null && captureTheFlagFlagListener.getCurrentCarrier() != null) {
+            if (member.getUUID().equals(captureTheFlagFlagListener.getCurrentCarrier().getUniqueId())) {
                 CANNOT_USE.msg(member.getPlayer(), "%thing%", "/soup", "%reason%", "as the Flag Carrier");
                 return;
             }
@@ -72,7 +74,7 @@ public class CommandSoup extends SkycadeCommand {
             return;
         }
 
-        stats.getActiveKit().getKit().giveSoup(member.getPlayer(), 30);
+        stats.getActiveKit().getKit().giveSoup(member.getPlayer(), 35);
         stats.takeCoins(cost);
 
         ScoreboardInfo.getInstance().updatePlayer(member.getPlayer());
