@@ -13,7 +13,6 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
@@ -171,6 +170,8 @@ public class KitBlockhunt extends Kit {
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         KitPvPStats stats = KitPvP.getInstance().getStats(event.getPlayer());
+
+        if (stats == null) return;
 
         if (stats.getActiveKit() == KitType.BLOCKHUNT) {
             removeDisguise(event.getPlayer());
