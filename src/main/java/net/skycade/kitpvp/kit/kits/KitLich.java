@@ -265,6 +265,8 @@ public class KitLich extends Kit {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         KitPvPStats stats = KitPvP.getInstance().getStats(event.getPlayer());
 
+        if (stats == null) return;
+
         if (stats.getActiveKit() == KitType.LICH) {
             if (placed.containsKey(event.getPlayer().getUniqueId())) {
                 placed.get(event.getPlayer().getUniqueId()).forEach((loc, replace) -> {
