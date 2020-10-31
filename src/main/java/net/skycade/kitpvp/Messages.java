@@ -130,16 +130,6 @@ public class Messages {
     public static final Localization.Message TAG_START = new Localization.Message("event.tag-start", "&a&lINFECTION! &r&a%player% is infected. Stay away from them for 5 minutes to get a coin bonus!");
     public static final Localization.Message TAG_ENDED = new Localization.Message("event.tag-ended", "&a&lINFECTION ENDED!");
 
-    //Gang Brawl
-    public static final Localization.Message BRAWL_STARTED = new Localization.Message("event.brawl-start", "&c&lGANG BRAWL! &7The &cGang Brawl &7event has begun! \n" +
-            "&7Goal: Be one of the top three Gangs with the most kills after &c15 minutes&7! \n" +
-            "&7Good luck!");
-    public static final Localization.Message BRAWL_ENDED = new Localization.Message("event.brawl-ended", "&c&lGANG BRAWL! &7The &cGang Brawl &7event has ended! \n" +
-            "&7Results: \n" +
-            "&61st &a%winner1% &f- &c%winner1kills% Kills \n" +
-            "&72nd &a%winner2% &f- &c%winner2kills% Kills \n" +
-            "&83rd &a%winner3% &f- &c%winner3kills% Kills");
-
     //Capture The Flag
     public static final Localization.Message CAPTURETHEFLAG_START = new Localization.Message("event.capturetheflag-start", "&a&lCAPTURE THE FLAG! &r&aTake the flag for your own!");
     public static final Localization.Message CAPTURETHEFLAG_STARTING = new Localization.Message("event.capturetheflag.starting", "&a&lCAPTURE THE FLAG &astarting in &6%time%&a!");
@@ -398,9 +388,7 @@ public class Messages {
                 ANTI_PHASE_COMBAT_EVASION,
                 ANTI_PHASE_SENT_TO_SPAWN,
                 OUT_OF_AMMUNITION,
-                CANNOT_THROW_AMMUNITION,
-                BRAWL_STARTED,
-                BRAWL_ENDED
+                CANNOT_THROW_AMMUNITION
         );
     }
 }
