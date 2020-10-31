@@ -2,8 +2,10 @@ package net.skycade.kitpvp.listeners.player;
 
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -24,6 +26,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class PlayerInteractListener implements Listener {
 
@@ -31,6 +34,17 @@ public class PlayerInteractListener implements Listener {
 
     public PlayerInteractListener(KitPvP plugin) {
         this.plugin = plugin;
+        preventDoubleSoupArrayListStuck();
+    }
+
+    private void preventDoubleSoupArrayListStuck() {
+        Bukkit.getOnlinePlayers().stream()
+                .filter(p -> (preventDoubleSoup.contains(p.getUniqueId())))
+                .forEach(p -> {
+                            preventDoubleSoup.remove(p.getUniqueId());
+                        }
+                );
+        Bukkit.getScheduler().runTaskLater(plugin, this::preventDoubleSoupArrayListStuck, 5);
     }
 
     @EventHandler
@@ -74,10 +88,12 @@ public class PlayerInteractListener implements Listener {
         KitType.LICH.getKit().onBlockBreak(event.getPlayer(), event.getBlock());
     }
 
+
+    private List<UUID> preventDoubleSoup = new ArrayList<>();
     // this is necessary to fix soup reg, because it runs before the general PlayerInteractEvent
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityInteractAtEntity(PlayerInteractAtEntityEvent event) {
-        Player p = event.getPlayer();
+        /*Player p = event.getPlayer();
         ItemStack item = p.getItemInHand();
 
         // applies soup to the player, runs first for soup reg reasons
@@ -97,14 +113,60 @@ public class PlayerInteractListener implements Listener {
                 p.updateInventory();
             }
         }
+
+         */
+
+        Player player = event.getPlayer();
+        ItemStack item = player.getItemInHand();
+        int slot = event.getPlayer().getInventory().getHeldItemSlot();
+        if (item == null)return;
+        if (item.getType() == Material.MUSHROOM_SOUP) {
+            if (preventDoubleSoup.contains(player.getUniqueId())) return;
+            if (player.getHealth() == player.getMaxHealth())return;
+
+            preventDoubleSoup.add(player.getUniqueId());
+            double toHeal = Math.min(player.getHealth() + 7.0, player.getMaxHealth());
+            player.setHealth(toHeal);
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    player.getInventory().clear(slot);
+                    player.updateInventory();
+                    preventDoubleSoup.remove(player.getUniqueId());
+                }
+            }.runTaskLater(plugin, 1L);
+        }
     }
-    private List<UUID> preventDoubleSoup = new ArrayList<>();
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void soup(PlayerInteractEvent event){
+        Player player = event.getPlayer();
+        int slot = event.getPlayer().getInventory().getHeldItemSlot();
+        if (event.getItem() == null)return;
+        if (event.getItem().getType() == Material.MUSHROOM_SOUP) {
+            if (preventDoubleSoup.contains(player.getUniqueId())) return;
+            if (player.getHealth() == player.getMaxHealth())return;
+
+            preventDoubleSoup.add(player.getUniqueId());
+            double toHeal = Math.min(player.getHealth() + 7.0, player.getMaxHealth());
+            player.setHealth(toHeal);
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    player.getInventory().clear(slot);
+                    player.updateInventory();
+                    preventDoubleSoup.remove(player.getUniqueId());
+                }
+            }.runTaskLater(plugin, 1L);
+        }
+    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
         Player p = event.getPlayer();
 
+        /*
         // cancel if they are trying to soup again when they cant
         if (preventDoubleSoup.contains(p.getUniqueId())) return;
 
@@ -137,7 +199,16 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
+         */
+
         KitPvPStats stats = plugin.getStats(p);
+
+        // paint ball kit ability
+        if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && stats.getActiveKit() == KitType.PAINTBALL || VanishStatus.isVanished(p.getUniqueId())) {
+            stats.getActiveKit().getKit().onItemUse(p, event.getItem());
+            return;
+        }
+
         // gives item back if used in spawn
         if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && (plugin.isInSpawnArea(p) || VanishStatus.isVanished(p.getUniqueId()))) {
             stats.getActiveKit().getKit().reimburseItem(p, event.getItem());
@@ -167,6 +238,7 @@ public class PlayerInteractListener implements Listener {
                 return;
             stats.getActiveKit().getKit().onItemUse(p, event.getItem());
         }
+
     }
 
 

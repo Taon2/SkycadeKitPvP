@@ -1,7 +1,8 @@
-package net.skycade.kitpvp.kit.kits.disabled;
+package net.skycade.kitpvp.kit.kits;
 
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
+import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
@@ -9,12 +10,15 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
@@ -34,10 +38,11 @@ public class KitFireArcher extends Kit {
     private int arrowStartAmount = 1;
 
     private final List<UUID> bowCooldown = new ArrayList<>();
-    private final List<UUID> flameCooldown = new ArrayList<>();
+
+    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
     public KitFireArcher(KitManager kitManager) {
-        super(kitManager, "FireArcher", KitType.FIREARCHER, 24000, false, getLore());
+        super(kitManager, "FireArcher", KitType.FIREARCHER, 24000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
@@ -68,10 +73,17 @@ public class KitFireArcher extends Kit {
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.ARROW_INFINITE, 1)
                 .addEnchantment(Enchantment.ARROW_DAMAGE, 1)
+                .addEnchantment(Enchantment.ARROW_FIRE, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fire 1 arrow every " + arrowCooldown + " second.")
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Some arrows are set aflame.").build();
+                .addLore(" ")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "On a successful hit, players around")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "will be set on fire!")
+                .build();
         arrows = new ItemBuilder(
                 Material.ARROW, arrowStartAmount).build();
+
+        constantEffects.put(PotionEffectType.FIRE_RESISTANCE, 1);
+        constantEffects.put(PotionEffectType.SPEED, 0);
 
         ItemStack icon = new ItemStack(Material.FIREBALL);
         setIcon(icon);
@@ -86,33 +98,11 @@ public class KitFireArcher extends Kit {
         p.getInventory().setChestplate(chestplate);
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
+
+        constantEffects.forEach((effect, amplifier) -> {
+            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+        });
     }
-
-    @Override
-    public void onItemUse(Player p, ItemStack item) {
-        if (item.getType() != Material.BOW)
-            return;
-        if (flameCooldown.contains(p.getUniqueId()))
-            return;
-        int flameSeconds = 20;
-        flameCooldown.add(p.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> flameCooldown.remove(p.getUniqueId()), 60 - flameSeconds);
-
-        item.addEnchantment(Enchantment.ARROW_FIRE, 1);
-        p.getWorld().playSound(p.getLocation(), Sound.FIRE_IGNITE, 1.0F, 1.0F);
-
-        Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
-            for (ItemStack itemStack : p.getInventory().getContents()) {
-                if (itemStack != null && itemStack.getType() == Material.BOW) {
-                    if (itemStack.containsEnchantment(Enchantment.ARROW_FIRE)) {
-                        FIRE_REMOVED.msg(p);
-                        itemStack.removeEnchantment(Enchantment.ARROW_FIRE);
-                    }
-                }
-            }
-        }, 20 * flameSeconds);
-    }
-
 
     public void onArrowLaunch(Player shooter, ProjectileLaunchEvent event) {
         if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
@@ -121,8 +111,18 @@ public class KitFireArcher extends Kit {
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent event) {
-        if (UtilMath.getRandom(0, 100) <= 3)
-            damagee.setFireTicks(100);
+        damagee.setFireTicks(20 * 5);
+        if (UtilMath.getRandom(0, 100) <= 3) {
+            Entity arrow = event.getDamager();
+            shootParticlesFromLoc(damagee, ParticleEffect.FLAME, 500, 0.3F);
+            for (Entity entity : arrow.getNearbyEntities(2D, 2D, 2D)){
+                if (entity instanceof Player){
+                    Player affected = (Player) entity;
+                    affected.setFireTicks(20 * 10);
+                    affected.damage(6, shooter);
+                }
+            }
+        }
     }
 
     @EventHandler
@@ -131,12 +131,11 @@ public class KitFireArcher extends Kit {
         if (stats.getActiveKit() != KitType.FIREARCHER) return;
 
         bowCooldown.remove(event.getPlayer().getUniqueId());
-        flameCooldown.remove(event.getPlayer().getUniqueId());
     }
 
     @Override
     public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Unobtainable.");
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /eventshop!");
     }
 
     public static List<String> getLore() {

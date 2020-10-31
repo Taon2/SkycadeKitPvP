@@ -90,12 +90,14 @@ public class KitMenu extends DynamicGui {
                             p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                             return;
                         }
-
-                        if (stats.getActiveKit() == kit.getKitType()) {
+                        // Disabled due to https://gitlab.com/skycade/skycade-issues/-/issues/734
+                        /*if (stats.getActiveKit() == kit.getKitType()) {
                             ALREADY_USING.msg(member.getPlayer(), "%kit%", kit.getKitType().getKit().getName());
                             p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                             return;
                         }
+
+                         */
 
                         if (kitManager.getKitPvP().getSpawnRegion().contains(member.getPlayer())) {
                             KIT_EQUIPPED.msg(member.getPlayer(), "%kit%", kit.getName());

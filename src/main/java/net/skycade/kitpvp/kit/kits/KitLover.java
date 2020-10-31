@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits.disabled;
+package net.skycade.kitpvp.kit.kits;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
@@ -30,7 +30,7 @@ public class KitLover extends Kit {
     private int loveCooldown = 15;
 
     public KitLover(KitManager kitManager) {
-        super(kitManager, "Lover", KitType.LOVER, 19000, false, getLore());
+        super(kitManager, "Lover", KitType.LOVER, 19000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)

@@ -32,6 +32,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class KitPvP extends SkycadePlugin {
@@ -143,12 +144,15 @@ public class KitPvP extends SkycadePlugin {
             return player != null && gang != null && gang.isMember(player) ? Collections.singletonList(ChatColor.GREEN) : null;
         }, (p, v) -> null);
 
-        net.skycade.SkycadeCore.utility.scoreboard.ScoreboardManager.getInstance().registerNametag(4, (p, v) -> null, (player, viewer) -> {
+        // Disabled due to Capture the Flag being disabled
+        /*net.skycade.SkycadeCore.utility.scoreboard.ScoreboardManager.getInstance().registerNametag(4, (p, v) -> null, (player, viewer) -> {
             Member member = MemberManager.getInstance().getMember(viewer, false);
             CaptureTheFlagEvent captureTheFlagEvent = CaptureTheFlagEvent.getInstance();
             if (member == null || player == null || captureTheFlagEvent.getBegin() == null) return null;
             return captureTheFlagEvent.isTeamRed(player) ? Collections.singletonList(ChatColor.RED) : Collections.singletonList(ChatColor.BLUE);
         }, (p, v) -> null);
+
+         */
 
         ScoreboardManager.getInstance().registerNametag(4, (p, v) -> null, (p, v) -> null, (p, v) -> {
             // Bounties!
@@ -163,8 +167,8 @@ public class KitPvP extends SkycadePlugin {
             }
 
             if (bounty == 0) return null;
-
-            return ChatColor.GOLD + " - $" + bounty;
+            DecimalFormat df = new DecimalFormat("###,###,###,###.##");
+            return ChatColor.GOLD + " - $" + df.format(bounty);
         });
 
         RandomEvent.init();

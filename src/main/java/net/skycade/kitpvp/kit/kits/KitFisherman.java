@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
@@ -9,7 +10,9 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -58,7 +61,7 @@ public class KitFisherman extends Kit {
         fishingRod = new ItemBuilder(
                 Material.FISHING_ROD)
                 .addEnchantment(Enchantment.DURABILITY, 10)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Using the fishing rod every " + 4 + " seconds")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Using the fishing rod every " + grappleCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "grapples you towards the hook.").build();
 
         ItemStack icon = new ItemStack(Material.FISHING_ROD);
@@ -75,7 +78,7 @@ public class KitFisherman extends Kit {
         p.getInventory().setBoots(boots);
     }
 
-    public void onRodUse(Player p, ProjectileLaunchEvent e) {
+    /*public void onRodUse(Player p, ProjectileLaunchEvent e) {
         if (!addCooldown(p, "Grapple", grappleCooldown, true) || frozenPlayers.containsKey(p.getUniqueId()))
             return;
 
@@ -93,6 +96,41 @@ public class KitFisherman extends Kit {
         e.getEntity().setVelocity(v);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(getKitManager().getKitPvP(), () -> p.setVelocity(v), 5);
+    }
+
+     */
+
+
+
+    @EventHandler
+    public void rodUse(PlayerFishEvent event){
+        Player player = event.getPlayer();
+
+        Kit kit = KitPvP.getInstance().getStats(player).getActiveKit().getKit();
+
+        if (kit.getKitType() == KitType.FISHERMAN){
+            if (KitPvP.getInstance().isInSpawnArea(player))return;
+
+            PlayerFishEvent.State state = event.getState();
+            if (state == PlayerFishEvent.State.FAILED_ATTEMPT){
+                if (!addCooldown(player, "Grapple", grappleCooldown, true) || frozenPlayers.containsKey(player.getUniqueId()))
+                    return;
+
+                Location playerLocation = player.getLocation();
+                Location hookLocation = event.getHook().getLocation();
+
+                // I am multiplying the Vector by 1.5 for more of a "boost"
+                // - NegativeKB
+                Vector vector = getVectorForPoints(playerLocation, hookLocation).multiply(1.5);
+                player.setVelocity(vector);
+
+                //For missions
+                KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(player, this.getKitType());
+                Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
+                player.playSound(playerLocation, Sound.BAT_TAKEOFF, 2.0F, 1.0F);
+            }
+        }
     }
 
     private Location getTarget(Player hookshooter, Integer amount) {

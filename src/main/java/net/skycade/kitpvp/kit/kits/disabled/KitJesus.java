@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.brcdev.gangs.GangsPlusApi;
 import net.brcdev.gangs.gang.Gang;
@@ -34,7 +34,7 @@ public class KitJesus extends Kit {
     private int cleanseCooldown = 25;
 
     public KitJesus(KitManager kitManager) {
-        super(kitManager, "Jesus", KitType.JESUS, 20000, getLore());
+        super(kitManager, "Jesus", KitType.JESUS, 20000, false, getLore());
 
         chestplate = new ItemBuilder(
                 Material.DIAMOND_CHESTPLATE)

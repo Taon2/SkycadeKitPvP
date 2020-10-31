@@ -61,7 +61,7 @@ public class KitBarbarian extends Kit {
 
     @Override
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        if (UtilMath.getRandom(0, 100) <= 2) {
+        if (UtilMath.getRandom(0, 150) <= 4) {
             if (damagee.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE))
                 damagee.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
             damagee.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 0));

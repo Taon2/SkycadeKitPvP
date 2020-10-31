@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits.disabled;
+package net.skycade.kitpvp.kit.kits;
 
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
@@ -38,7 +38,7 @@ public class KitWizard extends Kit {
     private final HashMap<UUID, Location> lastWizardLoc = new HashMap<>();
 
     public KitWizard(KitManager kitManager) {
-        super(kitManager, "Wizard", KitType.WIZARD, 34000, false, getLore());
+        super(kitManager, "Wizard", KitType.WIZARD, 34000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
@@ -88,7 +88,7 @@ public class KitWizard extends Kit {
 
     @Override
     public void onItemUse(Player p, ItemStack item) {
-        if (item.getType() != Material.BOOK) {
+        if (item.getType() == Material.BOOK) {
             if (!lastWizardLoc.containsKey(p.getUniqueId()))
                 return;
             if (lastWizardLoc.get(p.getUniqueId()).distance(p.getLocation()) > 30 || getKitManager().getKitPvP().getSpawnRegion().contains(lastWizardLoc.get(p.getUniqueId())))
@@ -171,7 +171,7 @@ public class KitWizard extends Kit {
 
     @Override
     public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Unobtainable.");
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }
 
     public static List<String> getLore() {

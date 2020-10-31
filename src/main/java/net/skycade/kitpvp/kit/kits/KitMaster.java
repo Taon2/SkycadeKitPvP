@@ -42,7 +42,7 @@ public class KitMaster extends Kit {
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
                 .addEnchantment(Enchantment.DURABILITY, 10)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
                 .setColour(Color.fromBGR(0, 215, 255)).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
@@ -57,12 +57,12 @@ public class KitMaster extends Kit {
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 10)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
                 .setColour(Color.fromBGR(0, 215, 255)).build();
         weapon = new ItemBuilder(
                 Material.DIAMOND_SPADE)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 5).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 3).build();
         stick = new ItemBuilder(
                 Material.STICK)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% a player every " + swapCooldown + " seconds")

@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
@@ -26,7 +26,7 @@ public class KitWarrior extends Kit {
     private double damageMultiplier = 1.5;
 
     public KitWarrior(KitManager kitManager) {
-        super(kitManager, "Warrior", KitType.WARRIOR, 50000, getLore());
+        super(kitManager, "Warrior", KitType.WARRIOR, 50000, false, getLore());
 
         helmet = new ItemBuilder(
                 Material.DIAMOND_HELMET)

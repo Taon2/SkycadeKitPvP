@@ -17,6 +17,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -31,8 +32,50 @@ public class CommandViewStats extends SkycadeCommand {
     public void onCommand(CommandSender commandSender, String[] strings) {
         Member member = MemberManager.getInstance().getMember((Player) commandSender);
 
+        // Added DecimalFormat to make numbers look better. Example: 100000 -> 100,000
+        // - Negative
+        DecimalFormat df = new DecimalFormat("###,###,###,###,###,###.##");
+
+        // Made it so you don't have to type your own name while doing /stats.
+        // Doing /stats without an extra argument will bring up your own stats.
+        // - Negative
         if (strings.length < 1) {
-            VIEWSTATS_USAGE.msg(commandSender);
+            // ASYNC (because it's grabbing from database)
+            Bukkit.getScheduler().runTaskAsynchronously(KitPvP.getInstance(), () -> {
+
+                Member target = MemberManager.getInstance().getMember((Player) commandSender, true);
+
+                if (target == null) { // double-single check case data pattern
+                    COULDNT_FIND.msg(commandSender, "%type%", "player", "%thing%", strings[0]);
+                    return;
+                }
+
+                KitPvPStats stats = KitPvP.getInstance().getStats(target);
+
+                //Gang name
+                String gangName = "No Gang";
+
+                if (target.getPlayer() != null) {
+                    Gang gang = GangsPlusApi.getPlayersGang(target.getPlayer());
+                    if (gang != null)
+                        gangName = gang.getName();
+                }
+
+                STATS.msg(member.getPlayer(),
+                        "%player%", ChatColor.GRAY + "[" + ChatColor.WHITE + stats.getPrestigeLevel() + "★" + ChatColor.GRAY + "] " + ChatColor.WHITE + ChatColor.BOLD + target.getName(),
+                        "%gang%", gangName,
+                        "%deaths%", df.format(stats.getDeaths()),
+                        "%kills%", df.format(stats.getKills()),
+                        "%kdr%", df.format(UtilMath.getKDR(stats.getKills(), stats.getDeaths())),
+                        "%assists%", df.format(stats.getAssists()),
+                        "%currentkillstreak%", df.format(stats.getStreak()),
+                        "%highestkillstreak%", df.format(stats.getHighestStreak()),
+                        "%kits%", df.format(stats.getKits().size()),
+                        "%currentkit%", stats.getActiveKit().getKit().getName(),
+                        "%coins%", df.format(stats.getCoins()),
+                        "%eventtokens%", df.format(stats.getEventTokens())
+                );
+            });
             return;
         }
 
@@ -56,7 +99,7 @@ public class CommandViewStats extends SkycadeCommand {
             KitPvPStats stats = KitPvP.getInstance().getStats(target);
 
             //Gang name
-            String gangName = "Not Available";
+            String gangName = "No Gang";
 
             if (target.getPlayer() != null) {
                 Gang gang = GangsPlusApi.getPlayersGang(target.getPlayer());
@@ -67,16 +110,16 @@ public class CommandViewStats extends SkycadeCommand {
             STATS.msg(member.getPlayer(),
                     "%player%", ChatColor.GRAY + "[" + ChatColor.WHITE + stats.getPrestigeLevel() + "★" + ChatColor.GRAY + "] " + ChatColor.WHITE + ChatColor.BOLD + target.getName(),
                     "%gang%", gangName,
-                    "%deaths%", Integer.toString(stats.getDeaths()),
-                    "%kills%", Integer.toString(stats.getKills()),
-                    "%kdr%", Double.toString(UtilMath.getKDR(stats.getKills(), stats.getDeaths())),
-                    "%assists%", Integer.toString(stats.getAssists()),
-                    "%currentkillstreak%", Integer.toString(stats.getStreak()),
-                    "%highestkillstreak%", Integer.toString(stats.getHighestStreak()),
-                    "%kits%", Integer.toString(stats.getKits().size()),
+                    "%deaths%", df.format(stats.getDeaths()),
+                    "%kills%", df.format(stats.getKills()),
+                    "%kdr%", df.format(UtilMath.getKDR(stats.getKills(), stats.getDeaths())),
+                    "%assists%", df.format(stats.getAssists()),
+                    "%currentkillstreak%", df.format(stats.getStreak()),
+                    "%highestkillstreak%", df.format(stats.getHighestStreak()),
+                    "%kits%", df.format(stats.getKits().size()),
                     "%currentkit%", stats.getActiveKit().getKit().getName(),
-                    "%coins%", Long.toString(stats.getCoins()),
-                    "%eventtokens%", Integer.toString(stats.getEventTokens())
+                    "%coins%", df.format(stats.getCoins()),
+                    "%eventtokens%", df.format(stats.getEventTokens())
             );
         });
     }

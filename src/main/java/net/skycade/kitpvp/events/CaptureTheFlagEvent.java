@@ -115,7 +115,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
 
     @Override
     public int getFrequencyPerDay() {
-        return 3;
+        return 0;
     }
 
     @Override

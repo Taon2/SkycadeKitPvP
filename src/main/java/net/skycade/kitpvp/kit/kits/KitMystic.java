@@ -29,7 +29,7 @@ public class KitMystic extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
-    private int catCooldown = 4;
+    private int catCooldown = 10;
 
     public KitMystic(KitManager kitManager) {
         super(kitManager, "Mystic", KitType.MYSTIC, 31000, getLore());

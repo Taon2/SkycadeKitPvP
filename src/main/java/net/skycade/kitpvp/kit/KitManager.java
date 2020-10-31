@@ -47,9 +47,9 @@ public class KitManager {
     private void registerKits() {
         registerKit(new KitArcher(this));
         registerKit(new KitAssassin(this));
+        registerKit(new KitAvatar(this));
         registerKit(new KitBarbarian(this));
         registerKit(new KitBlacksmith(this));
-        registerKit(new KitBladeMaster(this));
         registerKit(new KitBlockhunt(this));
         registerKit(new KitBomber(this));
         registerKit(new KitBuildUHC(this));
@@ -61,40 +61,42 @@ public class KitManager {
         registerKit(new KitDubstep(this));
         registerKit(new KitElite(this));
         registerKit(new KitEnderman(this));
+        registerKit(new KitFireArcher(this));
         registerKit(new KitFisherman(this));
         registerKit(new KitFrosty(this));
-        registerKit(new KitGambler(this));
+
         registerKit(new KitGank(this));
+        registerKit(new KitGolem(this));
         registerKit(new KitGuardian(this));
         registerKit(new KitHades(this));
         registerKit(new KitHydra(this));
         registerKit(new KitHyper(this));
-        registerKit(new KitJesus(this));
         registerKit(new KitJumper(this));
         registerKit(new KitKangaroo(this));
         registerKit(new KitKing(this));
         registerKit(new KitKnight(this));
+        registerKit(new KitLover(this));
         registerKit(new KitLich(this));
-        registerKit(new KitMultishot(this));
         registerKit(new KitMystic(this));
         registerKit(new KitNecromancer(this));
+        registerKit(new KitPaintball(this));
         registerKit(new KitPaladin(this));
         registerKit(new KitPlush(this));
         registerKit(new KitPotionMaster(this));
         registerKit(new KitPrick(this));
-        registerKit(new KitPyromancer(this));
+        registerKit(new KitReaper(this));
         registerKit(new KitShaco(this));
         registerKit(new KitSharingan(this));
-        registerKit(new KitShroom(this));
+
         registerKit(new KitSniper(this));
         registerKit(new KitSonic(this));
+        registerKit(new KitSorcerer(this));
         registerKit(new KitSoulMaster(this));
         registerKit(new KitTank(this));
         registerKit(new KitTeleporter(this));
-        registerKit(new KitTreeEnt(this));
-        registerKit(new KitWarrior(this));
         registerKit(new KitWitchdoctor(this));
         registerKit(new KitWither(this));
+        registerKit(new KitWizard(this));
         registerKit(new KitWolfPack(this));
         registerKit(new KitZeus(this));
         registerKit(new KitMaster(this));
@@ -102,21 +104,26 @@ public class KitManager {
         //Disabled kits, disabled because they were lame and new ones replaced them
         registerKit(new KitChronos(this));
         registerKit(new KitDefault(this));
-        registerKit(new KitFireArcher(this));
         registerKit(new KitFireMage(this));
-        registerKit(new KitGolem(this));
         registerKit(new KitGhost(this));
         registerKit(new KitHuntsman(this));
-        registerKit(new KitLover(this));
         registerKit(new KitMedic(this));
         registerKit(new KitNinja(this));
         registerKit(new KitStrafe(this));
         registerKit(new KitSupport(this));
         registerKit(new KitTribesman(this));
+        registerKit(new KitFireMage(this));
         registerKit(new KitUnicorn(this));
         registerKit(new KitVampire(this));
-        registerKit(new KitWizard(this));
         registerKit(new KitHulk(this));
+        registerKit(new KitGambler(this));
+        registerKit(new KitTreeEnt(this));
+        registerKit(new KitPyromancer(this));
+        registerKit(new KitShroom(this));
+        registerKit(new KitJesus(this));
+        registerKit(new KitWarrior(this));
+        registerKit(new KitMultishot(this));
+        registerKit(new KitBladeMaster(this));
     }
 
     private void registerKit(Kit kit) {

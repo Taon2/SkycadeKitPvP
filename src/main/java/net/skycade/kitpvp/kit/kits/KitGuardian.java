@@ -39,7 +39,7 @@ public class KitGuardian extends Kit {
     private Map<UUID, List<Integer>> beamRunnableMap = new HashMap<>();
 
     public KitGuardian(KitManager kitManager) {
-        super(kitManager, "Guardian", KitType.GUARDIAN, 0, getLore());
+        super(kitManager, "Guardian", KitType.GUARDIAN, 30000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
@@ -124,7 +124,9 @@ public class KitGuardian extends Kit {
                         }
 
                         if (beam.isViewing(target) && target != p) {
-                            target.damage(4);
+                            Random random = new Random();
+                            int damage = random.nextInt(8);
+                            target.damage(damage + 1, p);
                         }
                     }
                 }

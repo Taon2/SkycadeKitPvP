@@ -1,12 +1,18 @@
 package net.skycade.kitpvp.listeners.player;
 
+import com.connorlinfoot.actionbarapi.ActionBarAPI;
+import net.skycade.SkycadeCombat.data.CombatData;
 import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.Messages;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
@@ -35,7 +41,7 @@ public class PlayerMoveListener implements Listener {
         }
 
         startLilypadEffect();
-        startPressurePadEffect();
+        startRandomTPEffects(); // Random teleports from Spawn
     }
 
     private void startLilypadEffect() {
@@ -50,8 +56,31 @@ public class PlayerMoveListener implements Listener {
                 );
         Bukkit.getScheduler().runTaskLater(plugin, this::startLilypadEffect, 5);
     }
+    // New teleport pad method
+    private void startRandomTPEffects(){
+        Bukkit.getOnlinePlayers().stream()
+                .filter(p -> (p.getLocation().getBlock().getType() == Material.GOLD_PLATE) && UtilPlayer.isMoving(p)
+                        && p.getGameMode() == GameMode.SURVIVAL)
+                .forEach(p -> {
+                    Location teleport = teleports.get(ThreadLocalRandom.current().nextInt(0, teleports.size()));
+                    float yaw = 180;
+                    float pitch = 0;
+                    p.teleport(new Location(teleport.getWorld(), teleport.getX(), teleport.getY(), teleport.getZ(), yaw, pitch));
 
-    private void startPressurePadEffect() {
+                    ActionBarAPI.sendActionBar(p, ChatColor.translateAlternateColorCodes('&', "&c&lNow entering the Arena"));
+
+                    immune.add(p.getUniqueId());
+                    p.setGameMode(GameMode.SURVIVAL);
+                    p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
+                    // Removes immunity after 4 seconds
+                    Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
+                        immune.remove(p.getUniqueId());
+                    }, 4 * 20);
+                });
+        Bukkit.getScheduler().runTaskLater(plugin, this::startRandomTPEffects, 5);
+    }
+    // Old teleport pad method
+    /*private void startPressurePadEffect() {
         Bukkit.getOnlinePlayers().stream()
                 .filter(p -> (p.getLocation().getBlock().getType() == Material.GOLD_PLATE)
                         && UtilPlayer.isMoving(p)
@@ -97,6 +126,46 @@ public class PlayerMoveListener implements Listener {
                     }.runTaskTimer(KitPvP.getInstance(), 1, 1);
                 });
         Bukkit.getScheduler().runTaskLater(plugin, this::startPressurePadEffect, 5);
+    }
+
+     */
+
+    // "Anti-phase"
+    // If a player is detected inside of a block (due to a glitch with Knight and/or teleporter) it will do the following:
+    // * If you are in combat, the last player to hit you will get the kill.
+    // * If you are not in combat, you will be teleported to spawn.
+    @EventHandler
+    public void antiPhase(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR)return;
+
+        if (isGlitched(player)) {
+            if (player.isInsideVehicle()) {
+                player.getVehicle().eject();
+            }
+            player.kickPlayer("[Glitch Detection] Suck in block?");
+        }
+    }
+
+    public static boolean isGlitched(Player player){
+        double x = player.getLocation().getX();
+        double z = player.getLocation().getZ();
+
+        double y1 = player.getLocation().getY();
+        double y2 = player.getLocation().getY() + 1;
+
+        World world = player.getWorld();
+
+        Location loc1 = new Location(world, x, y1, z);
+        Location loc2 = new Location(world, x, y2, z);
+
+        Material y1block = player.getWorld().getBlockAt(loc1).getType();
+        Material y2block = player.getWorld().getBlockAt(loc2).getType();
+
+        if (y1block == Material.BARRIER || y2block == Material.BARRIER){
+            return true;
+        }
+        return false;
     }
 
     @EventHandler

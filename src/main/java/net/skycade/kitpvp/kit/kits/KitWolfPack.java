@@ -39,7 +39,7 @@ public class KitWolfPack extends Kit {
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
                 .addEnchantment(Enchantment.DURABILITY, 12)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .setColour(Color.WHITE).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
@@ -49,7 +49,7 @@ public class KitWolfPack extends Kit {
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .setColour(Color.WHITE).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)

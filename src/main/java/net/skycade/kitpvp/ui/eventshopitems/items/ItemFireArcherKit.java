@@ -14,18 +14,18 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.List;
 
-public class ItemZeusKit extends EventShopItem {
+public class ItemFireArcherKit extends EventShopItem {
 
     private EventShopManager eventShopManager;
 
-    public ItemZeusKit(EventShopManager eventShopManager) {
-        super(eventShopManager, "Zeus Kit", new ItemStack(Material.BLAZE_ROD, 1, (short) 0), 250, 0, false);
+    public ItemFireArcherKit(EventShopManager eventShopManager) {
+        super(eventShopManager, "FireArcher Kit", new ItemStack(Material.FIREBALL, 1, (short) 0), 100, 0, false);
         this.eventShopManager = eventShopManager;
     }
 
     public void giveReward(Player p) {
         KitPvPStats stats = KitPvP.getInstance().getStats(p);
-        stats.addKit(KitType.ZEUS);
+        stats.addKit(KitType.FIREARCHER);
 
         YamlConfiguration yaml = eventShopManager.getYaml();
         long now = System.currentTimeMillis();
@@ -40,7 +40,7 @@ public class ItemZeusKit extends EventShopItem {
     public List<String> getDescription() {
         return Arrays.asList(
                 ChatColor.GRAY + "",
-                ChatColor.GRAY + "Unlock kit Zeus."
+                ChatColor.GRAY + "Unlock kit FireArcher."
         );
     }
 }

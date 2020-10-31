@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
@@ -32,7 +32,7 @@ public class KitTreeEnt extends Kit {
     private int blockCooldown = 8;
 
     public KitTreeEnt(KitManager kitManager) {
-        super(kitManager, "Tree Ent", KitType.TREEENT, 28000, getLore());
+        super(kitManager, "Tree Ent", KitType.TREEENT, 28000, false, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEAVES)

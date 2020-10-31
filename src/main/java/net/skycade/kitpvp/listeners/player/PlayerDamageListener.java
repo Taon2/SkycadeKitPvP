@@ -1,5 +1,7 @@
 package net.skycade.kitpvp.listeners.player;
 
+import net.brcdev.gangs.GangsPlusApi;
+import net.brcdev.gangs.gang.Gang;
 import net.skycade.SkycadeCombat.data.CombatData;
 import net.skycade.SkycadeCore.leveling.achievements.Achievement;
 import net.skycade.SkycadeCore.leveling.achievements.CoreAchievementEvent;
@@ -17,13 +19,18 @@ import net.skycade.kitpvp.events.DoubleCoinsEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.*;
-import net.skycade.kitpvp.kit.kits.disabled.KitFireArcher;
+import net.skycade.kitpvp.kit.kits.KitFireArcher;
+import net.skycade.kitpvp.kit.kits.disabled.KitMultishot;
+import net.skycade.kitpvp.kit.kits.disabled.KitPyromancer;
+import net.skycade.kitpvp.kit.kits.disabled.KitShroom;
+import net.skycade.kitpvp.nms.MiniArmyZombie;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,6 +39,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.Vector;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -173,14 +181,17 @@ public class PlayerDamageListener implements Listener {
         if (killerPlayer == null || killerPlayer.equals(diedPlayer))
             return;
 
+        // Getting the gang of the killer
+        Gang gang = GangsPlusApi.getPlayersGang(killerPlayer);
+
         Member killerMember = MemberManager.getInstance().getMember(killerPlayer); // get member of the one who killed the player
         diedMember.setLastKiller(killerPlayer.getUniqueId()); // set the last killer of the player who died to the player who killed them
 
         killerPlayer.playSound(killerPlayer.getLocation(), "minecraft:entity.experience_orb.pickup", 1, 1); // play the "killed sound effect" to the player who killed the other
+
+        // DEATH MESSAGE
         if (diedPlayer.isOnline()) // if the player who died is online
             KILLED_BY.msg(diedMember.getPlayer(), "%player%", killerMember.getName());
-        if (killerPlayer.isOnline()) // if the player who killed is online
-            YOU_KILLED.msg(killerMember.getPlayer(), "%player%", diedMember.getName());
 
         //Update kills
         KitPvPStats killerStats = plugin.getStats(killerMember); // get the stats for the player who killed the other
@@ -268,6 +279,19 @@ public class PlayerDamageListener implements Listener {
         if (DoubleCoinsEvent.isActive())
             finalReward = finalReward * 2;
 
+        if (!(gang == null))
+            if (gang.getOnlineMembers().contains(diedPlayer))
+                finalReward = 0;
+
+        // KILL MESSAGE
+        DecimalFormat df = new DecimalFormat("###,###,###,###.##");
+        if (killerPlayer.isOnline()) // if the player who killed is online
+            YOU_KILLED.msg(killerMember.getPlayer(), "%player%", diedMember.getName(), "%coins%", df.format(finalReward));
+
+        // This message is called if you have killed a member of your gang
+        if (!(gang == null))
+            if (gang.getOnlineMembers().contains(diedPlayer))
+                KILLED_GANG_MEMBER.msg(killerPlayer);
         KitPvPCoinsRewardEvent coinsEvent = new KitPvPCoinsRewardEvent(killerPlayer, finalReward);
         Bukkit.getPluginManager().callEvent(coinsEvent);
 
@@ -296,10 +320,7 @@ public class PlayerDamageListener implements Listener {
 
         Kit kit = plugin.getStats(shooter).getActiveKit().getKit();
 
-        if (proj.getType() == EntityType.FISHING_HOOK) {
-            if (kit.getKitType() == KitType.FISHERMAN)
-                ((KitFisherman) kit).onRodUse(shooter, event);
-        } else if (proj.getType() == EntityType.SNOWBALL) {
+        if (proj.getType() == EntityType.SNOWBALL) {
             if (kit.getKitType() == KitType.SHACO)
                 ((KitShaco) kit).onSnowballUse(shooter, event);
             else if (kit.getKitType() == KitType.FROSTY)
@@ -409,7 +430,7 @@ public class PlayerDamageListener implements Listener {
             playerKilledMap.put(killed.getUniqueId(), amount);
             samePlayerKill.put(killer.getUniqueId(), playerKilledMap);
             if (amount > 3) {
-                NO_REWARDS.msg(killer);
+                NO_REWARDS.msg(killer, "%player%", killed.getName());
                 return true;
             }
         } else {

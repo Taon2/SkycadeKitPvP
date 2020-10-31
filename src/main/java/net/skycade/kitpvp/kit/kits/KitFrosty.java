@@ -36,7 +36,7 @@ public class KitFrosty extends Kit {
     private ItemStack weapon;
     private ItemStack snowball;
 
-    private int snowballCooldown = 5;
+    private int snowballCooldown = 8;
     private int snowballStartAmount = 3;
     private int snowballMaxAmount = 5;
     private int snowballRegenSpeed = 20;
@@ -48,7 +48,7 @@ public class KitFrosty extends Kit {
 
         helmet = new ItemBuilder(
                 Material.JACK_O_LANTERN)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Takes extra damage from lava and fire.").build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)

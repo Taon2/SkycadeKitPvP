@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.kit.Kit;
@@ -20,7 +20,7 @@ import static net.skycade.kitpvp.Messages.KIT_EQUIPPED;
 public class KitGambler extends Kit {
 
     public KitGambler(KitManager kitManager) {
-        super(kitManager, "Gambler", KitType.GAMBLER, 45000, getLore());
+        super(kitManager, "Gambler", KitType.GAMBLER, 45000, false, getLore());
 
         ItemStack icon = new ItemStack(Material.TRIPWIRE_HOOK);
         setIcon(icon);

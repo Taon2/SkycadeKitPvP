@@ -23,7 +23,7 @@ public class KitKangaroo extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
-    private int leapCooldown = 6;
+    private int leapCooldown = 10;
     private double leapYVelocity = 0.07;
 
     public KitKangaroo(KitManager kitManager) {
@@ -37,7 +37,7 @@ public class KitKangaroo extends Kit {
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 12)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4)
                 .setColour(Color.SILVER).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)

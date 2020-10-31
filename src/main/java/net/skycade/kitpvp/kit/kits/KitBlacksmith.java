@@ -1,5 +1,7 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.brcdev.gangs.GangsPlusApi;
+import net.brcdev.gangs.gang.Gang;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
@@ -21,8 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static net.skycade.kitpvp.Messages.PLAYER_REPAIRED;
-import static net.skycade.kitpvp.Messages.REPAIRED;
+import static net.skycade.kitpvp.Messages.*;
 
 public class KitBlacksmith extends Kit {
 
@@ -64,7 +65,7 @@ public class KitBlacksmith extends Kit {
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% a player every " + armorkitCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "repairs their armor.")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 armor kit every " + armorkitRegenSpeed + " seconds.")
-                .setName("Armor Kit").build();
+                .setName(ChatColor.DARK_AQUA + "Armor Kit").build();
 
         ItemStack icon = new ItemStack(Material.ANVIL);
         setIcon(icon);
@@ -125,6 +126,14 @@ public class KitBlacksmith extends Kit {
     public void onInteract(Player p, Player target, ItemStack item) {
         if (item.getType() != Material.ANVIL)
             return;
+
+        Gang gang = GangsPlusApi.getPlayersGang(p);
+        if (!gang.getOnlineMembers().contains(target)){
+            REPAIR_DENY.msg(p, "%player%", target.getName());
+            p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1,1);
+            return;
+        }
+
         if (!addCooldown(p, "Repair Armor", armorkitCooldown, true))
             return;
 
@@ -167,7 +176,7 @@ public class KitBlacksmith extends Kit {
 
     @Override
     public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 25!");
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 50!");
     }
 
     public static List<String> getLore() {

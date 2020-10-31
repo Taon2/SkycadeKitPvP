@@ -34,11 +34,11 @@ public class KitDubstep extends Kit {
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
         leggings = new ItemBuilder(
                 Material.GOLD_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.DURABILITY, 9)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
         boots = new ItemBuilder(
                 Material.GOLD_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 7)
+                .addEnchantment(Enchantment.DURABILITY, 9)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)

@@ -18,6 +18,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -282,6 +283,19 @@ public class KitLich extends Kit {
         }
     }
 
+    @EventHandler
+    public void preventSkullPlace(BlockPlaceEvent event){
+        Player player = event.getPlayer();
+        Kit kit = KitPvP.getInstance().getStats(player).getActiveKit().getKit();
+
+        if (kit.getKitType() == KitType.LICH) {
+            if (event.getBlock().getType() == Material.SKULL) {
+                event.setCancelled(true);
+                player.updateInventory();
+            }
+        }
+    }
+
     @Override
     public void onBlockPlace(Player p, Block block, BlockState replaced) {
         if (block.getType() != Material.BEACON)
@@ -359,7 +373,7 @@ public class KitLich extends Kit {
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
             stats.getActiveKit().getKit().giveSoup(died, 35);
         }, 5);
-        stats.applyKitPreference();
+        applyKit(died);
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
             removePhylactery.add(died.getUniqueId());
             stats.getActiveKit().getKit().beginApplyKit(died);

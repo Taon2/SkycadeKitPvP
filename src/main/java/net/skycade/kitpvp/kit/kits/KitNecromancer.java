@@ -209,7 +209,12 @@ public class KitNecromancer extends Kit {
                 event.setCancelled(true);
             }
         }
-
+        /* 
+        // Disabled due to bug where it does not actually set you in combat and spams your chat with "You are no longer in combat"
+        // Cannot find fix
+        //
+        // Produced the following error message when I tried to type /ct whilst trying to fix it http://prntscr.com/v9sbsy
+        //
         //Combat tags the player upon being hit by the ghosts
         if (event.getDamager().getType() == EntityType.ZOMBIE && (((CraftEntity) event.getDamager()).getHandle() instanceof MiniArmyZombie)) {
             MiniArmyZombie entity = (MiniArmyZombie) ((CraftEntity) event.getDamager()).getHandle();
@@ -229,14 +234,13 @@ public class KitNecromancer extends Kit {
             CombatData.Combat playerCombat = CombatData.getCombat(Bukkit.getPlayer(entity.getOwnerUUID()));
             CombatData.Combat playerTwoCombat = CombatData.getCombat((Player) event.getDamager());
 
-            if (event.getDamager() == entity.getOwner())
-                event.setCancelled(true);
-
             if (event.getDamager().getType() == EntityType.PLAYER && event.getDamager() != entity.getOwner()) {
                 playerCombat.setInCombat(true);
                 playerTwoCombat.setInCombat(true);
             }
         }
+
+         */
 
         //Sets the target for the ghosts
         Entity damager = event.getDamager();

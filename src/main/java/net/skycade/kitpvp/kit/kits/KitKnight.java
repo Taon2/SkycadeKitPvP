@@ -11,6 +11,7 @@ import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.listeners.player.PlayerMoveListener;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -49,22 +50,22 @@ public class KitKnight extends Kit {
 
         helmet = new ItemBuilder(
                 Material.CHAINMAIL_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DURABILITY, 4)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         chestplate = new ItemBuilder(
                 Material.CHAINMAIL_CHESTPLATE)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DURABILITY, 4)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         leggings = new ItemBuilder(
                 Material.CHAINMAIL_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DURABILITY, 4)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         boots = new ItemBuilder(
                 Material.CHAINMAIL_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DURABILITY, 4)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         weapon = new ItemBuilder(
@@ -194,6 +195,15 @@ public class KitKnight extends Kit {
             long now = System.currentTimeMillis();
 
             if (shiftTimer.get(event.getExited().getUniqueId()) + 5000 > now) {
+                // Only runs if the player is glitched
+                if (PlayerMoveListener.isGlitched((Player) event.getExited())){
+                    shiftTimer.remove(event.getExited().getUniqueId());
+                    horses.get(event.getExited().getUniqueId()).remove();
+                    if (horses.get(event.getExited().getUniqueId()) != null)
+                        horses.remove(event.getExited().getUniqueId());
+                    return;
+                }
+
                 event.setCancelled(true);
                 return;
             } else {

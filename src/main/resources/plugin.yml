@@ -1,7 +1,7 @@
 name: KitPvP
 main: net.skycade.kitpvp.KitPvP
-version: 4.1.35-SNAPSHOT
-authors: ["WhiteWalker72", "Riccardo Bello (RickyB98)", "Taon2"]
+version: 4.41.38-SNAPSHOT
+authors: ["WhiteWalker72", "Riccardo Bello (RickyB98)", "Taon2", "NegativeKB"]
 depend: [SkycadeCore, GuardianBeamAPI]
 softdepend: [SkycadeLeaderboards, GangsPlus, SkycadeKoth, SkycadeCrates]
 permission:

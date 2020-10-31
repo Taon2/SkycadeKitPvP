@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
@@ -44,7 +44,7 @@ public class KitShroom extends Kit {
     private List<Snowball> snowballList = new ArrayList<>();
 
     public KitShroom(KitManager kitManager) {
-        super(kitManager, "Shroom", KitType.SHROOM, 32000, getLore());
+        super(kitManager, "Shroom", KitType.SHROOM, 32000, false, getLore());
 
         helmet = new ItemBuilder(
                 Material.HUGE_MUSHROOM_2)

@@ -94,6 +94,7 @@ public class KitTeleporter extends Kit {
             if (player.getItemInHand().getType() == Material.ENDER_PEARL) {
                 if (!addCooldown(event.getPlayer(), getName(), 10, true) || frozenPlayers.containsKey(event.getPlayer().getUniqueId())) {
                     event.setCancelled(true);
+                    player.updateInventory();
                     return;
                 }
 

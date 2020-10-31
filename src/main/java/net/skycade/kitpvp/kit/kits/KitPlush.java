@@ -1,5 +1,8 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.brcdev.gangs.GangsPlusApi;
+import net.brcdev.gangs.gang.Gang;
+import net.brcdev.gangs.gang.GangMemberData;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
@@ -26,7 +29,7 @@ public class KitPlush extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
-    private int catCooldown = 5;
+    private int catCooldown = 12;
 
     private double jumpPower = 1.0;
 
@@ -35,16 +38,20 @@ public class KitPlush extends Kit {
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
-                .addEnchantment(Enchantment.DURABILITY, 12)
+                .addEnchantment(Enchantment.DURABILITY, 13)
                 .setColour(Color.fromRGB(200, 255, 255)).build();
+
         chestplate = new ItemBuilder(
-                Material.IRON_CHESTPLATE).build();
+                Material.IRON_CHESTPLATE).addEnchantment(Enchantment.DURABILITY, 1).build();
+
         leggings = new ItemBuilder(
-                Material.IRON_LEGGINGS).build();
+                Material.IRON_LEGGINGS).addEnchantment(Enchantment.DURABILITY, 1).build();
+
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.DURABILITY, 6)
                 .setColour(Color.fromRGB(200, 255, 255)).build();
+
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
@@ -90,11 +97,16 @@ public class KitPlush extends Kit {
         p.getWorld().playSound(loc, Sound.CAT_MEOW, 1F, 1F);
 
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
-            Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, cat.getLocation(), 3.5);
+            Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, cat.getLocation(), 4);
             targetPlayers.add(p);
+
+            Gang gang = GangsPlusApi.getPlayersGang(p);
+
             targetPlayers.forEach(target -> {
-                target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 3));
-                target.setVelocity(new Vector(0, jumpPower, 0));
+                if (gang != null && gang.getOnlineMembers().contains(target)) {
+                    target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 9, 3));
+                    target.setVelocity(new Vector(0, jumpPower, 0));
+                }
             });
 
             cat.getLocation().getWorld().createExplosion(cat.getLocation(), 0);

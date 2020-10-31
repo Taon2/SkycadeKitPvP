@@ -25,7 +25,7 @@ public class KitKing extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
-    private int golemCooldown = 35;
+    private int golemCooldown = 45;
     private List<IronGolem> golemList = new ArrayList<>();
 
     public KitKing(KitManager kitManager) {

@@ -36,7 +36,7 @@ public class EventShopManager {
         registerEventShopItem(new ItemProtUpgrade(this));
         registerEventShopItem(new ItemShacoKit(this));
         registerEventShopItem(new ItemBuildUHCKit(this));
-        registerEventShopItem(new ItemZeusKit(this));
+        registerEventShopItem(new ItemFireArcherKit(this));
         registerEventShopItem(new ItemRefreshKitCooldown(this));
         registerEventShopItem(new ItemSoupCost(this));
         registerEventShopItem(new ItemKitCrateKeyTransfer(this));

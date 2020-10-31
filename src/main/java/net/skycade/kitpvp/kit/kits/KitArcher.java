@@ -61,7 +61,7 @@ public class KitArcher extends Kit {
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 5).build();
+                .addEnchantment(Enchantment.DURABILITY, 5).addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
         bow = new ItemBuilder(
                 Material.BOW)
                 .addEnchantment(Enchantment.DURABILITY, 5)
@@ -105,7 +105,7 @@ public class KitArcher extends Kit {
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
-        archerChanceEffects(shooter, damagee, e, 60, 50, 30,20);
+        archerChanceEffects(shooter, damagee, e, 65, 30, 40,25);
     }
 
     private void archerChanceEffects(Player archer, Player target, EntityDamageByEntityEvent e, int regainHealth, int doubleDamage, int slowEffect, int blindEffect) {

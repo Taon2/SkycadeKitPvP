@@ -27,10 +27,12 @@ public class KitZeus extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private int abilityCooldown = 15;
+
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
     public KitZeus(KitManager kitManager) {
-        super(kitManager, "Zeus", KitType.ZEUS, 0, getLore());
+        super(kitManager, "Zeus", KitType.ZEUS, 30000, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)
@@ -54,8 +56,8 @@ public class KitZeus extends Kit {
                 .setColour(Color.fromRGB(255, 255, 153)).build();
         weapon = new ItemBuilder(
                 Material.BLAZE_ROD)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 5)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Damaging players has a chance to smite them with lightning.").build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 5).setName(ChatColor.GOLD + "The Thunderbolt")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right-Clicking a player can smite them!").build();
 
         constantEffects.put(PotionEffectType.FIRE_RESISTANCE, 0);
 
@@ -86,8 +88,9 @@ public class KitZeus extends Kit {
                 Material.LEAVES_2
         );
     }
+    // Old Ability trigger method
 
-    @Override
+    /*@Override
     public void onDamageDealHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
         if (UtilMath.getRandom(0, 100) <= 7) {
             HashMap<Player, List<Block>> playerBlockList = getBlocks(damagee);
@@ -107,6 +110,7 @@ public class KitZeus extends Kit {
             damagee.setFireTicks(60);
         }
     }
+     */
 
     private static HashMap<Player, List<Block>> getBlocks(Player player){
         Block block = player.getLocation().getBlock();
@@ -122,10 +126,35 @@ public class KitZeus extends Kit {
 
         return playerBlockList;
     }
+    // New Ability trigger method
+    @Override
+    public void onInteract(Player p, Player target, ItemStack item) {
+        String abilityName = "Lightning Strike";
+
+        if (item.getType() != Material.BLAZE_ROD)
+            return;
+        HashMap<Player, List<Block>> playerBlockList = getBlocks(target);
+        for (Block b : playerBlockList.get(target)){
+            if (!allowedTypes.contains(b.getType())) {
+                CANNOT_USE.msg(p, "%thing%", abilityName, "%reason%", "while under a block");
+                return;
+            }
+        }
+        if (!addCooldown(p, abilityName, abilityCooldown, true))
+            return;
+
+        //For missions
+        KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
+        Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
+
+        target.getWorld().strikeLightning(target.getLocation());
+        target.damage(4);
+        target.setFireTicks(60);
+    }
 
     @Override
     public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /eventshop!");
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }
 
     public static List<String> getLore() {

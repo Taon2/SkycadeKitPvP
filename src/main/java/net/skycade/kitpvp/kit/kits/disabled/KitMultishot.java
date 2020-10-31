@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
@@ -39,7 +39,7 @@ public class KitMultishot extends Kit {
     private List<Arrow> arrowList = new ArrayList<>();
 
     public KitMultishot(KitManager kitManager) {
-        super(kitManager, "Multishot", KitType.MULTISHOT, 40000, getLore());
+        super(kitManager, "Multishot", KitType.MULTISHOT, 40000, false, getLore());
 
         helmet = new ItemBuilder(
                 Material.CHAINMAIL_HELMET)

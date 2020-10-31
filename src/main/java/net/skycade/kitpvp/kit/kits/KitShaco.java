@@ -42,7 +42,7 @@ public class KitShaco extends Kit {
 
     private List<Snowball> snowballList = new ArrayList<>();
 
-    private double backstabMultiplier = 1.2;
+    private double backstabMultiplier = 1.105;
 
     private int invisibilityCooldown = 20;
     private int invisibilityLength = 8;

@@ -7,6 +7,7 @@ import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,6 +40,9 @@ public class PlayerJoinQuitListener implements Listener {
 
         plugin.getStats(p).getActiveKit().getKit().stopItemRunnables(p);
         plugin.getStats(p).getActiveKit().getKit().cancelRunnables(p);
+
+        Location tpToSpawn = plugin.getSpawnLocation();
+        p.teleport(tpToSpawn);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
@@ -54,10 +58,10 @@ public class PlayerJoinQuitListener implements Listener {
                 KitPvPStats stats = plugin.getStats(p);
 
                 // Gives every kit, only used during beta testing.
-//                KitPvP.getInstance().getKitManager().getKits().forEach((kitType, kit) -> {
-//                    if (kit.isEnabled())
-//                        stats.addKit(kitType);
-//                });
+                KitPvP.getInstance().getKitManager().getKits().forEach((kitType, kit) -> {
+                    if (kit.isEnabled())
+                        stats.addKit(kitType);
+                });
                 if (!stats.getActiveKit().getKit().isEnabled()) {
                     stats.setActiveKit(KitType.CHANCE);
                     stats.getActiveKit().getKit().giveSoup(p, 35);

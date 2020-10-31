@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
@@ -43,7 +43,7 @@ public class KitPyromancer extends Kit {
     private int fireballCooldown = 20;
 
     public KitPyromancer(KitManager kitManager) {
-        super(kitManager, "Pyromancer", KitType.PYROMANCER, 50000, getLore());
+        super(kitManager, "Pyromancer", KitType.PYROMANCER, 50000, false, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)

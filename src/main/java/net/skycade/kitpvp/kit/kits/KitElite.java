@@ -32,25 +32,25 @@ public class KitElite extends Kit {
                 Material.LEATHER_HELMET)
                 .addEnchantment(Enchantment.DURABILITY, 14)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you strength.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Killing a player grants you strength.")
                 .setColour(Color.WHITE).build();
         chestplate = new ItemBuilder(
                 Material.LEATHER_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you strength.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Killing a player grants you strength.")
                 .setColour(Color.BLUE).build();
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you strength.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Killing a player grants you strength.")
                 .setColour(Color.BLUE).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you strength.")
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Killing a player grants you strength.")
                 .setColour(Color.BLUE).build();
         weapon = new ItemBuilder(
                 Material.DIAMOND_SWORD)
@@ -81,8 +81,8 @@ public class KitElite extends Kit {
             if (killer.hasPotionEffect(PotionEffectType.REGENERATION))
                 killer.removePotionEffect(PotionEffectType.REGENERATION);
 
-            killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40, 0));
-            killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 40, 1));
+            killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 3, 0));
+            killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 4, 1));
         }
 
         return true;

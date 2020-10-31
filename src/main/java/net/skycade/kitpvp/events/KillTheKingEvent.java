@@ -47,8 +47,8 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
 
     private static KillTheKingEvent instance;
 
-    private int prizeAmount = 5;
-    private int participationAmount = 1;
+    private int prizeAmount = 10;
+    private int participationAmount = 2;
 
     private ItemStack helmet = new ItemStack(Material.DIAMOND_HELMET);
     private ItemStack chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);

@@ -10,6 +10,8 @@ import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.nms.ActionBarUtil;
 import net.skycade.kitpvp.runnable.ItemRunnable;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
+import net.skycade.kitpvp.ui.eventshopitems.items.ItemPotionEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -93,6 +95,7 @@ public abstract class Kit implements Listener {
             p.removePotionEffect(potionEffect.getType());
 
         applyKit(p);
+        KitPvP.getInstance().getEventShopManager().reapplyUpgrades(p);
 
         // sets proper lore between Shift + Right click or normal Right click
         KitPvPStats stats = KitPvP.getInstance().getStats(p);

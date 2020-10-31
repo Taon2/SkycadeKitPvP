@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
@@ -24,7 +24,7 @@ public class KitBladeMaster extends Kit {
     private ItemStack weapon2;
 
     public KitBladeMaster(KitManager kitManager) {
-        super(kitManager, "BladeMaster", KitType.BLADEMASTER, 29000, getLore());
+        super(kitManager, "BladeMaster", KitType.BLADEMASTER, 29000, false, getLore());
 
         helmet = new ItemBuilder(
                 Material.GOLD_HELMET)

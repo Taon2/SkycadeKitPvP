@@ -111,24 +111,34 @@ public class Messages {
     public static final Localization.Message EVENT_ALREADY_RUNNING = new Localization.Message("event.already-running", "&cAn event is already running!");
 
     //Double Credits
-    public static final Localization.Message DOUBLECREDITS_START = new Localization.Message("event.doublecredits-start", "&a&lDOUBLE CREDITS! &r&aFor the next 30 minutes, everybody earns double the amount of coins!");
-    public static final Localization.Message DOUBLECREDITS_ENDED = new Localization.Message("event.doublecredits-ended", "&a&lDOUBLE CREDITS ENDED!");
+    public static final Localization.Message DOUBLECREDITS_START = new Localization.Message("event.doublecredits-start", "&2&lDOUBLE CREDITS! &r&aFor the next 30 minutes, everybody earns double the amount of coins!");
+    public static final Localization.Message DOUBLECREDITS_ENDED = new Localization.Message("event.doublecredits-ended", "&2&lDOUBLE CREDITS ENDED!");
 
     //Kill The King
-    public static final Localization.Message KILLTHEKING_START = new Localization.Message("event.killtheking-start", "&a&lKILL THE KING! &r&a%player% is the King. Everyone attack them!");
-    public static final Localization.Message KILLTHEKING_TOO_LONG = new Localization.Message("event.killtheking-too-long", "&a&lThe King took too long to kill.");
+    public static final Localization.Message KILLTHEKING_START = new Localization.Message("event.killtheking-start", "&6&lKILL THE KING! &r&a%player% is the King. Everyone attack them!");
+    public static final Localization.Message KILLTHEKING_TOO_LONG = new Localization.Message("event.killtheking-too-long", "&6&lKILL THE KING! &aThe &6King &atook too long to kill.");
     public static final Localization.Message KILLTHEKING_PARTICIPATE = new Localization.Message("event.killtheking-participate", "&7You have received &a%amount% &7Event Tokens for participating!");
     public static final Localization.Message KILLTHEKING_SURVIVED = new Localization.Message("event.killtheking-survived", "&7You have received &a%amount% &7Event Tokens for surviving!");
     public static final Localization.Message KILLTHEKING_WON = new Localization.Message("event.killtheking-won", "&7You have killed the King! You have received &a%amount% &7Event Tokens for winning!");
-    public static final Localization.Message KILLTHEKING_KILLED_BY = new Localization.Message("event.killtheking-killed-by", "&c%player% &ahas killed the King!");
+    public static final Localization.Message KILLTHEKING_KILLED_BY = new Localization.Message("event.killtheking-killed-by", "&6&lKILL THE KING! &6%player% &7has killed the King!");
     public static final Localization.Message KILLTHEKING_KILLED = new Localization.Message("event.killtheking-killed", "&aThe King has been killed!");
     public static final Localization.Message KILLTHEKING_LOGGED_OUT = new Localization.Message("event.killtheking-logged-out", "&aThe King has been killed!");
     public static final Localization.Message KILLTHEKING_TO_SPAWN = new Localization.Message("event.killtheking-to-spawn", "&aThe King has been killed!");
-    public static final Localization.Message KILLTHEKING_ENDED = new Localization.Message("event.killtheking-ended", "&a&lKILL THE KING ENDED!");
+    public static final Localization.Message KILLTHEKING_ENDED = new Localization.Message("event.killtheking-ended", "&6&lKILL THE KING! &7The event has &cended&7.");
 
     //Tag
     public static final Localization.Message TAG_START = new Localization.Message("event.tag-start", "&a&lINFECTION! &r&a%player% is infected. Stay away from them for 5 minutes to get a coin bonus!");
     public static final Localization.Message TAG_ENDED = new Localization.Message("event.tag-ended", "&a&lINFECTION ENDED!");
+
+    //Gang Brawl
+    public static final Localization.Message BRAWL_STARTED = new Localization.Message("event.brawl-start", "&c&lGANG BRAWL! &7The &cGang Brawl &7event has begun! \n" +
+            "&7Goal: Be one of the top three Gangs with the most kills after &c15 minutes&7! \n" +
+            "&7Good luck!");
+    public static final Localization.Message BRAWL_ENDED = new Localization.Message("event.brawl-ended", "&c&lGANG BRAWL! &7The &cGang Brawl &7event has ended! \n" +
+            "&7Results: \n" +
+            "&61st &a%winner1% &f- &c%winner1kills% Kills \n" +
+            "&72nd &a%winner2% &f- &c%winner2kills% Kills \n" +
+            "&83rd &a%winner3% &f- &c%winner3kills% Kills");
 
     //Capture The Flag
     public static final Localization.Message CAPTURETHEFLAG_START = new Localization.Message("event.capturetheflag-start", "&a&lCAPTURE THE FLAG! &r&aTake the flag for your own!");
@@ -153,15 +163,24 @@ public class Messages {
     public static final Localization.Message KNOCKBACK_REMOVED = new Localization.Message("knockback-removed", "&cThe Knockback on your weapon was removed due to KOTH being active.");
 
     //KitPvP Kill Messages
-    public static final Localization.Message NO_REWARDS = new Localization.Message("kill.no-rewards", "&7You killed the same player more than 3 times, &cno rewards &7rewarded.");
+    public static final Localization.Message NO_REWARDS = new Localization.Message("kill.no-rewards", "&7You have killed &a%player% &7more than 3 times in a row.\n" +
+            "&cNo rewards &7rewarded.");
+
     public static final Localization.Message ASSIST_REWARD = new Localization.Message("kill.assist-rewards", "&7You got &6%amount% &7coins for assisting to kill %player%&7!");
-    public static final Localization.Message KILLED_BY = new Localization.Message("kill.killed-by", "&7You were killed by &a%player%&7.");
-    public static final Localization.Message YOU_KILLED = new Localization.Message("kill.you-killed", "&7You killed &a%player%&7.");
+    public static final Localization.Message KILLED_BY = new Localization.Message("kill.killed-by", "&7You have been killed by &c%player%&7.");
+    public static final Localization.Message YOU_KILLED = new Localization.Message("kill.you-killed", "&7You have killed &a%player%&7 and earned &6%coins% Coins&7.");
+    public static final Localization.Message KILLED_GANG_MEMBER = new Localization.Message("kill.killed-gang-member", "&7You have killed a fellow gang member, so you will not be rewarded.");
     public static final Localization.Message YOU_KILLED_LOGGED_OUT = new Localization.Message("kill.you-killed-logged-out", "&7You killed &a%player%&7 because they logged out while in combat with you.");
     public static final Localization.Message COLLECTED_BOUNTY = new Localization.Message("kill.collected-bounty", "&aYou got &a%amount% &7extra coins for collecting %player%'s bounty!");
     public static final Localization.Message YOU_BROKE_KILLSTREAK = new Localization.Message("kill.you-broke-killstreak", "&7You got &a%amount% &7extra coins for breaking &a%player%'s &7killstreak!");
-    public static final Localization.Message BROKE_KILLSTREAK = new Localization.Message("kill.broke-killstreak", "&c&l%killer% &6has broken &c&l%dead%'s &6killstreak of &c&l%ks%!");
+    public static final Localization.Message BROKE_KILLSTREAK = new Localization.Message("kill.broke-killstreak", "&c&l%killer% &6has broken &c&l%dead%'s &6killstreak of &c&l%ks%&6!");
     public static final Localization.Message HAS_KILLSTREAK = new Localization.Message("kill.has-killstreak", "&c&l%killer% &6has reached a killstreak of &c&l%ks%&6!");
+
+    // Anti-Phase
+    public static final Localization.Message ANTI_PHASE_SENT_TO_SPAWN = new Localization.Message("anti-phase.sent-to-spawn", "&7You have been detected inside of a block and have been sent to Spawn.");
+    public static final Localization.Message ANTI_PHASE_COMBAT_EVASION = new Localization.Message("anti-phase.combat-evasion", "&7You have been detected inside of a block.\n" +
+            "&7You were in combat at the time of glitching inside of this block, therefore you have &cdied&7!");
+
 
     //Kit Messages
     public static final Localization.Message CANT_USE_HERE = new Localization.Message("kit.cant-use-here", "&cYou can't use that ability here.");
@@ -198,6 +217,7 @@ public class Messages {
     public static final Localization.Message FIRE_REMOVED = new Localization.Message("kit.firearcher.fire-removed", "&cFire removed.!");
     public static final Localization.Message PLAYER_REPAIRED = new Localization.Message("kit.blacksmith.player-repaired", "&7You repaired &a%player%'s &7armor.");
     public static final Localization.Message REPAIRED = new Localization.Message("kit.blacksmith.repaired", "&7Armor repaired by &a%player%!");
+    public static final Localization.Message REPAIR_DENY = new Localization.Message("kit.blacksmith.repaired", "&7You must be in the same gang as &a%player% &7to repair their armor.");
     public static final Localization.Message SUMMONED_GHOSTS = new Localization.Message("kit.necromancer.summoned-ghosts", "&7Summoned 2 ghosts to fight for you!");
     public static final Localization.Message YOURE_WITHERED = new Localization.Message("kit.necromancer.withered", "&8You were withered by &b%player%&8!");
     public static final Localization.Message TELEPORTED_GHOSTS = new Localization.Message("kit.necromancer.teleported-ghosts", "&7Teleported ghosts to &b%player%&7!");
@@ -210,6 +230,9 @@ public class Messages {
     public static final Localization.Message YOU_BROKE_PHYLACTERY = new Localization.Message("kit.lich.you-broke-phylactery", "&7You broke &a%player%'s &7phylactery.");
     public static final Localization.Message PHYLACTERY_RESPAWNED = new Localization.Message("kit.lich.phylactery-respawned", "&7Respawned at your phylactery.");
     public static final Localization.Message FROZEN_ALREADY = new Localization.Message("kit.frosty.frozen-already", "&a%player% &chas already been frozen recently!");
+    public static final Localization.Message PRICKED_RECENTLY = new Localization.Message("kit.prick.pricked-recently", "&a%player% &chas already been pricked recently!");
+    public static final Localization.Message OUT_OF_AMMUNITION = new Localization.Message("kit.paintball.out-of-ammunition", "&cYou do not have any ammunition left! Please wait for some to regenerate.");
+    public static final Localization.Message CANNOT_THROW_AMMUNITION = new Localization.Message("kit.paintball.cannot-throw-ammunition", "&cYou may not throw your ammunition. Wasteful!");
 
     static void init() {
         Localization.getInstance().registerMessages("skycade.kitpvp",
@@ -342,6 +365,7 @@ public class Messages {
                 RESETSTATS_DESCRIPTION,
                 PLAYER_REPAIRED,
                 REPAIRED,
+                REPAIR_DENY,
                 YOURE_POISONED,
                 SUMMONED_GHOSTS,
                 YOURE_WITHERED,
@@ -368,7 +392,15 @@ public class Messages {
                 PLAYER_NOW_PRESTIGE,
                 FROZEN_ALREADY,
                 SHIFT_ABILITIES,
-                NO_SHIFT_ABILITIES
+                NO_SHIFT_ABILITIES,
+                PRICKED_RECENTLY,
+                KILLED_GANG_MEMBER,
+                ANTI_PHASE_COMBAT_EVASION,
+                ANTI_PHASE_SENT_TO_SPAWN,
+                OUT_OF_AMMUNITION,
+                CANNOT_THROW_AMMUNITION,
+                BRAWL_STARTED,
+                BRAWL_ENDED
         );
     }
 }

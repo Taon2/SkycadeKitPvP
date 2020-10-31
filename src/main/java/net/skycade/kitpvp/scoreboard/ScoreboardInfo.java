@@ -34,13 +34,15 @@ public class ScoreboardInfo {
                         ChatColor.GRAY + "Kills: " + ChatColor.GREEN + df.format(member.getKills()),
                         ChatColor.GRAY + "Deaths: " + ChatColor.RED + df.format(member.getDeaths()),
                         ChatColor.GRAY + "K/D: " + (kdr >= 1 ? ChatColor.GREEN : ChatColor.RED) + df.format(kdr),
-                        ChatColor.GRAY + "Killstreak: " + ChatColor.GREEN + df.format(KitPvP.getInstance().getStats(p).getStreak())
+                        ChatColor.GRAY + "Killstreak: " + ChatColor.GREEN + df.format(KitPvP.getInstance().getStats(p).getStreak()) +
+                                ChatColor.GRAY + " (" + ChatColor.YELLOW + "" + df.format(KitPvP.getInstance().getStats(p).getHighestStreak())
+                                + ChatColor.GRAY + ")"
                 );
             }
 
             @Override
             public int getPosition() {
-                return 3;
+                return 2;
             }
 
             @Override
@@ -54,11 +56,10 @@ public class ScoreboardInfo {
             public List<String> apply(Player p) {
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
                 return Arrays.asList(
-                        ChatColor.GRAY + "Kit: " + ChatColor.GREEN + stats.getActiveKit().getKit().getName(),
+                        "    ",
                         ChatColor.GRAY + "Coins: " + ChatColor.GOLD + df.format(stats.getCoins()),
                         ChatColor.GRAY + "Event Tokens: " + ChatColor.GOLD + df.format(stats.getEventTokens()),
-                        ChatColor.GRAY + "Kits Unlocked: " + ChatColor.YELLOW + df.format(stats.getKits().size()) +
-                                ChatColor.GRAY + "/" + ChatColor.GOLD + df.format(Arrays.stream(KitType.values()).filter(e -> e.getKit().isEnabled()).count())
+                        "  "
                 );
             }
 
@@ -69,7 +70,7 @@ public class ScoreboardInfo {
 
             @Override
             public int getSize() {
-                return 3;
+                return 4;
             }
         };
 

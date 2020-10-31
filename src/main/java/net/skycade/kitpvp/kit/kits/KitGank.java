@@ -18,16 +18,22 @@ import java.util.*;
 public class KitGank extends Kit {
 
     private ItemStack weapon;
+    private ItemStack boots;
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
     public KitGank(KitManager kitManager) {
-        super(kitManager, "Gank", KitType.GANK, 35000, getLore());
+        super(kitManager, "Gank", KitType.GANK, 0, getLore());
 
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 6)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 4).build();
+                .addEnchantment(Enchantment.DAMAGE_ALL, 3).build();
+
+        boots = new ItemBuilder(
+                Material.CHAINMAIL_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 5)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build();
 
         constantEffects.put(PotionEffectType.DAMAGE_RESISTANCE, 0);
         constantEffects.put(PotionEffectType.SPEED, 1);
@@ -40,6 +46,7 @@ public class KitGank extends Kit {
     @Override
     public void applyKit(Player p) {
         p.getInventory().addItem(weapon);
+        p.getInventory().setBoots(boots);
 
         constantEffects.forEach((effect, amplifier) -> {
             p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
@@ -53,13 +60,13 @@ public class KitGank extends Kit {
 
     @Override
     public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 25!");
     }
 
     public static List<String> getLore() {
         return Arrays.asList(
                 ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
-                ChatColor.GRAY + "" + ChatColor.ITALIC + "Strafe's little brother.",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Strafe's little brother. RIP Strafe.",
                 "",
                 ChatColor.GRAY + "Lots of potion effects,",
                 ChatColor.GRAY + "but no armor."
