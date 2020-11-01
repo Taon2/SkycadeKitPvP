@@ -1,24 +1,17 @@
 package net.skycade.kitpvp.listeners.player;
 
 import com.connorlinfoot.actionbarapi.ActionBarAPI;
-import net.skycade.SkycadeCombat.data.CombatData;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.Messages;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -41,7 +34,7 @@ public class PlayerMoveListener implements Listener {
         }
 
         startLilypadEffect();
-        startRandomTPEffects(); // Random teleports from Spawn
+        Bukkit.getScheduler().runTaskTimer(plugin, this::randomTpEffects, 0L, 5L); // Random teleports from Spawn
     }
 
     private void startLilypadEffect() {
@@ -57,7 +50,7 @@ public class PlayerMoveListener implements Listener {
         Bukkit.getScheduler().runTaskLater(plugin, this::startLilypadEffect, 5);
     }
     // New teleport pad method
-    private void startRandomTPEffects(){
+    private void randomTpEffects(){
         Bukkit.getOnlinePlayers().stream()
                 .filter(p -> (p.getLocation().getBlock().getType() == Material.GOLD_PLATE) && UtilPlayer.isMoving(p)
                         && p.getGameMode() == GameMode.SURVIVAL)
@@ -77,7 +70,6 @@ public class PlayerMoveListener implements Listener {
                         immune.remove(p.getUniqueId());
                     }, 4 * 20);
                 });
-        Bukkit.getScheduler().runTaskLater(plugin, this::startRandomTPEffects, 5);
     }
     // Old teleport pad method
     /*private void startPressurePadEffect() {
@@ -143,7 +135,7 @@ public class PlayerMoveListener implements Listener {
             if (player.isInsideVehicle()) {
                 player.getVehicle().eject();
             }
-            player.kickPlayer("[Glitch Detection] Suck in block?");
+            player.kickPlayer("[Glitch Detection] Stuck in block?");
         }
     }
 
@@ -162,10 +154,7 @@ public class PlayerMoveListener implements Listener {
         Material y1block = player.getWorld().getBlockAt(loc1).getType();
         Material y2block = player.getWorld().getBlockAt(loc2).getType();
 
-        if (y1block == Material.BARRIER || y2block == Material.BARRIER){
-            return true;
-        }
-        return false;
+        return y1block == Material.BARRIER || y2block == Material.BARRIER;
     }
 
     @EventHandler

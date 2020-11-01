@@ -19,18 +19,15 @@ import net.skycade.kitpvp.events.DoubleCoinsEvent;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.kit.kits.*;
-import net.skycade.kitpvp.kit.kits.KitFireArcher;
 import net.skycade.kitpvp.kit.kits.disabled.KitMultishot;
 import net.skycade.kitpvp.kit.kits.disabled.KitPyromancer;
 import net.skycade.kitpvp.kit.kits.disabled.KitShroom;
-import net.skycade.kitpvp.nms.MiniArmyZombie;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -268,20 +265,21 @@ public class PlayerDamageListener implements Listener {
             BROKE_KILLSTREAK.broadcast("%killer%", killerPlayer.getName(), "%dead%", diedPlayer.getName(), "%ks%", Integer.toString(diedStreak));
         }
 
-        //Normal kill coins
-        int base = KitPvP.getInstance().getConfig().getInt("kill-coins");
-        int power = killerStats.getStreak() - 1 <= 150 ? killerStats.getStreak() - 1 : 150;
-        int extra = (int) Math.ceil(base * Math.pow((100 + KitPvP.getInstance().getConfig().getInt("kill-bonus-percentage")) / ((double) 100), power)) + bounty;
+        int finalReward = 0;
 
-        double modifier = KitPvP.getInstance().getConfig().getDouble("coins-modifier");
-        int finalReward = (int) Math.ceil(modifier / (double) 100 * (extra + killstreakCoins));
+        if (gang == null || !gang.getOnlineMembers().contains(diedPlayer)) {
+            //Normal kill coins
+            int base = KitPvP.getInstance().getConfig().getInt("kill-coins");
+            int power = killerStats.getStreak() - 1 <= 150 ? killerStats.getStreak() - 1 : 150;
+            int extra = (int) Math.ceil(base * Math.pow((100 + KitPvP.getInstance().getConfig().getInt("kill-bonus-percentage")) / ((double) 100), power)) + bounty;
 
-        if (DoubleCoinsEvent.isActive())
-            finalReward = finalReward * 2;
+            double modifier = KitPvP.getInstance().getConfig().getDouble("coins-modifier");
 
-        if (!(gang == null))
-            if (gang.getOnlineMembers().contains(diedPlayer))
-                finalReward = 0;
+            finalReward = (int) Math.ceil(modifier / (double) 100 * (extra + killstreakCoins));
+
+            if (DoubleCoinsEvent.isActive())
+                finalReward = finalReward * 2;
+        }
 
         // KILL MESSAGE
         DecimalFormat df = new DecimalFormat("###,###,###,###.##");
@@ -289,9 +287,11 @@ public class PlayerDamageListener implements Listener {
             YOU_KILLED.msg(killerMember.getPlayer(), "%player%", diedMember.getName(), "%coins%", df.format(finalReward));
 
         // This message is called if you have killed a member of your gang
-        if (!(gang == null))
+        if (gang != null) {
             if (gang.getOnlineMembers().contains(diedPlayer))
                 KILLED_GANG_MEMBER.msg(killerPlayer);
+        }
+
         KitPvPCoinsRewardEvent coinsEvent = new KitPvPCoinsRewardEvent(killerPlayer, finalReward);
         Bukkit.getPluginManager().callEvent(coinsEvent);
 

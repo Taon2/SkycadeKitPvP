@@ -58,10 +58,10 @@ public class PlayerJoinQuitListener implements Listener {
                 KitPvPStats stats = plugin.getStats(p);
 
                 // Gives every kit, only used during beta testing.
-                KitPvP.getInstance().getKitManager().getKits().forEach((kitType, kit) -> {
+                /*KitPvP.getInstance().getKitManager().getKits().forEach((kitType, kit) -> {
                     if (kit.isEnabled())
                         stats.addKit(kitType);
-                });
+                });*/
                 if (!stats.getActiveKit().getKit().isEnabled()) {
                     stats.setActiveKit(KitType.CHANCE);
                     stats.getActiveKit().getKit().giveSoup(p, 35);

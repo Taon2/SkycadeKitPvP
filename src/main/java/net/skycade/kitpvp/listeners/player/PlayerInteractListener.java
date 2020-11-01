@@ -2,7 +2,6 @@ package net.skycade.kitpvp.listeners.player;
 
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
@@ -26,7 +25,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class PlayerInteractListener implements Listener {
 
@@ -34,22 +32,18 @@ public class PlayerInteractListener implements Listener {
 
     public PlayerInteractListener(KitPvP plugin) {
         this.plugin = plugin;
-        preventDoubleSoupArrayListStuck();
+        Bukkit.getScheduler().runTaskTimer(plugin, this::preventDoubleSoupArrayListStuck, 1L, 5L);
     }
 
     private void preventDoubleSoupArrayListStuck() {
-        Bukkit.getOnlinePlayers().stream()
-                .filter(p -> (preventDoubleSoup.contains(p.getUniqueId())))
-                .forEach(p -> {
-                            preventDoubleSoup.remove(p.getUniqueId());
-                        }
-                );
-        Bukkit.getScheduler().runTaskLater(plugin, this::preventDoubleSoupArrayListStuck, 5);
+        Bukkit.getOnlinePlayers().forEach(p -> preventDoubleSoup.remove(p.getUniqueId())); // just clear the list?
     }
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (!(event.getRightClicked() instanceof Player) || VanishStatus.isVanished(event.getPlayer().getUniqueId()) || plugin.isInSpawnArea(event.getPlayer()) || (plugin.getStats(event.getPlayer()).isAbilityToggle() && !event.getPlayer().isSneaking()))
+        if (!(event.getRightClicked() instanceof Player) || VanishStatus.isVanished(event.getPlayer().getUniqueId()) ||
+                plugin.isInSpawnArea(event.getPlayer()) || (plugin.getStats(event.getPlayer()).isAbilityToggle() &&
+                !event.getPlayer().isSneaking()))
             return;
 
         plugin.getStats(event.getPlayer()).getActiveKit().getKit().onInteract(event.getPlayer(), (Player) event.getRightClicked(), event.getPlayer().getInventory().getItemInHand());
