@@ -14,7 +14,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class KitSharingan extends Kit {
 
@@ -75,7 +78,7 @@ public class KitSharingan extends Kit {
     public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
         Collection<PotionEffect> effects = damager.getActivePotionEffects();
 
-        if(effects.size() < 1)
+        if (effects.size() < 1)
             return; // no effects, so don't copy effects
 
         if (!addCooldown(damagee, "Copy Potion Effects", copyPotionEffectsCooldown, true))

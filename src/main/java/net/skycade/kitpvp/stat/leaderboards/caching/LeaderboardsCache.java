@@ -27,7 +27,7 @@ public class LeaderboardsCache {
         public StatsMember load(@Nonnull UUID key) {
             StatsMember member;
 
-            if (memberCache.getIfPresent(key) == null){
+            if (memberCache.getIfPresent(key) == null) {
                 MojangUtil.PlayerData data = MojangUtil.get(key);
                 String name = data == null ? "unknown" : data.getName();
 

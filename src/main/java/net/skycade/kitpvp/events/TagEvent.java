@@ -5,7 +5,10 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPEventStartEvent;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -71,7 +74,7 @@ public class TagEvent extends RandomEvent implements Listener {
         Bukkit.getServer().getPluginManager().callEvent(eventStartEvent);
 
         TAG_START.broadcast("%player%", infectedPlayer.getName());
-        for(Player pl: Bukkit.getOnlinePlayers()){
+        for (Player pl : Bukkit.getOnlinePlayers()) {
             pl.playSound(pl.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
         }
 

@@ -6,19 +6,15 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import net.skycade.kitpvp.listeners.player.PlayerMoveListener;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -37,7 +33,7 @@ public class KitAvatar extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
-    public KitAvatar(KitManager kitManager){
+    public KitAvatar(KitManager kitManager) {
         super(kitManager, "Avatar", KitType.AVATAR, 30000, getLore());
 
         helmet = new ItemBuilder(
@@ -63,16 +59,16 @@ public class KitAvatar extends Kit {
                 .build();
 
         abilityItem = new ItemStack(Material.INK_SACK, 1, (short) 6);
-            ItemMeta abilityMeta = abilityItem.getItemMeta();
-            abilityMeta.setDisplayName(ChatColor.DARK_AQUA + "Dash");
-            List<String> abilityLore = new ArrayList<>();
-            abilityLore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% to Dash!");
-            abilityLore.add(" ");
-            abilityLore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Dashing will launch you forward towards your enemies");
-            abilityLore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "and grants you Speed 3 for 6 seconds.");
+        ItemMeta abilityMeta = abilityItem.getItemMeta();
+        abilityMeta.setDisplayName(ChatColor.DARK_AQUA + "Dash");
+        List<String> abilityLore = new ArrayList<>();
+        abilityLore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% to Dash!");
+        abilityLore.add(" ");
+        abilityLore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Dashing will launch you forward towards your enemies");
+        abilityLore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "and grants you Speed 3 for 6 seconds.");
 
-            abilityMeta.setLore(abilityLore);
-            abilityItem.setItemMeta(abilityMeta);
+        abilityMeta.setLore(abilityLore);
+        abilityItem.setItemMeta(abilityMeta);
 
         constantEffects.put(PotionEffectType.SPEED, 0);
 
@@ -134,7 +130,7 @@ public class KitAvatar extends Kit {
 
         flyingParticles.add(p.getUniqueId());
         flyingParticleStay.add(p.getUniqueId());
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             @Override
             public void run() {
@@ -142,7 +138,7 @@ public class KitAvatar extends Kit {
             }
         }.runTaskLater(KitPvP.getInstance(), 15);
 
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             @Override
             public void run() {
@@ -156,15 +152,15 @@ public class KitAvatar extends Kit {
     @Override
     public void onMove(Player p) {
         Location loc = p.getLocation();
-        if (loc.getBlock().getRelative(BlockFace.DOWN).getType() != Material.AIR){
+        if (loc.getBlock().getRelative(BlockFace.DOWN).getType() != Material.AIR) {
             if (flyingParticles.contains(p.getUniqueId())) {
                 if (!flyingParticleStay.contains(p.getUniqueId())) {
                     flyingParticles.remove(p.getUniqueId());
                 }
             }
         }
-        if (flyingParticles.contains(p.getUniqueId())){
-            if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR){
+        if (flyingParticles.contains(p.getUniqueId())) {
+            if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
                 p.getWorld().playEffect(p.getLocation(), Effect.MOBSPAWNER_FLAMES, 5, 5);
             }
         }

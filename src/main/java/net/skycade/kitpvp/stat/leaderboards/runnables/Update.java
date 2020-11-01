@@ -1,4 +1,5 @@
 package net.skycade.kitpvp.stat.leaderboards.runnables;
+
 import net.skycade.kitpvp.KitPvP;
 import org.bukkit.Bukkit;
 
@@ -19,8 +20,8 @@ public class Update {
         return false;
     }
 
-    public boolean stopTask(){
-        if(taskID != -1){
+    public boolean stopTask() {
+        if (taskID != -1) {
             Bukkit.getScheduler().cancelTask(taskID);
             taskID = -1;
             return true;

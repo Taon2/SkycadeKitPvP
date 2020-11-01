@@ -84,6 +84,7 @@ public class PlayerInteractListener implements Listener {
 
 
     private List<UUID> preventDoubleSoup = new ArrayList<>();
+
     // this is necessary to fix soup reg, because it runs before the general PlayerInteractEvent
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityInteractAtEntity(PlayerInteractAtEntityEvent event) {
@@ -113,15 +114,15 @@ public class PlayerInteractListener implements Listener {
         Player player = event.getPlayer();
         ItemStack item = player.getItemInHand();
         int slot = event.getPlayer().getInventory().getHeldItemSlot();
-        if (item == null)return;
+        if (item == null) return;
         if (item.getType() == Material.MUSHROOM_SOUP) {
             if (preventDoubleSoup.contains(player.getUniqueId())) return;
-            if (player.getHealth() == player.getMaxHealth())return;
+            if (player.getHealth() == player.getMaxHealth()) return;
 
             preventDoubleSoup.add(player.getUniqueId());
             double toHeal = Math.min(player.getHealth() + 7.0, player.getMaxHealth());
             player.setHealth(toHeal);
-            new BukkitRunnable(){
+            new BukkitRunnable() {
                 @Override
                 public void run() {
                     player.getInventory().clear(slot);
@@ -133,18 +134,18 @@ public class PlayerInteractListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void soup(PlayerInteractEvent event){
+    public void soup(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         int slot = event.getPlayer().getInventory().getHeldItemSlot();
-        if (event.getItem() == null)return;
+        if (event.getItem() == null) return;
         if (event.getItem().getType() == Material.MUSHROOM_SOUP) {
             if (preventDoubleSoup.contains(player.getUniqueId())) return;
-            if (player.getHealth() == player.getMaxHealth())return;
+            if (player.getHealth() == player.getMaxHealth()) return;
 
             preventDoubleSoup.add(player.getUniqueId());
             double toHeal = Math.min(player.getHealth() + 7.0, player.getMaxHealth());
             player.setHealth(toHeal);
-            new BukkitRunnable(){
+            new BukkitRunnable() {
                 @Override
                 public void run() {
                     player.getInventory().clear(slot);

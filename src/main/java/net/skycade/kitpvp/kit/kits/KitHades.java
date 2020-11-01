@@ -1,8 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
-import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
-import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
@@ -17,8 +15,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
-
-import static net.skycade.kitpvp.Messages.LOVE_U;
 
 public class KitHades extends Kit {
 

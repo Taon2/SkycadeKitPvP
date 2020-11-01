@@ -49,8 +49,9 @@ public class PlayerMoveListener implements Listener {
                 );
         Bukkit.getScheduler().runTaskLater(plugin, this::startLilypadEffect, 5);
     }
+
     // New teleport pad method
-    private void randomTpEffects(){
+    private void randomTpEffects() {
         Bukkit.getOnlinePlayers().stream()
                 .filter(p -> (p.getLocation().getBlock().getType() == Material.GOLD_PLATE) && UtilPlayer.isMoving(p)
                         && p.getGameMode() == GameMode.SURVIVAL)
@@ -129,7 +130,7 @@ public class PlayerMoveListener implements Listener {
     @EventHandler
     public void antiPhase(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR)return;
+        if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) return;
 
         if (isGlitched(player)) {
             if (player.isInsideVehicle()) {
@@ -139,7 +140,7 @@ public class PlayerMoveListener implements Listener {
         }
     }
 
-    public static boolean isGlitched(Player player){
+    public static boolean isGlitched(Player player) {
         double x = player.getLocation().getX();
         double z = player.getLocation().getZ();
 

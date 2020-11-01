@@ -6,9 +6,9 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
+import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.events.KillTheKingEvent;
 import net.skycade.kitpvp.events.TagEvent;
-import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.nms.ActionBarUtil;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
@@ -69,7 +69,8 @@ public class CommandRefreshKit extends SkycadeCommand {
 
         try {
             lastRefresh.put(member.getUUID(), yaml.getLong("current-refreshkit-cooldowns." + member.getUUID()));
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         if (lastRefresh.containsKey(member.getUUID())) {
             long diff = (now - lastRefresh.get(member.getUUID())) / 1000L;

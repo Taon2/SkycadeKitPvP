@@ -1,6 +1,5 @@
 package net.skycade.kitpvp.kit.kits;
 
-import net.skycade.SkycadeCombat.data.CombatData;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.events.CaptureTheFlagEvent;
@@ -68,7 +67,7 @@ public class KitNecromancer extends Kit {
                 .setColour(Color.GRAY).build();
         boots = new ItemBuilder(
                 Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY,  11)
+                .addEnchantment(Enchantment.DURABILITY, 11)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .setColour(Color.GRAY).build();
         weapon = new ItemBuilder(
@@ -247,7 +246,7 @@ public class KitNecromancer extends Kit {
         Entity damagee = event.getEntity();
 
         if (damager instanceof LivingEntity && damagee instanceof LivingEntity) {
-           if (ghostList.containsKey(damager.getUniqueId())) {
+            if (ghostList.containsKey(damager.getUniqueId())) {
                 for (MiniArmyZombie ghost : ghostList.get(damager.getUniqueId())) {
                     ((Zombie) ghost.getBukkitEntity()).setTarget((LivingEntity) damagee);
                 }

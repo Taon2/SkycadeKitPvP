@@ -101,9 +101,9 @@ public class KitHulk extends Kit {
             ParticleEffect.CLOUD.display(0, 0, 0, 0, 1, p.getLocation(), 128);
         }, 0L, 1L).getTaskId();
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> {
-                Bukkit.getScheduler().cancelTask(taskId);
-                p.setVelocity(new org.bukkit.util.Vector(0, -3, 0));
-                isSmashing.put(p.getUniqueId(), true);
+            Bukkit.getScheduler().cancelTask(taskId);
+            p.setVelocity(new org.bukkit.util.Vector(0, -3, 0));
+            isSmashing.put(p.getUniqueId(), true);
         }, 15L);
 
         new BukkitRunnable() {
@@ -141,11 +141,11 @@ public class KitHulk extends Kit {
                             fb.getNearbyEntities(1.0D, 1.0D, 1.0D).stream()
                                     .filter((ent) -> ent != p && ent.getType() != EntityType.FALLING_BLOCK)
                                     .forEach((ent) -> {
-                                if (ent.hasMetadata("NPC"))
-                                    return;
-                                ((Player) ent).damage(4, p);
-                                ent.setVelocity(ent.getLocation().getDirection().multiply(-1.35F).setY(0.8F));
-                            });
+                                        if (ent.hasMetadata("NPC"))
+                                            return;
+                                        ((Player) ent).damage(4, p);
+                                        ent.setVelocity(ent.getLocation().getDirection().multiply(-1.35F).setY(0.8F));
+                                    });
                         });
                     }
                 }

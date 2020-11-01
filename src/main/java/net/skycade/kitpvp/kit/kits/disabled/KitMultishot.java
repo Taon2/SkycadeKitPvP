@@ -121,7 +121,7 @@ public class KitMultishot extends Kit {
             arrowDir.multiply(e.getEntity().getVelocity().length());
 
             shooter.launchProjectile(Arrow.class, arrowDir);
-            arrowAngle += ((90 - initialArrowAngle)/2);
+            arrowAngle += ((90 - initialArrowAngle) / 2);
         }
 
         running.remove(shooter.getUniqueId());

@@ -30,9 +30,9 @@ public class EntityUtil {
         }
 
         try {
-            ((Map)cFieldEntityTypes.get(null)).put(name, entity);
-            ((Map)dFieldEntityTypes.get(null)).put(entity, name);
-            ((Map)fFieldEntityTypes.get(null)).put(entity, id);
+            ((Map) cFieldEntityTypes.get(null)).put(name, entity);
+            ((Map) dFieldEntityTypes.get(null)).put(entity, name);
+            ((Map) fFieldEntityTypes.get(null)).put(entity, id);
             return true;
         } catch (IllegalAccessException var4) {
             var4.printStackTrace();
@@ -42,7 +42,7 @@ public class EntityUtil {
 
     public static <T extends Entity> T spawnCustomEntity(Class<T> entity, Location location) {
         try {
-            World world = ((CraftWorld)location.getWorld()).getHandle();
+            World world = ((CraftWorld) location.getWorld()).getHandle();
             T customEntity = entity.getDeclaredConstructor(World.class).newInstance(world);
             customEntity.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
             world.addEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM);

@@ -5,7 +5,6 @@ import net.skycade.kitpvp.stat.leaderboards.caching.LeaderboardsCache;
 import net.skycade.skycadeleaderboards.leaderboards.StatisticType;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 public class StatKitPvPKills extends StatisticType<UUID, Integer> {

@@ -5,8 +5,8 @@ import net.skycade.SkycadeCore.guis.dynamicnew.DynamicGui;
 import net.skycade.SkycadeCore.utility.ItemBuilder;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
-import net.skycade.kitpvp.ui.prestige.PrestigeManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
+import net.skycade.kitpvp.ui.prestige.PrestigeManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -95,7 +95,7 @@ public class PrestigeMenu extends DynamicGui {
         if (page > 1) {
             setItemInteraction(45, new ItemBuilder(BACK).build(),
                     (p, ev) -> {
-                        new PrestigeMenu(member, page -1).open(p);
+                        new PrestigeMenu(member, page - 1).open(p);
                     });
         }
 

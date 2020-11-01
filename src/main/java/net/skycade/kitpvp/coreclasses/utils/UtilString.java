@@ -71,14 +71,14 @@ public class UtilString {
         throw new IllegalArgumentException("There is no value with name '" + name + " in Enum " + enumeration.getClass().getName());
     }
 
-	/*
+    /*
      * Never used
-	 * public static String centreForMinecraftChat(String s) {
-	 * int DEFAULT_CHAT_WIDTH = 106, RIGHT_MARGIN = 20;
-	 * int width = DEFAULT_CHAT_WIDTH - RIGHT_MARGIN;
-	 * return getWhitespace((width - ChatColor.stripColor(s).length()) / 2) + s;
-	 * }
-	 */
+     * public static String centreForMinecraftChat(String s) {
+     * int DEFAULT_CHAT_WIDTH = 106, RIGHT_MARGIN = 20;
+     * int width = DEFAULT_CHAT_WIDTH - RIGHT_MARGIN;
+     * return getWhitespace((width - ChatColor.stripColor(s).length()) / 2) + s;
+     * }
+     */
 
     public static Boolean getBoolean(String bool) {
         if (bool.equals("0") || bool.equalsIgnoreCase("false") || bool.equalsIgnoreCase("off") || bool.equalsIgnoreCase("no") || bool.equalsIgnoreCase("disable") || bool.equalsIgnoreCase("disabled"))

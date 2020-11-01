@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.Messages;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
@@ -15,7 +14,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,13 +39,13 @@ public class KitReaper extends Kit {
         super(kitManager, "Reaper", KitType.REAPER, 30000, getLore());
 
         helmet = new ItemStack(Material.SKULL_ITEM, 1, (short) 1);
-            ItemMeta helmetMeta = helmet.getItemMeta();
-            helmetMeta.setDisplayName(ChatColor.GRAY + "Reaper's Skull");
-            helmetMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
-            helmet.setItemMeta(helmetMeta);
+        ItemMeta helmetMeta = helmet.getItemMeta();
+        helmetMeta.setDisplayName(ChatColor.GRAY + "Reaper's Skull");
+        helmetMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+        helmet.setItemMeta(helmetMeta);
 
         chestplate = new ItemBuilder(
-                Material.IRON_CHESTPLATE).addEnchantment(Enchantment.DURABILITY, 5  )
+                Material.IRON_CHESTPLATE).addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .build();
 
@@ -58,7 +56,7 @@ public class KitReaper extends Kit {
                 .build();
 
         boots = new ItemBuilder(
-                Material.IRON_BOOTS).addEnchantment(Enchantment.DURABILITY, 5  )
+                Material.IRON_BOOTS).addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .build();
 
@@ -136,7 +134,7 @@ public class KitReaper extends Kit {
 
         target.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20 * witherDuration, 0));
 
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             @Override
             public void run() {

@@ -97,7 +97,8 @@ public class PlayerListeners implements Listener {
             return;
         }
 
-        if (!plugin.getSpawnRegion().contains(event.getTo()) || plugin.getSpawnRegion().contains(event.getFrom())) return;
+        if (!plugin.getSpawnRegion().contains(event.getTo()) || plugin.getSpawnRegion().contains(event.getFrom()))
+            return;
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -122,7 +123,8 @@ public class PlayerListeners implements Listener {
             stats.getActiveKit().getKit().onMove(event.getPlayer());
         }
 
-        if (!plugin.getSpawnRegion().contains(event.getTo()) || plugin.getSpawnRegion().contains(event.getFrom())) return;
+        if (!plugin.getSpawnRegion().contains(event.getTo()) || plugin.getSpawnRegion().contains(event.getFrom()))
+            return;
         new BukkitRunnable() {
             @Override
             public void run() {

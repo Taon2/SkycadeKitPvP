@@ -20,7 +20,7 @@ public class EventShopManager {
     private static EventShopManager instance;
     private final Map<String, EventShopItem> eventShopItems = new LinkedHashMap<>();
 
-    public EventShopManager (KitPvP plugin) {
+    public EventShopManager(KitPvP plugin) {
         this.plugin = plugin;
         instance = this;
 
@@ -29,7 +29,7 @@ public class EventShopManager {
         registerEventShopItems();
     }
 
-    private void registerEventShopItems(){
+    private void registerEventShopItems() {
         registerEventShopItem(new ItemCoinBoost(this));
         registerEventShopItem(new ItemKeepKillstreak(this));
         registerEventShopItem(new ItemPotionEffect(this));

@@ -284,7 +284,7 @@ public class KitLich extends Kit {
     }
 
     @EventHandler
-    public void preventSkullPlace(BlockPlaceEvent event){
+    public void preventSkullPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         Kit kit = KitPvP.getInstance().getStats(player).getActiveKit().getKit();
 
@@ -355,7 +355,7 @@ public class KitLich extends Kit {
             return true;
 
         Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), () -> UtilPlayer.reset(died), 1);
-        died.setHealth(died.getMaxHealth()/2);
+        died.setHealth(died.getMaxHealth() / 2);
         died.setVelocity(new Vector(0, 0, 0));
         died.setGameMode(GameMode.SURVIVAL);
         placed.get(died.getUniqueId()).forEach((loc, replace) -> {

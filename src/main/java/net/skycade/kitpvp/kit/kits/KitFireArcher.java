@@ -8,7 +8,9 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -21,8 +23,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
-
-import static net.skycade.kitpvp.Messages.FIRE_REMOVED;
 
 public class KitFireArcher extends Kit {
 
@@ -115,8 +115,8 @@ public class KitFireArcher extends Kit {
         if (UtilMath.getRandom(0, 100) <= 3) {
             Entity arrow = event.getDamager();
             shootParticlesFromLoc(damagee, ParticleEffect.FLAME, 500, 0.3F);
-            for (Entity entity : arrow.getNearbyEntities(2D, 2D, 2D)){
-                if (entity instanceof Player){
+            for (Entity entity : arrow.getNearbyEntities(2D, 2D, 2D)) {
+                if (entity instanceof Player) {
                     Player affected = (Player) entity;
                     affected.setFireTicks(20 * 10);
                     affected.damage(6, shooter);

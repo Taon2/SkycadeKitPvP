@@ -2,7 +2,6 @@ package net.skycade.kitpvp.kit.kits;
 
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
-import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
@@ -10,7 +9,6 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -112,13 +110,13 @@ public class KitZeus extends Kit {
     }
      */
 
-    private static HashMap<Player, List<Block>> getBlocks(Player player){
+    private static HashMap<Player, List<Block>> getBlocks(Player player) {
         Block block = player.getLocation().getBlock();
         HashMap<Player, List<Block>> playerBlockList = new HashMap<>();
         playerBlockList.put(player, new ArrayList<>());
         Location location = block.getLocation();
 
-        for(int y = 0; y < 256; y++){
+        for (int y = 0; y < 256; y++) {
             location.setY(block.getY() + 1);
             block = location.getBlock();
             playerBlockList.get(player).add(block);
@@ -126,6 +124,7 @@ public class KitZeus extends Kit {
 
         return playerBlockList;
     }
+
     // New Ability trigger method
     @Override
     public void onInteract(Player p, Player target, ItemStack item) {
@@ -134,7 +133,7 @@ public class KitZeus extends Kit {
         if (item.getType() != Material.BLAZE_ROD)
             return;
         HashMap<Player, List<Block>> playerBlockList = getBlocks(target);
-        for (Block b : playerBlockList.get(target)){
+        for (Block b : playerBlockList.get(target)) {
             if (!allowedTypes.contains(b.getType())) {
                 CANNOT_USE.msg(p, "%thing%", abilityName, "%reason%", "while under a block");
                 return;

@@ -10,8 +10,6 @@ import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.nms.ActionBarUtil;
 import net.skycade.kitpvp.runnable.ItemRunnable;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
-import net.skycade.kitpvp.ui.eventshopitems.items.ItemPotionEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -304,8 +302,8 @@ public abstract class Kit implements Listener {
         if (p == null || !p.isOnline()) return;
         KitType activeKit = KitPvP.getInstance().getStats(p).getActiveKit();
         boolean givePotion = activeKit == KitType.POTIONMASTER
-                            || activeKit == KitType.BUILDUHC
-                            || activeKit == KitType.WITCHDOCTOR;
+                || activeKit == KitType.BUILDUHC
+                || activeKit == KitType.WITCHDOCTOR;
 
         // loop through the items and fill with soup
         Inventory inventory = p.getInventory();

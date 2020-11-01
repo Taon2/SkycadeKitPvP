@@ -55,6 +55,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
     private ItemStack leggings = new ItemStack(Material.DIAMOND_LEGGINGS);
     private ItemStack boots = new ItemStack(Material.DIAMOND_BOOTS);
     private ItemStack rod = new ItemStack(Material.BLAZE_ROD);
+
     @Override
     public int getFrequencyPerDay() {
         return 8;
@@ -65,7 +66,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(this, KitPvP.getInstance());
     }
 
-    public void run(){
+    public void run() {
         instance = this;
         List<Player> p = Bukkit.getOnlinePlayers()
                 .stream().filter(e ->
@@ -87,7 +88,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
         Bukkit.getServer().getPluginManager().callEvent(eventStartEvent);
 
         KILLTHEKING_START.broadcast("%player%", kingPlayer.getName());
-        for(Player pl: Bukkit.getOnlinePlayers()){
+        for (Player pl : Bukkit.getOnlinePlayers()) {
             pl.playSound(pl.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
         }
 
@@ -209,8 +210,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                         }
                     }
                 });
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -254,28 +254,28 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onMoveEvent(PlayerMoveEvent event){
+    public void onMoveEvent(PlayerMoveEvent event) {
         if (begin == null) return;
 
         Player player = event.getPlayer();
-        if (this.king.equals(player.getUniqueId())){
+        if (this.king.equals(player.getUniqueId())) {
             particleMoveEffect(player, ParticleEffect.CRIT, 1, 30);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerDamage(EntityDamageByEntityEvent event){
+    public void onPlayerDamage(EntityDamageByEntityEvent event) {
         if (begin == null) return;
 
         Player player = Bukkit.getPlayer(event.getEntity().getUniqueId());
-        if (player != null && this.king.equals(player.getUniqueId())){
+        if (player != null && this.king.equals(player.getUniqueId())) {
             participated.add(event.getDamager().getUniqueId());
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerTeleport(PlayerTeleportEvent event){
-        if(KitPvP.getInstance().getSpawnRegion().contains(event.getTo()) && event.getPlayer().getUniqueId().equals(this.king)) {
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        if (KitPvP.getInstance().getSpawnRegion().contains(event.getTo()) && event.getPlayer().getUniqueId().equals(this.king)) {
             KILLTHEKING_TO_SPAWN.broadcast();
             stop();
         }
@@ -305,7 +305,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
         KILLTHEKING_ENDED.broadcast();
     }
 
-    private void itemBuilder(){
+    private void itemBuilder() {
         ItemMeta helmetEnchantMeta = helmet.getItemMeta();
         helmetEnchantMeta.addEnchant(Enchantment.DURABILITY, 10, true);
         helmetEnchantMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
@@ -360,7 +360,7 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
         return instance;
     }
 
-    public UUID getCurrentKing(){
+    public UUID getCurrentKing() {
         return king;
     }
 }

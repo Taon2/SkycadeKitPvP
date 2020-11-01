@@ -90,13 +90,13 @@ public class ViewKitMenu extends DynamicGui {
             }
             lore.add("");
             lore.addAll(kit.getHowToObtain());
-            setItem(13,  new ItemBuilder(Material.PAPER).setName(ChatColor.GREEN + kit.getName()).addLore(lore).build());
+            setItem(13, new ItemBuilder(Material.PAPER).setName(ChatColor.GREEN + kit.getName()).addLore(lore).build());
         }
 
         setItemInteraction(9, new net.skycade.SkycadeCore.utility.ItemBuilder(BACK).build(),
-                    (p, ev) -> {
-                        new KitMenu(KitPvP.getInstance().getKitManager(), MemberManager.getInstance().getMember(p)).open(p);
-                    });
+                (p, ev) -> {
+                    new KitMenu(KitPvP.getInstance().getKitManager(), MemberManager.getInstance().getMember(p)).open(p);
+                });
     }
 
     private void addItems(int index, List<ItemStack> items, List<PotionEffect> effects) {

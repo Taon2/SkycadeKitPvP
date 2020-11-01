@@ -91,7 +91,7 @@ public class KitSonic extends Kit {
         }
     }
 
-    public void disableSprint(Player p){
+    public void disableSprint(Player p) {
         if (p.hasPotionEffect(PotionEffectType.SPEED))
             p.removePotionEffect(PotionEffectType.SPEED);
         sprinting.remove(p.getUniqueId());

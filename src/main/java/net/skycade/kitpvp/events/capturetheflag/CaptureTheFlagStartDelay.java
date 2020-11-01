@@ -2,8 +2,8 @@ package net.skycade.kitpvp.events.capturetheflag;
 
 import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.events.RandomEvent;
 import net.skycade.kitpvp.events.CaptureTheFlagEvent;
+import net.skycade.kitpvp.events.RandomEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;

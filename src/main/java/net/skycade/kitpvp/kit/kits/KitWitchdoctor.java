@@ -66,17 +66,17 @@ public class KitWitchdoctor extends Kit {
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + chantCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "heals nearby allies and weakens nearby enemies.").build();
         regen = new ItemStack(Material.POTION, potionStartAmount, (short) 16385);
-                ItemMeta meta = regen.getItemMeta();
-                List<String> lore = new ArrayList<>();
-                lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 regeneration potion every " + potionRegenSpeed + " seconds.");
-                meta.setLore(lore);
-                regen.setItemMeta(meta);
+        ItemMeta meta = regen.getItemMeta();
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 regeneration potion every " + potionRegenSpeed + " seconds.");
+        meta.setLore(lore);
+        regen.setItemMeta(meta);
         weakness = new ItemStack(Material.POTION, potionStartAmount, (short) 16424);
-                ItemMeta meta2 = weakness.getItemMeta();
-                List<String> lore2 = new ArrayList<>();
-                lore2.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 weakness potion every " + potionRegenSpeed + " seconds.");
-                meta2.setLore(lore2);
-                weakness.setItemMeta(meta2);
+        ItemMeta meta2 = weakness.getItemMeta();
+        List<String> lore2 = new ArrayList<>();
+        lore2.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Regain 1 weakness potion every " + potionRegenSpeed + " seconds.");
+        meta2.setLore(lore2);
+        weakness.setItemMeta(meta2);
 
         ItemStack icon = new ItemStack(Material.CAULDRON_ITEM);
         setIcon(icon);

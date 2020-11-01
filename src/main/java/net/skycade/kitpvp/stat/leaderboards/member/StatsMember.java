@@ -23,6 +23,7 @@ public class StatsMember {
         this.uuid = uuid;
         this.name = name;
     }
+
     public Player getPlayer() {
         return Bukkit.getPlayer(getUUID());
     }

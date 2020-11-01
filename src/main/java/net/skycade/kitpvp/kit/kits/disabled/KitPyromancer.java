@@ -138,8 +138,8 @@ public class KitPyromancer extends Kit {
             int cz = loc.getBlockZ();
             World w = loc.getWorld();
             int rSquared = r * r;
-            for (int x = cx - r; x <= cx +r; x++) {
-                for (int z = cz - r; z <= cz +r; z++) {
+            for (int x = cx - r; x <= cx + r; x++) {
+                for (int z = cz - r; z <= cz + r; z++) {
                     if ((cx - x) * (cx - x) + (cz - z) * (cz - z) <= rSquared) {
                         Block block = w.getBlockAt(x, cy, z);
                         if (block.getType() == Material.AIR) {

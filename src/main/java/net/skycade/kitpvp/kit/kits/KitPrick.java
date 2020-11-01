@@ -90,7 +90,7 @@ public class KitPrick extends Kit {
 
         // If target is in the ArrayList, they cannot be pricked
         // - Negative
-        if (prickedPlayers.contains(target.getUniqueId())){
+        if (prickedPlayers.contains(target.getUniqueId())) {
             Messages.PRICKED_RECENTLY.msg(p, "%player%", target.getName());
             return;
         }
@@ -109,7 +109,7 @@ public class KitPrick extends Kit {
         prickedPlayers.add(target.getUniqueId());
 
         // Removes them from the Pricked Players arraylist after 130 ticks
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             @Override
             public void run() {

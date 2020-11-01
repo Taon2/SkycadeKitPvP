@@ -102,8 +102,7 @@ public class KitGuardian extends Kit {
                         }
 
                         beam.setEndingPosition(target.getLocation());
-                    }
-                    else
+                    } else
                         beam.setEndingPosition(p.getLocation());
                 } else {
                     beam.setEndingPosition(p.getLocation());
@@ -203,10 +202,10 @@ public class KitGuardian extends Kit {
 
         List<Material> blocks = new ArrayList<>();
 
-        for(int x = 0; x <= Math.abs(loc1.getBlockX()-loc2.getBlockX()); x++){
-            for(int y = 0; y <= Math.abs(loc1.getBlockY()-loc2.getBlockY()); y++){
-                for(int z = 0; z <= Math.abs(loc1.getBlockZ()-loc2.getBlockZ()); z++){
-                    Location locInPath = new Location(loc1.getWorld(),lowX+x, lowY+y, lowZ+z);
+        for (int x = 0; x <= Math.abs(loc1.getBlockX() - loc2.getBlockX()); x++) {
+            for (int y = 0; y <= Math.abs(loc1.getBlockY() - loc2.getBlockY()); y++) {
+                for (int z = 0; z <= Math.abs(loc1.getBlockZ() - loc2.getBlockZ()); z++) {
+                    Location locInPath = new Location(loc1.getWorld(), lowX + x, lowY + y, lowZ + z);
                     Block inPath = locInPath.getBlock();
                     blocks.add(inPath.getType());
                 }

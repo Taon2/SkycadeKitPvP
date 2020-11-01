@@ -39,7 +39,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static net.skycade.kitpvp.Messages.*;
 import static org.bukkit.ChatColor.*;
-import static org.bukkit.ChatColor.RED;
 
 public class CaptureTheFlagEvent extends RandomEvent implements Listener {
 
@@ -498,8 +497,7 @@ public class CaptureTheFlagEvent extends RandomEvent implements Listener {
         if (damager == null) {
             if (event.getDamager() instanceof Player) {
                 damager = (Player) event.getDamager();
-            }
-            else return;
+            } else return;
         }
         Player damagee = (Player) event.getEntity();
 

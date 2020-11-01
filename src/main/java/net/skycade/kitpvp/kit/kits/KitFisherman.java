@@ -11,7 +11,6 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -101,18 +100,17 @@ public class KitFisherman extends Kit {
      */
 
 
-
     @EventHandler
-    public void rodUse(PlayerFishEvent event){
+    public void rodUse(PlayerFishEvent event) {
         Player player = event.getPlayer();
 
         Kit kit = KitPvP.getInstance().getStats(player).getActiveKit().getKit();
 
-        if (kit.getKitType() == KitType.FISHERMAN){
-            if (KitPvP.getInstance().isInSpawnArea(player))return;
+        if (kit.getKitType() == KitType.FISHERMAN) {
+            if (KitPvP.getInstance().isInSpawnArea(player)) return;
 
             PlayerFishEvent.State state = event.getState();
-            if (state == PlayerFishEvent.State.FAILED_ATTEMPT){
+            if (state == PlayerFishEvent.State.FAILED_ATTEMPT) {
                 if (!addCooldown(player, "Grapple", grappleCooldown, true) || frozenPlayers.containsKey(player.getUniqueId()))
                     return;
 

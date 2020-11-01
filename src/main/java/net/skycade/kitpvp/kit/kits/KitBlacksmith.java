@@ -128,9 +128,9 @@ public class KitBlacksmith extends Kit {
             return;
 
         Gang gang = GangsPlusApi.getPlayersGang(p);
-        if (!gang.getOnlineMembers().contains(target)){
+        if (!gang.getOnlineMembers().contains(target)) {
             REPAIR_DENY.msg(p, "%player%", target.getName());
-            p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1,1);
+            p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1, 1);
             return;
         }
 

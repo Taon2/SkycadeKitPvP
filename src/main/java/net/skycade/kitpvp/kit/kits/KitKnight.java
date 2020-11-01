@@ -196,7 +196,7 @@ public class KitKnight extends Kit {
 
             if (shiftTimer.get(event.getExited().getUniqueId()) + 5000 > now) {
                 // Only runs if the player is glitched
-                if (PlayerMoveListener.isGlitched((Player) event.getExited())){
+                if (PlayerMoveListener.isGlitched((Player) event.getExited())) {
                     shiftTimer.remove(event.getExited().getUniqueId());
                     horses.get(event.getExited().getUniqueId()).remove();
                     if (horses.get(event.getExited().getUniqueId()) != null)

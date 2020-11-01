@@ -105,7 +105,7 @@ public class KitArcher extends Kit {
     }
 
     public void onArrowHit(Player shooter, Player damagee, EntityDamageByEntityEvent e) {
-        archerChanceEffects(shooter, damagee, e, 65, 30, 40,25);
+        archerChanceEffects(shooter, damagee, e, 65, 30, 40, 25);
     }
 
     private void archerChanceEffects(Player archer, Player target, EntityDamageByEntityEvent e, int regainHealth, int doubleDamage, int slowEffect, int blindEffect) {

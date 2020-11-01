@@ -8,7 +8,6 @@ import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.region.DataPoint;
 import net.skycade.kitpvp.coreclasses.region.Region;
-import net.skycade.kitpvp.events.CaptureTheFlagEvent;
 import net.skycade.kitpvp.events.RandomEvent;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;

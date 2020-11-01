@@ -53,7 +53,7 @@ public class KitUnicorn extends Kit {
         leggings = new ItemBuilder(
                 Material.LEATHER_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 12)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3 )
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Taking damage grants a resistance buff.")
                 .setColour(Color.WHITE).build();
         boots = new ItemBuilder(

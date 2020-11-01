@@ -5,14 +5,12 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -34,7 +32,7 @@ public class KitSorcerer extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
-    public KitSorcerer(KitManager kitManager){
+    public KitSorcerer(KitManager kitManager) {
         super(kitManager, "Sorcerer", KitType.SORCERER, 20000, getLore());
 
         helmet = new ItemBuilder(Material.STAINED_GLASS)
@@ -95,7 +93,7 @@ public class KitSorcerer extends Kit {
     }
 
     @EventHandler
-    public void damageEvent(EntityDamageEvent event){
+    public void damageEvent(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             Kit kit = KitPvP.getInstance().getStats(player).getActiveKit().getKit();

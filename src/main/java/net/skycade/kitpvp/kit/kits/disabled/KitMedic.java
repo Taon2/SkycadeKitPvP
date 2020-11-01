@@ -17,7 +17,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 import static net.skycade.kitpvp.Messages.HEALED;
 import static net.skycade.kitpvp.Messages.PLAYER_HEALED;

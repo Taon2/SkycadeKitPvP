@@ -7,7 +7,7 @@ public class Messages {
     //KitPvP General Messages
     public static final Localization.Message ALL_KITS_UNLOCKED = new Localization.Message("all-kits-unlocked", "&7You unlocked &aall &7the kits! You unlocked the &aKitMaster &7kit.");
     public static final Localization.Message COULDNT_FIND = new Localization.Message("couldnt-find", "&cCould not find &b%type% &c'&b%thing%&c'.");
-    public static final Localization.Message ON_COOLDOWN = new Localization.Message("on-cooldown",  "&cYou need to wait another &b%time% &cbefore using &b%thing% &cagain!");
+    public static final Localization.Message ON_COOLDOWN = new Localization.Message("on-cooldown", "&cYou need to wait another &b%time% &cbefore using &b%thing% &cagain!");
     public static final Localization.Message ON_COOLDOWN_NO_TIME = new Localization.Message("on-cooldown-no-time", "&b%thing% &cis on cooldown!");
     public static final Localization.Message OFF_COOLDOWN = new Localization.Message("off-cooldown", "&7You can now use &a%thing%&7.");
     public static final Localization.Message NOT_ENOUGH = new Localization.Message("not-enough", "&cYou don't have enough &b%thing%&7.");
@@ -104,7 +104,7 @@ public class Messages {
                     "&fCurrent Kit - &a%currentkit%\n" +
                     "&fCoins - &a%coins%\n" +
                     "&fEvent Tokens - &a%eventtokens%\n"
-            );
+    );
 
     //KitPvP Event Messages
     public static final Localization.Message NO_SUCH_EVENT = new Localization.Message("event.no-such-event", "&cNo such event.");

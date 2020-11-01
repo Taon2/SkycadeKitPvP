@@ -4,14 +4,12 @@ import net.skycade.SkycadeCore.utility.command.SkycadeCommand;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
-import net.skycade.kitpvp.events.DoubleCoinsEvent;
-import net.skycade.kitpvp.events.RandomEvent;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import net.skycade.kitpvp.ui.EventShopMenu;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static net.skycade.kitpvp.Messages.*;
+import static net.skycade.kitpvp.Messages.NO_SHIFT_ABILITIES;
+import static net.skycade.kitpvp.Messages.SHIFT_ABILITIES;
 
 public class CommandAbilityToggle extends SkycadeCommand {
     public CommandAbilityToggle() {

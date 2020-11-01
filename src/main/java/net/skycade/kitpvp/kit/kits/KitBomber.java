@@ -8,13 +8,11 @@ import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -124,7 +122,7 @@ public class KitBomber extends Kit {
         p.removePotionEffect(PotionEffectType.SPEED);
         p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 4, 2));
 
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             @Override
             public void run() {
@@ -136,16 +134,16 @@ public class KitBomber extends Kit {
     }
 
     @EventHandler
-    public void onExplosion(ExplosionPrimeEvent event){
-        if (!(event.getEntity() instanceof TNTPrimed))return;
+    public void onExplosion(ExplosionPrimeEvent event) {
+        if (!(event.getEntity() instanceof TNTPrimed)) return;
 
-        if (isBombThrowerOnline((TNTPrimed) event.getEntity())){
+        if (isBombThrowerOnline((TNTPrimed) event.getEntity())) {
             TNTPrimed tnt = (TNTPrimed) event.getEntity();
 
             Player shooter = Bukkit.getPlayer(tnt.getCustomName());
             Kit kit = KitPvP.getInstance().getStats(shooter).getActiveKit().getKit();
 
-            if (kit.getKitType() == KitType.BOMBER){
+            if (kit.getKitType() == KitType.BOMBER) {
                 // 4 is the default radius
                 // - Negative
                 event.setRadius(4 + 2);
@@ -159,13 +157,13 @@ public class KitBomber extends Kit {
         return true;
     }
 
-    private boolean isBombThrowerOnline(TNTPrimed tnt){
-        if (tnt.getCustomName() == null)return false;
+    private boolean isBombThrowerOnline(TNTPrimed tnt) {
+        if (tnt.getCustomName() == null) return false;
 
         String playerNameString = tnt.getCustomName();
 
-        for (Player online : Bukkit.getOnlinePlayers()){
-            if (online.getName().equals(playerNameString)){
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            if (online.getName().equals(playerNameString)) {
                 return true;
             }
         }

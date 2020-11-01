@@ -37,7 +37,7 @@ public class ItemPotionEffect extends EventShopItem {
 
     public void giveReward(Player p) {
         this.yaml = eventShopManager.getYaml();
-        int duration = getDuration()*20;
+        int duration = getDuration() * 20;
 
         p.addPotionEffect(new PotionEffect(getRandomEffect(p), duration, 0));
         long now = System.currentTimeMillis();
@@ -48,7 +48,7 @@ public class ItemPotionEffect extends EventShopItem {
 
     public void reapplyReward(Player p) {
         this.yaml = eventShopManager.getYaml();
-        int duration = (int)(getDuration() - ((System.currentTimeMillis() - yaml.getLong(p.getUniqueId().toString() + "." + getName())) / 1000L))*20;
+        int duration = (int) (getDuration() - ((System.currentTimeMillis() - yaml.getLong(p.getUniqueId().toString() + "." + getName())) / 1000L)) * 20;
 
         PotionEffectType type = potionEffects.get(yaml.getInt((p.getUniqueId() + "." + "generatedPotionNum")));
 

@@ -1,6 +1,5 @@
 package net.skycade.kitpvp.kit.kits;
 
-import jdk.jfr.Enabled;
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.Messages;
@@ -12,17 +11,14 @@ import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -41,7 +37,7 @@ public class KitPaintball extends Kit {
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
-    public KitPaintball(KitManager kitManager){
+    public KitPaintball(KitManager kitManager) {
         super(kitManager, "Paintball", KitType.PAINTBALL, 26000, getLore());
 
         helmet = new ItemBuilder(Material.IRON_HELMET)
@@ -73,13 +69,13 @@ public class KitPaintball extends Kit {
                 .build();
 
         paintballs = new ItemStack(Material.SNOW_BALL);
-            ItemMeta paintballMeta = paintballs.getItemMeta();
-            paintballMeta.setDisplayName(ChatColor.YELLOW + "Paintball Ammunition");
-            List<String> painballLore = new ArrayList<>();
-            painballLore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Ammunition regenerates every " + regenerationSpeed + " seconds");
+        ItemMeta paintballMeta = paintballs.getItemMeta();
+        paintballMeta.setDisplayName(ChatColor.YELLOW + "Paintball Ammunition");
+        List<String> painballLore = new ArrayList<>();
+        painballLore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Ammunition regenerates every " + regenerationSpeed + " seconds");
 
-            paintballMeta.setLore(painballLore);
-            paintballs.setItemMeta(paintballMeta);
+        paintballMeta.setLore(painballLore);
+        paintballs.setItemMeta(paintballMeta);
 
         constantEffects.put(PotionEffectType.SPEED, 0);
 
@@ -118,7 +114,7 @@ public class KitPaintball extends Kit {
         );
     }
 
-    private ItemStack getPaintballs(int amount){
+    private ItemStack getPaintballs(int amount) {
         ItemStack regenPaintball = new ItemStack(paintballs);
         regenPaintball.setAmount(amount);
 
@@ -131,12 +127,12 @@ public class KitPaintball extends Kit {
             return;
         if (p.getGameMode() == GameMode.CREATIVE || VanishStatus.isVanished(p.getUniqueId())) {
             p.launchProjectile(Snowball.class);
-            p.playSound(p.getLocation(), Sound.CHICKEN_EGG_POP, 1,1);
+            p.playSound(p.getLocation(), Sound.CHICKEN_EGG_POP, 1, 1);
             return;
         }
-        if (!p.getInventory().contains(Material.SNOW_BALL)){
+        if (!p.getInventory().contains(Material.SNOW_BALL)) {
             Messages.OUT_OF_AMMUNITION.msg(p);
-            p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1,1);
+            p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1, 1);
             return;
         }
 
@@ -147,18 +143,18 @@ public class KitPaintball extends Kit {
         p.getInventory().removeItem(paintballs);
         p.updateInventory();
         p.launchProjectile(Snowball.class);
-        p.playSound(p.getLocation(), Sound.CHICKEN_EGG_POP, 1,1);
+        p.playSound(p.getLocation(), Sound.CHICKEN_EGG_POP, 1, 1);
     }
 
     @EventHandler
-    public void ammunitionLaunch(ProjectileLaunchEvent event){
-        if (event.getEntity() instanceof Snowball){
-            if (event.getEntity().getShooter() instanceof Player){
+    public void ammunitionLaunch(ProjectileLaunchEvent event) {
+        if (event.getEntity() instanceof Snowball) {
+            if (event.getEntity().getShooter() instanceof Player) {
                 Player player = (Player) event.getEntity().getShooter();
                 Kit kit = KitPvP.getInstance().getStats(player).getActiveKit().getKit();
 
-                if (kit.getKitType() == KitType.PAINTBALL){
-                    if (player.getInventory().getItemInHand().getType() == Material.SNOW_BALL){
+                if (kit.getKitType() == KitType.PAINTBALL) {
+                    if (player.getInventory().getItemInHand().getType() == Material.SNOW_BALL) {
                         event.setCancelled(true);
                         player.getInventory().addItem(paintballs);
                         player.updateInventory();
@@ -171,16 +167,16 @@ public class KitPaintball extends Kit {
     }
 
     @EventHandler
-    public void paintballHit(EntityDamageByEntityEvent event){
-        if (!(event.getEntity() instanceof Player))return;
-        if (!(event.getDamager() instanceof Snowball))return;
-        if (!(((Snowball) event.getDamager()).getShooter() instanceof Player))return;
+    public void paintballHit(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        if (!(event.getDamager() instanceof Snowball)) return;
+        if (!(((Snowball) event.getDamager()).getShooter() instanceof Player)) return;
 
         Player shooter = (Player) ((Snowball) event.getDamager()).getShooter();
         Player victim = (Player) event.getEntity();
 
         Kit kit = KitPvP.getInstance().getStats(shooter).getActiveKit().getKit();
-        if (kit.getKitType() == KitType.PAINTBALL){
+        if (kit.getKitType() == KitType.PAINTBALL) {
             victim.damage(8, shooter);
         }
     }

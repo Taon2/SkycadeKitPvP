@@ -23,7 +23,7 @@ public class DoubleCoinsEvent extends RandomEvent {
         begin = System.currentTimeMillis();
 
         DOUBLECREDITS_START.broadcast();
-        for(Player pl: Bukkit.getOnlinePlayers()){
+        for (Player pl : Bukkit.getOnlinePlayers()) {
             pl.playSound(pl.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
         }
 

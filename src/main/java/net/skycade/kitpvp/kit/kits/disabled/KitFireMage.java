@@ -13,7 +13,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class KitFireMage extends Kit {
@@ -94,7 +96,7 @@ public class KitFireMage extends Kit {
                 ParticleEffect.FLAME.display(0, 0, 0, 0.03F, 3, loc, 30);
 
                 for (Player target : UtilPlayer.getNearbyPlayers(p, loc, 1.5).stream().filter(player -> player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList())) {
-                    target.damage(2+ 3, p);
+                    target.damage(2 + 3, p);
                     target.setFireTicks(20);
                 }
 

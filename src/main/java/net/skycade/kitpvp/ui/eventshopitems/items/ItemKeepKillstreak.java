@@ -1,8 +1,6 @@
 package net.skycade.kitpvp.ui.eventshopitems.items;
 
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
-import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
 import org.bukkit.ChatColor;
@@ -11,7 +9,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 

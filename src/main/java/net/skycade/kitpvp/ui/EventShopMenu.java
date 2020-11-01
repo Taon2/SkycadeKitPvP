@@ -68,6 +68,6 @@ public class EventShopMenu extends DynamicGui {
 
                         new ConfirmMenu(eventShopManager, member, clickedItem).open(p);
                     }
-            }));
+                }));
     }
 }
