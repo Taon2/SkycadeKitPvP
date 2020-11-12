@@ -13,11 +13,10 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static net.skycade.kitpvp.Messages.WOOSH;
 
@@ -30,6 +29,8 @@ public class KitEnderman extends Kit {
     private ItemStack weapon;
 
     private int teleportCooldown = 12;
+
+    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
     public KitEnderman(KitManager kitManager) {
         super(kitManager, "Enderman", KitType.ENDERMAN, 35000, getLore());
@@ -71,6 +72,8 @@ public class KitEnderman extends Kit {
 
         ItemStack icon = new ItemStack(Material.ENDER_PEARL);
         setIcon(icon);
+
+        constantEffects.put(PotionEffectType.SPEED, 0);
     }
 
     @Override
@@ -80,6 +83,10 @@ public class KitEnderman extends Kit {
         p.getInventory().setChestplate(chestplate);
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
+
+        constantEffects.forEach((effect, amplifier) -> {
+            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+        });
     }
 
     //Shooter is archer, damagee is player with enderman kit

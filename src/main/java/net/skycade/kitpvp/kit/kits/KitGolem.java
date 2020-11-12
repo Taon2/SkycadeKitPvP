@@ -47,7 +47,7 @@ public class KitGolem extends Kit {
         weapon = new ItemBuilder(
                 Material.WOOD_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 10)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 4)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + smashCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "smashes the ground around you.").build();
 

@@ -13,9 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class KitDubstep extends Kit {
 
@@ -25,30 +23,28 @@ public class KitDubstep extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
+    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
+
     public KitDubstep(KitManager kitManager) {
         super(kitManager, "Dubstep", KitType.DUBSTEP, 0, getLore());
 
         helmet = new ItemBuilder(
-                Material.IRON_HELMET)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
+                Material.IRON_HELMET).build();
         chestplate = new ItemBuilder(
-                Material.IRON_CHESTPLATE)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
+                Material.IRON_CHESTPLATE).build();
         leggings = new ItemBuilder(
-                Material.GOLD_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
+                Material.IRON_LEGGINGS).build();
         boots = new ItemBuilder(
-                Material.GOLD_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 9)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Moving randomly grants you resistance.").build();
+                Material.IRON_BOOTS).build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build();
+                .build();
 
         ItemStack icon = new ItemStack(Material.RECORD_4);
         setIcon(icon);
+
+        constantEffects.put(PotionEffectType.SPEED, 0);
     }
 
     @Override
@@ -58,15 +54,21 @@ public class KitDubstep extends Kit {
         p.getInventory().setChestplate(chestplate);
         p.getInventory().setLeggings(leggings);
         p.getInventory().setBoots(boots);
+
+        constantEffects.forEach((effect, amplifier) -> {
+            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+        });
     }
 
-    public void onMove(Player p) {
+   /* public void onMove(Player p) {
         if (p.getItemInHand().getType() != Material.IRON_SWORD)
             return;
 
         if (UtilMath.getRandom(0, 100) <= 3)
             p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 50, 3));
     }
+
+    */
 
     @Override
     public List<String> getHowToObtain() {
@@ -77,8 +79,7 @@ public class KitDubstep extends Kit {
         return Arrays.asList(
                 ChatColor.AQUA + "" + ChatColor.BOLD + "Defensive Kit",
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Drop the bass.",
-                "",
-                ChatColor.GRAY + "Randomly gains damage resistance."
+                ""
         );
     }
 }

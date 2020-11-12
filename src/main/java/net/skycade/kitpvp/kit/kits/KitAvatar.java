@@ -41,13 +41,11 @@ public class KitAvatar extends Kit {
                 .build();
 
         chestplate = new ItemBuilder(
-                Material.LEATHER_CHESTPLATE).addEnchantment(Enchantment.DURABILITY, 8)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                Material.CHAINMAIL_CHESTPLATE).addEnchantment(Enchantment.DURABILITY, 2)
                 .build();
 
         leggings = new ItemBuilder(
-                Material.LEATHER_LEGGINGS).addEnchantment(Enchantment.DURABILITY, 8)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3)
+                Material.CHAINMAIL_LEGGINGS).addEnchantment(Enchantment.DURABILITY, 2)
                 .build();
 
         boots = new ItemBuilder(
@@ -123,7 +121,7 @@ public class KitAvatar extends Kit {
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         p.getWorld().playSound(p.getLocation(), Sound.EXPLODE, 2.0F, 1.0F);
-        p.setVelocity(new org.bukkit.util.Vector(p.getLocation().getDirection().getX(), 0.25, p.getLocation().getDirection().getZ()).multiply(3));
+        p.setVelocity(new org.bukkit.util.Vector(p.getLocation().getDirection().getX(), 0.25, p.getLocation().getDirection().getZ()).multiply(2.8));
 
         p.removePotionEffect(PotionEffectType.SPEED);
         p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 6, 2));

@@ -57,7 +57,8 @@ public class KitSorcerer extends Kit {
                 .build();
 
         weapon = new ItemBuilder(Material.STONE_SWORD)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 3)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 2)
+                .addEnchantment(Enchantment.DURABILITY, 5)
                 .build();
 
         ItemStack icon = new ItemStack(Material.STAINED_GLASS);

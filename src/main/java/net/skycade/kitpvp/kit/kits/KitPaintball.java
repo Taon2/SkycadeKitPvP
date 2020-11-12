@@ -1,5 +1,6 @@
 package net.skycade.kitpvp.kit.kits;
 
+import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.Messages;
@@ -9,11 +10,13 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.*;
+import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -30,10 +33,9 @@ public class KitPaintball extends Kit {
     private ItemStack weapon;
     private ItemStack paintballs;
 
-    private int startingPaintBalls = 5;
-    private int maxPaintBalls = 5;
+    private int maxPaintBalls = 8;
 
-    private int regenerationSpeed = 3;
+    private int regenerationSpeed = 4;
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
@@ -125,13 +127,17 @@ public class KitPaintball extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.DIAMOND_HOE)
             return;
+        if (KitPvP.getInstance().getEventManager().getLMS().isPlaying(p) &&
+                !KitPvP.getInstance().getEventManager().getLMS().isFighting() ||
+                KitPvP.getInstance().getEventManager().getLMS().isSpectating(p))
+            return;
         if (p.getGameMode() == GameMode.CREATIVE || VanishStatus.isVanished(p.getUniqueId())) {
             p.launchProjectile(Snowball.class);
             p.playSound(p.getLocation(), Sound.CHICKEN_EGG_POP, 1, 1);
             return;
         }
         if (!p.getInventory().contains(Material.SNOW_BALL)) {
-            Messages.OUT_OF_AMMUNITION.msg(p);
+            ActionBarAPI.sendActionBar(p, ChatColor.translateAlternateColorCodes('&', Messages.OUT_OF_AMMUNITION.getMessage()));
             p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1, 1);
             return;
         }
@@ -159,7 +165,7 @@ public class KitPaintball extends Kit {
                         player.getInventory().addItem(paintballs);
                         player.updateInventory();
 
-                        Messages.CANNOT_THROW_AMMUNITION.msg(player);
+                        ActionBarAPI.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', Messages.CANNOT_THROW_AMMUNITION.getMessage()));
                     }
                 }
             }
@@ -176,10 +182,19 @@ public class KitPaintball extends Kit {
         Player victim = (Player) event.getEntity();
 
         Kit kit = KitPvP.getInstance().getStats(shooter).getActiveKit().getKit();
+        Kit victimkit = KitPvP.getInstance().getStats(victim).getActiveKit().getKit();
+        if (victimkit.getKitType() == KitType.ENDERMAN) return;
         if (kit.getKitType() == KitType.PAINTBALL) {
-            victim.damage(8, shooter);
+            // This is for making sure it sets the player in combat
+            victim.damage(1, shooter);
+            // If player is below 2 hearts or whatever
+            if (victim.getHealth() <= 4){
+                // victim.setHealth(0D) will make errors so I just made it deal 100 damage to instant kill them
+                victim.damage(100, shooter);
+                return;
+            }
+            // Removes like 2 hearts from the player (ignoring armor)
+            victim.setHealth(victim.getHealth() - 4D);
         }
     }
-
-
 }

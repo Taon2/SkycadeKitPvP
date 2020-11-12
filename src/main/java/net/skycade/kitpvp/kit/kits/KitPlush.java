@@ -110,7 +110,6 @@ public class KitPlush extends Kit {
                     target.setVelocity(new Vector(0, jumpPower, 0));
                 }
             });
-
             cat.getLocation().getWorld().createExplosion(cat.getLocation(), 0);
             cat.remove();
         }, 10);

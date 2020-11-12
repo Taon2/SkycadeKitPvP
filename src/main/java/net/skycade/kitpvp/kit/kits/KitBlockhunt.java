@@ -52,7 +52,7 @@ public class KitBlockhunt extends Kit {
 
         boots = new ItemBuilder(
                 Material.DIAMOND_BOOTS)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addEnchantment(Enchantment.DURABILITY, 2).build();
         weapon = new ItemBuilder(
                 Material.IRON_AXE)

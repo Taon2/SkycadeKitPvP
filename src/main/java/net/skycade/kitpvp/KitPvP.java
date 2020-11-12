@@ -15,6 +15,7 @@ import net.skycade.kitpvp.listeners.WorldListeners;
 import net.skycade.kitpvp.listeners.chat.ChatClick;
 import net.skycade.kitpvp.listeners.player.*;
 import net.skycade.kitpvp.managers.RotationManager;
+import net.skycade.kitpvp.playerevents.EventManager;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.GangPointsManager;
 import net.skycade.kitpvp.stat.KitPvPDB;
@@ -45,6 +46,7 @@ public class KitPvP extends SkycadePlugin {
     private RotationManager rotationManager;
     private GangPointsManager gangPointsManager;
     private ChatClick chatClick;
+    private EventManager eventManager;
 
     private Region spawnRegion;
     private Location spawnLocation;
@@ -94,6 +96,17 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("capturetheflag.blue-region.point-1", new Location(Bukkit.getWorld("world"), -100, 0, 200));
         defaults.put("capturetheflag.blue-region.point-2", new Location(Bukkit.getWorld("world"), 300, 250, 290));
 
+        defaults.put("player-events.sumo.lobby-location", new Location(Bukkit.getWorld("world"), -1345.5, 140, 3075.5));
+        defaults.put("player-events.sumo.position-1", new Location(Bukkit.getWorld("world"), -1345.5, 140, 3066.5));
+        defaults.put("player-events.sumo.position-2", new Location(Bukkit.getWorld("world"), -1345.5, 140, 3056.5));
+
+        defaults.put("player-events.lms.lobby-location", new Location(Bukkit.getWorld("world"), -1070.5, 147, 3426.5));
+        defaults.put("player-events.lms.arena-location", new Location(Bukkit.getWorld("world"), -1070.5, 137, 3426.5));
+
+        defaults.put("player-events.brackets.lobby-location", new Location(Bukkit.getWorld("world"), -323.5, 139, 3152.5));
+        defaults.put("player-events.brackets.position-1", new Location(Bukkit.getWorld("world"), -318.5, 139, 3147.5));
+        defaults.put("player-events.brackets.position-2", new Location(Bukkit.getWorld("world"), -266.5, 139, 3108.5));
+
         setConfigDefaults(defaults);
         loadDefaultConfig();
     }
@@ -112,6 +125,7 @@ public class KitPvP extends SkycadePlugin {
         this.eventShopManager = new EventShopManager(this);
         this.rotationManager = new RotationManager();
         this.gangPointsManager = new GangPointsManager();
+        this.eventManager = new EventManager();
         Bukkit.getPluginManager().registerEvents(chatClick = new ChatClick(), this);
 
         ScoreboardInfo.getInstance();
@@ -283,5 +297,7 @@ public class KitPvP extends SkycadePlugin {
         return availableKits;
     }
 
-
+    public EventManager getEventManager() {
+        return eventManager;
+    }
 }

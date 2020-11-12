@@ -50,7 +50,7 @@ public class KitReaper extends Kit {
                 .build();
 
         leggings = new ItemBuilder(
-                Material.LEATHER_LEGGINGS).addEnchantment(Enchantment.DURABILITY, 15)
+                Material.LEATHER_LEGGINGS).addEnchantment(Enchantment.DURABILITY, 17)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.BLACK)
                 .build();
@@ -61,7 +61,7 @@ public class KitReaper extends Kit {
                 .build();
 
         weapon = new ItemBuilder(
-                Material.DIAMOND_HOE).addEnchantment(Enchantment.DAMAGE_ALL, 7)
+                Material.DIAMOND_HOE).addEnchantment(Enchantment.DAMAGE_ALL, 5)
                 .build();
 
         abilityItem = new ItemStack(Material.SKULL_ITEM, 1, (short) 1);
@@ -115,7 +115,13 @@ public class KitReaper extends Kit {
     public void onInteract(Player p, Player target, ItemStack item) {
         if (item.getType() != Material.SKULL_ITEM)
             return;
-
+        if (KitPvP.getInstance().getEventManager().getLMS().isPlaying(p) &&
+                !KitPvP.getInstance().getEventManager().getLMS().isFighting() ||
+                KitPvP.getInstance().getEventManager().getLMS().isSpectating(p))
+            return;
+        if (KitPvP.getInstance().getEventManager().getLMS().isSpectating(p) ||
+                KitPvP.getInstance().getEventManager().getLMS().isSpectating(target))
+            return;
         if (!item.getItemMeta().hasDisplayName()) // Checks if the ability item doesnt have a display name
             return;
         if (!item.getItemMeta().getDisplayName().equals(ChatColor.DARK_GRAY + "Reaper's Wrath")) // Checks if the ability item's name is not "Reaper's Wrath"
@@ -142,6 +148,6 @@ public class KitReaper extends Kit {
                     p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
                 });
             }
-        }.runTaskLater(KitPvP.getInstance(), 20 * 8 + 1);
+        }.runTaskLater(KitPvP.getInstance(), 20 * 8 + 2);
     }
 }

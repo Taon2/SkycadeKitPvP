@@ -14,6 +14,7 @@ import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,8 @@ public class ShopMenu extends DynamicGui {
         });
 
         toRemove.forEach(kits::remove);
+
+        DecimalFormat df = new DecimalFormat("###,###,###,###");
 
         for (Kit kit : kits.values()) {
             if (kit.getPrice() == 0) continue;
@@ -63,7 +66,7 @@ public class ShopMenu extends DynamicGui {
                             lore.add(s);
                         }
                         lore.add("");
-                        lore.add(ChatColor.GOLD + "Cost: " + ChatColor.WHITE + kit.getPrice() + " Coins");
+                        lore.add(ChatColor.GOLD + "Cost: " + ChatColor.WHITE + df.format(kit.getPrice()) + " Coins");
                         if (stats.hasKit(kit.getKitType()))
                             lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "You already own this kit!");
                         else

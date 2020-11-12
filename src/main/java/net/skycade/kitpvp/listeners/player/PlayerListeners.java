@@ -239,7 +239,6 @@ public class PlayerListeners implements Listener {
                 stats.getActiveKit().getKit().stopItemRunnables(p);
                 stats.getActiveKit().getKit().beginApplyKit(p);
                 stats.getActiveKit().getKit().giveSoup(p, 35);
-                plugin.getEventShopManager().reapplyUpgrades(p);
             }
         }, 1);
 

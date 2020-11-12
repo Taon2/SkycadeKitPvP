@@ -6,6 +6,7 @@ import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.playerevents.EventType;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,13 +38,13 @@ public class KitBuildUHC extends Kit {
     private ItemStack bow;
     private ItemStack arrows;
 
-    private int goldenHeadCooldown = 20;
+    private int goldenHeadCooldown = 25;
     private int arrowCooldown = 1;
     private int arrowRegenSpeed = 3;
     private int arrowStartAmount = 16;
     private int arrowMaxAmount = 32;
 
-    private int blockRemoveSpeed = 2;
+    private int blockRemoveSpeed = 4;
     private int blockRegenSpeed = 3;
     private int blockStartAmount = 10;
     private int blockMaxAmount = 12;
@@ -121,6 +122,12 @@ public class KitBuildUHC extends Kit {
     }
 
     public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
+        if (KitPvP.getInstance().getEventManager().getCurrentEvent() == EventType.LMS){
+            if (KitPvP.getInstance().getEventManager().getLMS().isPlaying(shooter) &&
+                    !KitPvP.getInstance().getEventManager().getLMS().isFighting()) {
+                e.setCancelled(true);
+            }
+        }
         if (!addCooldown(shooter, "Bow", arrowCooldown, true)) {
             e.setCancelled(true);
         }
@@ -134,14 +141,21 @@ public class KitBuildUHC extends Kit {
     public void onItemUse(Player p, ItemStack item) {
         if (item.getType() != Material.IRON_SWORD)
             return;
+
+        if (KitPvP.getInstance().getEventManager().getLMS().isPlaying(p) &&
+                !KitPvP.getInstance().getEventManager().getLMS().isFighting() ||
+                KitPvP.getInstance().getEventManager().getLMS().isSpectating(p))
+            return;
+
         if (!addCooldown(p, "Golden Head", goldenHeadCooldown, true)) return;
 
         //For missions
         KitPvPSpecialAbilityEvent abilityEvent = new KitPvPSpecialAbilityEvent(p, this.getKitType());
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
-        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 80, 0));
-        p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 240, 1));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 3, 0));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20 * 10, 1));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 5, 1));
     }
 
     @Override

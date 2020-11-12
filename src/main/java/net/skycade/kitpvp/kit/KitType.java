@@ -13,7 +13,6 @@ public enum KitType {
     BARBARIAN("barbarian"),
     BLACKSMITH("blacksmith"),
     BLOCKHUNT("blockhunt"),
-    BOMBER("bomber"),
     BUILDUHC("builduhc"),
     CAVEMAN("caveman"),
     CERBERUS("cerberus"),
@@ -82,7 +81,9 @@ public enum KitType {
     UNICORN("unicorn"),
     VAMPIRE("vampire"),
     WARRIOR("warrior"),
-    HULK("hulk");
+    HULK("hulk"),
+
+    BOMBER("bomber");
 
     private final String alias;
 

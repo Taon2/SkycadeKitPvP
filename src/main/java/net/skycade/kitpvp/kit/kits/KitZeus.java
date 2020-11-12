@@ -25,7 +25,7 @@ public class KitZeus extends Kit {
     private ItemStack boots;
     private ItemStack weapon;
 
-    private int abilityCooldown = 15;
+    private int abilityCooldown = 8;
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
@@ -132,13 +132,6 @@ public class KitZeus extends Kit {
 
         if (item.getType() != Material.BLAZE_ROD)
             return;
-        HashMap<Player, List<Block>> playerBlockList = getBlocks(target);
-        for (Block b : playerBlockList.get(target)) {
-            if (!allowedTypes.contains(b.getType())) {
-                CANNOT_USE.msg(p, "%thing%", abilityName, "%reason%", "while under a block");
-                return;
-            }
-        }
         if (!addCooldown(p, abilityName, abilityCooldown, true))
             return;
 
@@ -147,8 +140,8 @@ public class KitZeus extends Kit {
         Bukkit.getServer().getPluginManager().callEvent(abilityEvent);
 
         target.getWorld().strikeLightning(target.getLocation());
-        target.damage(4);
-        target.setFireTicks(60);
+        target.damage(4, p);
+        target.setFireTicks(20 * 4);
     }
 
     @Override

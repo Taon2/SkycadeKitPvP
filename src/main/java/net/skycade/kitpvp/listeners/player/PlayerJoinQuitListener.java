@@ -1,6 +1,8 @@
 package net.skycade.kitpvp.listeners.player;
 
 import net.skycade.SkycadeCore.utility.TeleportUtil;
+import net.skycade.crates.CratesPlugin;
+import net.skycade.crates.crates.Crate;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
@@ -58,10 +60,11 @@ public class PlayerJoinQuitListener implements Listener {
                 KitPvPStats stats = plugin.getStats(p);
 
                 // Gives every kit, only used during beta testing.
-                /*KitPvP.getInstance().getKitManager().getKits().forEach((kitType, kit) -> {
+                KitPvP.getInstance().getKitManager().getKits().forEach((kitType, kit) -> {
                     if (kit.isEnabled())
                         stats.addKit(kitType);
-                });*/
+                });
+
                 if (!stats.getActiveKit().getKit().isEnabled()) {
                     stats.setActiveKit(KitType.CHANCE);
                     stats.getActiveKit().getKit().giveSoup(p, 35);
@@ -81,6 +84,13 @@ public class PlayerJoinQuitListener implements Listener {
 
                 ScoreboardInfo.getInstance().updatePlayer(p);
                 p.teleport(TeleportUtil.getSpawn());
+
+                // If the player has not played before, it gives them a free
+                // kit crate key, something we used to do
+                if (!p.hasPlayedBefore()){
+                    Crate crate = CratesPlugin.getInstance().getEditorModule().getCrate("kitcrate");
+                    crate.getKey().give(p.getUniqueId(), 1);
+                }
             }
         }.runTaskLater(KitPvP.getInstance(), 1L);
     }

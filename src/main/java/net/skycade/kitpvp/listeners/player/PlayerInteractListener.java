@@ -3,6 +3,7 @@ package net.skycade.kitpvp.listeners.player;
 import net.skycade.SkycadeCore.vanish.VanishStatus;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.playerevents.EventType;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -36,7 +37,7 @@ public class PlayerInteractListener implements Listener {
     }
 
     private void preventDoubleSoupArrayListStuck() {
-        Bukkit.getOnlinePlayers().forEach(p -> preventDoubleSoup.remove(p.getUniqueId())); // just clear the list?
+        preventDoubleSoup.clear();
     }
 
     @EventHandler
@@ -62,6 +63,21 @@ public class PlayerInteractListener implements Listener {
         }
 
         KitType type = plugin.getStats(event.getPlayer()).getActiveKit();
+        if (type == KitType.BUILDUHC || type == KitType.LICH){
+            if (plugin.getEventManager().getCurrentEvent() == EventType.LMS || plugin.getEventManager().getCurrentEvent() == EventType.BRACKETS){
+                if (plugin.getEventManager().getLMS().isPlaying(event.getPlayer()) || plugin.getEventManager().getLMS().isSpectating(event.getPlayer())){
+                    if (!plugin.getEventManager().getLMS().isFighting()){
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
+                if (plugin.getEventManager().getBrackets().isParticipating(event.getPlayer()) ||
+                plugin.getEventManager().getBrackets().isSpectating(event.getPlayer())){
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+        }
         if (type == KitType.BUILDUHC || type == KitType.LICH)
             type.getKit().onBlockPlace(event.getPlayer(), event.getBlock(), event.getBlockReplacedState());
         else

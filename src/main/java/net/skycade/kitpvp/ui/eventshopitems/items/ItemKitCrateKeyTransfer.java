@@ -34,7 +34,7 @@ public class ItemKitCrateKeyTransfer extends EventShopItem {
             crate.getKey().take(p.getUniqueId(), 1);
 
             KitPvPStats stats = KitPvP.getInstance().getStats(p);
-            stats.giveCoins(300);
+            stats.giveCoins(500);
         } else {
             p.sendMessage(Localization.getInstance().tl("skycade.crates.open.nokey"));
         }
@@ -47,7 +47,7 @@ public class ItemKitCrateKeyTransfer extends EventShopItem {
         return Arrays.asList(
                 ChatColor.GRAY + "",
                 ChatColor.GRAY + "Transfer 1 Kit Crate key",
-                ChatColor.GRAY + "into 300 coins."
+                ChatColor.GRAY + "into " +ChatColor.GOLD + "500 Coins" + ChatColor.GRAY + "."
         );
     }
 }

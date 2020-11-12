@@ -16,7 +16,7 @@ public class ItemSoupCost extends EventShopItem {
     private EventShopManager eventShopManager;
 
     public ItemSoupCost(EventShopManager eventShopManager) {
-        super(eventShopManager, "Permanently Reduce Soup Price", new ItemStack(Material.MUSHROOM_SOUP, 1, (short) 0), 400, 0, false);
+        super(eventShopManager, "Permanently Reduce Soup Price", new ItemStack(Material.MUSHROOM_SOUP, 1, (short) 0), 350, 0, false);
         this.eventShopManager = eventShopManager;
     }
 

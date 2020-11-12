@@ -204,7 +204,7 @@ public class KitLich extends Kit {
                 event.setCancelled(true);
             }
         }
-
+        /*
         //Combat tags the player upon being hit by the ghosts
         if (event.getDamager().getType() == EntityType.ZOMBIE && (((CraftEntity) event.getDamager()).getHandle() instanceof MiniArmyZombie)) {
             MiniArmyZombie entity = (MiniArmyZombie) ((CraftEntity) event.getDamager()).getHandle();
@@ -230,6 +230,8 @@ public class KitLich extends Kit {
                 entityCombat.setInCombat(true);
             }
         }
+
+         */
 
         //Sets the target for the ghosts
         Entity damager = event.getDamager();
@@ -317,6 +319,8 @@ public class KitLich extends Kit {
                     blockState.update();
                     if (p.isOnline())
                         PHYLACTERY_EXPIRED.msg(p);
+
+                    placed.remove(p.getUniqueId());
                 }
             });
         }, blockRemoveSpeed * 20);

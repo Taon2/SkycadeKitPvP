@@ -57,7 +57,7 @@ public class KitBlacksmith extends Kit {
         weapon = new ItemBuilder(
                 Material.IRON_PICKAXE)
                 .addEnchantment(Enchantment.DURABILITY, 6)
-                .addEnchantment(Enchantment.DAMAGE_ALL, 4)
+                .addEnchantment(Enchantment.DAMAGE_ALL, 3)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + anvilDropCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "drops 5 anvils in front of you.").build();
         armorkits = new ItemBuilder(
@@ -139,7 +139,7 @@ public class KitBlacksmith extends Kit {
 
         for (ItemStack armor : target.getInventory().getArmorContents()) {
             if (armor != null) {
-                armor.setDurability((short) (armor.getDurability() - UtilMath.getRandom(3, 7)));
+                armor.setDurability((short) (armor.getDurability() - UtilMath.getRandom(2, 5)));
             }
         }
 

@@ -126,7 +126,7 @@ public class KitWizard extends Kit {
 
                     for (Player target : UtilPlayer.getNearbyPlayers(p, loc, 1.5).stream().filter(player -> player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList()))
                         if (target.getGameMode() == GameMode.SURVIVAL)
-                            target.damage(8 + (3 * 3), p);
+                            target.damage(8, p);
 
                     if (t > 1.6)
                         this.cancel();
@@ -150,15 +150,19 @@ public class KitWizard extends Kit {
     }
 
     private Block getTargetBlock(Player p, boolean face, int length) {
-        List<Block> blocks = getLineOfSight(p, length);
-        for (Block block : blocks)
-            if (block.getType() != Material.AIR)
-                return block;
+        try {
+            List<Block> blocks = getLineOfSight(p, length);
+            for (Block block : blocks) {
+                if (block.getType() != Material.AIR)
+                    return block;
+            }
+            return null;
+        } catch (Exception ignored){}
         return null;
     }
 
     private List<Block> getLineOfSight(Player p, int length) {
-        return p.getLineOfSight(new HashSet<Material>(Arrays.asList(Material.values())), length);
+        return p.getLineOfSight(new HashSet<>(Arrays.asList(Material.values())), length);
     }
 
     @EventHandler

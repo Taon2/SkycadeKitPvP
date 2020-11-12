@@ -45,37 +45,37 @@ public class KitKnight extends Kit {
     private Map<UUID, Horse> horses = new HashMap<>();
     private Map<UUID, Long> shiftTimer = new HashMap<>();
 
+    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
+
     public KitKnight(KitManager kitManager) {
         super(kitManager, "Knight", KitType.KNIGHT, 26000, getLore());
 
         helmet = new ItemBuilder(
                 Material.CHAINMAIL_HELMET)
                 .addEnchantment(Enchantment.DURABILITY, 4)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         chestplate = new ItemBuilder(
                 Material.CHAINMAIL_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 4)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         leggings = new ItemBuilder(
                 Material.CHAINMAIL_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 4)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         boots = new ItemBuilder(
                 Material.CHAINMAIL_BOOTS)
                 .addEnchantment(Enchantment.DURABILITY, 4)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         weapon = new ItemBuilder(
-                Material.DIAMOND_SWORD)
+                Material.IRON_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 4)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + steedCooldown + " seconds")
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "lets you charge a horse into battle.").build();
 
         ItemStack icon = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
         setIcon(icon);
+
+        constantEffects.put(PotionEffectType.SPEED, 1);
     }
 
     @Override
@@ -87,6 +87,10 @@ public class KitKnight extends Kit {
         p.getInventory().setBoots(boots);
 
         horses.remove(p.getUniqueId());
+
+        constantEffects.forEach((effect, amplifier) -> {
+            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+        });
     }
 
     @Override
@@ -109,7 +113,13 @@ public class KitKnight extends Kit {
 
     @Override
     public void onItemUse(Player p, ItemStack item) {
-        if (item.getType() != Material.DIAMOND_SWORD)
+        if (item.getType() != Material.IRON_SWORD)
+            return;
+        if (KitPvP.getInstance().getEventManager().getLMS().isPlaying(p) ||
+                KitPvP.getInstance().getEventManager().getLMS().isSpectating(p))
+            return;
+        if (KitPvP.getInstance().getEventManager().getBrackets().isPlaying(p) ||
+                KitPvP.getInstance().getEventManager().getBrackets().isSpectating(p))
             return;
         if (horses.containsKey(p.getUniqueId()))
             return;

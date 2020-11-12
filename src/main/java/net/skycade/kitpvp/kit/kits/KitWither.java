@@ -6,13 +6,12 @@ import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -82,7 +81,14 @@ public class KitWither extends Kit {
 
     @Override
     public boolean onDeath(Player died, Player killer) {
-        died.getLocation().getWorld().createExplosion(died.getLocation().getBlockX(), died.getLocation().getBlockY(), died.getLocation().getBlockZ(), 2F, false, false);
+        // died.getLocation().getWorld().createExplosion(died.getLocation().getBlockX(), died.getLocation().getBlockY(), died.getLocation().getBlockZ(), 2F, false, false);
+        for (Entity entity : died.getNearbyEntities(5, 5, 5)){
+            if (entity instanceof Player){
+                Player affected = (Player) entity;
+                affected.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20 * 10, 1));
+                affected.playSound(affected.getLocation(), Sound.GHAST_SCREAM, 1, 1);
+            }
+        }
         return true;
     }
 
@@ -108,7 +114,8 @@ public class KitWither extends Kit {
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "A powerful opponent.",
                 "",
                 ChatColor.GRAY + "Chance to give people wither effect.",
-                ChatColor.GRAY + "On death you create a large explosion."
+                ChatColor.GRAY + "On death you effect the players around you with",
+                ChatColor.GRAY + "Wither 2."
         );
     }
 }

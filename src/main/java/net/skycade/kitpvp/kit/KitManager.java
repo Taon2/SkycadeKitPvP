@@ -5,6 +5,7 @@ import net.skycade.kitpvp.commands.*;
 import net.skycade.kitpvp.commands.staff.*;
 import net.skycade.kitpvp.kit.kits.*;
 import net.skycade.kitpvp.kit.kits.disabled.*;
+import net.skycade.kitpvp.playerevents.commands.*;
 import org.bukkit.Bukkit;
 
 import java.util.LinkedHashMap;
@@ -33,6 +34,13 @@ public class KitManager {
         new CommandViewKit();
         new CommandViewStats();
 
+        new CommandHost();
+        new CommandJoin();
+        new CommandQuit();
+        new CommandForceEnd();
+        new CommandGiveHostCredits();
+
+
         //Staff commands
         new CommandEco();
         new CommandEventEco();
@@ -51,7 +59,6 @@ public class KitManager {
         registerKit(new KitBarbarian(this));
         registerKit(new KitBlacksmith(this));
         registerKit(new KitBlockhunt(this));
-        registerKit(new KitBomber(this));
         registerKit(new KitBuildUHC(this));
         registerKit(new KitCaveMan(this));
         registerKit(new KitCerberus(this));
@@ -124,6 +131,7 @@ public class KitManager {
         registerKit(new KitWarrior(this));
         registerKit(new KitMultishot(this));
         registerKit(new KitBladeMaster(this));
+        registerKit(new KitBomber(this));
     }
 
     private void registerKit(Kit kit) {

@@ -18,11 +18,10 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class KitTeleporter extends Kit {
 
@@ -38,6 +37,7 @@ public class KitTeleporter extends Kit {
     private int pearlMaxAmount = 8;
 
     private List<EnderPearl> pearlList = new ArrayList<>();
+    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
     public KitTeleporter(KitManager kitManager) {
         super(kitManager, "Teleporter", KitType.TELEPORTER, 32000, getLore());
@@ -47,11 +47,11 @@ public class KitTeleporter extends Kit {
         chestplate = new ItemBuilder(
                 Material.CHAINMAIL_CHESTPLATE)
                 .addEnchantment(Enchantment.DURABILITY, 8)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+                .build();
         leggings = new ItemBuilder(
                 Material.CHAINMAIL_LEGGINGS)
                 .addEnchantment(Enchantment.DURABILITY, 8)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+                .build();
         boots = new ItemBuilder(
                 Material.IRON_BOOTS).build();
         weapon = new ItemBuilder(
@@ -63,6 +63,8 @@ public class KitTeleporter extends Kit {
 
         ItemStack icon = new ItemStack(Material.ENDER_PORTAL_FRAME);
         setIcon(icon);
+
+        constantEffects.put(PotionEffectType.SPEED, 0);
     }
 
     @Override
@@ -75,6 +77,10 @@ public class KitTeleporter extends Kit {
         p.getInventory().setBoots(boots);
 
         startItemRunnable(p, pearlRegenSpeed, getPearl(1), pearlMaxAmount, KitType.TELEPORTER);
+
+        constantEffects.forEach((effect, amplifier) -> {
+            p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
+        });
     }
 
     public void onPearlLaunch(Player shooter, ProjectileLaunchEvent event) {
@@ -89,6 +95,14 @@ public class KitTeleporter extends Kit {
         Player player = event.getPlayer();
 
         if (KitPvP.getInstance().getStats(player).getActiveKit() != KitType.TELEPORTER) return;
+
+        if (KitPvP.getInstance().getEventManager().getLMS().isPlaying(player) &&
+                !KitPvP.getInstance().getEventManager().getLMS().isFighting() ||
+                KitPvP.getInstance().getEventManager().getLMS().isSpectating(player)) {
+            event.setCancelled(true);
+            player.updateInventory();
+            return;
+        }
 
         if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if (player.getItemInHand().getType() == Material.ENDER_PEARL) {

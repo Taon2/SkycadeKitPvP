@@ -71,7 +71,9 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
         List<Player> p = Bukkit.getOnlinePlayers()
                 .stream().filter(e ->
                         !KitPvP.getInstance().isInSpawnArea(e)
-                                && !VanishStatus.isVanished(e.getUniqueId())
+                                && !VanishStatus.isVanished(e.getUniqueId()) &&
+                                !KitPvP.getInstance().getEventManager().getSumoEvent().isPlaying(e) &&
+                                !KitPvP.getInstance().getEventManager().getSumoEvent().isSpectating(e)
                 ).collect(Collectors.toList());
 
         if (p.isEmpty()) {

@@ -33,8 +33,8 @@ public class PlayerMoveListener implements Listener {
             teleports.add((Location) main.get(handle));
         }
 
-        startLilypadEffect();
         Bukkit.getScheduler().runTaskTimer(plugin, this::randomTpEffects, 0L, 5L); // Random teleports from Spawn
+        Bukkit.getScheduler().runTaskTimer(plugin, this::startLilypadEffect, 0L, 5L); // Lilypad Jump
     }
 
     private void startLilypadEffect() {
@@ -47,7 +47,6 @@ public class PlayerMoveListener implements Listener {
                             addLilyCooldown(p, 10); // 10 second cool-down
                         }
                 );
-        Bukkit.getScheduler().runTaskLater(plugin, this::startLilypadEffect, 5);
     }
 
     // New teleport pad method

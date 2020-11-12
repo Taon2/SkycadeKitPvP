@@ -21,6 +21,7 @@ public class Messages {
     public static final Localization.Message ALREADY_UNLOCKED = new Localization.Message("already-unlocked", "&cYou already have &b%thing% &cunlocked.");
     public static final Localization.Message KITS_ROTATED = new Localization.Message("kits-rotated", "&7Kits in the shop have &arotated&7!");
     public static final Localization.Message DONT_OWN = new Localization.Message("dont-own", "&cYou don't own &b%kit%&c, /shop to purchase!");
+    public static final Localization.Message NEW_PLAYER = new Localization.Message("new-player", "&7You have joined &c&lKitPvP &7for the first time, therefore you get a free &c&lKit Crate Key&7. Open it in the Crates area!");
 
     //KitPvP Command Messages
     public static final Localization.Message USING_KIT = new Localization.Message("command.using-kit", "&a%player%&7 is using the &a%kitname%&7 kit.");
@@ -166,12 +167,6 @@ public class Messages {
     public static final Localization.Message BROKE_KILLSTREAK = new Localization.Message("kill.broke-killstreak", "&c&l%killer% &6has broken &c&l%dead%'s &6killstreak of &c&l%ks%&6!");
     public static final Localization.Message HAS_KILLSTREAK = new Localization.Message("kill.has-killstreak", "&c&l%killer% &6has reached a killstreak of &c&l%ks%&6!");
 
-    // Anti-Phase
-    public static final Localization.Message ANTI_PHASE_SENT_TO_SPAWN = new Localization.Message("anti-phase.sent-to-spawn", "&7You have been detected inside of a block and have been sent to Spawn.");
-    public static final Localization.Message ANTI_PHASE_COMBAT_EVASION = new Localization.Message("anti-phase.combat-evasion", "&7You have been detected inside of a block.\n" +
-            "&7You were in combat at the time of glitching inside of this block, therefore you have &cdied&7!");
-
-
     //Kit Messages
     public static final Localization.Message CANT_USE_HERE = new Localization.Message("kit.cant-use-here", "&cYou can't use that ability here.");
     public static final Localization.Message YOURE_UNFROZEN = new Localization.Message("kit.unfrozen", "&bThawed out!");
@@ -223,6 +218,29 @@ public class Messages {
     public static final Localization.Message PRICKED_RECENTLY = new Localization.Message("kit.prick.pricked-recently", "&a%player% &chas already been pricked recently!");
     public static final Localization.Message OUT_OF_AMMUNITION = new Localization.Message("kit.paintball.out-of-ammunition", "&cYou do not have any ammunition left! Please wait for some to regenerate.");
     public static final Localization.Message CANNOT_THROW_AMMUNITION = new Localization.Message("kit.paintball.cannot-throw-ammunition", "&cYou may not throw your ammunition. Wasteful!");
+
+    // Event Messages
+    public static final Localization.Message MUST_BE_AT_SPAWN = new Localization.Message("player-events.must-be-at-spawn", "&b&lSkycade Events &f> &7You must be at spawn in order to join events!");
+    public static final Localization.Message STARTING_EVENT = new Localization.Message("player-events.starting-event", "&b&lSkycade Events &f> &b%player% &7is hosting a &b%event% &7Event, type &b/join &7to join!");
+    public static final Localization.Message STARTING_EVENT_TIME_LEFT = new Localization.Message("player-events.starting-event-time-left", "&7The Event will start in &b%second% &7seconds.");
+    public static final Localization.Message ALREADY_IN_EVENT = new Localization.Message("player-events.already-in-event", "&b&lSkycade Events &f> &7You are already in this event.");
+    public static final Localization.Message CANNOT_JOIN_EVNET = new Localization.Message("player-events.cannot-join", "&b&lSkycade Events &f> &7You cannot join this event.");
+    public static final Localization.Message NO_EVENT_RUNNING = new Localization.Message("player-events.no-event-running", "&b&lSkycade Events &f> &7There is currently no event running.");
+    public static final Localization.Message CANNOT_USE_COMMAND = new Localization.Message("player-events.cannot-use-cmd", "&b&lSkycade Events &f> &7You cannot use this command during events!");
+    public static final Localization.Message WON_EVENT = new Localization.Message("player-events.won-event", "&b&lSkycade Events &f> &b%player% &7has won the &b%event% &7Event!");
+    public static final Localization.Message EVENT_JOINED = new Localization.Message("player-events.join", "&b&lSkycade Events &f> &b%player% &7has joined! - &b%size%");
+    public static final Localization.Message EVENT_LEFT = new Localization.Message("player-events.left", "&b&lSkycade Events &f> &b%player% &7has left! - &b%size%");
+    public static final Localization.Message SUMO_ELIMINATED = new Localization.Message("player-events.sumo-eliminated", "&b&lSkycade Sumo &f> &b%player% &7has been eliminated!");
+    public static final Localization.Message SUMO_ROUND_STARTED = new Localization.Message("player-events.sumo-round-started", "&b&lSkycade Sumo &f> &7Round started!");
+    public static final Localization.Message SUMO_ROUND_FIGHTERS = new Localization.Message("player-events.sumo-round-fighters", "&b&lSkycade Sumo &f> &b%fighter1% &7vs &b%fighter2%");
+    public static final Localization.Message EVENT_FAILED_LACK_OF_PLAYERS = new Localization.Message("player-events.event-failed-to-start-cause-players", "&b&lSkycade Events &f> &7The Event has been canceled due to lack of players! You must have at least &b2 &7players.");
+    public static final Localization.Message EVENT_ON_COOLDOWN = new Localization.Message("player-events.event-on-cooldown", "&b&lSkycade Events &f> &7Events are currently on cooldown. You must wait &b%time% &7to host an Event.");
+    public static final Localization.Message LMS_FIGHT_ENABLED = new Localization.Message("player-events.lms.fight-enabled", "&b&lSkycade LMS &f> &cFight &7has been enabled.");
+    public static final Localization.Message LMS_STARTED = new Localization.Message("player-events.lms.started", "&b&lSkycade LMS &f> &7The Event has started. Spread out and prepare for PvP! &cFight &7will be enabled in &b5 seconds&7.");
+    public static final Localization.Message LMS_ELIMINATED = new Localization.Message("player-events.lms.eliminated", "&b&lSkycade LMS &f> &b%player% &7has been eliminated by &b%killer%! - &b%remaining% &7players left");
+    public static final Localization.Message BRACKETS_ELIMINATED = new Localization.Message("player-events.brackets-eliminated", "&b&lSkycade Brackets &f> &b%player% &7has been eliminated!");
+    public static final Localization.Message BRACKETS_ROUND_STARTED = new Localization.Message("player-events.brackets-round-started", "&b&lSkycade Brackets &f> &7Round started!");
+    public static final Localization.Message BRACKETS_ROUND_FIGHTERS = new Localization.Message("player-events.brackets-round-fighters", "&b&lSkycade Brackets &f> &b%fighter1% &7vs &b%fighter2%");
 
     static void init() {
         Localization.getInstance().registerMessages("skycade.kitpvp",
@@ -385,10 +403,29 @@ public class Messages {
                 NO_SHIFT_ABILITIES,
                 PRICKED_RECENTLY,
                 KILLED_GANG_MEMBER,
-                ANTI_PHASE_COMBAT_EVASION,
-                ANTI_PHASE_SENT_TO_SPAWN,
                 OUT_OF_AMMUNITION,
-                CANNOT_THROW_AMMUNITION
+                CANNOT_THROW_AMMUNITION,
+                NEW_PLAYER,
+                ALREADY_IN_EVENT,
+                NO_EVENT_RUNNING,
+                STARTING_EVENT,
+                STARTING_EVENT_TIME_LEFT,
+                CANNOT_USE_COMMAND,
+                EVENT_JOINED,
+                EVENT_LEFT,
+                WON_EVENT,
+                SUMO_ELIMINATED,
+                SUMO_ROUND_FIGHTERS,
+                SUMO_ROUND_STARTED,
+                EVENT_FAILED_LACK_OF_PLAYERS,
+                LMS_ELIMINATED,
+                LMS_FIGHT_ENABLED,
+                LMS_STARTED,
+                CANNOT_JOIN_EVNET,
+                MUST_BE_AT_SPAWN,
+                BRACKETS_ELIMINATED,
+                BRACKETS_ROUND_FIGHTERS,
+                BRACKETS_ROUND_STARTED
         );
     }
 }

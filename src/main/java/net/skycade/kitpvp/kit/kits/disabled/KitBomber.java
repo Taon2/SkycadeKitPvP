@@ -1,4 +1,4 @@
-package net.skycade.kitpvp.kit.kits;
+package net.skycade.kitpvp.kit.kits.disabled;
 
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
@@ -37,7 +37,7 @@ public class KitBomber extends Kit {
     private int tntRegenSpeed = 15;
 
     public KitBomber(KitManager kitManager) {
-        super(kitManager, "Bomber", KitType.BOMBER, 8000, getLore());
+        super(kitManager, "Bomber", KitType.BOMBER, 0, false, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)

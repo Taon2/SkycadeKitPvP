@@ -22,6 +22,7 @@ import net.skycade.kitpvp.kit.kits.*;
 import net.skycade.kitpvp.kit.kits.disabled.KitMultishot;
 import net.skycade.kitpvp.kit.kits.disabled.KitPyromancer;
 import net.skycade.kitpvp.kit.kits.disabled.KitShroom;
+import net.skycade.kitpvp.playerevents.EventType;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;
@@ -129,6 +130,11 @@ public class PlayerDamageListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         event.getDrops().clear();
         event.setDeathMessage("");
+        if (KitPvP.getInstance().getEventManager().getCurrentEvent() == EventType.LMS){
+            if (KitPvP.getInstance().getEventManager().getLMS().isPlaying(event.getEntity())){
+                return;
+            }
+        }
 
         Player diedPlayer = event.getEntity();
 
