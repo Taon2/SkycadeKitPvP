@@ -29,10 +29,10 @@ import java.util.UUID;
 
 public class SumoEvent implements Listener {
 
-    public ArrayList<UUID> participants;
-    public ArrayList<UUID> allPlayers;
-    public ArrayList<UUID> spectators;
-    public ArrayList<UUID> fightingPlayers;
+    public ArrayList<UUID> participants = new ArrayList<>();
+    public ArrayList<UUID> allPlayers = new ArrayList<>();
+    public ArrayList<UUID> spectators = new ArrayList<>();
+    public ArrayList<UUID> fightingPlayers = new ArrayList<>();
 
     private boolean countdown;
 
@@ -269,17 +269,11 @@ public class SumoEvent implements Listener {
     }
 
     public void start() {
-        if (getParticipants().size() < 2) {
+        if (getPlayers().size() <= 1) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (isPlaying(p)) {
+                if (isPlaying(p) && getPlayers() != null) {
                     removePlayer(p);
                     removeParticipant(p);
-                    Location spawn = KitPvP.getInstance().getSpawnLocation();
-                    p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
-                    Messages.EVENT_FAILED_LACK_OF_PLAYERS.msg(p);
-                }
-                if (isSpectating(p)) {
-                    removeSpectator(p);
                     Location spawn = KitPvP.getInstance().getSpawnLocation();
                     p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                     Messages.EVENT_FAILED_LACK_OF_PLAYERS.msg(p);

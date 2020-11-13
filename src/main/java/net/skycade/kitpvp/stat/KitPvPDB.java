@@ -7,6 +7,7 @@ import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.managers.DatabaseManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONObject;
@@ -32,7 +33,7 @@ public class KitPvPDB {
     public static String kitPvPTable;
 
     private KitPvPDB() {
-        kitPvPTable = KitPvP.getInstance().getDatabaseManager().get().getString("database.kitpvp-table");
+        kitPvPTable = DatabaseManager.getKitPvPTable();
     }
 
     public Member getMemberData(UUID uuid) {

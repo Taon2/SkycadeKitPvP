@@ -283,7 +283,6 @@ public class KitPvP extends SkycadePlugin {
         return databaseManager;
     }
 
-
     public GangPointsManager getGangPointsManager() {
         return gangPointsManager;
     }

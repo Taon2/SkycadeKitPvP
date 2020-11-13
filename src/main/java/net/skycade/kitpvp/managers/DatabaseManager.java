@@ -1,6 +1,7 @@
 package net.skycade.kitpvp.managers;
 
 import net.skycade.kitpvp.KitPvP;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -54,5 +55,12 @@ public class DatabaseManager {
 
     public YamlConfiguration get(){
         return yaml;
+    }
+
+    public static String getKitPvPTable(){
+        File file = new File(KitPvP.getInstance().getDataFolder(), "database.yml");
+        FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+
+        return configuration.getString("database.kitpvp-table");
     }
 }

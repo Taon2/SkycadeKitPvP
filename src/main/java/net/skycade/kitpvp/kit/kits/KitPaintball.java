@@ -35,7 +35,7 @@ public class KitPaintball extends Kit {
 
     private int maxPaintBalls = 8;
 
-    private int regenerationSpeed = 4;
+    private int regenerationSpeed = 2;
 
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 

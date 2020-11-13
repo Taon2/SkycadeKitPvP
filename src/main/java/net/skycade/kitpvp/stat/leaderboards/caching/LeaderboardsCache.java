@@ -8,6 +8,7 @@ import net.skycade.SkycadeCore.utility.MojangUtil;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
 import net.skycade.kitpvp.coreclasses.member.MemberManager;
+import net.skycade.kitpvp.managers.DatabaseManager;
 import net.skycade.kitpvp.stat.KitPvPDB;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.stat.leaderboards.member.StatsMember;
@@ -36,7 +37,7 @@ public class LeaderboardsCache {
 
                 // Loads information from database if uuid is offline
                 try (Connection connection = CoreSettings.getInstance().getConnection()) {
-                    String sql = "SELECT Kills, Coins, Deaths, HighestStreak FROM " + KitPvPDB.kitPvPTable + " WHERE UUID = ? AND Instance = ? AND Season = ?";
+                    String sql = "SELECT Kills, Coins, Deaths, HighestStreak FROM " + DatabaseManager.getKitPvPTable() + " WHERE UUID = ? AND Instance = ? AND Season = ?";
                     try (PreparedStatement statement = connection.prepareStatement(sql)) {
                         statement.setString(1, key.toString());
                         statement.setString(2, CoreSettings.getInstance().getThisInstance());
