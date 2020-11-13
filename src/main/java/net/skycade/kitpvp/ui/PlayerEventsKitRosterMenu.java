@@ -85,7 +85,7 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         manager.setHoster(p.getUniqueId());
                         p.closeInventory();
                     } else {
-                        p.sendMessage(Localization.getInstance().tl("skycade.crates.open.nokey"));
+                        Messages.NO_HOST_CREDITS.msg(p);
                     }
                 });
 
@@ -129,7 +129,7 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         manager.setHoster(p.getUniqueId());
                         p.closeInventory();
                     } else {
-                        p.sendMessage(Localization.getInstance().tl("skycade.crates.open.nokey"));
+                        Messages.NO_HOST_CREDITS.msg(p);
                     }
                 });
 
@@ -173,7 +173,7 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         manager.setHoster(p.getUniqueId());
                         p.closeInventory();
                     } else {
-                        p.sendMessage(Localization.getInstance().tl("skycade.crates.open.nokey"));
+                        Messages.NO_HOST_CREDITS.msg(p);
                     }
                 });
 
@@ -217,7 +217,7 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         manager.setHoster(p.getUniqueId());
                         p.closeInventory();
                     } else {
-                        p.sendMessage(Localization.getInstance().tl("skycade.crates.open.nokey"));
+                        Messages.NO_HOST_CREDITS.msg(p);
                     }
                 });
 
@@ -261,7 +261,7 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         manager.setHoster(p.getUniqueId());
                         p.closeInventory();
                     } else {
-                        p.sendMessage(Localization.getInstance().tl("skycade.crates.open.nokey"));
+                        Messages.NO_HOST_CREDITS.msg(p);
                     }
                 });
 
@@ -305,7 +305,7 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         manager.setHoster(p.getUniqueId());
                         p.closeInventory();
                     } else {
-                        p.sendMessage(Localization.getInstance().tl("skycade.crates.open.nokey"));
+                        Messages.NO_HOST_CREDITS.msg(p);
                     }
                 });
     }

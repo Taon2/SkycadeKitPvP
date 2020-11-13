@@ -55,15 +55,15 @@ public class KitFireArcher extends Kit {
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
                 .setColour(Color.ORANGE).build();
         leggings = new ItemBuilder(
-                Material.LEATHER_LEGGINGS)
-                .addEnchantment(Enchantment.DURABILITY, 10)
+                Material.CHAINMAIL_LEGGINGS)
+                .addEnchantment(Enchantment.DURABILITY, 2)
                 .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
-                .setColour(Color.ORANGE).build();
+                .build();
         boots = new ItemBuilder(
-                Material.LEATHER_BOOTS)
-                .addEnchantment(Enchantment.DURABILITY, 10)
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
-                .setColour(Color.ORANGE).build();
+                Material.IRON_BOOTS)
+                .addEnchantment(Enchantment.DURABILITY, 3)
+                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+                .build();
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
                 .addEnchantment(Enchantment.DURABILITY, 5)
@@ -72,7 +72,7 @@ public class KitFireArcher extends Kit {
                 Material.BOW)
                 .addEnchantment(Enchantment.DURABILITY, 5)
                 .addEnchantment(Enchantment.ARROW_INFINITE, 1)
-                .addEnchantment(Enchantment.ARROW_DAMAGE, 1)
+                .addEnchantment(Enchantment.ARROW_DAMAGE, 2)
                 .addEnchantment(Enchantment.ARROW_FIRE, 1)
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Fire 1 arrow every " + arrowCooldown + " second.")
                 .addLore(" ")

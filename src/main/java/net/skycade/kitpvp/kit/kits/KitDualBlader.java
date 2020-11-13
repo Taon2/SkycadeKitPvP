@@ -31,7 +31,7 @@ public class KitDualBlader extends Kit {
     private ItemStack weapon2;
 
     public KitDualBlader(KitManager kitManager) {
-        super(kitManager, "DualBlader", KitType.DUALBLADER, 34000, getLore());
+        super(kitManager, "DualBlader", KitType.DUALBLADER, 0, getLore());
 
         helmet = new ItemBuilder(
                 Material.IRON_HELMET)
@@ -101,7 +101,7 @@ public class KitDualBlader extends Kit {
 
     @Override
     public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 25!");
     }
 
     public static List<String> getLore() {

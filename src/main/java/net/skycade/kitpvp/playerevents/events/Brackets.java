@@ -79,8 +79,8 @@ public class Brackets implements Listener {
         startRound(fighter1, fighter2);
     }
     public void end(){
-        //getEventManager().setGlobalCooldown(System.currentTimeMillis() + ((10 * 60) * 1000L));
-        //getEventManager().setCooldownOn(true);
+        getEventManager().setGlobalCooldown(System.currentTimeMillis() + ((5 * 60) * 1000L));
+        getEventManager().setCooldownOn(true);
         getEventManager().setCurrentEvent(EventType.IDLE);
         getEventManager().setHoster(null);
     }
@@ -516,42 +516,42 @@ public class Brackets implements Listener {
             stats.setActiveKit(KitType.KNIGHT);
             KitKnight kit = new KitKnight(KitPvP.getInstance().getKitManager());
             kit.beginApplyKit(p);
-            giveSoup(p, 36);
+            giveSoup(p, 8);
             return;
         }
         if (getChosenKit() == KitType.REAPER){
             stats.setActiveKit(KitType.REAPER);
             KitReaper kit = new KitReaper(KitPvP.getInstance().getKitManager());
             kit.beginApplyKit(p);
-            giveSoup(p, 36);
+            giveSoup(p, 8);
             return;
         }
         if (getChosenKit() == KitType.PAINTBALL){
             stats.setActiveKit(KitType.PAINTBALL);
             KitPaintball kit = new KitPaintball(KitPvP.getInstance().getKitManager());
             kit.beginApplyKit(p);
-            giveSoup(p, 36);
+            giveSoup(p, 8);
             return;
         }
         if (getChosenKit() == KitType.BUILDUHC){
             stats.setActiveKit(KitType.BUILDUHC);
             KitBuildUHC kit = new KitBuildUHC(KitPvP.getInstance().getKitManager());
             kit.beginApplyKit(p);
-            giveSoup(p, 36);
+            giveSoup(p, 8);
             return;
         }
         if (getChosenKit() == KitType.DUBSTEP){
             stats.setActiveKit(KitType.DUBSTEP);
             KitDubstep kit = new KitDubstep(KitPvP.getInstance().getKitManager());
             kit.beginApplyKit(p);
-            giveSoup(p, 36);
+            giveSoup(p, 8);
             return;
         }
         if (getChosenKit() == KitType.TELEPORTER){
             stats.setActiveKit(KitType.TELEPORTER);
             KitTeleporter kit = new KitTeleporter(KitPvP.getInstance().getKitManager());
             kit.beginApplyKit(p);
-            giveSoup(p, 36);
+            giveSoup(p, 8);
         }
     }
 

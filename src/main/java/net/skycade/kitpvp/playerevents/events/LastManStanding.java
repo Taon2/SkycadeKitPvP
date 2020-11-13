@@ -91,8 +91,8 @@ public class LastManStanding implements Listener {
     }
 
     public void end(){
-        //getEventManager().setGlobalCooldown(System.currentTimeMillis() + ((10 * 60) * 1000L));
-        //getEventManager().setCooldownOn(true);
+        getEventManager().setGlobalCooldown(System.currentTimeMillis() + ((5 * 60) * 1000L));
+        getEventManager().setCooldownOn(true);
         getEventManager().setCurrentEvent(EventType.IDLE);
         setFighting(false);
         getEventManager().setHoster(null);

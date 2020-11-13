@@ -306,7 +306,7 @@ public class SumoEvent implements Listener {
     }
 
     public void end(){
-        getEventManager().setGlobalCooldown(System.currentTimeMillis() + ((10 * 60) * 1000L));
+        getEventManager().setGlobalCooldown(System.currentTimeMillis() + ((5 * 60) * 1000L));
         getEventManager().setCooldownOn(true);
         getEventManager().setCurrentEvent(EventType.IDLE);
         this.countdown = false;

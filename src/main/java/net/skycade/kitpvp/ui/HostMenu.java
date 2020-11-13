@@ -67,7 +67,7 @@ public class HostMenu extends DynamicGui {
                         manager.setHoster(p.getUniqueId());
                         p.closeInventory();
                     } else {
-                        p.sendMessage(Localization.getInstance().tl("skycade.crates.open.nokey"));
+                        Messages.NO_HOST_CREDITS.msg(p);
                     }
                 });
 
@@ -103,7 +103,7 @@ public class HostMenu extends DynamicGui {
                     if (CrateUser.get(p.getUniqueId()).hasKey(crate)) {
                         new PlayerEventsKitRosterMenu(EventType.LMS).open(p);
                     } else {
-                        p.sendMessage(Localization.getInstance().tl("skycade.crates.open.nokey"));
+                        Messages.NO_HOST_CREDITS.msg(p);
                     }
                 });
 
@@ -139,7 +139,7 @@ public class HostMenu extends DynamicGui {
                     if (CrateUser.get(p.getUniqueId()).hasKey(crate)) {
                         new PlayerEventsKitRosterMenu(EventType.BRACKETS).open(p);
                     } else {
-                        p.sendMessage(Localization.getInstance().tl("skycade.crates.open.nokey"));
+                        Messages.NO_HOST_CREDITS.msg(p);
                     }
                 });
     }

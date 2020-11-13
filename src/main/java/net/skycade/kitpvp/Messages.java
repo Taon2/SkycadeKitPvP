@@ -220,6 +220,7 @@ public class Messages {
     public static final Localization.Message CANNOT_THROW_AMMUNITION = new Localization.Message("kit.paintball.cannot-throw-ammunition", "&cYou may not throw your ammunition. Wasteful!");
 
     // Event Messages
+    public static final Localization.Message NO_HOST_CREDITS = new Localization.Message("player-events.no-host-credits", "&cYou do not have any Host Credits.");
     public static final Localization.Message MUST_BE_AT_SPAWN = new Localization.Message("player-events.must-be-at-spawn", "&b&lSkycade Events &f> &7You must be at spawn in order to join events!");
     public static final Localization.Message STARTING_EVENT = new Localization.Message("player-events.starting-event", "&b&lSkycade Events &f> &b%player% &7is hosting a &b%event% &7Event, type &b/join &7to join!");
     public static final Localization.Message STARTING_EVENT_TIME_LEFT = new Localization.Message("player-events.starting-event-time-left", "&7The Event will start in &b%second% &7seconds.");
@@ -425,7 +426,8 @@ public class Messages {
                 MUST_BE_AT_SPAWN,
                 BRACKETS_ELIMINATED,
                 BRACKETS_ROUND_FIGHTERS,
-                BRACKETS_ROUND_STARTED
+                BRACKETS_ROUND_STARTED,
+                NO_HOST_CREDITS
         );
     }
 }

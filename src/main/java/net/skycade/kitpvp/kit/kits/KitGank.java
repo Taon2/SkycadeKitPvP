@@ -23,7 +23,7 @@ public class KitGank extends Kit {
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
     public KitGank(KitManager kitManager) {
-        super(kitManager, "Gank", KitType.GANK, 0, getLore());
+        super(kitManager, "Gank", KitType.GANK, 50000, getLore());
 
         weapon = new ItemBuilder(
                 Material.STONE_SWORD)
@@ -55,7 +55,7 @@ public class KitGank extends Kit {
 
     @Override
     public List<String> getHowToObtain() {
-        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Prestige to level 25!");
+        return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
     }
 
     public static List<String> getLore() {
