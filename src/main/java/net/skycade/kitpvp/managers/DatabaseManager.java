@@ -23,7 +23,6 @@ public class DatabaseManager {
         Map<String, Object> defaults = new HashMap<>();
         defaults.put("database.name", "negativekb");
         defaults.put("database.host", "localhost");
-        defaults.put("database.host", "localhost");
         defaults.put("database.port", 3306);
         defaults.put("database.username", "negativekb");
         defaults.put("database.kitpvp-table", "skycade_kitpvp_members");
