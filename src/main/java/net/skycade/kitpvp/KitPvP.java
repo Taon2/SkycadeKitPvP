@@ -14,6 +14,7 @@ import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.listeners.WorldListeners;
 import net.skycade.kitpvp.listeners.chat.ChatClick;
 import net.skycade.kitpvp.listeners.player.*;
+import net.skycade.kitpvp.managers.DatabaseManager;
 import net.skycade.kitpvp.managers.RotationManager;
 import net.skycade.kitpvp.playerevents.EventManager;
 import net.skycade.kitpvp.scoreboard.ScoreboardInfo;
@@ -47,6 +48,7 @@ public class KitPvP extends SkycadePlugin {
     private GangPointsManager gangPointsManager;
     private ChatClick chatClick;
     private EventManager eventManager;
+    private DatabaseManager databaseManager;
 
     private Region spawnRegion;
     private Location spawnLocation;
@@ -56,8 +58,8 @@ public class KitPvP extends SkycadePlugin {
         Map<String, Object> defaults = new TreeMap<>();
 
         defaults.put("update-delay", 2400);
-        defaults.put("database.kitpvp-table", "skycade_kitpvp_members");
-        defaults.put("database.kitpvp-prestige-levels", "skycade_kitpvp_prestige_levels");
+        //defaults.put("database.kitpvp-table", "skycade_kitpvp_members");
+        //defaults.put("database.kitpvp-prestige-levels", "skycade_kitpvp_prestige_levels");
 
         defaults.put("start-kits", Arrays.asList(KitType.ARCHER.getAlias(), KitType.CHANCE.getAlias(), KitType.DUBSTEP.getAlias()));
         defaults.put("start-coins", 3500);
@@ -126,6 +128,7 @@ public class KitPvP extends SkycadePlugin {
         this.rotationManager = new RotationManager();
         this.gangPointsManager = new GangPointsManager();
         this.eventManager = new EventManager();
+        this.databaseManager = new DatabaseManager();
         Bukkit.getPluginManager().registerEvents(chatClick = new ChatClick(), this);
 
         ScoreboardInfo.getInstance();
@@ -276,6 +279,10 @@ public class KitPvP extends SkycadePlugin {
     public EventShopManager getEventShopManager() {
         return eventShopManager;
     }
+    public DatabaseManager getDatabaseManager() {
+        return databaseManager;
+    }
+
 
     public GangPointsManager getGangPointsManager() {
         return gangPointsManager;

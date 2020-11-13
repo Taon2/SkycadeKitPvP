@@ -106,7 +106,6 @@ public class Brackets implements Listener {
                 stats.applyKitPreference();
             }
         }
-
         getEventManager().setCurrentEvent(EventType.IDLE);
         getEventManager().setHoster(null);
     }
@@ -184,12 +183,16 @@ public class Brackets implements Listener {
 
                 opponent.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), loc.getYaw(), loc.getPitch()));
                 removeFighter(opponent);
+                addParticipant(opponent);
 
                 opponent.getInventory().clear();
                 opponent.getInventory().setHelmet(new ItemStack(Material.AIR));
                 opponent.getInventory().setChestplate(new ItemStack(Material.AIR));
                 opponent.getInventory().setLeggings(new ItemStack(Material.AIR));
                 opponent.getInventory().setBoots(new ItemStack(Material.AIR));
+
+                KitPvPStats killerStats = KitPvP.getInstance().getStats(opponent);
+                killerStats.setActiveKit(KitType.DEFAULT);
 
                 for (PotionEffect effect : opponent.getActivePotionEffects()) {
                     opponent.removePotionEffect(effect.getType());
@@ -203,7 +206,6 @@ public class Brackets implements Listener {
                 sendMessageToSpectators(eliminated);
 
                 if (getParticipants().size() > 1) {
-                    addParticipant(opponent);
                     new BukkitRunnable() {
 
                         @Override
@@ -288,12 +290,16 @@ public class Brackets implements Listener {
 
                 opponent.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), loc.getYaw(), loc.getPitch()));
                 removeFighter(opponent);
+                addParticipant(opponent);
 
                 opponent.getInventory().clear();
                 opponent.getInventory().setHelmet(new ItemStack(Material.AIR));
                 opponent.getInventory().setChestplate(new ItemStack(Material.AIR));
                 opponent.getInventory().setLeggings(new ItemStack(Material.AIR));
                 opponent.getInventory().setBoots(new ItemStack(Material.AIR));
+
+                KitPvPStats killerStats = KitPvP.getInstance().getStats(opponent);
+                killerStats.setActiveKit(KitType.DEFAULT);
 
                 for (PotionEffect effect : opponent.getActivePotionEffects()) {
                     opponent.removePotionEffect(effect.getType());
@@ -307,7 +313,6 @@ public class Brackets implements Listener {
                 sendMessageToSpectators(eliminated);
 
                 if (getParticipants().size() > 1) {
-                    addParticipant(opponent);
                     new BukkitRunnable() {
 
                         @Override
@@ -418,17 +423,20 @@ public class Brackets implements Listener {
                 sendMessageToSpectators(deathmsg);
 
                 removeFighter(killer);
+                addParticipant(killer);
                 Location loc = killer.getLocation();
                 Location lobby = getLobbyLocation();
 
                 killer.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), loc.getYaw(), loc.getPitch()));
-                removeFighter(killer);
 
                 killer.getInventory().clear();
                 killer.getInventory().setHelmet(new ItemStack(Material.AIR));
                 killer.getInventory().setChestplate(new ItemStack(Material.AIR));
                 killer.getInventory().setLeggings(new ItemStack(Material.AIR));
                 killer.getInventory().setBoots(new ItemStack(Material.AIR));
+
+                KitPvPStats killerStats = KitPvP.getInstance().getStats(killer);
+                killerStats.setActiveKit(KitType.DEFAULT);
 
                 for (PotionEffect effect : killer.getActivePotionEffects()) {
                     killer.removePotionEffect(effect.getType());
@@ -440,6 +448,7 @@ public class Brackets implements Listener {
                         if (isPlaying(onlineP)) {
                             removePlayer(onlineP);
                             removeFighter(onlineP);
+                            removeParticipant(onlineP);
                             KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
                             stats.setKitPreference(KitType.CHANCE);
                             Location spawn = KitPvP.getInstance().getSpawnLocation();
@@ -485,7 +494,6 @@ public class Brackets implements Listener {
                     }
                 }.runTaskLater(KitPvP.getInstance(), 5);
                 if (getParticipants().size() > 1) {
-                    addParticipant(killer);
                     new BukkitRunnable() {
 
                         @Override
@@ -504,7 +512,6 @@ public class Brackets implements Listener {
                             startRound(fighter1, fighter2);
                         }
                     }.runTaskLater(KitPvP.getInstance(), 20 * 5);
-                    return;
                 }
             }
         }
