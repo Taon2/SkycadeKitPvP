@@ -32,7 +32,7 @@ public class KitPvPDB {
     public static String kitPvPTable;
 
     private KitPvPDB() {
-        kitPvPTable = KitPvP.getInstance().getConfig().getString("database.kitpvp-table");
+        kitPvPTable = KitPvP.getInstance().getDatabaseManager().get().getString("database.kitpvp-table");
     }
 
     public Member getMemberData(UUID uuid) {
