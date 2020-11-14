@@ -68,9 +68,7 @@ public class KitKnight extends Kit {
                 .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Being in a gang with a player using Kit King increases your defence.").build();
         weapon = new ItemBuilder(
                 Material.IRON_SWORD)
-                .addEnchantment(Enchantment.DURABILITY, 4)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% every " + steedCooldown + " seconds")
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "lets you charge a horse into battle.").build();
+                .addEnchantment(Enchantment.DURABILITY, 4).build();
 
         ItemStack icon = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
         setIcon(icon);
@@ -110,6 +108,9 @@ public class KitKnight extends Kit {
             }
         });
     }
+/*
+    // Disabled Knight's horse due to a glitch with the Spigot that allows
+    // you to phase through blocks like stairs
 
     @Override
     public void onItemUse(Player p, ItemStack item) {
@@ -263,6 +264,8 @@ public class KitKnight extends Kit {
             }
         }, seconds * 20);
     }
+
+ */
 
     @Override
     public List<String> getHowToObtain() {

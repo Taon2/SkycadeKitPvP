@@ -280,6 +280,8 @@ public class SumoEvent implements Listener {
                 }
             }
             end();
+            getEventManager().setGlobalCooldown(System.currentTimeMillis() + (((2 * 60) * 1000L) + (30 * 1000L)));
+            getEventManager().setCooldownOn(true);
             return;
         }
         Crate crate = CratesPlugin.getInstance().getEditorModule().getCrate("hostcredit");
