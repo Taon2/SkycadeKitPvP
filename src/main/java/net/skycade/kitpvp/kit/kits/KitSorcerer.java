@@ -97,6 +97,7 @@ public class KitSorcerer extends Kit {
     public void damageEvent(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
+            if (KitPvP.getInstance().getStats(player) == null)return;
             Kit kit = KitPvP.getInstance().getStats(player).getActiveKit().getKit();
             if (kit.getKitType() == KitType.SORCERER) {
                 if (!addCooldown(player, "Absorption", abiltiyCooldown, false))
