@@ -73,7 +73,11 @@ public class KillTheKingEvent extends RandomEvent implements Listener {
                         !KitPvP.getInstance().isInSpawnArea(e)
                                 && !VanishStatus.isVanished(e.getUniqueId()) &&
                                 !KitPvP.getInstance().getEventManager().getSumoEvent().isPlaying(e) &&
-                                !KitPvP.getInstance().getEventManager().getSumoEvent().isSpectating(e)
+                                !KitPvP.getInstance().getEventManager().getSumoEvent().isSpectating(e) &&
+                                !KitPvP.getInstance().getEventManager().getBrackets().isSpectating(e) &&
+                                !KitPvP.getInstance().getEventManager().getBrackets().isPlaying(e) &&
+                                !KitPvP.getInstance().getEventManager().getLMS().isPlaying(e) &&
+                                !KitPvP.getInstance().getEventManager().getLMS().isSpectating(e)
                 ).collect(Collectors.toList());
 
         if (p.isEmpty()) {
