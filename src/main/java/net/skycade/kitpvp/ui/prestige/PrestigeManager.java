@@ -3,6 +3,7 @@ package net.skycade.kitpvp.ui.prestige;
 import net.skycade.SkycadeCore.CoreSettings;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.member.Member;
+import net.skycade.kitpvp.managers.DatabaseManager;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 
@@ -23,7 +24,7 @@ public class PrestigeManager {
 
     public PrestigeManager(KitPvP plugin) {
         this.plugin = plugin;
-        prestigeRewardsTable = KitPvP.getInstance().getConfig().getString("database.kitpvp-prestige-levels");
+        prestigeRewardsTable = DatabaseManager.getPrestigeTable();
 
         loadRewards();
     }

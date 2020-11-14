@@ -45,6 +45,7 @@ public class DatabaseManager {
             save();
         }
     }
+
     private void save() {
         try {
             yaml.save(file);
@@ -62,5 +63,12 @@ public class DatabaseManager {
         FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 
         return configuration.getString("database.kitpvp-table");
+    }
+
+    public static String getPrestigeTable() {
+        File file = new File(KitPvP.getInstance().getDataFolder(), "database.yml");
+        FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+
+        return configuration.getString("database.kitpvp-prestige-levels");
     }
 }
