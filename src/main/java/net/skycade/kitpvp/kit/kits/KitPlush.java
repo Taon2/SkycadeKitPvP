@@ -100,7 +100,6 @@ public class KitPlush extends Kit {
 
         Bukkit.getScheduler().runTaskLater(getKitManager().getKitPvP(), () -> {
             Set<Player> targetPlayers = UtilPlayer.getNearbyPlayers(p, cat.getLocation(), 4);
-            targetPlayers.add(p);
 
             Gang gang = GangsPlusApi.getPlayersGang(p);
 
@@ -110,7 +109,11 @@ public class KitPlush extends Kit {
                     target.setVelocity(new Vector(0, jumpPower, 0));
                 }
             });
-            cat.getLocation().getWorld().createExplosion(cat.getLocation(), 0);
+            p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 9, 3));
+            p.setVelocity(new Vector(0, jumpPower, 0));
+
+            cat.getWorld().playSound(cat.getLocation(), Sound.EXPLODE, 1F, 1F);
+            cat.getWorld().playEffect(cat.getLocation(), Effect.EXPLOSION_HUGE, 1, 1);
             cat.remove();
         }, 10);
     }
