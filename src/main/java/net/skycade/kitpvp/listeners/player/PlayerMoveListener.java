@@ -60,6 +60,8 @@ public class PlayerMoveListener implements Listener {
             Location loc = p.getLocation();
             loc.setY(loc.getY() - 1);
             if (loc.getBlock().getType() == Material.SLIME_BLOCK) {
+                p.getWorld().playSound(p.getLocation(), Sound.EXPLODE, 1L, 1L);
+                p.getWorld().playEffect(loc, Effect.EXPLOSION_HUGE, 1, 1);
                 p.setVelocity(new org.bukkit.util.Vector(p.getLocation().getDirection().getX(), 0.5, p.getLocation().getDirection().getZ()).multiply(2.8));
                 flyingParticles.add(p.getUniqueId());
                 flyingParticleStay.add(p.getUniqueId());

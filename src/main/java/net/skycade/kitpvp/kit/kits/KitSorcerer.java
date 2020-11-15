@@ -96,6 +96,7 @@ public class KitSorcerer extends Kit {
     @EventHandler
     public void damageEvent(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
+            if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK)return;
             Player player = (Player) event.getEntity();
             if (KitPvP.getInstance().getStats(player) == null) return;
             Kit kit = KitPvP.getInstance().getStats(player).getActiveKit().getKit();
