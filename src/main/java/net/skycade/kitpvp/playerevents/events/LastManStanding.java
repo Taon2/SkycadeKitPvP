@@ -555,4 +555,14 @@ public class LastManStanding implements Listener {
         return this.spectators;
     }
 
+    public void setLobbyLocation(Location loc){
+        KitPvP.getInstance().getConfig().set("player-events.lms.lobby-location", loc);
+        KitPvP.getInstance().saveConfig();
+    }
+
+    public void setArenaLocation(Location loc){
+        KitPvP.getInstance().getConfig().set("player-events.lms.arena-location", loc);
+        KitPvP.getInstance().saveConfig();
+    }
+
 }

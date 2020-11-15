@@ -1,6 +1,5 @@
 package net.skycade.kitpvp.ui;
 
-import net.md_5.bungee.api.ChatColor;
 import net.skycade.SkycadeCore.Localization;
 import net.skycade.SkycadeCore.guis.dynamicnew.DynamicGui;
 import net.skycade.SkycadeCore.utility.CoreUtil;
@@ -14,44 +13,23 @@ import net.skycade.kitpvp.playerevents.EventManager;
 import net.skycade.kitpvp.playerevents.EventType;
 import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 
 public class HostMenu extends DynamicGui {
-    private static final ItemStack SUMO = new ItemBuilder(Material.POTATO_ITEM)
-            .setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Sumo")
-            .build();
-
-    private static final ItemStack BRACKETS = new ItemBuilder(Material.DIAMOND_SWORD)
-            .setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Brackets")
-            .build();
-
-    private static final ItemStack LMS = new ItemBuilder(Material.GRASS)
-            .setDisplayName(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Last Man Standing")
-            .build();
-
     public HostMenu() {
         super("Choose an Event", 3);
-        setItemInteraction(11, new ItemBuilder(SUMO).build(),
+        setItemInteraction(11, new ItemBuilder(getSumo()).build(),
                 (p, ev) -> {
-                    EventManager manager = KitPvP.getInstance().getEventManager();
-                    if (manager.isCooldownOn()) {
-                        long currentTime = System.currentTimeMillis();
-                        long newTime = manager.getGlobalCooldown() - currentTime;
-
+                    if (getEventManager().isCooldownOn()) {
                         ev.setCancelled(true);
                         p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
-                        open(p);
-
-                        int toseconds = (int) (newTime / 1000);
-                        String message = Messages.EVENT_ON_COOLDOWN.getMessage();
-                        message = message.replaceAll("%time%", CoreUtil.niceFormat(toseconds, false));
-
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                        new HostMenu().open(p);
                         return;
                     }
-                    if (manager.getCurrentEvent() != EventType.IDLE) {
+                    if (getEventManager().getCurrentEvent() != EventType.IDLE) {
                         p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
                         ev.setCancelled(true);
                         return;
@@ -63,33 +41,23 @@ public class HostMenu extends DynamicGui {
                         return;
                     }
                     if (CrateUser.get(p.getUniqueId()).hasKey(crate)) {
-                        manager.announceEvent(p, EventType.SUMO);
-                        manager.setHoster(p.getUniqueId());
+                        getEventManager().announceEvent(p, EventType.SUMO);
+                        getEventManager().setHoster(p.getUniqueId());
                         p.closeInventory();
                     } else {
                         Messages.NO_HOST_CREDITS.msg(p);
                     }
                 });
 
-        setItemInteraction(13, new ItemBuilder(LMS).build(),
+        setItemInteraction(13, new ItemBuilder(getLMS()).build(),
                 (p, ev) -> {
-                    EventManager manager = KitPvP.getInstance().getEventManager();
-                    if (manager.isCooldownOn()) {
-                        long currentTime = System.currentTimeMillis();
-                        long newTime = manager.getGlobalCooldown() - currentTime;
-
+                    if (getEventManager().isCooldownOn()) {
                         ev.setCancelled(true);
                         p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
-                        open(p);
-
-                        int toseconds = (int) (newTime / 1000);
-                        String message = Messages.EVENT_ON_COOLDOWN.getMessage();
-                        message = message.replaceAll("%time%", CoreUtil.niceFormat(toseconds, false));
-
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                        new HostMenu().open(p);
                         return;
                     }
-                    if (manager.getCurrentEvent() != EventType.IDLE) {
+                    if (getEventManager().getCurrentEvent() != EventType.IDLE) {
                         p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
                         ev.setCancelled(true);
                         return;
@@ -107,25 +75,15 @@ public class HostMenu extends DynamicGui {
                     }
                 });
 
-        setItemInteraction(15, new ItemBuilder(BRACKETS).build(),
+        setItemInteraction(15, new ItemBuilder(getBrackets()).build(),
                 (p, ev) -> {
-                    EventManager manager = KitPvP.getInstance().getEventManager();
-                    if (manager.isCooldownOn()) {
-                        long currentTime = System.currentTimeMillis();
-                        long newTime = manager.getGlobalCooldown() - currentTime;
-
+                    if (getEventManager().isCooldownOn()) {
                         ev.setCancelled(true);
                         p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
-                        open(p);
-
-                        int toseconds = (int) (newTime / 1000);
-                        String message = Messages.EVENT_ON_COOLDOWN.getMessage();
-                        message = message.replaceAll("%time%", CoreUtil.niceFormat(toseconds, false));
-
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                        new HostMenu().open(p);
                         return;
                     }
-                    if (manager.getCurrentEvent() != EventType.IDLE) {
+                    if (getEventManager().getCurrentEvent() != EventType.IDLE) {
                         p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
                         ev.setCancelled(true);
                         return;
@@ -142,5 +100,119 @@ public class HostMenu extends DynamicGui {
                         Messages.NO_HOST_CREDITS.msg(p);
                     }
                 });
+    }
+
+    private ItemStack getSumo(){
+        if (getEventManager().isCooldownOn()){
+            long currentTime = System.currentTimeMillis();
+            long newTime = getEventManager().getGlobalCooldown() - currentTime;
+            int toseconds = (int) (newTime / 1000);
+
+            return new ItemBuilder(Material.POTATO_ITEM)
+                    .setDisplayName(ChatColor.translateAlternateColorCodes('&', "&e&lSumo"))
+                    .addToLore(
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&fThe main objective is to knock"),
+                            ChatColor.translateAlternateColorCodes('&', "&foff your opponents off the platform."),
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&fParticipants are chosen at random"),
+                            ChatColor.translateAlternateColorCodes('&', "&fto fight."),
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&4&lCOOLDOWN"),
+                            ChatColor.translateAlternateColorCodes('&', "&c" + CoreUtil.niceFormat(toseconds, false)),
+                            ChatColor.translateAlternateColorCodes('&', " ")
+                    )
+                    .build();
+        }
+
+        return new ItemBuilder(Material.POTATO_ITEM)
+                .setDisplayName(ChatColor.translateAlternateColorCodes('&', "&e&lSumo"))
+                .addToLore(
+                        ChatColor.translateAlternateColorCodes('&', " "),
+                        ChatColor.translateAlternateColorCodes('&', "&fThe main objective is to knock"),
+                        ChatColor.translateAlternateColorCodes('&', "&foff your opponents off the platform."),
+                        ChatColor.translateAlternateColorCodes('&', " "),
+                        ChatColor.translateAlternateColorCodes('&', "&fParticipants are chosen at random"),
+                        ChatColor.translateAlternateColorCodes('&', "&fto fight."),
+                        ChatColor.translateAlternateColorCodes('&', " ")
+                )
+                .build();
+    }
+
+    private ItemStack getLMS(){
+        if (getEventManager().isCooldownOn()){
+            long currentTime = System.currentTimeMillis();
+            long newTime = getEventManager().getGlobalCooldown() - currentTime;
+            int toseconds = (int) (newTime / 1000);
+
+            return new ItemBuilder(Material.GRASS)
+                    .setDisplayName(ChatColor.translateAlternateColorCodes('&', "&2&lLast Man Standing"))
+                    .addToLore(
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&fThe concept is simple,"),
+                            ChatColor.translateAlternateColorCodes('&', "&fbe the last man alive!"),
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&fYou receive &b14 &fhealing (pots/soup)"),
+                            ChatColor.translateAlternateColorCodes('&', "&fwhen you kill a player."),
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&4&lCOOLDOWN"),
+                            ChatColor.translateAlternateColorCodes('&', "&c" + CoreUtil.niceFormat(toseconds, false)),
+                            ChatColor.translateAlternateColorCodes('&', " ")
+                    )
+                    .build();
+        }
+
+        return new ItemBuilder(Material.GRASS)
+                .setDisplayName(ChatColor.translateAlternateColorCodes('&', "&2&lLast Man Standing"))
+                .addToLore(
+                        ChatColor.translateAlternateColorCodes('&', " "),
+                        ChatColor.translateAlternateColorCodes('&', " "),
+                        ChatColor.translateAlternateColorCodes('&', "&fThe concept is simple,"),
+                        ChatColor.translateAlternateColorCodes('&', "&fbe the last man alive!"),
+                        ChatColor.translateAlternateColorCodes('&', " "),
+                        ChatColor.translateAlternateColorCodes('&', "&fYou receive &b14 &fhealing (pots/soup)"),
+                        ChatColor.translateAlternateColorCodes('&', "&fwhen you kill a player."),
+                        ChatColor.translateAlternateColorCodes('&', " ")
+                )
+                .build();
+    }
+
+    private ItemStack getBrackets(){
+        if (getEventManager().isCooldownOn()){
+            long currentTime = System.currentTimeMillis();
+            long newTime = getEventManager().getGlobalCooldown() - currentTime;
+            int toseconds = (int) (newTime / 1000);
+
+            return new ItemBuilder(Material.DIAMOND_SWORD)
+                    .setDisplayName(ChatColor.translateAlternateColorCodes('&', "&a&lBrackets"))
+                    .addToLore(
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&fYour objective is to beat"),
+                            ChatColor.translateAlternateColorCodes('&', "&fyour opponent in a 1v1."),
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&fParticipants are chosen at random"),
+                            ChatColor.translateAlternateColorCodes('&', "&fto fight."),
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&4&lCOOLDOWN"),
+                            ChatColor.translateAlternateColorCodes('&', "&c" + CoreUtil.niceFormat(toseconds, false))
+                    )
+                    .build();
+        }
+
+        return new ItemBuilder(Material.DIAMOND_SWORD)
+                .setDisplayName(ChatColor.translateAlternateColorCodes('&', "&a&lBrackets"))
+                .addToLore(
+                        ChatColor.translateAlternateColorCodes('&', " "),
+                        ChatColor.translateAlternateColorCodes('&', "&fYour objective is to beat"),
+                        ChatColor.translateAlternateColorCodes('&', "&fyour opponent in a 1v1."),
+                        ChatColor.translateAlternateColorCodes('&', " "),
+                        ChatColor.translateAlternateColorCodes('&', "&fParticipants are chosen at random"),
+                        ChatColor.translateAlternateColorCodes('&', "&fto fight.")
+                )
+                .build();
+    }
+
+    private EventManager getEventManager(){
+        return KitPvP.getInstance().getEventManager();
     }
 }

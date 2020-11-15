@@ -660,6 +660,20 @@ public class SumoEvent implements Listener {
         }
     }
 
+    public void setLobbyLocation(Location loc){
+        KitPvP.getInstance().getConfig().set("player-events.sumo.lobby-location", loc);
+        KitPvP.getInstance().saveConfig();
+    }
+
+    public void setFighter1Location(Location loc){
+        KitPvP.getInstance().getConfig().set("player-events.sumo.position-1", loc);
+        KitPvP.getInstance().saveConfig();
+    }
+    public void setFighter2Location(Location loc){
+        KitPvP.getInstance().getConfig().set("player-events.sumo.position-2", loc);
+        KitPvP.getInstance().saveConfig();
+    }
+
     private EventManager getEventManager() {
         return KitPvP.getInstance().getEventManager();
     }

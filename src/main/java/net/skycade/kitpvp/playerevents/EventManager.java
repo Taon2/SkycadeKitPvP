@@ -66,22 +66,38 @@ public class EventManager {
     public void announceEvent(Player hoster, EventType type){
         setCurrentEvent(type);
         setJoinable(true);
-        sendAnnouncement(hoster, type, 30);
+        sendAnnouncement(hoster, type, 60);
 
         new BukkitRunnable(){
+            @Override
+            public void run() {
+                sendAnnouncement(hoster, type, 50);
+            }
+        }.runTaskLater(KitPvP.getInstance(), 20 * 10); // This will announce 50 seconds before the event starts
+
+        new BukkitRunnable(){
+
+            @Override
+            public void run() {
+                sendAnnouncement(hoster, type, 40);
+            }
+        }.runTaskLater(KitPvP.getInstance(), 20 * 20); // This will announce 40 seconds before the event starts
+
+        new BukkitRunnable(){
+
+            @Override
+            public void run() {
+                sendAnnouncement(hoster, type, 30);
+            }
+        }.runTaskLater(KitPvP.getInstance(), 20 * 30); // This will announce 30 seconds before the event starts
+
+        new BukkitRunnable(){
+
             @Override
             public void run() {
                 sendAnnouncement(hoster, type, 20);
             }
-        }.runTaskLater(KitPvP.getInstance(), 20 * 10); // This will announce 20 seconds before the event starts
-
-        new BukkitRunnable(){
-
-            @Override
-            public void run() {
-                sendAnnouncement(hoster, type, 15);
-            }
-        }.runTaskLater(KitPvP.getInstance(), 20 * 15); // This will announce 15 seconds before the event starts
+        }.runTaskLater(KitPvP.getInstance(), 20 * 40); // This will announce 20 seconds before the event starts
 
         new BukkitRunnable(){
 
@@ -89,7 +105,7 @@ public class EventManager {
             public void run() {
                 sendAnnouncement(hoster, type, 10);
             }
-        }.runTaskLater(KitPvP.getInstance(), 20 * 20); // This will announce 10 seconds before the event starts
+        }.runTaskLater(KitPvP.getInstance(), 20 * 50); // This will announce 10 seconds before the event starts
 
         new BukkitRunnable(){
 
@@ -97,8 +113,7 @@ public class EventManager {
             public void run() {
                 sendAnnouncement(hoster, type, 5);
             }
-        }.runTaskLater(KitPvP.getInstance(), 20 * 25); // This will announce 5 seconds before the event starts
-
+        }.runTaskLater(KitPvP.getInstance(), 20 * 55); // This will announce 5 seconds before the event starts
         new BukkitRunnable(){
 
             @Override
@@ -107,7 +122,7 @@ public class EventManager {
                 startEvent(currentEvent);
 
             }
-        }.runTaskLater(KitPvP.getInstance(), 20 * 30); // This will announce 5 seconds before the event starts
+        }.runTaskLater(KitPvP.getInstance(), 20 * 60); // this will start the event
     }
 
     private void sendAnnouncement(Player hoster, EventType type, int secondsUntilStarting){

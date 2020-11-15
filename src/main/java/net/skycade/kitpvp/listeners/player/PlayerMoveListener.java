@@ -4,6 +4,8 @@ import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,6 +14,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -25,6 +28,9 @@ public class PlayerMoveListener implements Listener {
     private static List<UUID> immune = new ArrayList<>();
     private final Map<UUID, Long> lilyCooldown = new HashMap<>();
 
+    private ArrayList<UUID> flyingParticles = new ArrayList<>();
+    private ArrayList<UUID> flyingParticleStay = new ArrayList<>();
+
     public PlayerMoveListener(KitPvP plugin) {
         this.plugin = plugin;
 
@@ -35,6 +41,7 @@ public class PlayerMoveListener implements Listener {
 
         Bukkit.getScheduler().runTaskTimer(plugin, this::randomTpEffects, 0L, 5L); // Random teleports from Spawn
         Bukkit.getScheduler().runTaskTimer(plugin, this::startLilypadEffect, 0L, 5L); // Lilypad Jump
+        Bukkit.getScheduler().runTaskTimer(plugin, this::startSlimeblockEffect, 0L, 5L); // Slimeblock Jump
     }
 
     private void startLilypadEffect() {
@@ -47,6 +54,26 @@ public class PlayerMoveListener implements Listener {
                             addLilyCooldown(p, 10); // 10 second cool-down
                         }
                 );
+    }
+
+    private void startSlimeblockEffect() {
+        for (Player p : Bukkit.getOnlinePlayers()){
+            Location loc = p.getLocation();
+            loc.setY(loc.getY() - 1);
+            if (loc.getBlock().getType() == Material.SLIME_BLOCK){
+                p.setVelocity(new org.bukkit.util.Vector(p.getLocation().getDirection().getX(), 0.5, p.getLocation().getDirection().getZ()).multiply(2.8));
+                flyingParticles.add(p.getUniqueId());
+                flyingParticleStay.add(p.getUniqueId());
+
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        flyingParticleStay.remove(p.getUniqueId());
+                    }
+                }.runTaskLater(KitPvP.getInstance(), 15);
+            }
+        }
     }
 
     // New teleport pad method
@@ -136,6 +163,24 @@ public class PlayerMoveListener implements Listener {
                 player.getVehicle().eject();
             }
             player.kickPlayer("[Glitch Detection] Stuck in block?");
+        }
+    }
+
+    @EventHandler
+    public void slimeParticles(PlayerMoveEvent event) {
+        Player p = event.getPlayer();
+        Location loc = p.getLocation();
+        if (loc.getBlock().getRelative(BlockFace.DOWN).getType() != Material.AIR) {
+            if (flyingParticles.contains(p.getUniqueId())) {
+                if (!flyingParticleStay.contains(p.getUniqueId())) {
+                    flyingParticles.remove(p.getUniqueId());
+                }
+            }
+        }
+        if (flyingParticles.contains(p.getUniqueId())) {
+            if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+                p.getWorld().playEffect(p.getLocation(), Effect.MOBSPAWNER_FLAMES, 5, 5);
+            }
         }
     }
 

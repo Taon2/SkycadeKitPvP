@@ -135,6 +135,11 @@ public class PlayerDamageListener implements Listener {
                 return;
             }
         }
+        if (KitPvP.getInstance().getEventManager().getCurrentEvent() == EventType.BRACKETS){
+            if (KitPvP.getInstance().getEventManager().getBrackets().isPlaying(event.getEntity())){
+                return;
+            }
+        }
 
         Player diedPlayer = event.getEntity();
 

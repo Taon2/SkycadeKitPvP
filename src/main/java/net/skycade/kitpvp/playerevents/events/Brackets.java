@@ -473,8 +473,6 @@ public class Brackets implements Listener {
                     return;
                 }
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
-                stats.setKitPreference(KitType.CHANCE);
-                stats.setActiveKit(KitType.DEFAULT);
                 new BukkitRunnable(){
 
                     @Override
@@ -493,6 +491,9 @@ public class Brackets implements Listener {
                         for (PotionEffect effect : player.getActivePotionEffects()) {
                             player.removePotionEffect(effect.getType());
                         }
+
+                        stats.setKitPreference(KitType.CHANCE);
+                        stats.setActiveKit(KitType.DEFAULT);
                     }
                 }.runTaskLater(KitPvP.getInstance(), 5);
                 if (getParticipants().size() > 1) {
@@ -789,5 +790,19 @@ public class Brackets implements Listener {
 
     private EventManager getEventManager() {
         return KitPvP.getInstance().getEventManager();
+    }
+
+    public void setLobbyLocation(Location loc){
+        KitPvP.getInstance().getConfig().set("player-events.brackets.lobby-location", loc);
+        KitPvP.getInstance().saveConfig();
+    }
+
+    public void setFighter1Location(Location loc){
+        KitPvP.getInstance().getConfig().set("player-events.brackets.position-1", loc);
+        KitPvP.getInstance().saveConfig();
+    }
+    public void setFighter2Location(Location loc){
+        KitPvP.getInstance().getConfig().set("player-events.brackets.position-2", loc);
+        KitPvP.getInstance().saveConfig();
     }
 }
