@@ -63,16 +63,16 @@ public class PlayerInteractListener implements Listener {
         }
 
         KitType type = plugin.getStats(event.getPlayer()).getActiveKit();
-        if (type == KitType.BUILDUHC || type == KitType.LICH){
-            if (plugin.getEventManager().getCurrentEvent() == EventType.LMS || plugin.getEventManager().getCurrentEvent() == EventType.BRACKETS){
-                if (plugin.getEventManager().getLMS().isPlaying(event.getPlayer()) || plugin.getEventManager().getLMS().isSpectating(event.getPlayer())){
-                    if (!plugin.getEventManager().getLMS().isFighting()){
+        if (type == KitType.BUILDUHC || type == KitType.LICH) {
+            if (plugin.getEventManager().getCurrentEvent() == EventType.LMS || plugin.getEventManager().getCurrentEvent() == EventType.BRACKETS) {
+                if (plugin.getEventManager().getLMS().isPlaying(event.getPlayer()) || plugin.getEventManager().getLMS().isSpectating(event.getPlayer())) {
+                    if (!plugin.getEventManager().getLMS().isFighting()) {
                         event.setCancelled(true);
                         return;
                     }
                 }
                 if (plugin.getEventManager().getBrackets().isParticipating(event.getPlayer()) ||
-                plugin.getEventManager().getBrackets().isSpectating(event.getPlayer())){
+                        plugin.getEventManager().getBrackets().isSpectating(event.getPlayer())) {
                     event.setCancelled(true);
                     return;
                 }

@@ -130,13 +130,13 @@ public class PlayerDamageListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         event.getDrops().clear();
         event.setDeathMessage("");
-        if (KitPvP.getInstance().getEventManager().getCurrentEvent() == EventType.LMS){
-            if (KitPvP.getInstance().getEventManager().getLMS().isPlaying(event.getEntity())){
+        if (KitPvP.getInstance().getEventManager().getCurrentEvent() == EventType.LMS) {
+            if (KitPvP.getInstance().getEventManager().getLMS().isPlaying(event.getEntity())) {
                 return;
             }
         }
-        if (KitPvP.getInstance().getEventManager().getCurrentEvent() == EventType.BRACKETS){
-            if (KitPvP.getInstance().getEventManager().getBrackets().isPlaying(event.getEntity())){
+        if (KitPvP.getInstance().getEventManager().getCurrentEvent() == EventType.BRACKETS) {
+            if (KitPvP.getInstance().getEventManager().getBrackets().isPlaying(event.getEntity())) {
                 return;
             }
         }

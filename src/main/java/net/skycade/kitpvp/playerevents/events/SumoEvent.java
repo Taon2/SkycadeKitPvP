@@ -84,9 +84,9 @@ public class SumoEvent implements Listener {
         sendMessageToSpectators(joinmsg);
     }
 
-    public void leaveEvent(Player p){
+    public void leaveEvent(Player p) {
         if (getEventManager().getCurrentEvent() == EventType.SUMO) {
-            if (isParticipating(p)){
+            if (isParticipating(p)) {
                 removeParticipant(p);
                 removePlayer(p);
 
@@ -104,7 +104,7 @@ public class SumoEvent implements Listener {
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
             }
-            if (isSpectating(p)){
+            if (isSpectating(p)) {
                 removeSpectator(p);
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
@@ -115,7 +115,7 @@ public class SumoEvent implements Listener {
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
             }
 
-            if (isFighting(p)){
+            if (isFighting(p)) {
                 removePlayer(p);
                 removeFighter(p);
 
@@ -179,7 +179,7 @@ public class SumoEvent implements Listener {
     public void leave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         if (getEventManager().getCurrentEvent() == EventType.SUMO) {
-            if (isParticipating(player)){
+            if (isParticipating(player)) {
                 removeParticipant(player);
                 removePlayer(player);
 
@@ -197,7 +197,7 @@ public class SumoEvent implements Listener {
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 player.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
             }
-            if (isSpectating(player)){
+            if (isSpectating(player)) {
                 removeSpectator(player);
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
@@ -208,7 +208,7 @@ public class SumoEvent implements Listener {
                 player.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
             }
 
-            if (isFighting(player)){
+            if (isFighting(player)) {
                 removePlayer(player);
                 removeFighter(player);
 
@@ -301,7 +301,7 @@ public class SumoEvent implements Listener {
         startRound(fighter1, fighter2);
     }
 
-    public void end(){
+    public void end() {
         getEventManager().setGlobalCooldown(System.currentTimeMillis() + ((5 * 60) * 1000L));
         getEventManager().setCooldownOn(true);
         getEventManager().setCurrentEvent(EventType.IDLE);
@@ -309,7 +309,7 @@ public class SumoEvent implements Listener {
         getEventManager().setHoster(null);
     }
 
-    public void forceEnd(){
+    public void forceEnd() {
         sendMessageToPlayers("&cThis event has been forcefully ended by an Administrator.");
         sendMessageToSpectators("&cThis event has been forcefully ended by an Administrator.");
 
@@ -333,7 +333,6 @@ public class SumoEvent implements Listener {
     }
 
 
-
     public void startRound(Player fighter1, Player fighter2) {
         Location fighter1Loc = fighter1.getLocation();
         Location fighter2Loc = fighter2.getLocation();
@@ -354,7 +353,7 @@ public class SumoEvent implements Listener {
         sendMessageToPlayers(roundstart);
         sendMessageToPlayers(fighters);
 
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             @Override
             public void run() {
@@ -362,7 +361,7 @@ public class SumoEvent implements Listener {
             }
         }.runTaskLater(KitPvP.getInstance(), 1);
 
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             @Override
             public void run() {
@@ -376,8 +375,8 @@ public class SumoEvent implements Listener {
         Player player = event.getPlayer();
         if (getEventManager().getCurrentEvent() == EventType.SUMO) {
             if (isFighting(player)) {
-                if (countdown){
-                    if (event.getTo().getBlockX() != event.getFrom().getBlockX() || event.getTo().getBlockZ() != event.getFrom().getBlockZ()){
+                if (countdown) {
+                    if (event.getTo().getBlockX() != event.getFrom().getBlockX() || event.getTo().getBlockZ() != event.getFrom().getBlockZ()) {
                         event.setTo(event.getFrom());
                     }
                     return;
@@ -447,22 +446,22 @@ public class SumoEvent implements Listener {
     }
 
     @EventHandler
-    public void attack(EntityDamageByEntityEvent event){
-        if (event.getEntity() instanceof Player){
+    public void attack(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Player) {
             if (event.getDamager() instanceof Player) {
                 Player victim = (Player) event.getEntity();
                 Player attacker = (Player) event.getDamager();
                 if (getEventManager().getCurrentEvent() == EventType.SUMO) {
-                    if (isParticipating(victim)){
+                    if (isParticipating(victim)) {
                         event.setCancelled(true);
                     }
-                    if (isParticipating(attacker)){
+                    if (isParticipating(attacker)) {
                         event.setCancelled(true);
                     }
-                    if (isSpectating(victim)){
+                    if (isSpectating(victim)) {
                         event.setCancelled(true);
                     }
-                    if (isSpectating(attacker)){
+                    if (isSpectating(attacker)) {
                         event.setCancelled(true);
                     }
                     if (isFighting(attacker) && isFighting(attacker)) {
@@ -474,8 +473,8 @@ public class SumoEvent implements Listener {
     }
 
     @EventHandler
-    public void blockCommands(PlayerCommandPreprocessEvent event){
-        if (getEventManager().getCurrentEvent() == EventType.SUMO){
+    public void blockCommands(PlayerCommandPreprocessEvent event) {
+        if (getEventManager().getCurrentEvent() == EventType.SUMO) {
             Player player = event.getPlayer();
             if (isPlaying(player) || isSpectating(player)) {
                 String command = event.getMessage();
@@ -660,16 +659,17 @@ public class SumoEvent implements Listener {
         }
     }
 
-    public void setLobbyLocation(Location loc){
+    public void setLobbyLocation(Location loc) {
         KitPvP.getInstance().getConfig().set("player-events.sumo.lobby-location", loc);
         KitPvP.getInstance().saveConfig();
     }
 
-    public void setFighter1Location(Location loc){
+    public void setFighter1Location(Location loc) {
         KitPvP.getInstance().getConfig().set("player-events.sumo.position-1", loc);
         KitPvP.getInstance().saveConfig();
     }
-    public void setFighter2Location(Location loc){
+
+    public void setFighter2Location(Location loc) {
         KitPvP.getInstance().getConfig().set("player-events.sumo.position-2", loc);
         KitPvP.getInstance().saveConfig();
     }

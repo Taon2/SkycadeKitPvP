@@ -1,15 +1,10 @@
 package net.skycade.kitpvp.playerevents;
 
-import net.skycade.SkycadeCore.Localization;
-import net.skycade.crates.CrateUser;
-import net.skycade.crates.CratesPlugin;
-import net.skycade.crates.crates.Crate;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.Messages;
 import net.skycade.kitpvp.playerevents.events.Brackets;
 import net.skycade.kitpvp.playerevents.events.LastManStanding;
 import net.skycade.kitpvp.playerevents.events.SumoEvent;
-import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -36,7 +31,7 @@ public class EventManager {
     private Brackets brackets;
 
 
-    public EventManager(){
+    public EventManager() {
         this.sumoEvent = new SumoEvent();
         this.lastManStanding = new LastManStanding();
         this.brackets = new Brackets();
@@ -46,36 +41,36 @@ public class EventManager {
 
     }
 
-    public void startEvent(EventType type){
-        if (type == EventType.SUMO){
+    public void startEvent(EventType type) {
+        if (type == EventType.SUMO) {
             getSumoEvent().start();
             setJoinable(false);
             return;
         }
-        if (type == EventType.LMS){
+        if (type == EventType.LMS) {
             getLMS().start();
             setJoinable(false);
             return;
         }
-        if (type == EventType.BRACKETS){
+        if (type == EventType.BRACKETS) {
             getBrackets().start();
             setJoinable(false);
         }
     }
 
-    public void announceEvent(Player hoster, EventType type){
+    public void announceEvent(Player hoster, EventType type) {
         setCurrentEvent(type);
         setJoinable(true);
         sendAnnouncement(hoster, type, 60);
 
-        new BukkitRunnable(){
+        new BukkitRunnable() {
             @Override
             public void run() {
                 sendAnnouncement(hoster, type, 50);
             }
         }.runTaskLater(KitPvP.getInstance(), 20 * 10); // This will announce 50 seconds before the event starts
 
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             @Override
             public void run() {
@@ -83,7 +78,7 @@ public class EventManager {
             }
         }.runTaskLater(KitPvP.getInstance(), 20 * 20); // This will announce 40 seconds before the event starts
 
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             @Override
             public void run() {
@@ -91,7 +86,7 @@ public class EventManager {
             }
         }.runTaskLater(KitPvP.getInstance(), 20 * 30); // This will announce 30 seconds before the event starts
 
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             @Override
             public void run() {
@@ -99,7 +94,7 @@ public class EventManager {
             }
         }.runTaskLater(KitPvP.getInstance(), 20 * 40); // This will announce 20 seconds before the event starts
 
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             @Override
             public void run() {
@@ -107,14 +102,14 @@ public class EventManager {
             }
         }.runTaskLater(KitPvP.getInstance(), 20 * 50); // This will announce 10 seconds before the event starts
 
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             @Override
             public void run() {
                 sendAnnouncement(hoster, type, 5);
             }
         }.runTaskLater(KitPvP.getInstance(), 20 * 55); // This will announce 5 seconds before the event starts
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             @Override
             public void run() {
@@ -125,18 +120,18 @@ public class EventManager {
         }.runTaskLater(KitPvP.getInstance(), 20 * 60); // this will start the event
     }
 
-    private void sendAnnouncement(Player hoster, EventType type, int secondsUntilStarting){
+    private void sendAnnouncement(Player hoster, EventType type, int secondsUntilStarting) {
         String message = announcement;
         String starting = startingIn;
 
-        switch (type){
-            case SUMO:{
+        switch (type) {
+            case SUMO: {
                 message = message.replaceAll("%event%", "Sumo");
             }
-            case BRACKETS:{
+            case BRACKETS: {
                 message = message.replaceAll("%event%", "Brackets");
             }
-            case LMS:{
+            case LMS: {
                 message = message.replaceAll("%event%", "Last Man Standing");
             }
         }
@@ -148,11 +143,11 @@ public class EventManager {
         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', starting));
     }
 
-    public void eventCooldownRunnable(){
-        if (globalCooldown == 0)return;
+    public void eventCooldownRunnable() {
+        if (globalCooldown == 0) return;
         long currentTime = System.currentTimeMillis();
 
-        if (currentTime > getGlobalCooldown()){
+        if (currentTime > getGlobalCooldown()) {
             setGlobalCooldown(0);
             setCooldownOn(false);
         }
@@ -189,6 +184,7 @@ public class EventManager {
     public void setCurrentEvent(EventType type) {
         this.currentEvent = type;
     }
+
     public boolean isJoinable() {
         return joinable;
     }
@@ -200,9 +196,11 @@ public class EventManager {
     public SumoEvent getSumoEvent() {
         return sumoEvent;
     }
+
     public LastManStanding getLMS() {
         return lastManStanding;
     }
+
     public Brackets getBrackets() {
         return brackets;
     }

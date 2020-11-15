@@ -157,7 +157,8 @@ public class KitWizard extends Kit {
                     return block;
             }
             return null;
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
         return null;
     }
 

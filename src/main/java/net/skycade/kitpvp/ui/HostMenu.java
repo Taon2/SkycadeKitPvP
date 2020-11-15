@@ -1,6 +1,5 @@
 package net.skycade.kitpvp.ui;
 
-import net.skycade.SkycadeCore.Localization;
 import net.skycade.SkycadeCore.guis.dynamicnew.DynamicGui;
 import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.SkycadeCore.utility.ItemBuilder;
@@ -11,8 +10,6 @@ import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.Messages;
 import net.skycade.kitpvp.playerevents.EventManager;
 import net.skycade.kitpvp.playerevents.EventType;
-import net.skycade.kitpvp.stat.KitPvPStats;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -102,8 +99,8 @@ public class HostMenu extends DynamicGui {
                 });
     }
 
-    private ItemStack getSumo(){
-        if (getEventManager().isCooldownOn()){
+    private ItemStack getSumo() {
+        if (getEventManager().isCooldownOn()) {
             long currentTime = System.currentTimeMillis();
             long newTime = getEventManager().getGlobalCooldown() - currentTime;
             int toseconds = (int) (newTime / 1000);
@@ -139,8 +136,8 @@ public class HostMenu extends DynamicGui {
                 .build();
     }
 
-    private ItemStack getLMS(){
-        if (getEventManager().isCooldownOn()){
+    private ItemStack getLMS() {
+        if (getEventManager().isCooldownOn()) {
             long currentTime = System.currentTimeMillis();
             long newTime = getEventManager().getGlobalCooldown() - currentTime;
             int toseconds = (int) (newTime / 1000);
@@ -177,8 +174,8 @@ public class HostMenu extends DynamicGui {
                 .build();
     }
 
-    private ItemStack getBrackets(){
-        if (getEventManager().isCooldownOn()){
+    private ItemStack getBrackets() {
+        if (getEventManager().isCooldownOn()) {
             long currentTime = System.currentTimeMillis();
             long newTime = getEventManager().getGlobalCooldown() - currentTime;
             int toseconds = (int) (newTime / 1000);
@@ -212,7 +209,7 @@ public class HostMenu extends DynamicGui {
                 .build();
     }
 
-    private EventManager getEventManager(){
+    private EventManager getEventManager() {
         return KitPvP.getInstance().getEventManager();
     }
 }

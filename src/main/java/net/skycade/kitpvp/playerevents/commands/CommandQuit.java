@@ -19,28 +19,28 @@ public class CommandQuit extends SkycadeCommand {
 
     @Override
     public void onCommand(CommandSender commandSender, String[] strings) {
-        if (commandSender instanceof Player){
+        if (commandSender instanceof Player) {
             Player p = (Player) commandSender;
             EventManager manager = KitPvP.getInstance().getEventManager();
-            if (manager.getCurrentEvent() == null){
+            if (manager.getCurrentEvent() == null) {
                 Messages.NO_EVENT_RUNNING.msg(p);
                 return;
             }
-            if (manager.getCurrentEvent() == EventType.SUMO){
+            if (manager.getCurrentEvent() == EventType.SUMO) {
                 SumoEvent event = KitPvP.getInstance().getEventManager().getSumoEvent();
-                if (event.isPlaying(p) || event.isSpectating(p)){
+                if (event.isPlaying(p) || event.isSpectating(p)) {
                     event.leaveEvent(p);
                 }
             }
-            if (manager.getCurrentEvent() == EventType.LMS){
+            if (manager.getCurrentEvent() == EventType.LMS) {
                 LastManStanding event = KitPvP.getInstance().getEventManager().getLMS();
-                if (event.isPlaying(p) || event.isSpectating(p)){
+                if (event.isPlaying(p) || event.isSpectating(p)) {
                     event.quit(p);
                 }
             }
-            if (manager.getCurrentEvent() == EventType.BRACKETS){
+            if (manager.getCurrentEvent() == EventType.BRACKETS) {
                 Brackets event = KitPvP.getInstance().getEventManager().getBrackets();
-                if (event.isPlaying(p) || event.isSpectating(p)){
+                if (event.isPlaying(p) || event.isSpectating(p)) {
                     event.quit(p);
                 }
             }

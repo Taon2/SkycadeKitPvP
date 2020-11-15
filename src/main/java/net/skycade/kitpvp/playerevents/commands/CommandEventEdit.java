@@ -15,7 +15,7 @@ public class CommandEventEdit extends SkycadeCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player))return;
+        if (!(sender instanceof Player)) return;
         Player player = (Player) sender;
 
         if (args.length == 0) {
@@ -25,9 +25,9 @@ public class CommandEventEdit extends SkycadeCommand {
             player.sendMessage(" ");
             return;
         }
-        switch (args[0].toLowerCase()){
-            case "sumo":{
-                if (args.length == 1){
+        switch (args[0].toLowerCase()) {
+            case "sumo": {
+                if (args.length == 1) {
                     player.sendMessage(" ");
                     player.sendMessage(ChatColor.AQUA + "Skycade Events Editor");
                     player.sendMessage("/eventedit Sumo lobby - Sets the lobby position to your location");
@@ -36,8 +36,8 @@ public class CommandEventEdit extends SkycadeCommand {
                     player.sendMessage(" ");
                     return;
                 }
-                switch (args[1].toLowerCase()){
-                    case "lobby":{
+                switch (args[1].toLowerCase()) {
+                    case "lobby": {
                         KitPvP.getInstance().getEventManager().getSumoEvent().setLobbyLocation(player.getLocation());
                         player.sendMessage(" ");
                         player.sendMessage(ChatColor.AQUA + "Skycade Events Editor");
@@ -45,7 +45,7 @@ public class CommandEventEdit extends SkycadeCommand {
                         player.sendMessage(" ");
                         return;
                     }
-                    case "player1":{
+                    case "player1": {
                         KitPvP.getInstance().getEventManager().getSumoEvent().setFighter1Location(player.getLocation());
 
                         player.sendMessage(" ");
@@ -54,7 +54,7 @@ public class CommandEventEdit extends SkycadeCommand {
                         player.sendMessage(" ");
                         return;
                     }
-                    case "player2":{
+                    case "player2": {
                         KitPvP.getInstance().getEventManager().getSumoEvent().setFighter2Location(player.getLocation());
 
                         player.sendMessage(" ");
@@ -63,7 +63,7 @@ public class CommandEventEdit extends SkycadeCommand {
                         player.sendMessage(" ");
                         return;
                     }
-                    default:{
+                    default: {
                         player.sendMessage(" ");
                         player.sendMessage(ChatColor.AQUA + "Skycade Events Editor");
                         player.sendMessage("/eventedit Sumo lobby - Sets the lobby position to your location");
@@ -74,8 +74,8 @@ public class CommandEventEdit extends SkycadeCommand {
                     }
                 }
             }
-            case "lms":{
-                if (args.length == 1){
+            case "lms": {
+                if (args.length == 1) {
                     player.sendMessage(" ");
                     player.sendMessage(ChatColor.AQUA + "Skycade Events Editor");
                     player.sendMessage("/eventedit LMS lobby - Sets the lobby position to your location");
@@ -84,8 +84,8 @@ public class CommandEventEdit extends SkycadeCommand {
                     return;
                 }
 
-                switch (args[1].toLowerCase()){
-                    case "lobby":{
+                switch (args[1].toLowerCase()) {
+                    case "lobby": {
                         KitPvP.getInstance().getEventManager().getLMS().setLobbyLocation(player.getLocation());
 
                         player.sendMessage(" ");
@@ -94,7 +94,7 @@ public class CommandEventEdit extends SkycadeCommand {
                         player.sendMessage(" ");
                         return;
                     }
-                    case "arena":{
+                    case "arena": {
                         KitPvP.getInstance().getEventManager().getLMS().setArenaLocation(player.getLocation());
 
                         player.sendMessage(" ");
@@ -103,7 +103,7 @@ public class CommandEventEdit extends SkycadeCommand {
                         player.sendMessage(" ");
                         return;
                     }
-                    default:{
+                    default: {
                         player.sendMessage(" ");
                         player.sendMessage(ChatColor.AQUA + "Skycade Events Editor");
                         player.sendMessage("/eventedit LMS lobby - Sets the lobby position to your location");
@@ -113,8 +113,8 @@ public class CommandEventEdit extends SkycadeCommand {
                     }
                 }
             }
-            case "brackets":{
-                if (args.length == 1){
+            case "brackets": {
+                if (args.length == 1) {
                     player.sendMessage(" ");
                     player.sendMessage(ChatColor.AQUA + "Skycade Events Editor");
                     player.sendMessage("/eventedit Brackets lobby - Sets the lobby position to your location");
@@ -123,8 +123,8 @@ public class CommandEventEdit extends SkycadeCommand {
                     player.sendMessage(" ");
                     return;
                 }
-                switch (args[1].toLowerCase()){
-                    case "lobby":{
+                switch (args[1].toLowerCase()) {
+                    case "lobby": {
                         KitPvP.getInstance().getEventManager().getBrackets().setLobbyLocation(player.getLocation());
 
                         player.sendMessage(" ");
@@ -133,7 +133,7 @@ public class CommandEventEdit extends SkycadeCommand {
                         player.sendMessage(" ");
                         return;
                     }
-                    case "player1":{
+                    case "player1": {
                         KitPvP.getInstance().getEventManager().getBrackets().setFighter1Location(player.getLocation());
 
                         player.sendMessage(" ");
@@ -142,7 +142,7 @@ public class CommandEventEdit extends SkycadeCommand {
                         player.sendMessage(" ");
                         return;
                     }
-                    case "player2":{
+                    case "player2": {
                         KitPvP.getInstance().getEventManager().getBrackets().setFighter2Location(player.getLocation());
 
                         player.sendMessage(" ");
@@ -151,7 +151,7 @@ public class CommandEventEdit extends SkycadeCommand {
                         player.sendMessage(" ");
                         return;
                     }
-                    default:{
+                    default: {
                         player.sendMessage(" ");
                         player.sendMessage(ChatColor.AQUA + "Skycade Events Editor");
                         player.sendMessage("/eventedit Brackets lobby - Sets the lobby position to your location");

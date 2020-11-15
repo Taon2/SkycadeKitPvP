@@ -1,11 +1,6 @@
 package net.skycade.kitpvp.ui.eventshopitems.items;
 
-import net.skycade.SkycadeCore.Localization;
-import net.skycade.crates.CrateUser;
-import net.skycade.crates.CratesPlugin;
-import net.skycade.crates.crates.Crate;
 import net.skycade.kitpvp.KitPvP;
-import net.skycade.kitpvp.stat.KitPvPStats;
 import net.skycade.kitpvp.ui.HostMenu;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopItem;
 import net.skycade.kitpvp.ui.eventshopitems.EventShopManager;

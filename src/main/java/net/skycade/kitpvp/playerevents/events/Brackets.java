@@ -43,8 +43,8 @@ public class Brackets implements Listener {
         Bukkit.getPluginManager().registerEvents(this, KitPvP.getInstance());
     }
 
-    public void start(){
-        if (getPlayers().size() < 2){
+    public void start() {
+        if (getPlayers().size() < 2) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (isPlaying(p)) {
                     removePlayer(p);
@@ -80,13 +80,15 @@ public class Brackets implements Listener {
 
         startRound(fighter1, fighter2);
     }
-    public void end(){
+
+    public void end() {
         getEventManager().setGlobalCooldown(System.currentTimeMillis() + ((5 * 60) * 1000L));
         getEventManager().setCooldownOn(true);
         getEventManager().setCurrentEvent(EventType.IDLE);
         getEventManager().setHoster(null);
     }
-    public void forceEnd(){
+
+    public void forceEnd() {
         sendMessageToPlayers("&cThis event has been forcefully ended by an Administrator.");
         sendMessageToSpectators("&cThis event has been forcefully ended by an Administrator.");
 
@@ -112,7 +114,7 @@ public class Brackets implements Listener {
         getEventManager().setHoster(null);
     }
 
-    public void join(Player p){
+    public void join(Player p) {
         KitPvPStats stats = KitPvP.getInstance().getStats(p);
         stats.setKitPreference(KitType.CHANCE);
         stats.setActiveKit(KitType.DEFAULT);
@@ -144,9 +146,9 @@ public class Brackets implements Listener {
         sendMessageToSpectators(joinmsg);
     }
 
-    public void quit(Player p){
+    public void quit(Player p) {
         if (getEventManager().getCurrentEvent() == EventType.BRACKETS) {
-            if (isParticipating(p)){
+            if (isParticipating(p)) {
                 removeParticipant(p);
                 removePlayer(p);
 
@@ -164,7 +166,7 @@ public class Brackets implements Listener {
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
             }
-            if (isSpectating(p)){
+            if (isSpectating(p)) {
                 removeSpectator(p);
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
@@ -175,7 +177,7 @@ public class Brackets implements Listener {
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
             }
 
-            if (isFighting(p)){
+            if (isFighting(p)) {
                 removePlayer(p);
                 removeFighter(p);
 
@@ -250,10 +252,10 @@ public class Brackets implements Listener {
     }
 
     @EventHandler
-    public void leave(PlayerQuitEvent event){
+    public void leave(PlayerQuitEvent event) {
         if (getEventManager().getCurrentEvent() == EventType.BRACKETS) {
             Player p = event.getPlayer();
-            if (isParticipating(p)){
+            if (isParticipating(p)) {
                 removeParticipant(p);
                 removePlayer(p);
 
@@ -271,7 +273,7 @@ public class Brackets implements Listener {
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
             }
-            if (isSpectating(p)){
+            if (isSpectating(p)) {
                 removeSpectator(p);
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
@@ -282,7 +284,7 @@ public class Brackets implements Listener {
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
             }
 
-            if (isFighting(p)){
+            if (isFighting(p)) {
                 removePlayer(p);
                 removeFighter(p);
 
@@ -356,7 +358,7 @@ public class Brackets implements Listener {
         }
     }
 
-    public void startRound(Player fighter1, Player fighter2){
+    public void startRound(Player fighter1, Player fighter2) {
         Location fighter1Loc = fighter1.getLocation();
         Location fighter2Loc = fighter2.getLocation();
 
@@ -381,8 +383,8 @@ public class Brackets implements Listener {
     }
 
     @EventHandler
-    public void blockCommands(PlayerCommandPreprocessEvent event){
-        if (getEventManager().getCurrentEvent() == EventType.BRACKETS){
+    public void blockCommands(PlayerCommandPreprocessEvent event) {
+        if (getEventManager().getCurrentEvent() == EventType.BRACKETS) {
             Player player = event.getPlayer();
             if (isPlaying(player) || isSpectating(player)) {
                 String command = event.getMessage();
@@ -406,11 +408,11 @@ public class Brackets implements Listener {
     }
 
     @EventHandler
-    public void elimination(PlayerDeathEvent event){
+    public void elimination(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        if (player.getKiller() != null){
+        if (player.getKiller() != null) {
             Player killer = player.getKiller();
-            if (isFighting(player) && isFighting(killer)){
+            if (isFighting(player) && isFighting(killer)) {
                 player.spigot().respawn();
                 removePlayer(player);
                 removeFighter(player);
@@ -473,7 +475,7 @@ public class Brackets implements Listener {
                     return;
                 }
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
-                new BukkitRunnable(){
+                new BukkitRunnable() {
 
                     @Override
                     public void run() {
@@ -522,42 +524,42 @@ public class Brackets implements Listener {
 
     private void applyChosenKit(Player p) {
         KitPvPStats stats = KitPvP.getInstance().getStats(p);
-        if (getChosenKit() == KitType.KNIGHT){
+        if (getChosenKit() == KitType.KNIGHT) {
             stats.setActiveKit(KitType.KNIGHT);
             KitKnight kit = new KitKnight(KitPvP.getInstance().getKitManager());
             kit.beginApplyKit(p);
             giveSoup(p, 8);
             return;
         }
-        if (getChosenKit() == KitType.REAPER){
+        if (getChosenKit() == KitType.REAPER) {
             stats.setActiveKit(KitType.REAPER);
             KitReaper kit = new KitReaper(KitPvP.getInstance().getKitManager());
             kit.beginApplyKit(p);
             giveSoup(p, 8);
             return;
         }
-        if (getChosenKit() == KitType.PAINTBALL){
+        if (getChosenKit() == KitType.PAINTBALL) {
             stats.setActiveKit(KitType.PAINTBALL);
             KitPaintball kit = new KitPaintball(KitPvP.getInstance().getKitManager());
             kit.beginApplyKit(p);
             giveSoup(p, 8);
             return;
         }
-        if (getChosenKit() == KitType.BUILDUHC){
+        if (getChosenKit() == KitType.BUILDUHC) {
             stats.setActiveKit(KitType.BUILDUHC);
             KitBuildUHC kit = new KitBuildUHC(KitPvP.getInstance().getKitManager());
             kit.beginApplyKit(p);
             giveSoup(p, 8);
             return;
         }
-        if (getChosenKit() == KitType.DUBSTEP){
+        if (getChosenKit() == KitType.DUBSTEP) {
             stats.setActiveKit(KitType.DUBSTEP);
             KitDubstep kit = new KitDubstep(KitPvP.getInstance().getKitManager());
             kit.beginApplyKit(p);
             giveSoup(p, 8);
             return;
         }
-        if (getChosenKit() == KitType.TELEPORTER){
+        if (getChosenKit() == KitType.TELEPORTER) {
             stats.setActiveKit(KitType.TELEPORTER);
             KitTeleporter kit = new KitTeleporter(KitPvP.getInstance().getKitManager());
             kit.beginApplyKit(p);
@@ -596,14 +598,14 @@ public class Brackets implements Listener {
     }
 
     @EventHandler
-    public void hit(EntityDamageByEntityEvent event){
-        if (event.getEntity() instanceof Player){
-            if (event.getDamager() instanceof Player){
-                if (getEventManager().getCurrentEvent() == EventType.BRACKETS){
+    public void hit(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Player) {
+            if (event.getDamager() instanceof Player) {
+                if (getEventManager().getCurrentEvent() == EventType.BRACKETS) {
                     Player victim = (Player) event.getEntity();
                     Player attacker = (Player) event.getDamager();
 
-                    if (isSpectating(victim) || isSpectating(attacker)){
+                    if (isSpectating(victim) || isSpectating(attacker)) {
                         event.setCancelled(true);
                         return;
                     }
@@ -612,9 +614,9 @@ public class Brackets implements Listener {
                     }
                 }
             }
-            if (event.getDamager() instanceof Projectile){
+            if (event.getDamager() instanceof Projectile) {
                 Player victim = (Player) event.getEntity();
-                if (isSpectating(victim) || isParticipating(victim)){
+                if (isSpectating(victim) || isParticipating(victim)) {
                     event.setCancelled(true);
                 }
             }
@@ -628,6 +630,7 @@ public class Brackets implements Listener {
     public void setChosenKit(KitType chosenKit) {
         this.chosenKit = chosenKit;
     }
+
     public void sendMessageToPlayers(String message) {
         if (this.players == null) return;
 
@@ -648,14 +651,15 @@ public class Brackets implements Listener {
         }
     }
 
-    public Location getLobbyLocation(){
+    public Location getLobbyLocation() {
         return (Location) KitPvP.getInstance().getConfig().get("player-events.brackets.lobby-location");
     }
 
-    public Location getFighter1Position(){
+    public Location getFighter1Position() {
         return (Location) KitPvP.getInstance().getConfig().get("player-events.brackets.position-1");
     }
-    public Location getFighter2Position(){
+
+    public Location getFighter2Position() {
         return (Location) KitPvP.getInstance().getConfig().get("player-events.brackets.position-2");
     }
 
@@ -672,6 +676,7 @@ public class Brackets implements Listener {
 
         this.players = list;
     }
+
     public void addSpectator(Player p) {
         if (this.spectators == null || this.spectators.isEmpty()) {
             ArrayList<UUID> list = new ArrayList<>();
@@ -723,6 +728,7 @@ public class Brackets implements Listener {
         ArrayList<UUID> list = this.fighters;
         return list.contains(p.getUniqueId());
     }
+
     public void addFighter(Player p) {
         if (this.fighters == null || this.fighters.isEmpty()) {
             ArrayList<UUID> list = new ArrayList<>();
@@ -743,6 +749,7 @@ public class Brackets implements Listener {
 
         this.fighters = list;
     }
+
     public boolean isParticipating(Player p) {
         if (this.participants == null || this.participants.isEmpty()) {
             return false;
@@ -750,6 +757,7 @@ public class Brackets implements Listener {
         ArrayList<UUID> list = this.participants;
         return list.contains(p.getUniqueId());
     }
+
     public void addParticipant(Player p) {
         if (this.participants == null || this.participants.isEmpty()) {
             ArrayList<UUID> list = new ArrayList<>();
@@ -792,16 +800,17 @@ public class Brackets implements Listener {
         return KitPvP.getInstance().getEventManager();
     }
 
-    public void setLobbyLocation(Location loc){
+    public void setLobbyLocation(Location loc) {
         KitPvP.getInstance().getConfig().set("player-events.brackets.lobby-location", loc);
         KitPvP.getInstance().saveConfig();
     }
 
-    public void setFighter1Location(Location loc){
+    public void setFighter1Location(Location loc) {
         KitPvP.getInstance().getConfig().set("player-events.brackets.position-1", loc);
         KitPvP.getInstance().saveConfig();
     }
-    public void setFighter2Location(Location loc){
+
+    public void setFighter2Location(Location loc) {
         KitPvP.getInstance().getConfig().set("player-events.brackets.position-2", loc);
         KitPvP.getInstance().saveConfig();
     }

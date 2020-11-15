@@ -1,7 +1,6 @@
 package net.skycade.kitpvp.ui;
 
 import net.md_5.bungee.api.ChatColor;
-import net.skycade.SkycadeCore.Localization;
 import net.skycade.SkycadeCore.guis.dynamicnew.DynamicGui;
 import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.SkycadeCore.utility.ItemBuilder;
@@ -79,7 +78,7 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         if (type == EventType.LMS) {
                             manager.getLMS().setChosenKit(KitType.KNIGHT);
                         }
-                        if (type == EventType.BRACKETS){
+                        if (type == EventType.BRACKETS) {
                             manager.getBrackets().setChosenKit(KitType.KNIGHT);
                         }
                         manager.setHoster(p.getUniqueId());
@@ -123,7 +122,7 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         if (type == EventType.LMS) {
                             manager.getLMS().setChosenKit(KitType.REAPER);
                         }
-                        if (type == EventType.BRACKETS){
+                        if (type == EventType.BRACKETS) {
                             manager.getBrackets().setChosenKit(KitType.REAPER);
                         }
                         manager.setHoster(p.getUniqueId());
@@ -167,7 +166,7 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         if (type == EventType.LMS) {
                             manager.getLMS().setChosenKit(KitType.PAINTBALL);
                         }
-                        if (type == EventType.BRACKETS){
+                        if (type == EventType.BRACKETS) {
                             manager.getBrackets().setChosenKit(KitType.PAINTBALL);
                         }
                         manager.setHoster(p.getUniqueId());
@@ -211,7 +210,7 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         if (type == EventType.LMS) {
                             manager.getLMS().setChosenKit(KitType.BUILDUHC);
                         }
-                        if (type == EventType.BRACKETS){
+                        if (type == EventType.BRACKETS) {
                             manager.getBrackets().setChosenKit(KitType.BUILDUHC);
                         }
                         manager.setHoster(p.getUniqueId());
@@ -255,7 +254,7 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         if (type == EventType.LMS) {
                             manager.getLMS().setChosenKit(KitType.DUBSTEP);
                         }
-                        if (type == EventType.BRACKETS){
+                        if (type == EventType.BRACKETS) {
                             manager.getBrackets().setChosenKit(KitType.DUBSTEP);
                         }
                         manager.setHoster(p.getUniqueId());
@@ -299,7 +298,7 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         if (type == EventType.LMS) {
                             manager.getLMS().setChosenKit(KitType.TELEPORTER);
                         }
-                        if (type == EventType.BRACKETS){
+                        if (type == EventType.BRACKETS) {
                             manager.getBrackets().setChosenKit(KitType.TELEPORTER);
                         }
                         manager.setHoster(p.getUniqueId());

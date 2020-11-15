@@ -4,7 +4,6 @@ import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -57,10 +56,10 @@ public class PlayerMoveListener implements Listener {
     }
 
     private void startSlimeblockEffect() {
-        for (Player p : Bukkit.getOnlinePlayers()){
+        for (Player p : Bukkit.getOnlinePlayers()) {
             Location loc = p.getLocation();
             loc.setY(loc.getY() - 1);
-            if (loc.getBlock().getType() == Material.SLIME_BLOCK){
+            if (loc.getBlock().getType() == Material.SLIME_BLOCK) {
                 p.setVelocity(new org.bukkit.util.Vector(p.getLocation().getDirection().getX(), 0.5, p.getLocation().getDirection().getZ()).multiply(2.8));
                 flyingParticles.add(p.getUniqueId());
                 flyingParticleStay.add(p.getUniqueId());

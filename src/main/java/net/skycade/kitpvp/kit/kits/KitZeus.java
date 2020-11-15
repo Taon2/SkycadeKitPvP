@@ -15,8 +15,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
-import static net.skycade.kitpvp.Messages.CANNOT_USE;
-
 public class KitZeus extends Kit {
 
     private ItemStack helmet;

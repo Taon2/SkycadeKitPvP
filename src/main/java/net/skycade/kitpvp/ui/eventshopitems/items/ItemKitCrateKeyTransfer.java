@@ -47,7 +47,7 @@ public class ItemKitCrateKeyTransfer extends EventShopItem {
         return Arrays.asList(
                 ChatColor.GRAY + "",
                 ChatColor.GRAY + "Transfer 1 Kit Crate key",
-                ChatColor.GRAY + "into " +ChatColor.GOLD + "500 Coins" + ChatColor.GRAY + "."
+                ChatColor.GRAY + "into " + ChatColor.GOLD + "500 Coins" + ChatColor.GRAY + "."
         );
     }
 }

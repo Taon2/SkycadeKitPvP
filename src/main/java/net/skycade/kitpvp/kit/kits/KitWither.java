@@ -11,7 +11,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -82,8 +81,8 @@ public class KitWither extends Kit {
     @Override
     public boolean onDeath(Player died, Player killer) {
         // died.getLocation().getWorld().createExplosion(died.getLocation().getBlockX(), died.getLocation().getBlockY(), died.getLocation().getBlockZ(), 2F, false, false);
-        for (Entity entity : died.getNearbyEntities(5, 5, 5)){
-            if (entity instanceof Player){
+        for (Entity entity : died.getNearbyEntities(5, 5, 5)) {
+            if (entity instanceof Player) {
                 Player affected = (Player) entity;
                 affected.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20 * 10, 1));
                 affected.playSound(affected.getLocation(), Sound.GHAST_SCREAM, 1, 1);

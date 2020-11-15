@@ -10,13 +10,11 @@ import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
 import org.bukkit.*;
-import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -188,7 +186,7 @@ public class KitPaintball extends Kit {
             // This is for making sure it sets the player in combat
             victim.damage(1, shooter);
             // If player is below 2 hearts or whatever
-            if (victim.getHealth() <= 4){
+            if (victim.getHealth() <= 4) {
                 // victim.setHealth(0D) will make errors so I just made it deal 100 damage to instant kill them
                 victim.damage(100, shooter);
                 return;

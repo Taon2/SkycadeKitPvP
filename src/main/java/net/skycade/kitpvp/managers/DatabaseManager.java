@@ -54,11 +54,11 @@ public class DatabaseManager {
         }
     }
 
-    public YamlConfiguration get(){
+    public YamlConfiguration get() {
         return yaml;
     }
 
-    public static String getKitPvPTable(){
+    public static String getKitPvPTable() {
         File file = new File(KitPvP.getInstance().getDataFolder(), "database.yml");
         FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 

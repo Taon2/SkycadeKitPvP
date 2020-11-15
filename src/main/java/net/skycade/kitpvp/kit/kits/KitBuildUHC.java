@@ -122,7 +122,7 @@ public class KitBuildUHC extends Kit {
     }
 
     public void onArrowLaunch(Player shooter, ProjectileLaunchEvent e) {
-        if (KitPvP.getInstance().getEventManager().getCurrentEvent() == EventType.LMS){
+        if (KitPvP.getInstance().getEventManager().getCurrentEvent() == EventType.LMS) {
             if (KitPvP.getInstance().getEventManager().getLMS().isPlaying(shooter) &&
                     !KitPvP.getInstance().getEventManager().getLMS().isFighting()) {
                 e.setCancelled(true);

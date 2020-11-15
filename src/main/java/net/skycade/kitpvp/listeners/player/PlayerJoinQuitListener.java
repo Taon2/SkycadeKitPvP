@@ -87,7 +87,7 @@ public class PlayerJoinQuitListener implements Listener {
 
                 // If the player has not played before, it gives them a free
                 // kit crate key, something we used to do
-                if (!p.hasPlayedBefore()){
+                if (!p.hasPlayedBefore()) {
                     Crate crate = CratesPlugin.getInstance().getEditorModule().getCrate("kitcrate");
                     crate.getKey().give(p.getUniqueId(), 1);
                 }

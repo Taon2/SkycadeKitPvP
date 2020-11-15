@@ -279,6 +279,7 @@ public class KitPvP extends SkycadePlugin {
     public EventShopManager getEventShopManager() {
         return eventShopManager;
     }
+
     public DatabaseManager getDatabaseManager() {
         return databaseManager;
     }
