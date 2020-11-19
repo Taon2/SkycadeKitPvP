@@ -23,6 +23,9 @@ public class EventManager {
     public boolean cooldownOn;
     public boolean joinable;
 
+    public boolean stopped;
+    public long countdown;
+
     public UUID hoster;
 
     private SumoEvent sumoEvent;
@@ -37,7 +40,9 @@ public class EventManager {
         this.brackets = new Brackets();
         this.currentEvent = EventType.IDLE;
         this.hoster = null;
+        this.stopped = false;
         Bukkit.getScheduler().runTaskTimer(KitPvP.getInstance(), this::eventCooldownRunnable, 0L, 20L);
+        Bukkit.getScheduler().runTaskTimer(KitPvP.getInstance(), this::eventCountdown, 0L, 20L);
 
     }
 
@@ -61,63 +66,9 @@ public class EventManager {
     public void announceEvent(Player hoster, EventType type) {
         setCurrentEvent(type);
         setJoinable(true);
-        sendAnnouncement(hoster, type, 60);
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                sendAnnouncement(hoster, type, 50);
-            }
-        }.runTaskLater(KitPvP.getInstance(), 20 * 10); // This will announce 50 seconds before the event starts
-
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                sendAnnouncement(hoster, type, 40);
-            }
-        }.runTaskLater(KitPvP.getInstance(), 20 * 20); // This will announce 40 seconds before the event starts
-
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                sendAnnouncement(hoster, type, 30);
-            }
-        }.runTaskLater(KitPvP.getInstance(), 20 * 30); // This will announce 30 seconds before the event starts
-
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                sendAnnouncement(hoster, type, 20);
-            }
-        }.runTaskLater(KitPvP.getInstance(), 20 * 40); // This will announce 20 seconds before the event starts
-
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                sendAnnouncement(hoster, type, 10);
-            }
-        }.runTaskLater(KitPvP.getInstance(), 20 * 50); // This will announce 10 seconds before the event starts
-
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                sendAnnouncement(hoster, type, 5);
-            }
-        }.runTaskLater(KitPvP.getInstance(), 20 * 55); // This will announce 5 seconds before the event starts
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-
-                startEvent(currentEvent);
-
-            }
-        }.runTaskLater(KitPvP.getInstance(), 20 * 60); // this will start the event
+        setStopped(false);
+        setCountdown(System.currentTimeMillis() + (60 * 1000L));
+        sendAnnouncement(hoster, getCurrentEvent(), 60);
     }
 
     private void sendAnnouncement(Player hoster, EventType type, int secondsUntilStarting) {
@@ -150,6 +101,26 @@ public class EventManager {
         if (currentTime > getGlobalCooldown()) {
             setGlobalCooldown(0);
             setCooldownOn(false);
+        }
+    }
+
+    public void eventCountdown(){
+        if (isStopped())return;
+        if (getCountdown() == 0) return;
+
+        long currentTime = System.currentTimeMillis();
+
+        if (currentTime > getCountdown()) {
+            setCountdown(0);
+        }
+
+        long newTime = getCountdown() - currentTime;
+        int sec = (int) (newTime / 1000);
+        if (sec == 50 || sec == 40 || sec == 30 || sec == 20 || sec == 10 || sec == 5){
+            sendAnnouncement(Bukkit.getPlayer(getHoster()), getCurrentEvent(), sec);
+        }
+         if (sec == 1){
+             startEvent(getCurrentEvent());
         }
     }
 
@@ -191,6 +162,21 @@ public class EventManager {
 
     public void setJoinable(boolean joinable) {
         this.joinable = joinable;
+    }
+
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public void setStopped(boolean stopped) {
+        this.stopped = stopped;
+    }
+    public long getCountdown() {
+        return countdown;
+    }
+
+    public void setCountdown(long countdown) {
+        this.countdown = countdown;
     }
 
     public SumoEvent getSumoEvent() {

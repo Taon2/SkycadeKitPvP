@@ -48,6 +48,7 @@ public class Brackets implements Listener {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (isPlaying(p)) {
                     removePlayer(p);
+                    removeParticipant(p);
                     Location spawn = KitPvP.getInstance().getSpawnLocation();
                     p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                     Messages.EVENT_FAILED_LACK_OF_PLAYERS.msg(p);
@@ -93,7 +94,17 @@ public class Brackets implements Listener {
         sendMessageToSpectators("&cThis event has been forcefully ended by an Administrator.");
 
         for (Player p : Bukkit.getOnlinePlayers()) {
+            if (isFighting(p)){
+               removeFighter(p);
+               removePlayer(p);
+                KitPvPStats stats = KitPvP.getInstance().getStats(p);
+                stats.setKitPreference(KitType.CHANCE);
+                Location spawn = KitPvP.getInstance().getSpawnLocation();
+                p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
+                stats.applyKitPreference();
+            }
             if (isPlaying(p)) {
+                removeParticipant(p);
                 removePlayer(p);
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
                 stats.setKitPreference(KitType.CHANCE);
@@ -204,7 +215,8 @@ public class Brackets implements Listener {
                 opponent.setHealth(20D);
 
                 String eliminated = Messages.BRACKETS_ELIMINATED.getMessage();
-                eliminated = eliminated.replaceAll("%player%", p.getName());
+                eliminated = eliminated.replaceAll("%player%", p.getName())
+                        .replaceAll("%remaining%", String.valueOf(getPlayers().size()));
 
                 sendMessageToPlayers(eliminated);
                 sendMessageToSpectators(eliminated);
@@ -311,7 +323,8 @@ public class Brackets implements Listener {
                 opponent.setHealth(20D);
 
                 String eliminated = Messages.BRACKETS_ELIMINATED.getMessage();
-                eliminated = eliminated.replaceAll("%player%", p.getName());
+                eliminated = eliminated.replaceAll("%player%", p.getName())
+                                    .replaceAll("%remaining%", String.valueOf(getPlayers().size()));
 
                 sendMessageToPlayers(eliminated);
                 sendMessageToSpectators(eliminated);

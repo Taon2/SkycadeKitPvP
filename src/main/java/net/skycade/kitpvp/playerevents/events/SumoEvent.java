@@ -128,7 +128,8 @@ public class SumoEvent implements Listener {
                 addParticipant(opponent);
 
                 String eliminated = Messages.SUMO_ELIMINATED.getMessage();
-                eliminated = eliminated.replaceAll("%player%", p.getName());
+                eliminated = eliminated.replaceAll("%player%", p.getName())
+                        .replaceAll("%remaining%", String.valueOf(getPlayers().size()));
 
                 sendMessageToPlayers(eliminated);
                 sendMessageToSpectators(eliminated);
@@ -221,7 +222,8 @@ public class SumoEvent implements Listener {
                 addParticipant(opponent);
 
                 String eliminated = Messages.SUMO_ELIMINATED.getMessage();
-                eliminated = eliminated.replaceAll("%player%", player.getName());
+                eliminated = eliminated.replaceAll("%player%", player.getName())
+                        .replaceAll("%remaining%", String.valueOf(getPlayers().size()));
 
                 sendMessageToPlayers(eliminated);
                 sendMessageToSpectators(eliminated);
@@ -398,7 +400,8 @@ public class SumoEvent implements Listener {
                     addParticipant(opponent);
 
                     String eliminated = Messages.SUMO_ELIMINATED.getMessage();
-                    eliminated = eliminated.replaceAll("%player%", player.getName());
+                    eliminated = eliminated.replaceAll("%player%", player.getName())
+                            .replaceAll("%remaining%", String.valueOf(getPlayers().size()));
 
                     sendMessageToPlayers(eliminated);
                     sendMessageToSpectators(eliminated);

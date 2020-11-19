@@ -40,6 +40,7 @@ public class KitManager {
         new CommandForceEnd();
         new CommandGiveHostCredits();
         new CommandEventEdit();
+        new CommandResetCooldown();
 
 
         //Staff commands

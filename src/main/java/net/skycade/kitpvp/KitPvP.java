@@ -90,6 +90,10 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("spawn-region.point-1", new Location(Bukkit.getWorld("world"), -100, 0, 200));
         defaults.put("spawn-region.point-2", new Location(Bukkit.getWorld("world"), 300, 250, 290));
 
+
+        defaults.put("spawn-antiglitch.point-1", new Location(Bukkit.getWorld("world"), -442, 121, 3608));
+        defaults.put("spawn-antiglitch.point-2", new Location(Bukkit.getWorld("world"), -442, 132, 3628));
+
         defaults.put("teleport-locations.point-1", new Location(Bukkit.getWorld("world"), 252.5, 73.0, -45.0, -45, 0));
 
         defaults.put("capturetheflag.banner-spawn", new Location(Bukkit.getWorld("world"), 252.5, 73.0, -45.0, -45, 0));
@@ -184,7 +188,7 @@ public class KitPvP extends SkycadePlugin {
 
             if (bounty == 0) return null;
             DecimalFormat df = new DecimalFormat("###,###,###,###.##");
-            return ChatColor.GOLD + " - $" + df.format(bounty);
+            return ChatColor.GOLD + "" + ChatColor.BOLD + " - $" + df.format(bounty);
         });
 
         RandomEvent.init();

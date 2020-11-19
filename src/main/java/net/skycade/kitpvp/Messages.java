@@ -231,7 +231,7 @@ public class Messages {
     public static final Localization.Message WON_EVENT = new Localization.Message("player-events.won-event", "&b&lSkycade Events &f> &b%player% &7has won the &b%event% &7Event!");
     public static final Localization.Message EVENT_JOINED = new Localization.Message("player-events.join", "&b&lSkycade Events &f> &b%player% &7has joined! - &b%size%");
     public static final Localization.Message EVENT_LEFT = new Localization.Message("player-events.left", "&b&lSkycade Events &f> &b%player% &7has left! - &b%size%");
-    public static final Localization.Message SUMO_ELIMINATED = new Localization.Message("player-events.sumo-eliminated", "&b&lSkycade Sumo &f> &b%player% &7has been eliminated!");
+    public static final Localization.Message SUMO_ELIMINATED = new Localization.Message("player-events.sumo-eliminated", "&b&lSkycade Sumo &f> &b%player% &7has been eliminated! - &b%remaining% &7players left");
     public static final Localization.Message SUMO_ROUND_STARTED = new Localization.Message("player-events.sumo-round-started", "&b&lSkycade Sumo &f> &7Round started!");
     public static final Localization.Message SUMO_ROUND_FIGHTERS = new Localization.Message("player-events.sumo-round-fighters", "&b&lSkycade Sumo &f> &b%fighter1% &7vs &b%fighter2%");
     public static final Localization.Message EVENT_FAILED_LACK_OF_PLAYERS = new Localization.Message("player-events.event-failed-to-start-cause-players", "&b&lSkycade Events &f> &7The Event has been canceled due to lack of players! You must have at least &b2 &7players.");
@@ -239,7 +239,7 @@ public class Messages {
     public static final Localization.Message LMS_FIGHT_ENABLED = new Localization.Message("player-events.lms.fight-enabled", "&b&lSkycade LMS &f> &cFight &7has been enabled.");
     public static final Localization.Message LMS_STARTED = new Localization.Message("player-events.lms.started", "&b&lSkycade LMS &f> &7The Event has started. Spread out and prepare for PvP! &cFight &7will be enabled in &b5 seconds&7.");
     public static final Localization.Message LMS_ELIMINATED = new Localization.Message("player-events.lms.eliminated", "&b&lSkycade LMS &f> &b%player% &7has been eliminated by &b%killer%! - &b%remaining% &7players left");
-    public static final Localization.Message BRACKETS_ELIMINATED = new Localization.Message("player-events.brackets-eliminated", "&b&lSkycade Brackets &f> &b%player% &7has been eliminated!");
+    public static final Localization.Message BRACKETS_ELIMINATED = new Localization.Message("player-events.brackets-eliminated", "&b&lSkycade Brackets &f> &b%player% &7has been eliminated! - &b%remaining% &7players left");
     public static final Localization.Message BRACKETS_ROUND_STARTED = new Localization.Message("player-events.brackets-round-started", "&b&lSkycade Brackets &f> &7Round started!");
     public static final Localization.Message BRACKETS_ROUND_FIGHTERS = new Localization.Message("player-events.brackets-round-fighters", "&b&lSkycade Brackets &f> &b%fighter1% &7vs &b%fighter2%");
 

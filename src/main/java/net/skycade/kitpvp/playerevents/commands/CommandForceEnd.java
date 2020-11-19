@@ -28,14 +28,17 @@ public class CommandForceEnd extends SkycadeCommand {
             if (type == EventType.SUMO) {
                 p.sendMessage(ChatColor.GREEN + "You have ended the Sumo event.");
                 getEventManager().getSumoEvent().forceEnd();
+                getEventManager().setStopped(true);
             }
             if (type == EventType.LMS) {
                 p.sendMessage(ChatColor.GREEN + "You have ended the LMS event.");
                 getEventManager().getLMS().forceEnd();
+                getEventManager().setStopped(true);
             }
             if (type == EventType.BRACKETS) {
                 p.sendMessage(ChatColor.GREEN + "You have ended the Brackets event.");
                 getEventManager().getBrackets().forceEnd();
+                getEventManager().setStopped(true);
             }
         }
     }
