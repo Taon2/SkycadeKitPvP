@@ -183,6 +183,7 @@ public class LastManStanding implements Listener {
                         winner = winner.replaceAll("%player%", theWinner.getName()).replaceAll("%event%", "Last Man Standing");
                         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', winner));
                         end();
+                        getEventManager().rewardPlayer(theWinner);
                         return;
                     }
                 }
@@ -230,6 +231,7 @@ public class LastManStanding implements Listener {
                     winner = winner.replaceAll("%player%", theWinner.getName()).replaceAll("%event%", "Last Man Standing");
                     Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', winner));
                     end();
+                    getEventManager().rewardPlayer(theWinner);
                     return;
                 }
             }
@@ -281,6 +283,7 @@ public class LastManStanding implements Listener {
                     winner = winner.replaceAll("%player%", killer.getName()).replaceAll("%event%", "Last Man Standing");
                     Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', winner));
                     end();
+                    getEventManager().rewardPlayer(killer);
                     return;
                 }
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);

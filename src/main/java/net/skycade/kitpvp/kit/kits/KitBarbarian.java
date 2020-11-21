@@ -28,25 +28,32 @@ public class KitBarbarian extends Kit {
     private ItemStack leggings;
     private ItemStack boots;
     private ItemStack weapon;
+    private ItemStack ability;
+
+    private int cooldown = 18;
 
     public KitBarbarian(KitManager kitManager) {
-        super(kitManager, "Barbarian", KitType.BARBARIAN, 12000, getLore());
+        super(kitManager, "Barbarian", KitType.BARBARIAN, 20000, getLore());
 
         helmet = new ItemBuilder(
-                Material.IRON_HELMET)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when hit by enemies.").build();
+                Material.IRON_HELMET).build();
         chestplate = new ItemBuilder(
-                Material.IRON_CHESTPLATE)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when hit by enemies.").build();
+                Material.IRON_CHESTPLATE).build();
         leggings = new ItemBuilder(
-                Material.IRON_LEGGINGS)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when hit by enemies.").build();
+                Material.IRON_LEGGINGS).build();
         boots = new ItemBuilder(
-                Material.IRON_BOOTS)
-                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gains strength when hit by enemies.").build();
+                Material.IRON_BOOTS).build();
         weapon = new ItemBuilder(
                 Material.IRON_AXE)
                 .addEnchantment(Enchantment.DURABILITY, 5).build();
+
+        ability = new ItemBuilder(
+                Material.REDSTONE).setName(ChatColor.translateAlternateColorCodes('&', "&cBloodlust"))
+                .addLore(ChatColor.GRAY + "" + ChatColor.ITALIC + "%click% to activate " + ChatColor.DARK_RED +
+                        "Bloodlust" + ChatColor.GRAY + "" + ChatColor.ITALIC + "!")
+                .addLore(" ")
+                .addLore(ChatColor.DARK_RED + "Bloodlust " + ChatColor.GRAY + "grants you Strength for 3 seconds.")
+                .build();
 
         ItemStack icon = new ItemStack(Material.IRON_AXE);
         setIcon(icon);
@@ -55,6 +62,7 @@ public class KitBarbarian extends Kit {
     @Override
     public void applyKit(Player p) {
         p.getInventory().addItem(weapon);
+        p.getInventory().addItem(ability);
         p.getInventory().setHelmet(helmet);
         p.getInventory().setChestplate(chestplate);
         p.getInventory().setLeggings(leggings);
@@ -62,15 +70,16 @@ public class KitBarbarian extends Kit {
     }
 
     @Override
-    public void onDamageGetHit(EntityDamageByEntityEvent e, Player damager, Player damagee) {
-        if (UtilMath.getRandom(0, 150) <= 4) {
-            if (damagee.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE))
-                damagee.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-            damagee.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 0));
-            damagee.getWorld().playEffect(damagee.getLocation(), Effect.FLAME, 1);
-            damagee.getWorld().playSound(damagee.getLocation(), Sound.ZOMBIE_PIG_ANGRY, 1, 1);
-            shootParticlesFromLoc(damagee, ParticleEffect.FLAME, 500, 0.3F);
-        }
+    public void onItemUse(Player p, ItemStack item) {
+        if (item.getType() != Material.REDSTONE)return;
+
+        if (!addCooldown(p, "Bloodlust", cooldown, true))
+            return;
+
+        p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 3, 0));
+        p.getWorld().playEffect(p.getLocation(), Effect.FLAME, 1);
+        p.getWorld().playSound(p.getLocation(), Sound.ZOMBIE_PIG_ANGRY, 1, 1);
+        shootParticlesFromLoc(p, ParticleEffect.FLAME, 500, 0.3F);
     }
 
     @Override

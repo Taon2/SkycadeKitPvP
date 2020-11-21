@@ -1,10 +1,13 @@
 package net.skycade.kitpvp.playerevents;
 
+import net.skycade.crates.CratesPlugin;
+import net.skycade.crates.crates.Crate;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.Messages;
 import net.skycade.kitpvp.playerevents.events.Brackets;
 import net.skycade.kitpvp.playerevents.events.LastManStanding;
 import net.skycade.kitpvp.playerevents.events.SumoEvent;
+import net.skycade.kitpvp.stat.KitPvPStats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -122,6 +125,17 @@ public class EventManager {
          if (sec == 1){
              startEvent(getCurrentEvent());
         }
+    }
+
+    public void rewardPlayer(Player p){
+        KitPvPStats stats = KitPvP.getInstance().getStats(p);
+        stats.giveCoins(1500);
+        Crate crate = CratesPlugin.getInstance().getEditorModule().getCrate("upgradecrate");
+        crate.getKey().take(p.getUniqueId(), 1);
+
+        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have won the following rewards for winning an Event:"));
+        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f* &61,500 Coins"));
+        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f* &d1 Upgrade Crate Key"));
     }
 
     public long getGlobalCooldown() {

@@ -258,6 +258,7 @@ public class Brackets implements Listener {
                 String winner = Messages.WON_EVENT.getMessage();
                 winner = winner.replaceAll("%player%", opponent.getName()).replaceAll("%event%", "Brackets");
                 Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', winner));
+                getEventManager().rewardPlayer(opponent);
                 end();
             }
         }
@@ -366,6 +367,7 @@ public class Brackets implements Listener {
                 String winner = Messages.WON_EVENT.getMessage();
                 winner = winner.replaceAll("%player%", opponent.getName()).replaceAll("%event%", "Brackets");
                 Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', winner));
+                getEventManager().rewardPlayer(opponent);
                 end();
             }
         }
@@ -484,6 +486,7 @@ public class Brackets implements Listener {
                     String winner = Messages.WON_EVENT.getMessage();
                     winner = winner.replaceAll("%player%", killer.getName()).replaceAll("%event%", "Brackets");
                     Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', winner));
+                    getEventManager().rewardPlayer(killer);
                     end();
                     return;
                 }

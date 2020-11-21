@@ -265,9 +265,7 @@ public class KitKnight extends Kit {
                 ChatColor.GRAY + "" + ChatColor.ITALIC + "Protects his king.",
                 "",
                 ChatColor.GRAY + "Being in a gang with a player using",
-                ChatColor.GRAY + "Kit King nearby increases your defence.",
-                ChatColor.GRAY + "%click% with your sword",
-                ChatColor.GRAY + "mounts you onto a horse."
+                ChatColor.GRAY + "Kit King nearby increases your defence."
         );
     }
 }
