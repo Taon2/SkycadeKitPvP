@@ -5,5 +5,6 @@ authors: [ "WhiteWalker72", "Riccardo Bello (RickyB98)", "Taon2", "NegativeKB" ]
 depend: [ SkycadeCore, GuardianBeamAPI ]
 softdepend: [ SkycadeLeaderboards, GangsPlus, SkycadeKoth, SkycadeCrates ]
 permission:
+
   kitpvp.nametag.view:
     default:

@@ -132,7 +132,6 @@ public class EventManager {
         stats.giveCoins(1500);
         Crate crate = CratesPlugin.getInstance().getEditorModule().getCrate("upgradecrate");
         crate.getKey().give(p.getUniqueId(), 1);
-
         p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have won the following rewards for winning an Event:"));
         p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f* &61,500 Coins"));
         p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f* &d1 Upgrade Crate Key"));
