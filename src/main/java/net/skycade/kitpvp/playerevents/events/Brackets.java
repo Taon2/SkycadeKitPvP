@@ -98,7 +98,7 @@ public class Brackets implements Listener {
                removeFighter(p);
                removePlayer(p);
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.CHANCE);
+                stats.setKitPreference(KitType.DUBSTEP);
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                 stats.applyKitPreference();
@@ -107,7 +107,7 @@ public class Brackets implements Listener {
                 removeParticipant(p);
                 removePlayer(p);
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.CHANCE);
+                stats.setKitPreference(KitType.DUBSTEP);
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                 stats.applyKitPreference();
@@ -115,7 +115,7 @@ public class Brackets implements Listener {
             if (isSpectating(p)) {
                 removeSpectator(p);
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.CHANCE);
+                stats.setKitPreference(KitType.DUBSTEP);
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                 stats.applyKitPreference();
@@ -164,8 +164,8 @@ public class Brackets implements Listener {
                 removePlayer(p);
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.CHANCE);
-                stats.setActiveKit(KitType.CHANCE);
+                stats.setKitPreference(KitType.DUBSTEP);
+                stats.setActiveKit(KitType.DUBSTEP);
 
                 String leavemsg = Messages.EVENT_LEFT.getMessage();
                 leavemsg = leavemsg.replaceAll("%player%", p.getName())
@@ -181,8 +181,8 @@ public class Brackets implements Listener {
                 removeSpectator(p);
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.CHANCE);
-                stats.setActiveKit(KitType.CHANCE);
+                stats.setKitPreference(KitType.DUBSTEP);
+                stats.setActiveKit(KitType.DUBSTEP);
 
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
@@ -246,11 +246,17 @@ public class Brackets implements Listener {
                     if (isPlaying(onlineP)) {
                         removePlayer(onlineP);
                         removeParticipant(onlineP);
+                        KitPvPStats stats = KitPvP.getInstance().getStats(p);
+                        stats.setKitPreference(KitType.DUBSTEP);
+                        stats.setActiveKit(KitType.DUBSTEP);
                         Location spawn = KitPvP.getInstance().getSpawnLocation();
                         onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                     }
                     if (isSpectating(onlineP)) {
                         removeSpectator(onlineP);
+                        KitPvPStats stats = KitPvP.getInstance().getStats(p);
+                        stats.setKitPreference(KitType.DUBSTEP);
+                        stats.setActiveKit(KitType.DUBSTEP);
                         Location spawn = KitPvP.getInstance().getSpawnLocation();
                         onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                     }
@@ -273,8 +279,8 @@ public class Brackets implements Listener {
                 removePlayer(p);
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.CHANCE);
-                stats.setActiveKit(KitType.CHANCE);
+                stats.setKitPreference(KitType.DUBSTEP);
+                stats.setActiveKit(KitType.DUBSTEP);
 
                 String leavemsg = Messages.EVENT_LEFT.getMessage();
                 leavemsg = leavemsg.replaceAll("%player%", p.getName())
@@ -290,8 +296,8 @@ public class Brackets implements Listener {
                 removeSpectator(p);
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.CHANCE);
-                stats.setActiveKit(KitType.CHANCE);
+                stats.setKitPreference(KitType.DUBSTEP);
+                stats.setActiveKit(KitType.DUBSTEP);
 
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
@@ -355,11 +361,17 @@ public class Brackets implements Listener {
                     if (isPlaying(onlineP)) {
                         removePlayer(onlineP);
                         removeParticipant(onlineP);
+                        KitPvPStats stats = KitPvP.getInstance().getStats(p);
+                        stats.setKitPreference(KitType.DUBSTEP);
+                        stats.setActiveKit(KitType.DUBSTEP);
                         Location spawn = KitPvP.getInstance().getSpawnLocation();
                         onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                     }
                     if (isSpectating(onlineP)) {
                         removeSpectator(onlineP);
+                        KitPvPStats stats = KitPvP.getInstance().getStats(p);
+                        stats.setKitPreference(KitType.DUBSTEP);
+                        stats.setActiveKit(KitType.DUBSTEP);
                         Location spawn = KitPvP.getInstance().getSpawnLocation();
                         onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                     }
@@ -469,7 +481,7 @@ public class Brackets implements Listener {
                             removeFighter(onlineP);
                             removeParticipant(onlineP);
                             KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
-                            stats.setKitPreference(KitType.CHANCE);
+                            stats.setKitPreference(KitType.DUBSTEP);
                             Location spawn = KitPvP.getInstance().getSpawnLocation();
                             onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                             stats.applyKitPreference();
@@ -477,7 +489,7 @@ public class Brackets implements Listener {
                         if (isSpectating(onlineP)) {
                             removeSpectator(onlineP);
                             KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
-                            stats.setKitPreference(KitType.CHANCE);
+                            stats.setKitPreference(KitType.DUBSTEP);
                             Location spawn = KitPvP.getInstance().getSpawnLocation();
                             onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                             stats.applyKitPreference();
@@ -510,7 +522,7 @@ public class Brackets implements Listener {
                             player.removePotionEffect(effect.getType());
                         }
 
-                        stats.setKitPreference(KitType.CHANCE);
+                        stats.setKitPreference(KitType.DUBSTEP);
                         stats.setActiveKit(KitType.DEFAULT);
                     }
                 }.runTaskLater(KitPvP.getInstance(), 5);

@@ -107,7 +107,8 @@ public class LastManStanding implements Listener {
             if (isPlaying(p)) {
                 removePlayer(p);
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.CHANCE);
+                stats.setKitPreference(KitType.DUBSTEP);
+                stats.setActiveKit(KitType.DUBSTEP);
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                 stats.applyKitPreference();
@@ -115,7 +116,8 @@ public class LastManStanding implements Listener {
             if (isSpectating(p)) {
                 removeSpectator(p);
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.CHANCE);
+                stats.setKitPreference(KitType.DUBSTEP);
+                stats.setActiveKit(KitType.DUBSTEP);
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                 stats.applyKitPreference();
@@ -151,6 +153,10 @@ public class LastManStanding implements Listener {
             if (isPlaying(player)) {
                 removePlayer(player);
 
+                KitPvPStats stats1 = KitPvP.getInstance().getStats(player);
+                stats1.setKitPreference(KitType.DUBSTEP);
+                stats1.setActiveKit(KitType.DUBSTEP);
+
                 String quitmsg = Messages.EVENT_LEFT.getMessage();
                 quitmsg = quitmsg.replaceAll("%player%", player.getName())
                         .replaceAll("%size%", String.valueOf(getPlayers().size()));
@@ -167,14 +173,16 @@ public class LastManStanding implements Listener {
                             if (isPlaying(onlineP)) {
                                 removePlayer(onlineP);
                                 KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
-                                stats.setKitPreference(KitType.CHANCE);
+                                stats.setKitPreference(KitType.DUBSTEP);
+                                stats.setActiveKit(KitType.DUBSTEP);
                                 onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                                 stats.applyKitPreference();
                             }
                             if (isSpectating(onlineP)) {
                                 removeSpectator(onlineP);
                                 KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
-                                stats.setKitPreference(KitType.CHANCE);
+                                stats.setKitPreference(KitType.DUBSTEP);
+                                stats.setActiveKit(KitType.DUBSTEP);
                                 onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                                 stats.applyKitPreference();
                             }
@@ -215,14 +223,16 @@ public class LastManStanding implements Listener {
                         if (isPlaying(onlineP)) {
                             removePlayer(onlineP);
                             KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
-                            stats.setKitPreference(KitType.CHANCE);
+                            stats.setKitPreference(KitType.DUBSTEP);
+                            stats.setActiveKit(KitType.DUBSTEP);
                             onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                             stats.applyKitPreference();
                         }
                         if (isSpectating(onlineP)) {
                             removeSpectator(onlineP);
                             KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
-                            stats.setKitPreference(KitType.CHANCE);
+                            stats.setKitPreference(KitType.DUBSTEP);
+                            stats.setActiveKit(KitType.DUBSTEP);
                             onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                             stats.applyKitPreference();
                         }
@@ -265,7 +275,8 @@ public class LastManStanding implements Listener {
                         if (isPlaying(onlineP)) {
                             removePlayer(onlineP);
                             KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
-                            stats.setKitPreference(KitType.CHANCE);
+                            stats.setKitPreference(KitType.DUBSTEP);
+                            stats.setActiveKit(KitType.DUBSTEP);
                             Location spawn = KitPvP.getInstance().getSpawnLocation();
                             onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                             stats.applyKitPreference();
@@ -273,7 +284,8 @@ public class LastManStanding implements Listener {
                         if (isSpectating(onlineP)) {
                             removeSpectator(onlineP);
                             KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
-                            stats.setKitPreference(KitType.CHANCE);
+                            stats.setKitPreference(KitType.DUBSTEP);
+                            stats.setActiveKit(KitType.DUBSTEP);
                             Location spawn = KitPvP.getInstance().getSpawnLocation();
                             onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                             stats.applyKitPreference();
@@ -287,7 +299,7 @@ public class LastManStanding implements Listener {
                     return;
                 }
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
-                stats.setKitPreference(KitType.CHANCE);
+                stats.setKitPreference(KitType.DUBSTEP);
                 stats.setActiveKit(KitType.DEFAULT);
                 new BukkitRunnable() {
 

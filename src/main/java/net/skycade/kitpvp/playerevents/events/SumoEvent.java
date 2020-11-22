@@ -54,7 +54,7 @@ public class SumoEvent implements Listener {
 
     public void join(Player p) {
         KitPvPStats stats = KitPvP.getInstance().getStats(p);
-        stats.setKitPreference(KitType.CHANCE);
+        stats.setKitPreference(KitType.DUBSTEP);
         stats.setActiveKit(KitType.DEFAULT);
 
         p.getInventory().clear();
@@ -91,8 +91,8 @@ public class SumoEvent implements Listener {
                 removePlayer(p);
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.CHANCE);
-                stats.setActiveKit(KitType.CHANCE);
+                stats.setKitPreference(KitType.DUBSTEP);
+                stats.setActiveKit(KitType.DUBSTEP);
 
                 String leavemsg = Messages.EVENT_LEFT.getMessage();
                 leavemsg = leavemsg.replaceAll("%player%", p.getName())
@@ -108,8 +108,8 @@ public class SumoEvent implements Listener {
                 removeSpectator(p);
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.CHANCE);
-                stats.setActiveKit(KitType.CHANCE);
+                stats.setKitPreference(KitType.DUBSTEP);
+                stats.setActiveKit(KitType.DUBSTEP);
 
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
@@ -185,8 +185,8 @@ public class SumoEvent implements Listener {
                 removePlayer(player);
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
-                stats.setKitPreference(KitType.CHANCE);
-                stats.setActiveKit(KitType.CHANCE);
+                stats.setKitPreference(KitType.DUBSTEP);
+                stats.setActiveKit(KitType.DUBSTEP);
 
                 String leavemsg = Messages.EVENT_LEFT.getMessage();
                 leavemsg = leavemsg.replaceAll("%player%", player.getName())
@@ -202,8 +202,8 @@ public class SumoEvent implements Listener {
                 removeSpectator(player);
 
                 KitPvPStats stats = KitPvP.getInstance().getStats(player);
-                stats.setKitPreference(KitType.CHANCE);
-                stats.setActiveKit(KitType.CHANCE);
+                stats.setKitPreference(KitType.DUBSTEP);
+                stats.setActiveKit(KitType.DUBSTEP);
 
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 player.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
@@ -320,11 +320,17 @@ public class SumoEvent implements Listener {
             if (isPlaying(p)) {
                 removePlayer(p);
                 removeParticipant(p);
+                KitPvPStats stats = KitPvP.getInstance().getStats(p);
+                stats.setKitPreference(KitType.DUBSTEP);
+                stats.setActiveKit(KitType.DUBSTEP);
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
             }
             if (isSpectating(p)) {
                 removeSpectator(p);
+                KitPvPStats stats = KitPvP.getInstance().getStats(p);
+                stats.setKitPreference(KitType.DUBSTEP);
+                stats.setActiveKit(KitType.DUBSTEP);
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
             }
@@ -431,11 +437,17 @@ public class SumoEvent implements Listener {
                         if (isPlaying(p)) {
                             removePlayer(p);
                             removeParticipant(p);
+                            KitPvPStats stats = KitPvP.getInstance().getStats(p);
+                            stats.setKitPreference(KitType.DUBSTEP);
+                            stats.setActiveKit(KitType.DUBSTEP);
                             Location spawn = KitPvP.getInstance().getSpawnLocation();
                             p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                         }
                         if (isSpectating(p)) {
                             removeSpectator(p);
+                            KitPvPStats stats = KitPvP.getInstance().getStats(p);
+                            stats.setKitPreference(KitType.DUBSTEP);
+                            stats.setActiveKit(KitType.DUBSTEP);
                             Location spawn = KitPvP.getInstance().getSpawnLocation();
                             p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                         }
@@ -506,7 +518,7 @@ public class SumoEvent implements Listener {
         if (this.participants == null) return;
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (this.participants.contains(player)) {
+            if (this.participants.contains(player.getUniqueId())) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
             }
         }

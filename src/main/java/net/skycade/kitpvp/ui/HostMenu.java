@@ -121,7 +121,22 @@ public class HostMenu extends DynamicGui {
                     )
                     .build();
         }
-
+        if (getEventManager().getCurrentEvent() != EventType.IDLE){
+            return new ItemBuilder(Material.POTATO_ITEM)
+                    .setDisplayName(ChatColor.translateAlternateColorCodes('&', "&e&lSumo"))
+                    .addToLore(
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&fThe main objective is to knock"),
+                            ChatColor.translateAlternateColorCodes('&', "&foff your opponents off the platform."),
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&fParticipants are chosen at random"),
+                            ChatColor.translateAlternateColorCodes('&', "&fto fight."),
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&a&lTHERE IS ALREADY AN EVENT RUNNING"),
+                            ChatColor.translateAlternateColorCodes('&', " ")
+                    )
+                    .build();
+        }
         return new ItemBuilder(Material.POTATO_ITEM)
                 .setDisplayName(ChatColor.translateAlternateColorCodes('&', "&e&lSumo"))
                 .addToLore(
@@ -158,6 +173,21 @@ public class HostMenu extends DynamicGui {
                     )
                     .build();
         }
+        if (getEventManager().getCurrentEvent() != EventType.IDLE){
+            return new ItemBuilder(Material.GRASS)
+                    .setDisplayName(ChatColor.translateAlternateColorCodes('&', "&2&lLast Man Standing"))
+                    .addToLore(
+                    ChatColor.translateAlternateColorCodes('&', " "),
+                    ChatColor.translateAlternateColorCodes('&', "&fThe concept is simple,"),
+                    ChatColor.translateAlternateColorCodes('&', "&fbe the last man alive!"),
+                    ChatColor.translateAlternateColorCodes('&', " "),
+                    ChatColor.translateAlternateColorCodes('&', "&fYou receive &b14 &fhealing (pots/soup)"),
+                    ChatColor.translateAlternateColorCodes('&', "&fwhen you kill a player."),
+                    ChatColor.translateAlternateColorCodes('&', " "),
+                    ChatColor.translateAlternateColorCodes('&', "&a&lTHERE IS ALREADY AN EVENT RUNNING"),
+                    ChatColor.translateAlternateColorCodes('&', " ")
+                    ).build();
+        }
 
         return new ItemBuilder(Material.GRASS)
                 .setDisplayName(ChatColor.translateAlternateColorCodes('&', "&2&lLast Man Standing"))
@@ -192,6 +222,23 @@ public class HostMenu extends DynamicGui {
                             ChatColor.translateAlternateColorCodes('&', " "),
                             ChatColor.translateAlternateColorCodes('&', "&4&lCOOLDOWN"),
                             ChatColor.translateAlternateColorCodes('&', "&c" + CoreUtil.niceFormat(toseconds, false))
+                    )
+                    .build();
+        }
+
+        if (getEventManager().getCurrentEvent() != EventType.IDLE){
+            return new ItemBuilder(Material.DIAMOND_SWORD)
+                    .setDisplayName(ChatColor.translateAlternateColorCodes('&', "&a&lBrackets"))
+                    .addToLore(
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&fYour objective is to beat"),
+                            ChatColor.translateAlternateColorCodes('&', "&fyour opponent in a 1v1."),
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&fParticipants are chosen at random"),
+                            ChatColor.translateAlternateColorCodes('&', "&fto fight."),
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&a&lTHERE IS ALREADY AN EVENT RUNNING"),
+                            ChatColor.translateAlternateColorCodes('&', " ")
                     )
                     .build();
         }
