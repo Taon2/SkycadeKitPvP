@@ -131,7 +131,7 @@ public class EventManager {
         KitPvPStats stats = KitPvP.getInstance().getStats(p);
         stats.giveCoins(1500);
         Crate crate = CratesPlugin.getInstance().getEditorModule().getCrate("upgradecrate");
-        crate.getKey().take(p.getUniqueId(), 1);
+        crate.getKey().give(p.getUniqueId(), 1);
 
         p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have won the following rewards for winning an Event:"));
         p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f* &61,500 Coins"));
