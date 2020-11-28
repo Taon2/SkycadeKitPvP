@@ -218,6 +218,8 @@ public class Messages {
     public static final Localization.Message PRICKED_RECENTLY = new Localization.Message("kit.prick.pricked-recently", "&a%player% &chas already been pricked recently!");
     public static final Localization.Message OUT_OF_AMMUNITION = new Localization.Message("kit.paintball.out-of-ammunition", "&cYou do not have any ammunition left! Please wait for some to regenerate.");
     public static final Localization.Message CANNOT_THROW_AMMUNITION = new Localization.Message("kit.paintball.cannot-throw-ammunition", "&cYou may not throw your ammunition. Wasteful!");
+    public static final Localization.Message BLOODLUST_ACTIVATED = new Localization.Message("kit.barbarian.bloodlust-activated", "&4&lBLOODLUST &7Bloodlust activated! You now do &c1.5x &7damage for &c5 seconds&7.");
+    public static final Localization.Message BLOODLUST_EXPIRED = new Localization.Message("kit.barbarian.bloodlust-expired", "&4&lBLOODLUST &7Bloodlust has expired!");
 
     // Event Messages
     public static final Localization.Message NO_HOST_CREDITS = new Localization.Message("player-events.no-host-credits", "&cYou do not have any Host Credits.");
@@ -427,7 +429,9 @@ public class Messages {
                 BRACKETS_ELIMINATED,
                 BRACKETS_ROUND_FIGHTERS,
                 BRACKETS_ROUND_STARTED,
-                NO_HOST_CREDITS
+                NO_HOST_CREDITS,
+                BLOODLUST_ACTIVATED,
+                BLOODLUST_EXPIRED
         );
     }
 }

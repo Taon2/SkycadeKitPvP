@@ -323,6 +323,45 @@ public class LastManStanding implements Listener {
                 }.runTaskLater(KitPvP.getInstance(), 5);
             }
         }
+
+        if (isPlaying(player)){
+            player.spigot().respawn();
+            removePlayer(player);
+            addSpectator(player);
+
+            String deathmsg = Messages.LMS_ELIMINATED.getMessage();
+            deathmsg = deathmsg.replaceAll("%player%", player.getName())
+                    .replaceAll("%killer%", "Unknown")
+                    .replaceAll("%remaining%", String.valueOf(getPlayers().size()));
+
+            sendMessageToPlayers(deathmsg);
+            sendMessageToSpectators(deathmsg);
+
+            KitPvPStats stats = KitPvP.getInstance().getStats(player);
+            stats.setKitPreference(KitType.DUBSTEP);
+            stats.setActiveKit(KitType.DEFAULT);
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+
+                    Location ploc = player.getLocation();
+                    Location lobby = getLobbyLocation();
+                    player.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), ploc.getYaw(), ploc.getPitch()));
+
+                    player.getInventory().clear();
+                    player.getInventory().setHelmet(new ItemStack(Material.AIR));
+                    player.getInventory().setChestplate(new ItemStack(Material.AIR));
+                    player.getInventory().setLeggings(new ItemStack(Material.AIR));
+                    player.getInventory().setBoots(new ItemStack(Material.AIR));
+
+                    for (PotionEffect effect : player.getActivePotionEffects()) {
+                        player.removePotionEffect(effect.getType());
+                    }
+                }
+            }.runTaskLater(KitPvP.getInstance(), 5);
+
+        }
     }
 
     private void applyChosenKit(Player p) {

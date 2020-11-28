@@ -42,7 +42,7 @@ public class KitFireArcher extends Kit {
     private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
     public KitFireArcher(KitManager kitManager) {
-        super(kitManager, "FireArcher", KitType.FIREARCHER, 24000, getLore());
+        super(kitManager, "FireArcher", KitType.FIREARCHER, 0, getLore());
 
         helmet = new ItemBuilder(
                 Material.LEATHER_HELMET)

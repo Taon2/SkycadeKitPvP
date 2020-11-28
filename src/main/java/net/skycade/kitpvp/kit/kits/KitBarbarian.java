@@ -1,5 +1,7 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.KitPvP;
+import net.skycade.kitpvp.Messages;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.coreclasses.utils.ParticleEffect;
 import net.skycade.kitpvp.coreclasses.utils.UtilMath;
@@ -12,14 +14,14 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class KitBarbarian extends Kit {
 
@@ -30,7 +32,9 @@ public class KitBarbarian extends Kit {
     private ItemStack weapon;
     private ItemStack ability;
 
-    private int cooldown = 18;
+    private ArrayList<UUID> bloodlustPlayers = new ArrayList<>();
+
+    private int cooldown = 30;
 
     public KitBarbarian(KitManager kitManager) {
         super(kitManager, "Barbarian", KitType.BARBARIAN, 20000, getLore());
@@ -76,10 +80,33 @@ public class KitBarbarian extends Kit {
         if (!addCooldown(p, "Bloodlust", cooldown, true))
             return;
 
-        p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 3, 0));
         p.getWorld().playEffect(p.getLocation(), Effect.FLAME, 1);
         p.getWorld().playSound(p.getLocation(), Sound.ZOMBIE_PIG_ANGRY, 1, 1);
         shootParticlesFromLoc(p, ParticleEffect.FLAME, 500, 0.3F);
+        bloodlustPlayers.add(p.getUniqueId());
+        Messages.BLOODLUST_ACTIVATED.msg(p);
+        new BukkitRunnable(){
+
+            @Override
+            public void run() {
+                bloodlustPlayers.remove(p.getUniqueId());
+                Messages.BLOODLUST_EXPIRED.msg(p);
+            }
+        }.runTaskLater(KitPvP.getInstance(), 20 * 5);
+    }
+
+    @EventHandler
+    public void bloodlustHit(EntityDamageByEntityEvent event){
+        if (event.getEntity() instanceof Player){
+            if (event.getDamager() instanceof Player){
+                Player attacker = (Player) event.getDamager();
+                if (bloodlustPlayers.contains(attacker.getUniqueId())){
+                    double intialDamage = event.getDamage();
+                    double newDamage = intialDamage * 1.5;
+                    event.setDamage(newDamage);
+                }
+            }
+        }
     }
 
     @Override

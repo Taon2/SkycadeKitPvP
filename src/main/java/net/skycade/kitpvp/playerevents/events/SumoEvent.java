@@ -481,7 +481,7 @@ public class SumoEvent implements Listener {
                     if (isSpectating(attacker)) {
                         event.setCancelled(true);
                     }
-                    if (isFighting(attacker) && isFighting(attacker)) {
+                    if (isFighting(victim) && isFighting(attacker)) {
                         event.setDamage(0);
                     }
                 }
