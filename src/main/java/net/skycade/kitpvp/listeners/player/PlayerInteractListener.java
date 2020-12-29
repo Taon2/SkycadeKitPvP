@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -33,11 +34,6 @@ public class PlayerInteractListener implements Listener {
 
     public PlayerInteractListener(KitPvP plugin) {
         this.plugin = plugin;
-        Bukkit.getScheduler().runTaskTimer(plugin, this::preventDoubleSoupArrayListStuck, 1L, 5L);
-    }
-
-    private void preventDoubleSoupArrayListStuck() {
-        preventDoubleSoup.clear();
     }
 
     @EventHandler
@@ -65,16 +61,13 @@ public class PlayerInteractListener implements Listener {
         KitType type = plugin.getStats(event.getPlayer()).getActiveKit();
         if (type == KitType.BUILDUHC || type == KitType.LICH) {
             if (plugin.getEventManager().getCurrentEvent() == EventType.LMS || plugin.getEventManager().getCurrentEvent() == EventType.BRACKETS) {
-                if (plugin.getEventManager().getLMS().isPlaying(event.getPlayer()) || plugin.getEventManager().getLMS().isSpectating(event.getPlayer())) {
+                if (plugin.getEventManager().getLMS().isPlaying(event.getPlayer()) ||
+                        plugin.getEventManager().getBrackets().isParticipating(event.getPlayer())
+                        || plugin.getEventManager().isSpectating(event.getPlayer())) {
                     if (!plugin.getEventManager().getLMS().isFighting()) {
                         event.setCancelled(true);
                         return;
                     }
-                }
-                if (plugin.getEventManager().getBrackets().isParticipating(event.getPlayer()) ||
-                        plugin.getEventManager().getBrackets().isSpectating(event.getPlayer())) {
-                    event.setCancelled(true);
-                    return;
                 }
             }
         }
@@ -96,80 +89,6 @@ public class PlayerInteractListener implements Listener {
 
         event.setCancelled(true);
         KitType.LICH.getKit().onBlockBreak(event.getPlayer(), event.getBlock());
-    }
-
-
-    private List<UUID> preventDoubleSoup = new ArrayList<>();
-
-    // this is necessary to fix soup reg, because it runs before the general PlayerInteractEvent
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onEntityInteractAtEntity(PlayerInteractAtEntityEvent event) {
-        /*Player p = event.getPlayer();
-        ItemStack item = p.getItemInHand();
-
-        // applies soup to the player, runs first for soup reg reasons
-        if (item != null && item.getType() == Material.MUSHROOM_SOUP) {
-            double health = p.getHealth();
-            double maxHealth = p.getMaxHealth();
-            if (health < maxHealth) {
-                // heals
-                if (health < maxHealth - 7)
-                    p.setHealth(health + 7);
-                else
-                    p.setHealth(maxHealth);
-
-                final int heldItemSlot = event.getPlayer().getInventory().getHeldItemSlot();
-
-                event.getPlayer().getInventory().clear(heldItemSlot);
-                p.updateInventory();
-            }
-        }
-
-         */
-
-        Player player = event.getPlayer();
-        ItemStack item = player.getItemInHand();
-        int slot = event.getPlayer().getInventory().getHeldItemSlot();
-        if (item == null) return;
-        if (item.getType() == Material.MUSHROOM_SOUP) {
-            if (preventDoubleSoup.contains(player.getUniqueId())) return;
-            if (player.getHealth() == player.getMaxHealth()) return;
-
-            preventDoubleSoup.add(player.getUniqueId());
-            double toHeal = Math.min(player.getHealth() + 7.0, player.getMaxHealth());
-            player.setHealth(toHeal);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    player.getInventory().clear(slot);
-                    player.updateInventory();
-                    preventDoubleSoup.remove(player.getUniqueId());
-                }
-            }.runTaskLater(plugin, 1L);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void soup(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        int slot = event.getPlayer().getInventory().getHeldItemSlot();
-        if (event.getItem() == null) return;
-        if (event.getItem().getType() == Material.MUSHROOM_SOUP) {
-            if (preventDoubleSoup.contains(player.getUniqueId())) return;
-            if (player.getHealth() == player.getMaxHealth()) return;
-
-            preventDoubleSoup.add(player.getUniqueId());
-            double toHeal = Math.min(player.getHealth() + 7.0, player.getMaxHealth());
-            player.setHealth(toHeal);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    player.getInventory().clear(slot);
-                    player.updateInventory();
-                    preventDoubleSoup.remove(player.getUniqueId());
-                }
-            }.runTaskLater(plugin, 1L);
-        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

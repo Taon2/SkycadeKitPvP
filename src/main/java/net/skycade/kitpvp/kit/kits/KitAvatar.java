@@ -144,7 +144,7 @@ public class KitAvatar extends Kit {
                     p.addPotionEffect(new PotionEffect(effect, Integer.MAX_VALUE, amplifier));
                 });
             }
-        }.runTaskLater(KitPvP.getInstance(), 20 * 6 + 1);
+        }.runTaskLater(KitPvP.getInstance(), 20 * 6 + 2);
     }
 
     @Override

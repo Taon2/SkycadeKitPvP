@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ItemRefreshKitCooldown extends EventShopItem {
 
-    private EventShopManager eventShopManager;
+    private final EventShopManager eventShopManager;
 
     public ItemRefreshKitCooldown(EventShopManager eventShopManager) {
         super(eventShopManager, "Permanently Reduce RefreshKit Cooldown", new ItemStack(Material.CHEST, 1, (short) 0), 400, 0, false);

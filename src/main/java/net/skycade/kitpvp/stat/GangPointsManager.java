@@ -92,6 +92,13 @@ public class GangPointsManager {
             points.put(gangName, amount);
         }
     }
+    public void removePoints(String gangName, Long amount) {
+        if (points.containsKey(gangName)) {
+            points.replace(gangName, points.get(gangName) - amount);
+        } else {
+            points.put(gangName, amount);
+        }
+    }
 
     public void resetAllPoints() {
         Map<String, Long> newPoints = new HashMap<>();

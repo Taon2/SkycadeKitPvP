@@ -4,14 +4,12 @@ import net.skycade.crates.CratesPlugin;
 import net.skycade.crates.crates.Crate;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.Messages;
+import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.playerevents.EventManager;
 import net.skycade.kitpvp.playerevents.EventType;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,24 +17,21 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
-public class SumoEvent implements Listener {
+public class Sumo implements Listener {
 
     public ArrayList<UUID> participants = new ArrayList<>();
     public ArrayList<UUID> allPlayers = new ArrayList<>();
-    public ArrayList<UUID> spectators = new ArrayList<>();
     public ArrayList<UUID> fightingPlayers = new ArrayList<>();
 
     private boolean countdown;
 
-    public SumoEvent() {
+    public Sumo() {
         Bukkit.getPluginManager().registerEvents(this, KitPvP.getInstance());
     }
 
@@ -57,82 +52,55 @@ public class SumoEvent implements Listener {
         stats.setKitPreference(KitType.DUBSTEP);
         stats.setActiveKit(KitType.DEFAULT);
 
-        p.getInventory().clear();
-        p.getInventory().setHelmet(new ItemStack(Material.AIR));
-        p.getInventory().setChestplate(new ItemStack(Material.AIR));
-        p.getInventory().setLeggings(new ItemStack(Material.AIR));
-        p.getInventory().setBoots(new ItemStack(Material.AIR));
-
-        for (PotionEffect effect : p.getActivePotionEffects()) {
-            p.removePotionEffect(effect.getType());
-        }
+        UtilPlayer.reset(p);
 
         addParticipant(p);
         addPlayer(p);
 
-        Location loc = p.getLocation();
-        float yaw = loc.getYaw();
-        float pitch = loc.getPitch();
-
         Location lobby = getLobbyLocation();
-        p.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), yaw, pitch));
+        p.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), lobby.getYaw(), lobby.getPitch()));
 
-        String joinmsg = Messages.EVENT_JOINED.getMessage();
-        joinmsg = joinmsg.replaceAll("%player%", p.getName()).replaceAll("%size%", String.valueOf(getPlayers().size()));
-
-        sendMessageToPlayers(joinmsg);
-        sendMessageToSpectators(joinmsg);
+        for (Player player : Bukkit.getOnlinePlayers()){
+            if (isPlaying(player) || getEventManager().isSpectating(player)) {
+                Messages.EVENT_JOINED.msg(player, "%player%", p.getName(), "%size%", String.valueOf(getPlayers().size()));
+            }
+        }
     }
 
-    public void leaveEvent(Player p) {
+
+    public void quit(Player p) {
         if (getEventManager().getCurrentEvent() == EventType.SUMO) {
             if (isParticipating(p)) {
                 removeParticipant(p);
                 removePlayer(p);
 
-                KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.DUBSTEP);
-                stats.setActiveKit(KitType.DUBSTEP);
+                for (Player player : Bukkit.getOnlinePlayers()){
+                    if (isPlaying(player) || getEventManager().isSpectating(player)) {
+                        Messages.EVENT_LEFT.msg(player, "%player%", p.getName(), "%size%", String.valueOf(getPlayers().size()));
+                    }
+                }
 
-                String leavemsg = Messages.EVENT_LEFT.getMessage();
-                leavemsg = leavemsg.replaceAll("%player%", p.getName())
-                        .replaceAll("%size%", String.valueOf(getPlayers().size()));
-
-                sendMessageToSpectators(leavemsg);
-                sendMessageToPlayers(leavemsg);
-
-                Location spawn = KitPvP.getInstance().getSpawnLocation();
-                p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
+               getEventManager().removeFromEvent(p);
             }
-            if (isSpectating(p)) {
-                removeSpectator(p);
-
-                KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.DUBSTEP);
-                stats.setActiveKit(KitType.DUBSTEP);
-
-                Location spawn = KitPvP.getInstance().getSpawnLocation();
-                p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
+            if (getEventManager().isSpectating(p)) {
+                getEventManager().removeSpectator(p);
             }
 
             if (isFighting(p)) {
                 removePlayer(p);
                 removeFighter(p);
+                if (countdown) countdown = false;
 
                 Player opponent = Bukkit.getPlayer(getFightingPlayers().get(0));
-                Location loc = opponent.getLocation();
                 Location lobby = getLobbyLocation();
 
-                opponent.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), loc.getYaw(), loc.getPitch()));
+                opponent.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), lobby.getYaw(), lobby.getPitch()));
                 removeFighter(opponent);
                 addParticipant(opponent);
 
-                String eliminated = Messages.SUMO_ELIMINATED.getMessage();
-                eliminated = eliminated.replaceAll("%player%", p.getName())
-                        .replaceAll("%remaining%", String.valueOf(getPlayers().size()));
-
-                sendMessageToPlayers(eliminated);
-                sendMessageToSpectators(eliminated);
+                for (Player player : Bukkit.getOnlinePlayers()){
+                    Messages.SUMO_ELIMINATED.msg(player, "%player%", p.getName(), "%remaining%", String.valueOf(getPlayers().size()));
+                }
 
                 if (getParticipants().size() > 1) {
                     new BukkitRunnable() {
@@ -159,18 +127,13 @@ public class SumoEvent implements Listener {
                     if (isPlaying(onlineP)) {
                         removePlayer(onlineP);
                         removeParticipant(onlineP);
-                        Location spawn = KitPvP.getInstance().getSpawnLocation();
-                        onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
+                        getEventManager().removeFromEvent(onlineP);
                     }
-                    if (isSpectating(onlineP)) {
-                        removeSpectator(onlineP);
-                        Location spawn = KitPvP.getInstance().getSpawnLocation();
-                        onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
+                    if (getEventManager().isSpectating(onlineP)) {
+                        getEventManager().removeSpectator(onlineP);
                     }
                 }
-                String winner = Messages.WON_EVENT.getMessage();
-                winner = winner.replaceAll("%player%", opponent.getName()).replaceAll("%event%", "Sumo");
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', winner));
+                Messages.WON_EVENT.broadcast("%player%", opponent.getName(), "%event%", "Sumo");
                 end();
             }
         }
@@ -184,34 +147,21 @@ public class SumoEvent implements Listener {
                 removeParticipant(player);
                 removePlayer(player);
 
-                KitPvPStats stats = KitPvP.getInstance().getStats(player);
-                stats.setKitPreference(KitType.DUBSTEP);
-                stats.setActiveKit(KitType.DUBSTEP);
+                for (Player p : Bukkit.getOnlinePlayers()){
+                    if (isPlaying(p) || getEventManager().isSpectating(p)){
+                        Messages.EVENT_LEFT.msg(p, "%player%", player.getName(), "%size%", String.valueOf(getPlayers().size()));
+                    }
+                }
 
-                String leavemsg = Messages.EVENT_LEFT.getMessage();
-                leavemsg = leavemsg.replaceAll("%player%", player.getName())
-                        .replaceAll("%size%", String.valueOf(getPlayers().size()));
-
-                sendMessageToSpectators(leavemsg);
-                sendMessageToPlayers(leavemsg);
-
-                Location spawn = KitPvP.getInstance().getSpawnLocation();
-                player.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
+                getEventManager().removeFromEvent(player);
             }
-            if (isSpectating(player)) {
-                removeSpectator(player);
 
-                KitPvPStats stats = KitPvP.getInstance().getStats(player);
-                stats.setKitPreference(KitType.DUBSTEP);
-                stats.setActiveKit(KitType.DUBSTEP);
-
-                Location spawn = KitPvP.getInstance().getSpawnLocation();
-                player.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
-            }
+            if (getEventManager().isSpectating(player)) getEventManager().removeSpectator(player);
 
             if (isFighting(player)) {
                 removePlayer(player);
                 removeFighter(player);
+                if (countdown) countdown = false;
 
                 Player opponent = Bukkit.getPlayer(getFightingPlayers().get(0));
                 Location loc = opponent.getLocation();
@@ -221,12 +171,12 @@ public class SumoEvent implements Listener {
                 removeFighter(opponent);
                 addParticipant(opponent);
 
-                String eliminated = Messages.SUMO_ELIMINATED.getMessage();
-                eliminated = eliminated.replaceAll("%player%", player.getName())
-                        .replaceAll("%remaining%", String.valueOf(getPlayers().size()));
-
-                sendMessageToPlayers(eliminated);
-                sendMessageToSpectators(eliminated);
+                for (Player p : Bukkit.getOnlinePlayers()){
+                    if (isPlaying(p) || getEventManager().isSpectating(p)){
+                        Messages.SUMO_ELIMINATED.msg(p, "%player%", player.getName(),
+                                "%remaining%", String.valueOf(getPlayers().size()));
+                    }
+                }
 
                 if (getParticipants().size() > 1) {
                     new BukkitRunnable() {
@@ -253,18 +203,12 @@ public class SumoEvent implements Listener {
                     if (isPlaying(onlineP)) {
                         removePlayer(onlineP);
                         removeParticipant(onlineP);
-                        Location spawn = KitPvP.getInstance().getSpawnLocation();
-                        onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
+                        getEventManager().removeFromEvent(onlineP);
                     }
-                    if (isSpectating(onlineP)) {
-                        removeSpectator(onlineP);
-                        Location spawn = KitPvP.getInstance().getSpawnLocation();
-                        onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
-                    }
+
+                    if (getEventManager().isSpectating(onlineP)) getEventManager().removeSpectator(onlineP);
                 }
-                String winner = Messages.WON_EVENT.getMessage();
-                winner = winner.replaceAll("%player%", opponent.getName()).replaceAll("%event%", "Sumo");
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', winner));
+                Messages.WON_EVENT.broadcast("%player%", opponent.getName(), "%event%", "Sumo");
                 getEventManager().rewardPlayer(opponent);
                 end();
             }
@@ -313,26 +257,17 @@ public class SumoEvent implements Listener {
     }
 
     public void forceEnd() {
-        sendMessageToPlayers("&cThis event has been forcefully ended by an Administrator.");
-        sendMessageToSpectators("&cThis event has been forcefully ended by an Administrator.");
-
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (isPlaying(p)) {
                 removePlayer(p);
                 removeParticipant(p);
-                KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.DUBSTEP);
-                stats.setActiveKit(KitType.DUBSTEP);
-                Location spawn = KitPvP.getInstance().getSpawnLocation();
-                p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
+                getEventManager().removeFromEvent(p);
+
+                p.sendMessage(ChatColor.RED + "This event has been forcefull ended by an Administrator");
             }
-            if (isSpectating(p)) {
-                removeSpectator(p);
-                KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.DUBSTEP);
-                stats.setActiveKit(KitType.DUBSTEP);
-                Location spawn = KitPvP.getInstance().getSpawnLocation();
-                p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
+            if (getEventManager().isSpectating(p)) {
+                getEventManager().removeSpectator(p);
+                p.sendMessage(ChatColor.RED + "This event has been forcefull ended by an Administrator");
             }
         }
 
@@ -343,24 +278,19 @@ public class SumoEvent implements Listener {
 
 
     public void startRound(Player fighter1, Player fighter2) {
-        Location fighter1Loc = fighter1.getLocation();
-        Location fighter2Loc = fighter2.getLocation();
 
         Location pos1 = getFighter1Position();
         Location pos2 = getFighter2Position();
-        fighter1.teleport(new Location(pos1.getWorld(), pos1.getX(), pos1.getY(), pos1.getZ(), fighter1Loc.getYaw(), fighter1Loc.getPitch()));
-        fighter2.teleport(new Location(pos2.getWorld(), pos2.getX(), pos2.getY(), pos2.getZ(), fighter2Loc.getYaw(), fighter2Loc.getPitch()));
+        fighter1.teleport(new Location(pos1.getWorld(), pos1.getX(), pos1.getY(), pos1.getZ(), pos1.getYaw(), pos1.getPitch()));
+        fighter2.teleport(new Location(pos2.getWorld(), pos2.getX(), pos2.getY(), pos2.getZ(), pos2.getYaw(), pos2.getPitch()));
 
-        String roundstart = Messages.SUMO_ROUND_STARTED.getMessage();
 
-        String fighters = Messages.SUMO_ROUND_FIGHTERS.getMessage();
-        fighters = fighters.replaceAll("%fighter1%", fighter1.getName()).replaceAll("%fighter2%", fighter2.getName());
-
-        sendMessageToSpectators(roundstart);
-        sendMessageToSpectators(fighters);
-
-        sendMessageToPlayers(roundstart);
-        sendMessageToPlayers(fighters);
+        for (Player p : Bukkit.getOnlinePlayers()){
+            if (isPlaying(p) || getEventManager().isSpectating(p)){
+                Messages.SUMO_ROUND_STARTED.msg(p);
+                Messages.SUMO_ROUND_FIGHTERS.msg(p, "%fighter1%", fighter1.getName(), "%fighter2%", fighter2.getName());
+            }
+        }
 
         new BukkitRunnable() {
 
@@ -395,23 +325,23 @@ public class SumoEvent implements Listener {
                 if (loc1.getBlock().getType() == Material.WATER || loc1.getBlock().getType() == Material.STATIONARY_WATER) {
                     removeFighter(player);
                     removePlayer(player);
-                    addSpectator(player);
+                    getEventManager().addSpectator(player);
 
                     Player opponent = Bukkit.getPlayer(getFightingPlayers().get(0));
-                    Location loc = opponent.getLocation();
                     Location lobby = getLobbyLocation();
 
-                    player.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), loc.getYaw(), loc.getPitch()));
-                    opponent.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), loc.getYaw(), loc.getPitch()));
+                    player.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), lobby.getYaw(), lobby.getPitch()));
+                    opponent.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), lobby.getYaw(), lobby.getPitch()));
                     removeFighter(opponent);
                     addParticipant(opponent);
 
-                    String eliminated = Messages.SUMO_ELIMINATED.getMessage();
-                    eliminated = eliminated.replaceAll("%player%", player.getName())
-                            .replaceAll("%remaining%", String.valueOf(getPlayers().size()));
+                    for (Player p : Bukkit.getOnlinePlayers()){
+                        if (isPlaying(p) || getEventManager().isSpectating(p)){
+                            Messages.SUMO_ELIMINATED.msg(p, "%player%", player.getName(),
+                                    "%remaining%", String.valueOf(getPlayers().size()));
+                        }
+                    }
 
-                    sendMessageToPlayers(eliminated);
-                    sendMessageToSpectators(eliminated);
                     if (getParticipants().size() > 1) {
                         new BukkitRunnable() {
 
@@ -437,24 +367,13 @@ public class SumoEvent implements Listener {
                         if (isPlaying(p)) {
                             removePlayer(p);
                             removeParticipant(p);
-                            KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                            stats.setKitPreference(KitType.DUBSTEP);
-                            stats.setActiveKit(KitType.DUBSTEP);
-                            Location spawn = KitPvP.getInstance().getSpawnLocation();
-                            p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
+                            getEventManager().removeFromEvent(p);
                         }
-                        if (isSpectating(p)) {
-                            removeSpectator(p);
-                            KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                            stats.setKitPreference(KitType.DUBSTEP);
-                            stats.setActiveKit(KitType.DUBSTEP);
-                            Location spawn = KitPvP.getInstance().getSpawnLocation();
-                            p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
-                        }
+
+                        if (getEventManager().isSpectating(p)) getEventManager().removeSpectator(p);
+
                     }
-                    String winner = Messages.WON_EVENT.getMessage();
-                    winner = winner.replaceAll("%player%", opponent.getName()).replaceAll("%event%", "Sumo");
-                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', winner));
+                    Messages.WON_EVENT.broadcast("%player%", opponent.getName(), "%event%", "Sumo");
                     getEventManager().rewardPlayer(opponent);
                     end();
                 }
@@ -475,10 +394,10 @@ public class SumoEvent implements Listener {
                     if (isParticipating(attacker)) {
                         event.setCancelled(true);
                     }
-                    if (isSpectating(victim)) {
+                    if (getEventManager().isSpectating(victim)) {
                         event.setCancelled(true);
                     }
-                    if (isSpectating(attacker)) {
+                    if (getEventManager().isSpectating(attacker)) {
                         event.setCancelled(true);
                     }
                     if (isFighting(victim) && isFighting(attacker)) {
@@ -493,7 +412,7 @@ public class SumoEvent implements Listener {
     public void blockCommands(PlayerCommandPreprocessEvent event) {
         if (getEventManager().getCurrentEvent() == EventType.SUMO) {
             Player player = event.getPlayer();
-            if (isPlaying(player) || isSpectating(player)) {
+            if (isPlaying(player) || getEventManager().isSpectating(player)) {
                 String command = event.getMessage();
 
                 ArrayList<String> blocked = new ArrayList<>();
@@ -576,19 +495,6 @@ public class SumoEvent implements Listener {
         this.fightingPlayers = list;
     }
 
-    public void addSpectator(Player p) {
-        if (this.spectators == null || this.spectators.isEmpty()) {
-            ArrayList<UUID> list = new ArrayList<>();
-            list.add(p.getUniqueId());
-
-            this.spectators = list;
-            return;
-        }
-        ArrayList<UUID> list = this.spectators;
-        list.add(p.getUniqueId());
-
-        this.spectators = list;
-    }
 
     public void removeParticipant(Player p) {
         ArrayList<UUID> list = getParticipants();
@@ -611,12 +517,6 @@ public class SumoEvent implements Listener {
         this.fightingPlayers = list;
     }
 
-    public void removeSpectator(Player p) {
-        ArrayList<UUID> list = getSpectators();
-        list.remove(p.getUniqueId());
-
-        this.spectators = list;
-    }
 
     public boolean isFighting(Player p) {
         if (this.fightingPlayers == null || this.fightingPlayers.isEmpty()) {
@@ -626,13 +526,6 @@ public class SumoEvent implements Listener {
         return list.contains(p.getUniqueId());
     }
 
-    public boolean isSpectating(Player p) {
-        if (this.spectators == null || this.spectators.isEmpty()) {
-            return false;
-        }
-        ArrayList<UUID> list = this.spectators;
-        return list.contains(p.getUniqueId());
-    }
 
     public boolean isParticipating(Player p) {
         if (this.participants == null || this.participants.isEmpty()) {
@@ -662,20 +555,6 @@ public class SumoEvent implements Listener {
         return this.fightingPlayers;
     }
 
-    public ArrayList<UUID> getSpectators() {
-        return this.spectators;
-    }
-
-    public void sendMessageToSpectators(String message) {
-        if (this.spectators == null) return;
-
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (isSpectating(p)) {
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-            }
-        }
-    }
-
     public void setLobbyLocation(Location loc) {
         KitPvP.getInstance().getConfig().set("player-events.sumo.lobby-location", loc);
         KitPvP.getInstance().saveConfig();
@@ -688,6 +567,11 @@ public class SumoEvent implements Listener {
 
     public void setFighter2Location(Location loc) {
         KitPvP.getInstance().getConfig().set("player-events.sumo.position-2", loc);
+        KitPvP.getInstance().saveConfig();
+    }
+
+    public void setRegionPosition(Location loc, int position) {
+        KitPvP.getInstance().getConfig().set("player-events.sumo.region.pos" + position, loc);
         KitPvP.getInstance().saveConfig();
     }
 

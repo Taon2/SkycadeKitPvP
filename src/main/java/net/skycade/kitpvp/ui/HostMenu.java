@@ -41,6 +41,7 @@ public class HostMenu extends DynamicGui {
                         getEventManager().announceEvent(p, EventType.SUMO);
                         getEventManager().setHoster(p.getUniqueId());
                         p.closeInventory();
+                        return;
                     } else {
                         Messages.NO_HOST_CREDITS.msg(p);
                     }
@@ -121,7 +122,7 @@ public class HostMenu extends DynamicGui {
                     )
                     .build();
         }
-        if (getEventManager().getCurrentEvent() != EventType.IDLE){
+        if (getEventManager().getCurrentEvent() != EventType.IDLE) {
             return new ItemBuilder(Material.POTATO_ITEM)
                     .setDisplayName(ChatColor.translateAlternateColorCodes('&', "&e&lSumo"))
                     .addToLore(
@@ -173,19 +174,19 @@ public class HostMenu extends DynamicGui {
                     )
                     .build();
         }
-        if (getEventManager().getCurrentEvent() != EventType.IDLE){
+        if (getEventManager().getCurrentEvent() != EventType.IDLE) {
             return new ItemBuilder(Material.GRASS)
                     .setDisplayName(ChatColor.translateAlternateColorCodes('&', "&2&lLast Man Standing"))
                     .addToLore(
-                    ChatColor.translateAlternateColorCodes('&', " "),
-                    ChatColor.translateAlternateColorCodes('&', "&fThe concept is simple,"),
-                    ChatColor.translateAlternateColorCodes('&', "&fbe the last man alive!"),
-                    ChatColor.translateAlternateColorCodes('&', " "),
-                    ChatColor.translateAlternateColorCodes('&', "&fYou receive &b14 &fhealing (pots/soup)"),
-                    ChatColor.translateAlternateColorCodes('&', "&fwhen you kill a player."),
-                    ChatColor.translateAlternateColorCodes('&', " "),
-                    ChatColor.translateAlternateColorCodes('&', "&a&lTHERE IS ALREADY AN EVENT RUNNING"),
-                    ChatColor.translateAlternateColorCodes('&', " ")
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&fThe concept is simple,"),
+                            ChatColor.translateAlternateColorCodes('&', "&fbe the last man alive!"),
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&fYou receive &b14 &fhealing (pots/soup)"),
+                            ChatColor.translateAlternateColorCodes('&', "&fwhen you kill a player."),
+                            ChatColor.translateAlternateColorCodes('&', " "),
+                            ChatColor.translateAlternateColorCodes('&', "&a&lTHERE IS ALREADY AN EVENT RUNNING"),
+                            ChatColor.translateAlternateColorCodes('&', " ")
                     ).build();
         }
 
@@ -226,7 +227,7 @@ public class HostMenu extends DynamicGui {
                     .build();
         }
 
-        if (getEventManager().getCurrentEvent() != EventType.IDLE){
+        if (getEventManager().getCurrentEvent() != EventType.IDLE) {
             return new ItemBuilder(Material.DIAMOND_SWORD)
                     .setDisplayName(ChatColor.translateAlternateColorCodes('&', "&a&lBrackets"))
                     .addToLore(

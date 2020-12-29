@@ -4,10 +4,10 @@ import java.util.List;
 
 public class PrestigeLevel {
 
-    private int level;
-    private int cost;
-    private List<String> commands;
-    private List<String> rewardDesc;
+    private final int level;
+    private final int cost;
+    private final List<String> commands;
+    private final List<String> rewardDesc;
 
     PrestigeLevel(int level, int cost, List<String> commands, List<String> rewardDesc) {
         this.level = level;

@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ItemFireArcherKit extends EventShopItem {
 
-    private EventShopManager eventShopManager;
+    private final EventShopManager eventShopManager;
 
     public ItemFireArcherKit(EventShopManager eventShopManager) {
         super(eventShopManager, "FireArcher Kit", new ItemStack(Material.FIREBALL, 1, (short) 0), 100, 0, false);

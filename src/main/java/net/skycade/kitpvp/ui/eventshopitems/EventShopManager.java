@@ -14,11 +14,11 @@ import java.util.logging.Level;
 
 public class EventShopManager {
 
+    private static EventShopManager instance;
+    private final KitPvP plugin;
+    private final Map<String, EventShopItem> eventShopItems = new LinkedHashMap<>();
     private File file;
     private YamlConfiguration yaml;
-    private final KitPvP plugin;
-    private static EventShopManager instance;
-    private final Map<String, EventShopItem> eventShopItems = new LinkedHashMap<>();
 
     public EventShopManager(KitPvP plugin) {
         this.plugin = plugin;
@@ -27,6 +27,12 @@ public class EventShopManager {
         configManager();
 
         registerEventShopItems();
+    }
+
+    public static EventShopManager getInstance() {
+        if (instance == null)
+            instance = new EventShopManager(KitPvP.getInstance());
+        return instance;
     }
 
     private void registerEventShopItems() {
@@ -118,11 +124,5 @@ public class EventShopManager {
         } catch (IOException e) {
             plugin.getLogger().log(Level.SEVERE, "Couldn't save purchasedupgrades yaml file.", e);
         }
-    }
-
-    public static EventShopManager getInstance() {
-        if (instance == null)
-            instance = new EventShopManager(KitPvP.getInstance());
-        return instance;
     }
 }

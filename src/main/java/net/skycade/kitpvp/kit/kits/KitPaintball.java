@@ -127,7 +127,7 @@ public class KitPaintball extends Kit {
             return;
         if (KitPvP.getInstance().getEventManager().getLMS().isPlaying(p) &&
                 !KitPvP.getInstance().getEventManager().getLMS().isFighting() ||
-                KitPvP.getInstance().getEventManager().getLMS().isSpectating(p))
+                KitPvP.getInstance().getEventManager().isSpectating(p))
             return;
         if (p.getGameMode() == GameMode.CREATIVE || VanishStatus.isVanished(p.getUniqueId())) {
             p.launchProjectile(Snowball.class);

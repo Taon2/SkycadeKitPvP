@@ -16,15 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ItemPotionEffect extends EventShopItem {
 
-    private YamlConfiguration yaml;
-    private EventShopManager eventShopManager;
-
-    public ItemPotionEffect(EventShopManager eventShopManager) {
-        super(eventShopManager, "Random Potion Upgrade", new ItemStack(Material.GLASS_BOTTLE), 10, 300, true);
-        this.eventShopManager = eventShopManager;
-    }
-
-    private static List<PotionEffectType> potionEffects;
+    private static final List<PotionEffectType> potionEffects;
 
     static {
         potionEffects = Arrays.asList(
@@ -33,6 +25,14 @@ public class ItemPotionEffect extends EventShopItem {
                 PotionEffectType.REGENERATION,
                 PotionEffectType.SPEED
         );
+    }
+
+    private YamlConfiguration yaml;
+    private final EventShopManager eventShopManager;
+
+    public ItemPotionEffect(EventShopManager eventShopManager) {
+        super(eventShopManager, "Random Potion Upgrade", new ItemStack(Material.GLASS_BOTTLE), 10, 300, true);
+        this.eventShopManager = eventShopManager;
     }
 
     public void giveReward(Player p) {

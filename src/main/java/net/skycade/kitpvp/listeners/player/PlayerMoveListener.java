@@ -65,20 +65,22 @@ public class PlayerMoveListener implements Listener {
                 loc.setY(loc.getY() - 1);
                 if (loc.getBlock().getType() == Material.SLIME_BLOCK) {
                     if (p.getGameMode() == GameMode.SURVIVAL || !VanishStatus.isVanished(p.getUniqueId())) {
-                        p.getWorld().playSound(p.getLocation(), Sound.EXPLODE, 1L, 1L);
-                        p.getWorld().playEffect(loc, Effect.EXPLOSION_HUGE, 1, 1);
-                        p.setVelocity(new org.bukkit.util.Vector(p.getLocation().getDirection().getX(), 0.5, p.getLocation().getDirection().getZ()).multiply(2.8));
-                        flyingParticles.add(p.getUniqueId());
-                        flyingParticleStay.add(p.getUniqueId());
-                        launchPad.add(p.getUniqueId());
+                        if (!launchPad.contains(p.getUniqueId())) {
+                            p.getWorld().playSound(p.getLocation(), Sound.EXPLODE, 1L, 1L);
+                            p.getWorld().playEffect(loc, Effect.EXPLOSION_HUGE, 1, 1);
+                            p.setVelocity(new org.bukkit.util.Vector(p.getLocation().getDirection().getX(), 0.5, p.getLocation().getDirection().getZ()).multiply(2.8));
+                            flyingParticles.add(p.getUniqueId());
+                            flyingParticleStay.add(p.getUniqueId());
+                            launchPad.add(p.getUniqueId());
 
-                        new BukkitRunnable() {
+                            new BukkitRunnable() {
 
-                            @Override
-                            public void run() {
-                                flyingParticleStay.remove(p.getUniqueId());
-                            }
-                        }.runTaskLater(KitPvP.getInstance(), 15);
+                                @Override
+                                public void run() {
+                                    flyingParticleStay.remove(p.getUniqueId());
+                                }
+                            }.runTaskLater(KitPvP.getInstance(), 15);
+                        }
                     }
                 }
             }

@@ -236,7 +236,7 @@ public class PlayerDamageListener implements Listener {
         killerStats.setStreak(killerStreak); // add one to their kill streak ^
 
         //For missions
-        KitPvPKillstreakChange killstreakEvent = new KitPvPKillstreakChange(killerPlayer, killerStreak); // get the kill streak event for the killer
+        KitPvPKillstreakChange killstreakEvent = new    KitPvPKillstreakChange(killerPlayer, killerStreak); // get the kill streak event for the killer
         Bukkit.getServer().getPluginManager().callEvent(killstreakEvent); // call the kill streak event
 
         if (killerStreak % 10 == 0) // if the kill streak is a multiple of 10

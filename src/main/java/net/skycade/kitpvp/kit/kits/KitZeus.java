@@ -1,10 +1,12 @@
 package net.skycade.kitpvp.kit.kits;
 
+import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.bukkitevents.KitPvPSpecialAbilityEvent;
 import net.skycade.kitpvp.coreclasses.utils.ItemBuilder;
 import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitManager;
 import net.skycade.kitpvp.kit.KitType;
+import net.skycade.kitpvp.playerevents.EventType;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -130,6 +132,17 @@ public class KitZeus extends Kit {
 
         if (item.getType() != Material.BLAZE_ROD)
             return;
+
+        if (KitPvP.getInstance().getEventManager().getBrackets().getChosenKit() == KitType.ZEUS ||
+                KitPvP.getInstance().getEventManager().getLMS().getChosenKit() == KitType.ZEUS){
+            if (KitPvP.getInstance().getEventManager().getBrackets().isParticipating(p)){
+                return;
+            }
+            if (!KitPvP.getInstance().getEventManager().getLMS().isFighting()){
+                return;
+            }
+        }
+
         if (!addCooldown(p, abilityName, abilityCooldown, true))
             return;
 

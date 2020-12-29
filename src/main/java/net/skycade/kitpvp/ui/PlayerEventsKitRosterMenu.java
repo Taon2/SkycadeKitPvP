@@ -1,8 +1,6 @@
 package net.skycade.kitpvp.ui;
 
-import net.md_5.bungee.api.ChatColor;
 import net.skycade.SkycadeCore.guis.dynamicnew.DynamicGui;
-import net.skycade.SkycadeCore.utility.CoreUtil;
 import net.skycade.SkycadeCore.utility.ItemBuilder;
 import net.skycade.crates.CrateUser;
 import net.skycade.crates.CratesPlugin;
@@ -12,6 +10,7 @@ import net.skycade.kitpvp.Messages;
 import net.skycade.kitpvp.kit.KitType;
 import net.skycade.kitpvp.playerevents.EventManager;
 import net.skycade.kitpvp.playerevents.EventType;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
@@ -21,8 +20,12 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
             .setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Knight")
             .build();
 
-    private static final ItemStack REAPER = new ItemBuilder(Material.SKULL_ITEM)
-            .setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Reaper")
+    private static final ItemStack ZEUS = new ItemBuilder(Material.BLAZE_ROD)
+            .setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Zeus")
+            .build();
+
+    private static final ItemStack GANK = new ItemBuilder(Material.STONE_SWORD)
+            .setDisplayName(ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "Gank")
             .build();
 
     private static final ItemStack PAINTBALL = new ItemBuilder(Material.DIAMOND_HOE)
@@ -31,10 +34,6 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
 
     private static final ItemStack BUILDUHC = new ItemBuilder(Material.WOOD)
             .setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "BuildUHC")
-            .build();
-
-    private static final ItemStack DUBSTEP = new ItemBuilder(Material.RECORD_3)
-            .setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Dubstep")
             .build();
 
     private static final ItemStack TELEPORTER = new ItemBuilder(Material.ENDER_PORTAL_FRAME)
@@ -48,18 +47,9 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                 (p, ev) -> {
                     EventManager manager = KitPvP.getInstance().getEventManager();
                     if (manager.isCooldownOn()) {
-                        long currentTime = System.currentTimeMillis();
-                        long newTime = manager.getGlobalCooldown() - currentTime;
-
                         ev.setCancelled(true);
                         p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
-                        open(p);
-
-                        int toseconds = (int) (newTime / 1000);
-                        String message = Messages.EVENT_ON_COOLDOWN.getMessage();
-                        message = message.replaceAll("%time%", CoreUtil.niceFormat(toseconds, false));
-
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                        new PlayerEventsKitRosterMenu(type).open(p);
                         return;
                     }
                     if (manager.getCurrentEvent() != EventType.IDLE) {
@@ -74,7 +64,6 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         return;
                     }
                     if (CrateUser.get(p.getUniqueId()).hasKey(crate)) {
-                        manager.announceEvent(p, type);
                         if (type == EventType.LMS) {
                             manager.getLMS().setChosenKit(KitType.KNIGHT);
                         }
@@ -82,28 +71,20 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                             manager.getBrackets().setChosenKit(KitType.KNIGHT);
                         }
                         manager.setHoster(p.getUniqueId());
+                        manager.announceEvent(p, type);
                         p.closeInventory();
                     } else {
                         Messages.NO_HOST_CREDITS.msg(p);
                     }
                 });
 
-        setItemInteraction(11, new ItemBuilder(REAPER).build(),
+        setItemInteraction(11, new ItemBuilder(ZEUS).build(),
                 (p, ev) -> {
                     EventManager manager = KitPvP.getInstance().getEventManager();
                     if (manager.isCooldownOn()) {
-                        long currentTime = System.currentTimeMillis();
-                        long newTime = manager.getGlobalCooldown() - currentTime;
-
                         ev.setCancelled(true);
                         p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
-                        open(p);
-
-                        int toseconds = (int) (newTime / 1000);
-                        String message = Messages.EVENT_ON_COOLDOWN.getMessage();
-                        message = message.replaceAll("%time%", CoreUtil.niceFormat(toseconds, false));
-
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                        new PlayerEventsKitRosterMenu(type).open(p);
                         return;
                     }
                     if (manager.getCurrentEvent() != EventType.IDLE) {
@@ -118,14 +99,14 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         return;
                     }
                     if (CrateUser.get(p.getUniqueId()).hasKey(crate)) {
-                        manager.announceEvent(p, type);
                         if (type == EventType.LMS) {
-                            manager.getLMS().setChosenKit(KitType.REAPER);
+                            manager.getLMS().setChosenKit(KitType.ZEUS);
                         }
                         if (type == EventType.BRACKETS) {
-                            manager.getBrackets().setChosenKit(KitType.REAPER);
+                            manager.getBrackets().setChosenKit(KitType.ZEUS);
                         }
                         manager.setHoster(p.getUniqueId());
+                        manager.announceEvent(p, type);
                         p.closeInventory();
                     } else {
                         Messages.NO_HOST_CREDITS.msg(p);
@@ -136,18 +117,9 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                 (p, ev) -> {
                     EventManager manager = KitPvP.getInstance().getEventManager();
                     if (manager.isCooldownOn()) {
-                        long currentTime = System.currentTimeMillis();
-                        long newTime = manager.getGlobalCooldown() - currentTime;
-
                         ev.setCancelled(true);
                         p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
-                        open(p);
-
-                        int toseconds = (int) (newTime / 1000);
-                        String message = Messages.EVENT_ON_COOLDOWN.getMessage();
-                        message = message.replaceAll("%time%", CoreUtil.niceFormat(toseconds, false));
-
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                        new PlayerEventsKitRosterMenu(type).open(p);
                         return;
                     }
                     if (manager.getCurrentEvent() != EventType.IDLE) {
@@ -162,7 +134,6 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         return;
                     }
                     if (CrateUser.get(p.getUniqueId()).hasKey(crate)) {
-                        manager.announceEvent(p, type);
                         if (type == EventType.LMS) {
                             manager.getLMS().setChosenKit(KitType.PAINTBALL);
                         }
@@ -170,6 +141,7 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                             manager.getBrackets().setChosenKit(KitType.PAINTBALL);
                         }
                         manager.setHoster(p.getUniqueId());
+                        manager.announceEvent(p, type);
                         p.closeInventory();
                     } else {
                         Messages.NO_HOST_CREDITS.msg(p);
@@ -180,18 +152,9 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                 (p, ev) -> {
                     EventManager manager = KitPvP.getInstance().getEventManager();
                     if (manager.isCooldownOn()) {
-                        long currentTime = System.currentTimeMillis();
-                        long newTime = manager.getGlobalCooldown() - currentTime;
-
                         ev.setCancelled(true);
                         p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
-                        open(p);
-
-                        int toseconds = (int) (newTime / 1000);
-                        String message = Messages.EVENT_ON_COOLDOWN.getMessage();
-                        message = message.replaceAll("%time%", CoreUtil.niceFormat(toseconds, false));
-
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                        new PlayerEventsKitRosterMenu(type).open(p);
                         return;
                     }
                     if (manager.getCurrentEvent() != EventType.IDLE) {
@@ -206,7 +169,6 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         return;
                     }
                     if (CrateUser.get(p.getUniqueId()).hasKey(crate)) {
-                        manager.announceEvent(p, type);
                         if (type == EventType.LMS) {
                             manager.getLMS().setChosenKit(KitType.BUILDUHC);
                         }
@@ -214,28 +176,20 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                             manager.getBrackets().setChosenKit(KitType.BUILDUHC);
                         }
                         manager.setHoster(p.getUniqueId());
+                        manager.announceEvent(p, type);
                         p.closeInventory();
                     } else {
                         Messages.NO_HOST_CREDITS.msg(p);
                     }
                 });
 
-        setItemInteraction(15, new ItemBuilder(DUBSTEP).build(),
+        setItemInteraction(15, new ItemBuilder(GANK).build(),
                 (p, ev) -> {
                     EventManager manager = KitPvP.getInstance().getEventManager();
                     if (manager.isCooldownOn()) {
-                        long currentTime = System.currentTimeMillis();
-                        long newTime = manager.getGlobalCooldown() - currentTime;
-
                         ev.setCancelled(true);
                         p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
-                        open(p);
-
-                        int toseconds = (int) (newTime / 1000);
-                        String message = Messages.EVENT_ON_COOLDOWN.getMessage();
-                        message = message.replaceAll("%time%", CoreUtil.niceFormat(toseconds, false));
-
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                        new PlayerEventsKitRosterMenu(type).open(p);
                         return;
                     }
                     if (manager.getCurrentEvent() != EventType.IDLE) {
@@ -250,14 +204,14 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         return;
                     }
                     if (CrateUser.get(p.getUniqueId()).hasKey(crate)) {
-                        manager.announceEvent(p, type);
                         if (type == EventType.LMS) {
-                            manager.getLMS().setChosenKit(KitType.DUBSTEP);
+                            manager.getLMS().setChosenKit(KitType.GANK);
                         }
                         if (type == EventType.BRACKETS) {
-                            manager.getBrackets().setChosenKit(KitType.DUBSTEP);
+                            manager.getBrackets().setChosenKit(KitType.GANK);
                         }
                         manager.setHoster(p.getUniqueId());
+                        manager.announceEvent(p, type);
                         p.closeInventory();
                     } else {
                         Messages.NO_HOST_CREDITS.msg(p);
@@ -268,18 +222,9 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                 (p, ev) -> {
                     EventManager manager = KitPvP.getInstance().getEventManager();
                     if (manager.isCooldownOn()) {
-                        long currentTime = System.currentTimeMillis();
-                        long newTime = manager.getGlobalCooldown() - currentTime;
-
                         ev.setCancelled(true);
                         p.playSound(p.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
-                        open(p);
-
-                        int toseconds = (int) (newTime / 1000);
-                        String message = Messages.EVENT_ON_COOLDOWN.getMessage();
-                        message = message.replaceAll("%time%", CoreUtil.niceFormat(toseconds, false));
-
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                        new PlayerEventsKitRosterMenu(type).open(p);
                         return;
                     }
                     if (manager.getCurrentEvent() != EventType.IDLE) {
@@ -294,7 +239,6 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                         return;
                     }
                     if (CrateUser.get(p.getUniqueId()).hasKey(crate)) {
-                        manager.announceEvent(p, type);
                         if (type == EventType.LMS) {
                             manager.getLMS().setChosenKit(KitType.TELEPORTER);
                         }
@@ -302,6 +246,7 @@ public class PlayerEventsKitRosterMenu extends DynamicGui {
                             manager.getBrackets().setChosenKit(KitType.TELEPORTER);
                         }
                         manager.setHoster(p.getUniqueId());
+                        manager.announceEvent(p, type);
                         p.closeInventory();
                     } else {
                         Messages.NO_HOST_CREDITS.msg(p);

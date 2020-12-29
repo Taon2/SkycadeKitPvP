@@ -144,7 +144,7 @@ public class KitBuildUHC extends Kit {
 
         if (KitPvP.getInstance().getEventManager().getLMS().isPlaying(p) &&
                 !KitPvP.getInstance().getEventManager().getLMS().isFighting() ||
-                KitPvP.getInstance().getEventManager().getLMS().isSpectating(p))
+                KitPvP.getInstance().getEventManager().isSpectating(p))
             return;
 
         if (!addCooldown(p, "Golden Head", goldenHeadCooldown, true)) return;

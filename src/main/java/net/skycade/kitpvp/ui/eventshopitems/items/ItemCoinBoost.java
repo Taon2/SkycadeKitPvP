@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ItemCoinBoost extends EventShopItem {
 
-    private EventShopManager eventShopManager;
+    private final EventShopManager eventShopManager;
 
     public ItemCoinBoost(EventShopManager eventShopManager) {
         super(eventShopManager, "Double Coins Upgrade", new ItemStack(Material.DOUBLE_PLANT, 1, (short) 0), 50, 600, true);

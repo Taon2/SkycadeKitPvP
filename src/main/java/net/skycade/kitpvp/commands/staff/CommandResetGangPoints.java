@@ -18,7 +18,7 @@ public class CommandResetGangPoints extends SkycadeCommand {
     @Override
     public void onCommand(CommandSender commandSender, String[] strings) {
         if (strings.length < 1) {
-            RESETGANGPOINTS_USAGE.msg(commandSender);
+            //RESETGANGPOINTS_USAGE.msg(commandSender);
             return;
         }
 

@@ -34,13 +34,10 @@ public class KitManager {
         new CommandViewKit();
         new CommandViewStats();
 
-        new CommandHost();
-        new CommandJoin();
-        new CommandQuit();
-        new CommandForceEnd();
+        // Events
+        new CommandEvent();
         new CommandGiveHostCredits();
         new CommandEventEdit();
-        new CommandResetCooldown();
 
 
         //Staff commands
@@ -49,7 +46,8 @@ public class KitManager {
         new CommandKitsUnlocked();
         new CommandRefund();
         new CommandResetStats();
-        new CommandResetGangPoints();
+        //new CommandResetGangPoints(); Not sure if you want this class deleted so I just disabled it for now ! - Neg
+        new CommandGangPoints();
         new CommandSetStats();
         new CommandTriggerEvent();
     }

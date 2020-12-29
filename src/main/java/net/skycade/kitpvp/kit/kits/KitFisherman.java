@@ -29,7 +29,7 @@ public class KitFisherman extends Kit {
     private ItemStack weapon;
     private ItemStack fishingRod;
 
-    private int grappleCooldown = 4;
+    private int grappleCooldown = 8;
 
     public KitFisherman(KitManager kitManager) {
         super(kitManager, "Fisherman", KitType.FISHERMAN, 46000, getLore());

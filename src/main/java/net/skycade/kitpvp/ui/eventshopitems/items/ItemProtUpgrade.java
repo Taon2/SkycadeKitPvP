@@ -18,15 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ItemProtUpgrade extends EventShopItem {
 
-    private YamlConfiguration yaml;
-    private EventShopManager eventShopManager;
-
-    public ItemProtUpgrade(EventShopManager eventShopManager) {
-        super(eventShopManager, "Protection Upgrade", new ItemStack(Material.DIAMOND_CHESTPLATE), 25, 300, true);
-        this.eventShopManager = eventShopManager;
-    }
-
-    private static List<Enchantment> protEnchants;
+    private static final List<Enchantment> protEnchants;
 
     static {
         protEnchants = Arrays.asList(
@@ -35,6 +27,14 @@ public class ItemProtUpgrade extends EventShopItem {
                 Enchantment.PROTECTION_FIRE,
                 Enchantment.PROTECTION_PROJECTILE
         );
+    }
+
+    private YamlConfiguration yaml;
+    private final EventShopManager eventShopManager;
+
+    public ItemProtUpgrade(EventShopManager eventShopManager) {
+        super(eventShopManager, "Protection Upgrade", new ItemStack(Material.DIAMOND_CHESTPLATE), 25, 300, true);
+        this.eventShopManager = eventShopManager;
     }
 
     public void giveReward(Player p) {

@@ -23,11 +23,11 @@ import static net.skycade.kitpvp.Messages.GET_SPOOKED;
 
 public class KitGhost extends Kit {
 
-    private ItemStack weapon;
+    private final ItemStack weapon;
 
-    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
+    private final Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
-    private int spookCooldown = 10;
+    private final int spookCooldown = 10;
 
     public KitGhost(KitManager kitManager) {
         super(kitManager, "Ghost", KitType.GHOST, 22000, false, getLore());
@@ -48,6 +48,16 @@ public class KitGhost extends Kit {
         setIcon(icon);
 
         setIcon(new ItemBuilder(new ItemStack(Material.POTION, 1, (short) 8270)).build());
+    }
+
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "OooOOOooo!",
+                "",
+                ChatColor.GRAY + "%click% will",
+                ChatColor.GRAY + "spook players around you."
+        );
     }
 
     @Override
@@ -96,15 +106,5 @@ public class KitGhost extends Kit {
     @Override
     public List<String> getHowToObtain() {
         return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Unobtainable.");
-    }
-
-    public static List<String> getLore() {
-        return Arrays.asList(
-                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
-                ChatColor.GRAY + "" + ChatColor.ITALIC + "OooOOOooo!",
-                "",
-                ChatColor.GRAY + "%click% will",
-                ChatColor.GRAY + "spook players around you."
-        );
     }
 }

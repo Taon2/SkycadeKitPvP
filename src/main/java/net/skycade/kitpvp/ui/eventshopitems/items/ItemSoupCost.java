@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ItemSoupCost extends EventShopItem {
 
-    private EventShopManager eventShopManager;
+    private final EventShopManager eventShopManager;
 
     public ItemSoupCost(EventShopManager eventShopManager) {
         super(eventShopManager, "Permanently Reduce Soup Price", new ItemStack(Material.MUSHROOM_SOUP, 1, (short) 0), 350, 0, false);

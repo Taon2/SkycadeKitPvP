@@ -6,7 +6,7 @@
 
     <groupId>net.skycade</groupId>
     <artifactId>SkycadeKitPvP</artifactId>
-    <version>4.2.6-SNAPSHOT</version>
+    <version>4.3.8-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -133,27 +133,27 @@
             <systemPath>${basedir}/dependencies/SkycadeKoth-1.0.3.jar</systemPath>
             <scope>system</scope>
         </dependency>
-        <!-- SkycadeCrates -->
-        <dependency>
-            <groupId>net.skycade</groupId>
-            <artifactId>SkycadeCrates</artifactId>
-            <version>1.10.2-SNAPSHOT</version>
-            <systemPath>${basedir}/dependencies/SkycadeCrates-1.10.2-SNAPSHOT.jar</systemPath>
-            <scope>system</scope>
-        </dependency>
-        <!--ViaVersion-->
-        <dependency>
-            <groupId>us.myles</groupId>
-            <artifactId>viaversion</artifactId>
-            <version>2.2.3-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- PremiumVanishAPI -->
-        <dependency>
-            <groupId>com.github.MyzelYam</groupId>
-            <artifactId>PremiumVanishAPI</artifactId>
-            <version>2.0.2</version>
-            <scope>provided</scope>
-        </dependency>
+            <!-- SkycadeCrates -->
+            <dependency>
+                <groupId>net.skycade</groupId>
+                <artifactId>SkycadeCrates</artifactId>
+                <version>1.10.2-SNAPSHOT</version>
+                <systemPath>${basedir}/dependencies/SkycadeCrates-1.10.2-SNAPSHOT.jar</systemPath>
+                <scope>system</scope>
+            </dependency>
+            <!--ViaVersion-->
+            <dependency>
+                <groupId>us.myles</groupId>
+                <artifactId>viaversion</artifactId>
+                <version>2.2.3-SNAPSHOT</version>
+                <scope>provided</scope>
+            </dependency>
+            <!-- PremiumVanishAPI -->
+            <dependency>
+                <groupId>com.github.MyzelYam</groupId>
+                <artifactId>PremiumVanishAPI</artifactId>
+                <version>2.0.2</version>
+                <scope>provided</scope>
+            </dependency>
     </dependencies>
 </project>

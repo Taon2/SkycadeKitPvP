@@ -4,15 +4,14 @@ import net.skycade.crates.CratesPlugin;
 import net.skycade.crates.crates.Crate;
 import net.skycade.kitpvp.KitPvP;
 import net.skycade.kitpvp.Messages;
+import net.skycade.kitpvp.coreclasses.utils.UtilMath;
+import net.skycade.kitpvp.coreclasses.utils.UtilPlayer;
+import net.skycade.kitpvp.kit.Kit;
 import net.skycade.kitpvp.kit.KitType;
-import net.skycade.kitpvp.kit.kits.*;
 import net.skycade.kitpvp.playerevents.EventManager;
 import net.skycade.kitpvp.playerevents.EventType;
 import net.skycade.kitpvp.stat.KitPvPStats;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -32,7 +31,6 @@ import java.util.UUID;
 public class LastManStanding implements Listener {
 
     public ArrayList<UUID> players = new ArrayList<>();
-    public ArrayList<UUID> spectators = new ArrayList<>();
 
     public KitType chosenKit;
 
@@ -52,10 +50,8 @@ public class LastManStanding implements Listener {
                     p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
                     Messages.EVENT_FAILED_LACK_OF_PLAYERS.msg(p);
                 }
-                if (isSpectating(p)) {
-                    removeSpectator(p);
-                    Location spawn = KitPvP.getInstance().getSpawnLocation();
-                    p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
+                if (getEventManager().isSpectating(p)) {
+                    getEventManager().removeSpectator(p);
                     Messages.EVENT_FAILED_LACK_OF_PLAYERS.msg(p);
                 }
             }
@@ -70,23 +66,27 @@ public class LastManStanding implements Listener {
         for (Player p : Bukkit.getOnlinePlayers()) {
             UUID uuid = p.getUniqueId();
             if (getPlayers().contains(uuid)) {
-                Location ploc = p.getLocation();
                 Location arena = getArenaSpawnLocation();
-                p.teleport(new Location(arena.getWorld(), arena.getX(), arena.getY(), arena.getZ(), ploc.getYaw(), ploc.getPitch()));
+                p.teleport(new Location(arena.getWorld(), arena.getX(), arena.getY(), arena.getZ(), arena.getYaw(), arena.getPitch()));
             }
         }
-        String message = Messages.LMS_STARTED.getMessage();
-        sendMessageToPlayers(message);
-        sendMessageToSpectators(message);
+
+        for (Player p: Bukkit.getOnlinePlayers()){
+            if (isPlaying(p) || getEventManager().isSpectating(p)){
+                Messages.LMS_STARTED.msg(p);
+            }
+        }
 
         new BukkitRunnable() {
 
             @Override
             public void run() {
                 setFighting(true);
-                String message = Messages.LMS_FIGHT_ENABLED.getMessage();
-                sendMessageToPlayers(message);
-                sendMessageToSpectators(message);
+                for (Player p: Bukkit.getOnlinePlayers()){
+                    if (isPlaying(p) || getEventManager().isSpectating(p)){
+                        Messages.LMS_FIGHT_ENABLED.msg(p);
+                    }
+                }
             }
         }.runTaskLater(KitPvP.getInstance(), 20 * 5);
     }
@@ -100,27 +100,15 @@ public class LastManStanding implements Listener {
     }
 
     public void forceEnd() {
-        sendMessageToPlayers("&cThis event has been forcefully ended by an Administrator.");
-        sendMessageToSpectators("&cThis event has been forcefully ended by an Administrator.");
-
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (isPlaying(p)) {
                 removePlayer(p);
-                KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.DUBSTEP);
-                stats.setActiveKit(KitType.DUBSTEP);
-                Location spawn = KitPvP.getInstance().getSpawnLocation();
-                p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
-                stats.applyKitPreference();
+                getEventManager().removeFromEvent(p);
+                p.sendMessage(ChatColor.RED + "This event has been forcefully ended by an Administrator.");
             }
-            if (isSpectating(p)) {
-                removeSpectator(p);
-                KitPvPStats stats = KitPvP.getInstance().getStats(p);
-                stats.setKitPreference(KitType.DUBSTEP);
-                stats.setActiveKit(KitType.DUBSTEP);
-                Location spawn = KitPvP.getInstance().getSpawnLocation();
-                p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
-                stats.applyKitPreference();
+            if (getEventManager().isSpectating(p)) {
+                getEventManager().removeSpectator(p);
+                p.sendMessage(ChatColor.RED + "This event has been forcefully ended by an Administrator.");
             }
         }
 
@@ -133,17 +121,15 @@ public class LastManStanding implements Listener {
         applyChosenKit(p);
         addPlayer(p);
 
-        Location ploc = p.getLocation();
         Location lobby = getLobbyLocation();
+        p.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), lobby.getYaw(), lobby.getPitch()));
 
-        p.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), ploc.getYaw(), ploc.getPitch()));
 
-        String joinmsg = Messages.EVENT_JOINED.getMessage();
-        joinmsg = joinmsg.replaceAll("%player%", p.getName()).
-                replaceAll("%size%", String.valueOf(getPlayers().size()));
-
-        sendMessageToPlayers(joinmsg);
-        sendMessageToSpectators(joinmsg);
+        for (Player player : Bukkit.getOnlinePlayers()){
+            if (isPlaying(player) || getEventManager().isSpectating(player)) {
+                Messages.EVENT_JOINED.msg(player, "%player%", p.getName(), "%size%", String.valueOf(getPlayers().size()));
+            }
+        }
     }
 
     @EventHandler
@@ -157,12 +143,11 @@ public class LastManStanding implements Listener {
                 stats1.setKitPreference(KitType.DUBSTEP);
                 stats1.setActiveKit(KitType.DUBSTEP);
 
-                String quitmsg = Messages.EVENT_LEFT.getMessage();
-                quitmsg = quitmsg.replaceAll("%player%", player.getName())
-                        .replaceAll("%size%", String.valueOf(getPlayers().size()));
-
-                sendMessageToPlayers(quitmsg);
-                sendMessageToSpectators(quitmsg);
+                for (Player p : Bukkit.getOnlinePlayers()){
+                    if (isPlaying(player) || getEventManager().isSpectating(player)) {
+                        Messages.EVENT_LEFT.msg(p, "%player%", player.getName(), "%size%", String.valueOf(getPlayers().size()));
+                    }
+                }
 
                 Location spawn = KitPvP.getInstance().getSpawnLocation();
                 player.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
@@ -172,19 +157,10 @@ public class LastManStanding implements Listener {
                         for (Player onlineP : Bukkit.getOnlinePlayers()) {
                             if (isPlaying(onlineP)) {
                                 removePlayer(onlineP);
-                                KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
-                                stats.setKitPreference(KitType.DUBSTEP);
-                                stats.setActiveKit(KitType.DUBSTEP);
-                                onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
-                                stats.applyKitPreference();
+                                getEventManager().removeFromEvent(onlineP);
                             }
-                            if (isSpectating(onlineP)) {
-                                removeSpectator(onlineP);
-                                KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
-                                stats.setKitPreference(KitType.DUBSTEP);
-                                stats.setActiveKit(KitType.DUBSTEP);
-                                onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
-                                stats.applyKitPreference();
+                            if (getEventManager().isSpectating(onlineP)) {
+                                getEventManager().removeSpectator(onlineP);
                             }
                         }
                         String winner = Messages.WON_EVENT.getMessage();
@@ -196,7 +172,7 @@ public class LastManStanding implements Listener {
                     }
                 }
             }
-            removeSpectator(player);
+            getEventManager().removeSpectator(player);
             Location spawn = KitPvP.getInstance().getSpawnLocation();
             player.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
         }
@@ -207,12 +183,11 @@ public class LastManStanding implements Listener {
         if (isPlaying(p)) {
             removePlayer(p);
 
-            String quitmsg = Messages.EVENT_LEFT.getMessage();
-            quitmsg = quitmsg.replaceAll("%player%", p.getName())
-                    .replaceAll("%size%", String.valueOf(getPlayers().size()));
-
-            sendMessageToPlayers(quitmsg);
-            sendMessageToSpectators(quitmsg);
+            for (Player player : Bukkit.getOnlinePlayers()){
+                if (isPlaying(player) || getEventManager().isSpectating(player)) {
+                    Messages.EVENT_LEFT.msg(player, "%player%", p.getName(), "%size%", String.valueOf(getPlayers().size()));
+                }
+            }
 
             Location spawn = KitPvP.getInstance().getSpawnLocation();
             p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
@@ -222,19 +197,10 @@ public class LastManStanding implements Listener {
                     for (Player onlineP : Bukkit.getOnlinePlayers()) {
                         if (isPlaying(onlineP)) {
                             removePlayer(onlineP);
-                            KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
-                            stats.setKitPreference(KitType.DUBSTEP);
-                            stats.setActiveKit(KitType.DUBSTEP);
-                            onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
-                            stats.applyKitPreference();
+                            getEventManager().removeFromEvent(onlineP);
                         }
-                        if (isSpectating(onlineP)) {
-                            removeSpectator(onlineP);
-                            KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
-                            stats.setKitPreference(KitType.DUBSTEP);
-                            stats.setActiveKit(KitType.DUBSTEP);
-                            onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
-                            stats.applyKitPreference();
+                        if (getEventManager().isSpectating(onlineP)) {
+                            getEventManager().removeSpectator(onlineP);
                         }
                     }
                     String winner = Messages.WON_EVENT.getMessage();
@@ -246,9 +212,7 @@ public class LastManStanding implements Listener {
                 }
             }
         }
-        removeSpectator(p);
-        Location spawn = KitPvP.getInstance().getSpawnLocation();
-        p.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
+        getEventManager().removeSpectator(p);
     }
 
     @EventHandler
@@ -259,41 +223,31 @@ public class LastManStanding implements Listener {
             if (isPlaying(player) && isPlaying(killer)) {
                 player.spigot().respawn();
                 removePlayer(player);
-                addSpectator(player);
 
-                String deathmsg = Messages.LMS_ELIMINATED.getMessage();
-                deathmsg = deathmsg.replaceAll("%player%", player.getName())
-                        .replaceAll("%killer%", killer.getName())
-                        .replaceAll("%remaining%", String.valueOf(getPlayers().size()));
+                for (ItemStack armor : killer.getInventory().getArmorContents()) {
+                    if (armor != null) {
+                        armor.setDurability((short) (armor.getDurability() - UtilMath.getRandom(5, 10)));
+                    }
+                }
 
-                sendMessageToPlayers(deathmsg);
-                sendMessageToSpectators(deathmsg);
+                for (Player p : Bukkit.getOnlinePlayers()){
+                    if (isPlaying(p) || getEventManager().isSpectating(p)) {
+                        Messages.LMS_ELIMINATED.msg(p, "%player%", player.getName(), "%killer%", killer.getName(), "%remaining%", String.valueOf(getPlayers().size()));
+                    }
+                }
 
                 giveSoup(killer, 14);
                 if (getPlayers().size() == 1) {
                     for (Player onlineP : Bukkit.getOnlinePlayers()) {
                         if (isPlaying(onlineP)) {
                             removePlayer(onlineP);
-                            KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
-                            stats.setKitPreference(KitType.DUBSTEP);
-                            stats.setActiveKit(KitType.DUBSTEP);
-                            Location spawn = KitPvP.getInstance().getSpawnLocation();
-                            onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
-                            stats.applyKitPreference();
+                            getEventManager().removeFromEvent(onlineP);
                         }
-                        if (isSpectating(onlineP)) {
-                            removeSpectator(onlineP);
-                            KitPvPStats stats = KitPvP.getInstance().getStats(onlineP);
-                            stats.setKitPreference(KitType.DUBSTEP);
-                            stats.setActiveKit(KitType.DUBSTEP);
-                            Location spawn = KitPvP.getInstance().getSpawnLocation();
-                            onlineP.teleport(new Location(spawn.getWorld(), spawn.getX(), spawn.getY(), spawn.getZ()));
-                            stats.applyKitPreference();
+                        if (getEventManager().isSpectating(onlineP)) {
+                            getEventManager().removeSpectator(onlineP);
                         }
                     }
-                    String winner = Messages.WON_EVENT.getMessage();
-                    winner = winner.replaceAll("%player%", killer.getName()).replaceAll("%event%", "Last Man Standing");
-                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', winner));
+                    Messages.WON_EVENT.broadcast("%player%", killer.getName(), "%event%", "Last Man Standing");
                     end();
                     getEventManager().rewardPlayer(killer);
                     return;
@@ -305,20 +259,16 @@ public class LastManStanding implements Listener {
 
                     @Override
                     public void run() {
-
-                        Location ploc = player.getLocation();
                         Location lobby = getLobbyLocation();
-                        player.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), ploc.getYaw(), ploc.getPitch()));
+                        player.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), lobby.getYaw(), lobby.getPitch()));
 
-                        player.getInventory().clear();
-                        player.getInventory().setHelmet(new ItemStack(Material.AIR));
-                        player.getInventory().setChestplate(new ItemStack(Material.AIR));
-                        player.getInventory().setLeggings(new ItemStack(Material.AIR));
-                        player.getInventory().setBoots(new ItemStack(Material.AIR));
+                        new BukkitRunnable(){
+                                    @Override
+                                    public void run() {
+                                        getEventManager().addSpectator(player);
+                                    }
+                                }.runTaskLater(KitPvP.getInstance(), 2);
 
-                        for (PotionEffect effect : player.getActivePotionEffects()) {
-                            player.removePotionEffect(effect.getType());
-                        }
                     }
                 }.runTaskLater(KitPvP.getInstance(), 5);
             }
@@ -327,15 +277,12 @@ public class LastManStanding implements Listener {
         if (isPlaying(player)){
             player.spigot().respawn();
             removePlayer(player);
-            addSpectator(player);
 
-            String deathmsg = Messages.LMS_ELIMINATED.getMessage();
-            deathmsg = deathmsg.replaceAll("%player%", player.getName())
-                    .replaceAll("%killer%", "Unknown")
-                    .replaceAll("%remaining%", String.valueOf(getPlayers().size()));
-
-            sendMessageToPlayers(deathmsg);
-            sendMessageToSpectators(deathmsg);
+            for (Player p : Bukkit.getOnlinePlayers()){
+                if (isPlaying(player) || getEventManager().isSpectating(player)) {
+                    Messages.LMS_ELIMINATED.msg(p, "%player%", player.getName(), "%killer%", "Unknown", "%size%", String.valueOf(getPlayers().size()));
+                }
+            }
 
             KitPvPStats stats = KitPvP.getInstance().getStats(player);
             stats.setKitPreference(KitType.DUBSTEP);
@@ -349,15 +296,13 @@ public class LastManStanding implements Listener {
                     Location lobby = getLobbyLocation();
                     player.teleport(new Location(lobby.getWorld(), lobby.getX(), lobby.getY(), lobby.getZ(), ploc.getYaw(), ploc.getPitch()));
 
-                    player.getInventory().clear();
-                    player.getInventory().setHelmet(new ItemStack(Material.AIR));
-                    player.getInventory().setChestplate(new ItemStack(Material.AIR));
-                    player.getInventory().setLeggings(new ItemStack(Material.AIR));
-                    player.getInventory().setBoots(new ItemStack(Material.AIR));
-
-                    for (PotionEffect effect : player.getActivePotionEffects()) {
-                        player.removePotionEffect(effect.getType());
-                    }
+                    UtilPlayer.reset(player);
+                    new BukkitRunnable(){
+                        @Override
+                        public void run() {
+                            getEventManager().addSpectator(player);
+                        }
+                    }.runTaskLater(KitPvP.getInstance(), 2);
                 }
             }.runTaskLater(KitPvP.getInstance(), 5);
 
@@ -366,47 +311,10 @@ public class LastManStanding implements Listener {
 
     private void applyChosenKit(Player p) {
         KitPvPStats stats = KitPvP.getInstance().getStats(p);
-        if (getChosenKit() == KitType.KNIGHT) {
-            stats.setActiveKit(KitType.KNIGHT);
-            KitKnight kit = new KitKnight(KitPvP.getInstance().getKitManager());
-            kit.beginApplyKit(p);
-            giveSoup(p, 36);
-            return;
-        }
-        if (getChosenKit() == KitType.REAPER) {
-            stats.setActiveKit(KitType.REAPER);
-            KitReaper kit = new KitReaper(KitPvP.getInstance().getKitManager());
-            kit.beginApplyKit(p);
-            giveSoup(p, 36);
-            return;
-        }
-        if (getChosenKit() == KitType.PAINTBALL) {
-            stats.setActiveKit(KitType.PAINTBALL);
-            KitPaintball kit = new KitPaintball(KitPvP.getInstance().getKitManager());
-            kit.beginApplyKit(p);
-            giveSoup(p, 36);
-            return;
-        }
-        if (getChosenKit() == KitType.BUILDUHC) {
-            stats.setActiveKit(KitType.BUILDUHC);
-            KitBuildUHC kit = new KitBuildUHC(KitPvP.getInstance().getKitManager());
-            kit.beginApplyKit(p);
-            giveSoup(p, 36);
-            return;
-        }
-        if (getChosenKit() == KitType.DUBSTEP) {
-            stats.setActiveKit(KitType.DUBSTEP);
-            KitDubstep kit = new KitDubstep(KitPvP.getInstance().getKitManager());
-            kit.beginApplyKit(p);
-            giveSoup(p, 36);
-            return;
-        }
-        if (getChosenKit() == KitType.TELEPORTER) {
-            stats.setActiveKit(KitType.TELEPORTER);
-            KitTeleporter kit = new KitTeleporter(KitPvP.getInstance().getKitManager());
-            kit.beginApplyKit(p);
-            giveSoup(p, 36);
-        }
+        Kit kit = getChosenKit().getKit();
+        stats.setActiveKit(kit.getKitType());
+        kit.beginApplyKit(p);
+        giveSoup(p, 36);
     }
 
 
@@ -443,7 +351,7 @@ public class LastManStanding implements Listener {
     public void blockCommands(PlayerCommandPreprocessEvent event) {
         if (getEventManager().getCurrentEvent() == EventType.LMS) {
             Player player = event.getPlayer();
-            if (isPlaying(player) || isSpectating(player)) {
+            if (isPlaying(player) || getEventManager().isSpectating(player)) {
                 String command = event.getMessage();
 
                 ArrayList<String> blocked = new ArrayList<>();
@@ -472,7 +380,7 @@ public class LastManStanding implements Listener {
                     Player victim = (Player) event.getEntity();
                     Player attacker = (Player) event.getDamager();
 
-                    if (isSpectating(victim) || isSpectating(attacker)) {
+                    if (getEventManager().isSpectating(victim) || getEventManager().isSpectating(attacker)) {
                         event.setCancelled(true);
                         return;
                     }
@@ -485,7 +393,7 @@ public class LastManStanding implements Listener {
             }
             if (event.getDamager() instanceof Projectile) {
                 Player victim = (Player) event.getEntity();
-                if (isSpectating(victim)) {
+                if (getEventManager().isSpectating(victim)) {
                     event.setCancelled(true);
                 }
                 if (isPlaying(victim) && !isFighting()) {
@@ -494,7 +402,6 @@ public class LastManStanding implements Listener {
             }
         }
     }
-
 
     public void sendMessageToPlayers(String message) {
         if (this.players == null) return;
@@ -506,15 +413,6 @@ public class LastManStanding implements Listener {
         }
     }
 
-    public void sendMessageToSpectators(String message) {
-        if (this.spectators == null) return;
-
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (isSpectating(p)) {
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-            }
-        }
-    }
 
     public Location getLobbyLocation() {
         return (Location) KitPvP.getInstance().getConfig().get("player-events.lms.lobby-location");
@@ -550,19 +448,6 @@ public class LastManStanding implements Listener {
         this.players = list;
     }
 
-    public void addSpectator(Player p) {
-        if (this.spectators == null || this.spectators.isEmpty()) {
-            ArrayList<UUID> list = new ArrayList<>();
-            list.add(p.getUniqueId());
-
-            this.spectators = list;
-            return;
-        }
-        ArrayList<UUID> list = this.spectators;
-        list.add(p.getUniqueId());
-
-        this.spectators = list;
-    }
 
     public void removePlayer(Player p) {
         ArrayList<UUID> list = getPlayers();
@@ -571,20 +456,6 @@ public class LastManStanding implements Listener {
         this.players = list;
     }
 
-    public void removeSpectator(Player p) {
-        ArrayList<UUID> list = getSpectators();
-        list.remove(p.getUniqueId());
-
-        this.spectators = list;
-    }
-
-    public boolean isSpectating(Player p) {
-        if (this.spectators == null || this.spectators.isEmpty()) {
-            return false;
-        }
-        ArrayList<UUID> list = this.spectators;
-        return list.contains(p.getUniqueId());
-    }
 
     public boolean isPlaying(Player p) {
         if (this.players == null || this.players.isEmpty()) {
@@ -606,11 +477,6 @@ public class LastManStanding implements Listener {
         return this.players;
     }
 
-
-    public ArrayList<UUID> getSpectators() {
-        return this.spectators;
-    }
-
     public void setLobbyLocation(Location loc) {
         KitPvP.getInstance().getConfig().set("player-events.lms.lobby-location", loc);
         KitPvP.getInstance().saveConfig();
@@ -618,6 +484,11 @@ public class LastManStanding implements Listener {
 
     public void setArenaLocation(Location loc) {
         KitPvP.getInstance().getConfig().set("player-events.lms.arena-location", loc);
+        KitPvP.getInstance().saveConfig();
+    }
+
+    public void setRegionPosition(Location loc, int position) {
+        KitPvP.getInstance().getConfig().set("player-events.lms.region.pos" + position, loc);
         KitPvP.getInstance().saveConfig();
     }
 

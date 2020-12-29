@@ -117,10 +117,10 @@ public class KitReaper extends Kit {
             return;
         if (KitPvP.getInstance().getEventManager().getLMS().isPlaying(p) &&
                 !KitPvP.getInstance().getEventManager().getLMS().isFighting() ||
-                KitPvP.getInstance().getEventManager().getLMS().isSpectating(p))
+                KitPvP.getInstance().getEventManager().isSpectating(p))
             return;
-        if (KitPvP.getInstance().getEventManager().getLMS().isSpectating(p) ||
-                KitPvP.getInstance().getEventManager().getLMS().isSpectating(target))
+        if (KitPvP.getInstance().getEventManager().isSpectating(p) ||
+                KitPvP.getInstance().getEventManager().isSpectating(target))
             return;
         if (!item.getItemMeta().hasDisplayName()) // Checks if the ability item doesnt have a display name
             return;

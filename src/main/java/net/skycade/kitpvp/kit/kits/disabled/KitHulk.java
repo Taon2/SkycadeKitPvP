@@ -27,17 +27,17 @@ import java.util.*;
 
 public class KitHulk extends Kit {
 
-    private ItemStack helmet;
-    private ItemStack chestplate;
-    private ItemStack leggings;
-    private ItemStack boots;
+    private final ItemStack helmet;
+    private final ItemStack chestplate;
+    private final ItemStack leggings;
+    private final ItemStack boots;
 
-    private Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
+    private final Map<PotionEffectType, Integer> constantEffects = new HashMap<>();
 
-    private int smashCooldown = 20;
+    private final int smashCooldown = 20;
 
-    private Map<UUID, List<FallingBlock>> blockList = new HashMap<>();
-    private Map<UUID, Boolean> isSmashing = new HashMap<>();
+    private final Map<UUID, List<FallingBlock>> blockList = new HashMap<>();
+    private final Map<UUID, Boolean> isSmashing = new HashMap<>();
 
     public KitHulk(KitManager kitManager) {
         super(kitManager, "Hulk", KitType.HULK, 50000, false, getLore());
@@ -70,6 +70,36 @@ public class KitHulk extends Kit {
                 Material.LEATHER_LEGGINGS)
                 .setColour(Color.PURPLE).build();
         setIcon(icon);
+    }
+
+    public static List<Block> getBlocksInRadius(Location location, int radius, boolean hollow) {
+        List<Block> blocks = new ArrayList<>();
+        int bX = location.getBlockX(),
+                bY = location.getBlockY(),
+                bZ = location.getBlockZ();
+        for (int x = bX - radius; x <= bX + radius; x++)
+            for (int y = bY - radius; y <= bY + radius; y++)
+                for (int z = bZ - radius; z <= bZ + radius; z++) {
+                    double distance = ((bX - x) * (bX - x) + (bY - y) * (bY - y) + (bZ - z) * (bZ - z));
+                    if (distance < radius * radius
+                            && !(hollow && distance < ((radius - 1) * (radius - 1)))) {
+                        Location l = new Location(location.getWorld(), x, y, z);
+                        if (l.getBlock().getType() != Material.BARRIER)
+                            blocks.add(l.getBlock());
+                    }
+                }
+        return blocks;
+    }
+
+    public static List<String> getLore() {
+        return Arrays.asList(
+                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "HULK SMASH!",
+                "",
+                ChatColor.GRAY + "%click% a block with your",
+                ChatColor.GRAY + "fist makes you smash the ground,",
+                ChatColor.GRAY + "knocking back enemies."
+        );
     }
 
     @Override
@@ -169,25 +199,6 @@ public class KitHulk extends Kit {
         }, seconds * 20);
     }
 
-    public static List<Block> getBlocksInRadius(Location location, int radius, boolean hollow) {
-        List<Block> blocks = new ArrayList<>();
-        int bX = location.getBlockX(),
-                bY = location.getBlockY(),
-                bZ = location.getBlockZ();
-        for (int x = bX - radius; x <= bX + radius; x++)
-            for (int y = bY - radius; y <= bY + radius; y++)
-                for (int z = bZ - radius; z <= bZ + radius; z++) {
-                    double distance = ((bX - x) * (bX - x) + (bY - y) * (bY - y) + (bZ - z) * (bZ - z));
-                    if (distance < radius * radius
-                            && !(hollow && distance < ((radius - 1) * (radius - 1)))) {
-                        Location l = new Location(location.getWorld(), x, y, z);
-                        if (l.getBlock().getType() != Material.BARRIER)
-                            blocks.add(l.getBlock());
-                    }
-                }
-        return blocks;
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockChangeState(EntityChangeBlockEvent event) {
         Player p = null;
@@ -206,16 +217,5 @@ public class KitHulk extends Kit {
     @Override
     public List<String> getHowToObtain() {
         return Collections.singletonList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Purchase from /shop!");
-    }
-
-    public static List<String> getLore() {
-        return Arrays.asList(
-                ChatColor.RED + "" + ChatColor.BOLD + "Offensive Kit",
-                ChatColor.GRAY + "" + ChatColor.ITALIC + "HULK SMASH!",
-                "",
-                ChatColor.GRAY + "%click% a block with your",
-                ChatColor.GRAY + "fist makes you smash the ground,",
-                ChatColor.GRAY + "knocking back enemies."
-        );
     }
 }

@@ -7,6 +7,7 @@ public class Messages {
     //KitPvP General Messages
     public static final Localization.Message ALL_KITS_UNLOCKED = new Localization.Message("all-kits-unlocked", "&7You unlocked &aall &7the kits! You unlocked the &aKitMaster &7kit.");
     public static final Localization.Message COULDNT_FIND = new Localization.Message("couldnt-find", "&cCould not find &b%type% &c'&b%thing%&c'.");
+    public static final Localization.Message VALID_STATS = new Localization.Message("valid-stats", "&cValid stats: &ekills&c, &edeaths&c, &eassits&c, &ekillstreak&c, &ehighestks&c, &eassists");
     public static final Localization.Message ON_COOLDOWN = new Localization.Message("on-cooldown", "&cYou need to wait another &b%time% &cbefore using &b%thing% &cagain!");
     public static final Localization.Message ON_COOLDOWN_NO_TIME = new Localization.Message("on-cooldown-no-time", "&b%thing% &cis on cooldown!");
     public static final Localization.Message OFF_COOLDOWN = new Localization.Message("off-cooldown", "&7You can now use &a%thing%&7.");
@@ -45,6 +46,8 @@ public class Messages {
     public static final Localization.Message NOT_THAT_PRESTIGE = new Localization.Message("command.not-that-prestige", "&cYou cannot rank up to that prestige yet.");
     public static final Localization.Message PLAYER_NOW_PRESTIGE = new Localization.Message("command.now-prestige", "&a&l%player% &7&lis now &a&lPrestige %num%!");
     public static final Localization.Message GANG_POINTS_RESET = new Localization.Message("command.gang-points-reset", "&a%gang%'s &7gang points are reset.");
+    public static final Localization.Message GANG_POINTS_DEDUCTED = new Localization.Message("command.gang-points-deduct", "&a%gang%'s &7gang points have been deducted by &a%amount%&7.");
+    public static final Localization.Message GANG_POINTS_SET = new Localization.Message("command.gang-points-set", "&a%gang%'s &7gang points have been set to &a%amount%&7.");
     public static final Localization.Message SHIFT_ABILITIES = new Localization.Message("command.shift-abilities", "&aYour abilities now require Shift + Right Click to activate.");
     public static final Localization.Message NO_SHIFT_ABILITIES = new Localization.Message("command.no-shift-abilities", "&aYour abilities now require Right Click to activate.");
 
@@ -67,7 +70,8 @@ public class Messages {
     public static final Localization.Message RESETSTATS_USAGE = new Localization.Message("usage.resetstats", "&7/resetstats &a<player>");
     public static final Localization.Message LOCK_UNLOCK_USAGE = new Localization.Message("usage.lock-unlock", "&7/kit &a<lock/unlock> <player/all> <kitname>");
     public static final Localization.Message KITSUNLOCKED_USAGE = new Localization.Message("usage.kitsunlocked", "&7/kitsunlocked &a<player>");
-    public static final Localization.Message RESETGANGPOINTS_USAGE = new Localization.Message("usage.resetgangpoints", "&7/resetgangpoints &a<gangname/all>");
+    public static final Localization.Message GANG_POINTS_USAGE = new Localization.Message("usage.resetgangpoints", "&7/gangpoints reset &a<gangname/all> \n" +
+            "&7/gangpoints deduct &a<gang>");
     public static final Localization.Message ABILITYTOGGLE_USAGE = new Localization.Message("usage.abilitytoggle", "&7/abilitytoggle");
 
     public static final Localization.Message KITPVPHELP_TITLE = new Localization.Message("title.kitpvphelp", "&7------------------&2KitPvP Help&7------------------");
@@ -222,32 +226,91 @@ public class Messages {
     public static final Localization.Message BLOODLUST_EXPIRED = new Localization.Message("kit.barbarian.bloodlust-expired", "&4&lBLOODLUST &7Bloodlust has expired!");
 
     // Event Messages
+
+    public static final Localization.Message EVENT_COMMAND_USAGE = new Localization.Message("player-events.command-usage", "\n" +
+            "&b&lSkycade Events \n" +
+            "&3/event host &f- Host an Event \n" +
+            "&3/event join &f- Join an Event \n" +
+            "&3/event quit/leave &f- Leave an Event \n" +
+            "&3/event spectate/spec &f- Spectate an Event \n" +
+            "&3/event forceend &f- Forcefully stop an Event &c(Admin+) \n" +
+            "&3/event resetcooldown &f- Wipe the cooldown &c(Admin+) \n" +
+            " ");
+
+    public static final Localization.Message JOINING_EVENT = new Localization.Message("player-events.joining", "&7Joining event..");
+    public static final Localization.Message LEAVING_EVENT = new Localization.Message("player-events.leaving", "&7Leaving event..");
+    public static final Localization.Message ALREADY_JOINING = new Localization.Message("player-events.already-joining", "&cYou are already joining the event!");
+    public static final Localization.Message ALREADY_LEAVING = new Localization.Message("player-events.already-leaving", "&cYou are already leaving the event!");
     public static final Localization.Message NO_HOST_CREDITS = new Localization.Message("player-events.no-host-credits", "&cYou do not have any Host Credits.");
     public static final Localization.Message MUST_BE_AT_SPAWN = new Localization.Message("player-events.must-be-at-spawn", "&b&lSkycade Events &f> &7You must be at spawn in order to join events!");
-    public static final Localization.Message STARTING_EVENT = new Localization.Message("player-events.starting-event", "&b&lSkycade Events &f> &b%player% &7is hosting a &b%event% &7Event, type &b/join &7to join!");
-    public static final Localization.Message STARTING_EVENT_TIME_LEFT = new Localization.Message("player-events.starting-event-time-left", "&7The Event will start in &b%second% &7seconds.");
+    public static final Localization.Message SPECTATING_SILENT = new Localization.Message("player-events.spectating-silent", "&b&lSkycade Events &f> &7You have silently started spectating the Event!");
+    public static final Localization.Message STARTED_SPECTATING = new Localization.Message("player-events.started-spectating", "&b&lSkycade Events &f> &b%player% &7is now spectating!");
+    public static final Localization.Message STOPPED_SPECTATING = new Localization.Message("player-events.stopped-spectating", "&b&lSkycade Events &f> &b%player% &7is no longer spectating!");
+    public static final Localization.Message OUT_OF_BOUNDS = new Localization.Message("player-events.out-of-bounds", "&b&lSkycade Events &f> &7You have went out of bounds! You have been returned to the Event spawn.");
+
+    public static final Localization.Message STARTING_EVENT = new Localization.Message("player-events.starting-event", "\n" +
+            "&b&lSkycade Events &f> &b%player% &7is hosting a &b%event% &7Event, type &b/join &7to join!");
+    public static final Localization.Message STARTING_EVENT_TIME_LEFT = new Localization.Message("player-events.starting-event-time-left", "&7The Event will start in &b%second% &7seconds. \n"
+            + " ");
+
     public static final Localization.Message ALREADY_IN_EVENT = new Localization.Message("player-events.already-in-event", "&b&lSkycade Events &f> &7You are already in this event.");
     public static final Localization.Message CANNOT_JOIN_EVNET = new Localization.Message("player-events.cannot-join", "&b&lSkycade Events &f> &7You cannot join this event.");
     public static final Localization.Message NO_EVENT_RUNNING = new Localization.Message("player-events.no-event-running", "&b&lSkycade Events &f> &7There is currently no event running.");
     public static final Localization.Message CANNOT_USE_COMMAND = new Localization.Message("player-events.cannot-use-cmd", "&b&lSkycade Events &f> &7You cannot use this command during events!");
-    public static final Localization.Message WON_EVENT = new Localization.Message("player-events.won-event", "&b&lSkycade Events &f> &b%player% &7has won the &b%event% &7Event!");
+
+    public static final Localization.Message WON_EVENT = new Localization.Message("player-events.won-event", "\n " +
+            "&b&lSkycade Events &f> &b%player% &7has won the &b%event% &7Event! \n" +
+            " ");
+
     public static final Localization.Message EVENT_JOINED = new Localization.Message("player-events.join", "&b&lSkycade Events &f> &b%player% &7has joined! - &b%size%");
     public static final Localization.Message EVENT_LEFT = new Localization.Message("player-events.left", "&b&lSkycade Events &f> &b%player% &7has left! - &b%size%");
-    public static final Localization.Message SUMO_ELIMINATED = new Localization.Message("player-events.sumo-eliminated", "&b&lSkycade Sumo &f> &b%player% &7has been eliminated! - &b%remaining% &7players left");
-    public static final Localization.Message SUMO_ROUND_STARTED = new Localization.Message("player-events.sumo-round-started", "&b&lSkycade Sumo &f> &7Round started!");
-    public static final Localization.Message SUMO_ROUND_FIGHTERS = new Localization.Message("player-events.sumo-round-fighters", "&b&lSkycade Sumo &f> &b%fighter1% &7vs &b%fighter2%");
+
+    public static final Localization.Message SUMO_EVENT_ANNOUNCEMENT = new Localization.Message("player-events.sumo-announcement", "\n " +
+            "&b&lSkycade Events &f> &b%player% &7is hosting a &bSumo &7Event, type &b/event join &7to join!");
+
+    public static final Localization.Message SUMO_ELIMINATED = new Localization.Message("player-events.sumo-eliminated", "\n " +
+            "&b&lSkycade Sumo &f> &b%player% &7has been eliminated! - &b%remaining% &7players left \n" +
+            " ");
+
+    public static final Localization.Message SUMO_ROUND_STARTED = new Localization.Message("player-events.sumo-round-started", "\n " +
+            "&b&lSkycade Sumo &f> &7Round started!");
+    public static final Localization.Message SUMO_ROUND_FIGHTERS = new Localization.Message("player-events.sumo-round-fighters", "&b&lSkycade Sumo &f> &b%fighter1% &7vs &b%fighter2% \n" +
+            " ");
+
     public static final Localization.Message EVENT_FAILED_LACK_OF_PLAYERS = new Localization.Message("player-events.event-failed-to-start-cause-players", "&b&lSkycade Events &f> &7The Event has been canceled due to lack of players! You must have at least &b2 &7players.");
-    public static final Localization.Message EVENT_ON_COOLDOWN = new Localization.Message("player-events.event-on-cooldown", "&b&lSkycade Events &f> &7Events are currently on cooldown. You must wait &b%time% &7to host an Event.");
-    public static final Localization.Message LMS_FIGHT_ENABLED = new Localization.Message("player-events.lms.fight-enabled", "&b&lSkycade LMS &f> &cFight &7has been enabled.");
-    public static final Localization.Message LMS_STARTED = new Localization.Message("player-events.lms.started", "&b&lSkycade LMS &f> &7The Event has started. Spread out and prepare for PvP! &cFight &7will be enabled in &b5 seconds&7.");
-    public static final Localization.Message LMS_ELIMINATED = new Localization.Message("player-events.lms.eliminated", "&b&lSkycade LMS &f> &b%player% &7has been eliminated by &b%killer%! - &b%remaining% &7players left");
-    public static final Localization.Message BRACKETS_ELIMINATED = new Localization.Message("player-events.brackets-eliminated", "&b&lSkycade Brackets &f> &b%player% &7has been eliminated! - &b%remaining% &7players left");
-    public static final Localization.Message BRACKETS_ROUND_STARTED = new Localization.Message("player-events.brackets-round-started", "&b&lSkycade Brackets &f> &7Round started!");
-    public static final Localization.Message BRACKETS_ROUND_FIGHTERS = new Localization.Message("player-events.brackets-round-fighters", "&b&lSkycade Brackets &f> &b%fighter1% &7vs &b%fighter2%");
+
+    public static final Localization.Message LMS_EVENT_ANNOUNCEMENT = new Localization.Message("player-events.lms.announcement", "\n " +
+            "&b&lSkycade Events &f> &b%player% &7is hosting a &bLast Man Standing (%kit%) &7Event, type &b/event join &7to join!");
+
+    public static final Localization.Message LMS_FIGHT_ENABLED = new Localization.Message("player-events.lms.fight-enabled", " \n" +
+            "&b&lSkycade LMS &f> &cFight &7has been enabled. \n" +
+            " ");
+
+
+    public static final Localization.Message LMS_STARTED = new Localization.Message("player-events.lms.started", "\n " +
+            "&b&lSkycade LMS &f> &7The Event has started. Spread out and prepare for PvP! &cFight &7will be enabled in &b5 seconds&7. \n" +
+            " ");
+
+    public static final Localization.Message LMS_ELIMINATED = new Localization.Message("player-events.lms.eliminated", " \n" +
+            "&b&lSkycade LMS &f> &b%player% &7has been eliminated by &b%killer%! - &b%remaining% &7players left \n" +
+            " ");
+
+    public static final Localization.Message BRACKETS_EVENT_ANNOUNCEMENT = new Localization.Message("player-events.brackets.announcement", "\n " +
+            "&b&lSkycade Events &f> &b%player% &7is hosting a &bBrackets (%kit%) &7Event, type &b/event join &7to join!");
+
+    public static final Localization.Message BRACKETS_ELIMINATED = new Localization.Message("player-events.brackets-eliminated", " \n" +
+            "&b&lSkycade Brackets &f> &b%player% &7has been eliminated! - &b%remaining% &7players left \n" +
+            " ");
+
+    public static final Localization.Message BRACKETS_ROUND_STARTED = new Localization.Message("player-events.brackets-round-started", " \n" +
+            "&b&lSkycade Brackets &f> &7Round started!");
+    public static final Localization.Message BRACKETS_ROUND_FIGHTERS = new Localization.Message("player-events.brackets-round-fighters", "&b&lSkycade Brackets &f> &b%fighter1% &7vs &b%fighter2% \n" +
+            " ");
 
     static void init() {
         Localization.getInstance().registerMessages("skycade.kitpvp",
                 COULDNT_FIND,
+                VALID_STATS,
                 ON_COOLDOWN,
                 USING_KIT,
                 CANNOT_USE,
@@ -393,7 +456,7 @@ public class Messages {
                 PHYLACTERY_BROKEN,
                 YOU_BROKE_PHYLACTERY,
                 PHYLACTERY_RESPAWNED,
-                RESETGANGPOINTS_USAGE,
+                GANG_POINTS_USAGE,
                 RESETGANGPOINTS_DESCRIPTION,
                 GANG_POINTS_RESET,
                 YOU_KILLED_LOGGED_OUT,
@@ -431,7 +494,14 @@ public class Messages {
                 BRACKETS_ROUND_STARTED,
                 NO_HOST_CREDITS,
                 BLOODLUST_ACTIVATED,
-                BLOODLUST_EXPIRED
+                BLOODLUST_EXPIRED,
+                JOINING_EVENT,
+                LEAVING_EVENT,
+                ALREADY_JOINING,
+                ALREADY_LEAVING,
+                STARTED_SPECTATING,
+                STOPPED_SPECTATING,
+                SPECTATING_SILENT
         );
     }
 }

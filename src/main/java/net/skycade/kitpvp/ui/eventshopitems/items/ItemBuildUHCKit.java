@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ItemBuildUHCKit extends EventShopItem {
 
-    private EventShopManager eventShopManager;
+    private final EventShopManager eventShopManager;
 
     public ItemBuildUHCKit(EventShopManager eventShopManager) {
         super(eventShopManager, "BuildUHC Kit", new ItemStack(Material.WOOD, 1, (short) 0), 300, 0, false);

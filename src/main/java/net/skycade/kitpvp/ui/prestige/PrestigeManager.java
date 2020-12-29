@@ -20,7 +20,7 @@ public class PrestigeManager {
     private final KitPvP plugin;
     private final String prestigeRewardsTable;
 
-    private TreeMap<Integer, PrestigeLevel> prestigeLevels = new TreeMap<>();
+    private final TreeMap<Integer, PrestigeLevel> prestigeLevels = new TreeMap<>();
 
     public PrestigeManager(KitPvP plugin) {
         this.plugin = plugin;

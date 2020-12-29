@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ItemShacoKit extends EventShopItem {
 
-    private EventShopManager eventShopManager;
+    private final EventShopManager eventShopManager;
 
     public ItemShacoKit(EventShopManager eventShopManager) {
         super(eventShopManager, "Shaco Kit", new ItemStack(Material.FERMENTED_SPIDER_EYE, 1, (short) 0), 350, 0, false);

@@ -105,13 +105,19 @@ public class KitPvP extends SkycadePlugin {
         defaults.put("player-events.sumo.lobby-location", new Location(Bukkit.getWorld("world"), -1345.5, 140, 3075.5));
         defaults.put("player-events.sumo.position-1", new Location(Bukkit.getWorld("world"), -1345.5, 140, 3066.5));
         defaults.put("player-events.sumo.position-2", new Location(Bukkit.getWorld("world"), -1345.5, 140, 3056.5));
+        defaults.put("player-events.sumo.region.pos1", new Location(Bukkit.getWorld("world"), -1345.5, 140, 3056.5));
+        defaults.put("player-events.sumo.region.pos2", new Location(Bukkit.getWorld("world"), -1345.5, 140, 3056.5));
 
         defaults.put("player-events.lms.lobby-location", new Location(Bukkit.getWorld("world"), -1070.5, 147, 3426.5));
         defaults.put("player-events.lms.arena-location", new Location(Bukkit.getWorld("world"), -1070.5, 137, 3426.5));
+        defaults.put("player-events.lms.region.pos1", new Location(Bukkit.getWorld("world"), -1070.5, 137, 3426.5));
+        defaults.put("player-events.lms.region.pos2", new Location(Bukkit.getWorld("world"), -1070.5, 137, 3426.5));
 
         defaults.put("player-events.brackets.lobby-location", new Location(Bukkit.getWorld("world"), -323.5, 139, 3152.5));
         defaults.put("player-events.brackets.position-1", new Location(Bukkit.getWorld("world"), -318.5, 139, 3147.5));
         defaults.put("player-events.brackets.position-2", new Location(Bukkit.getWorld("world"), -266.5, 139, 3108.5));
+        defaults.put("player-events.brackets.region.pos1", new Location(Bukkit.getWorld("world"), -266.5, 139, 3108.5));
+        defaults.put("player-events.brackets.region.pos2", new Location(Bukkit.getWorld("world"), -266.5, 139, 3108.5));
 
         setConfigDefaults(defaults);
         loadDefaultConfig();
@@ -235,6 +241,7 @@ public class KitPvP extends SkycadePlugin {
     private void registerListeners() {
         Bukkit.getPluginManager().registerEvents(new PlayerDamageListener(this), this);
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new SoupRegistration(this), this);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinQuitListener(this), this);
         Bukkit.getPluginManager().registerEvents(new PlayerListeners(this), this);
         Bukkit.getPluginManager().registerEvents(new PlayerMoveListener(this), this);

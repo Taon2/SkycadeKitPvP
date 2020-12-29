@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ItemKeepKillstreak extends EventShopItem {
 
-    private EventShopManager eventShopManager;
+    private final EventShopManager eventShopManager;
 
     public ItemKeepKillstreak(EventShopManager eventShopManager) {
         super(eventShopManager, "Keep Killstreak", new ItemStack(Material.DIAMOND_SWORD), 100, 0, true);

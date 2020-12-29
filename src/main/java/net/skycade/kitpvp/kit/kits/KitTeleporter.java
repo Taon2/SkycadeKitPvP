@@ -98,7 +98,7 @@ public class KitTeleporter extends Kit {
 
         if (KitPvP.getInstance().getEventManager().getLMS().isPlaying(player) &&
                 !KitPvP.getInstance().getEventManager().getLMS().isFighting() ||
-                KitPvP.getInstance().getEventManager().getLMS().isSpectating(player)) {
+                KitPvP.getInstance().getEventManager().isSpectating(player)) {
             event.setCancelled(true);
             player.updateInventory();
             return;

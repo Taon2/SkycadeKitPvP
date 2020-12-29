@@ -12,9 +12,9 @@ public abstract class EventShopItem implements Listener {
     private final EventShopManager eventShopManager;
     private final String name;
     private ItemStack icon;
-    private int price;
-    private int duration;
-    private boolean repeatable;
+    private final int price;
+    private final int duration;
+    private final boolean repeatable;
 
     public EventShopItem(EventShopManager eventShopManager, String name, ItemStack icon, int price, int duration, boolean repeatable) {
         this.eventShopManager = eventShopManager;
